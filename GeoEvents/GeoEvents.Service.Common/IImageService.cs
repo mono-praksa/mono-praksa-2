@@ -7,6 +7,9 @@ using GeoEvents.Model.Common;
 
 namespace GeoEvents.Service.Common
 {
+    /// <summary>
+    /// The image service interface.
+    /// </summary>
     public interface IImageService
     {
             #region Methods

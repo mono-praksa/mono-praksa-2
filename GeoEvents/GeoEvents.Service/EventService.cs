@@ -11,6 +11,10 @@ using AutoMapper;
 
 namespace GeoEvents.Service
 {
+    /// <summary>
+    /// The event service.
+    /// </summary>
+    /// <seealso cref="IEventService"/>
     public class EventService : IEventService
     {
         #region Properties

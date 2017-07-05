@@ -10,7 +10,7 @@ namespace GeoEvents.Model
     /// <summary>
     /// The image.
     /// </summary>
-    /// <seealso cref="GeoEvents.Model.Common.IImage" />
+    /// <seealso cref="IImage" />
     class Image : IImage
     {
         #region Properties

@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace GeoEvents.Common
 {
+    /// <summary>
+    /// The filter model.
+    /// </summary>
     public class Filter
     {
         #region Properties
