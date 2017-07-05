@@ -10,18 +10,18 @@ using System.Threading.Tasks;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using AutoMapper;
 
 namespace GeoEvents.WebAPI.Controllers
 {
     [RoutePrefix("api/event")]
     public class EventsController : ApiController
     {
-        public MockData Data;
-        public IEventService Service { get; set; }
+        protected IEventService Service { get; private set; }
+
         public EventsController(IEventService service)
         {
             this.Service = service;
-            Data = new MockData();
         }
 
         //[HttpPost]
@@ -41,9 +41,11 @@ namespace GeoEvents.WebAPI.Controllers
         public List<EventsViewModel> GetEvents()
         {
             //Filter filter = new Filter(latitude, longitude, radius, startTime, endTime);
-            //return Service.GetEvents(filter);
+            Filter filter = new Filter(40.71M,74.00M,3000000,new DateTime(2017-07-05),new DateTime(2017-07-07),1);
 
-            return Data.GenerateMockData();
+            return Mapper.Map<List<EventsViewModel>>(Service.GetEvents(filter));
+
+            //return Data.GenerateMockData();
         }
     }
 }

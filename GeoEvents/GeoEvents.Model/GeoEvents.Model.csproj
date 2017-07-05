@@ -55,6 +55,14 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\GeoEvents.Common\GeoEvents.Common.csproj">
+      <Project>{27529823-c319-4644-b863-49632214f5dd}</Project>
+      <Name>GeoEvents.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\GeoEvents.DAL\GeoEvents.DAL.csproj">
+      <Project>{ea5ff65d-7791-44e7-920f-7afd0bf73d85}</Project>
+      <Name>GeoEvents.DAL</Name>
+    </ProjectReference>
     <ProjectReference Include="..\GeoEvents.Model.Common\GeoEvents.Model.Common.csproj">
       <Project>{be064c7f-8529-470c-87f1-323597d81f0d}</Project>
       <Name>GeoEvents.Model.Common</Name>

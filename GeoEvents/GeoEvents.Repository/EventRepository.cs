@@ -56,8 +56,7 @@ namespace GeoEvents.Repository
         {
             PostgresConn.OpenConnection();
 
-            NpgsqlCommand command = new NpgsqlCommand("SELECT * FROM \"Events\"WHERE earth_box(ll_to_earth(@Lat, @Long), Radius)"+
-                " @> ll_to_earth(\"Events\".\"Lat\", \"Events\".\"Long\") AND (@UserStartTime, @UserEndTime)OVRLAPS(\"Events\".\"StartTime\",\"Events\".\"EndTime\") AND @Category & \"Events\".\"Category\" > 0 ",
+            NpgsqlCommand command = new NpgsqlCommand("SELECT * FROM \"Events\"WHERE earth_box(ll_to_earth(@Lat, @Long), @Radius) @> ll_to_earth(\"Events\".\"Lat\", \"Events\".\"Long\") AND (@UserStartTime, @UserEndTime)OVERLAPS(\"Events\".\"StartTime\",\"Events\".\"EndTime\") AND @Category & \"Events\".\"Category\" > 0 ",
                 PostgresConn.NpgConn());
             
             command.Parameters.AddWithValue("@Lat", filter.ULat);
@@ -71,7 +70,7 @@ namespace GeoEvents.Repository
 
             EventEntity tmp;
             List<IEventEntity> SelectEvents = new List<IEventEntity>();
-
+            
             while (dr.Read())
             {
                 tmp = new EventEntity
@@ -88,6 +87,8 @@ namespace GeoEvents.Repository
 
                 SelectEvents.Add(tmp);
             }
+            var x = new EventEntity(new Guid(), new DateTime(2017-01-01), DateTime.Now, 2.0M, 2.1M, "MOCK", "oskdpodkbp", 3);
+            SelectEvents.Add(x);
 
             return SelectEvents;
         }

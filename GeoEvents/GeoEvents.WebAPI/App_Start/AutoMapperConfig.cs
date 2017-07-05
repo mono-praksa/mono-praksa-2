@@ -11,12 +11,12 @@ namespace GeoEvents.WebAPI.App_Start
     {
         public static void Initialize()
         {
-            GeoEvents.Model.Mapping.AutoMapperMaps.Initialize();
+            GeoEvents.Model.Mapping.AutoMapperMaps.Initialize();/*
             AutoMapper.Mapper.Initialize(config =>
             {
                 config.CreateMap<IEvent, EventsViewModel>().ReverseMap();
                 config.CreateMap<IImage, ImagesViewModel>().ReverseMap();
-            });
+            });*/
         }
     }
 }

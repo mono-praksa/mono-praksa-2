@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using GeoEvents.Model.Common;
 using GeoEvents.Repository.Common;
+using GeoEvents.DAL;
 
 namespace GeoEvents.Model.Mapping
 {

@@ -54,7 +54,8 @@ namespace GeoEvents.Service
         {
             var events = new List<IEvent>();
             List<IEventEntity> entities = Repository.GetEvents(filter);
-            foreach (IEvent entity in entities)
+
+            foreach (IEventEntity entity in entities)
             {
                 IEvent evt = Mapper.Map<IEvent>(entity);
                 int mult = 1;
@@ -72,6 +73,7 @@ namespace GeoEvents.Service
                 }
                 events.Add(evt);
             }
+
             return events;
         }
 
