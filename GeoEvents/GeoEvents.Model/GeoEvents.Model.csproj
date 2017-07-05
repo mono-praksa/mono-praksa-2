@@ -54,6 +54,10 @@
       <Project>{be064c7f-8529-470c-87f1-323597d81f0d}</Project>
       <Name>GeoEvents.Model.Common</Name>
     </ProjectReference>
+    <ProjectReference Include="..\GeoEvents.Repository.Common\GeoEvents.Repository.Common.csproj">
+      <Project>{36f21666-4fd2-44b9-b9a2-e884b7c669be}</Project>
+      <Name>GeoEvents.Repository.Common</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
