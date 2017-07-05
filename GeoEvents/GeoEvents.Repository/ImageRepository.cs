@@ -57,18 +57,15 @@ namespace GeoEvents.Repository
 
             NpgsqlDataReader dr = command.ExecuteReader();
 
-            ImageEntity tmp;
+         
             List<IImageEntity> selectImages = new List<IImageEntity>();
 
             while (dr.Read())
             {
-                tmp = new ImageEntity
-                {
-                    Id = dr.GetBytes(0,0,)  //new Guid(dr[0].ToString()),
-                    Content =Encoding.ASCII.GetBytes(dr[1].ToString()), 
-                    EventId = eventID
-
-                };
+                ImageEntity tmp = new ImageEntity();
+                long size = dr.GetBytes(0, 0, tmp.Content, 0,4096);  
+                    
+                tmp = new ImageEntity(new Guid(dr[0].ToString()), eventID );
 
                 selectImages.Add(tmp);
             }
