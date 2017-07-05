@@ -21,7 +21,7 @@ namespace GeoEvents.WebAPI.Mock
                 evm.StartTime = DateTime.UtcNow;
                 evm.EndTime = DateTime.UtcNow;
                 evm.Description = "description";
-                evm.Categories.Add(1);
+                evm.Categories = new List<int>() { 1, 2, 3 };
                 list.Add(evm);
             }
             return list;

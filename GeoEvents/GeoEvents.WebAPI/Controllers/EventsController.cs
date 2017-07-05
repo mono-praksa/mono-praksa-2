@@ -16,13 +16,15 @@ namespace GeoEvents.WebAPI.Controllers
     [RoutePrefix("api/event")]
     public class EventsController : ApiController
     {
-        public IEventService Service;
-        public EventsController(IEventService service)
+        public MockData Data;
+        //public IEventService Service;
+        public EventsController(/*IEventService service*/)
         {
-            this.Service = service;
+            //this.Service = service;
+            Data = new MockData();
         }
 
-        [HttpPost]
+        //[HttpPost]
         //[Route("create/{name}/{description}/{longitude}/{latitude}/{categories}/{startTime}/{endTime}")]
         //public bool CreateEvent(string name, string description, decimal longitude, decimal latitude, List<int> categories, DateTime startTime, DateTime endTime)
         public bool CreateEvent()
@@ -34,10 +36,14 @@ namespace GeoEvents.WebAPI.Controllers
 
         [HttpGet]
         //[Route("get/{latitude}/{longitude}/{radius}/{startTime}/{endTime}")]
-        public List<IEvent> GetEvents(decimal latitude, decimal longitude, decimal radius, DateTime startTime, DateTime endTime)
+        [Route("mockdata")]
+        //public List<IEvent> GetEvents(decimal latitude, decimal longitude, decimal radius, DateTime startTime, DateTime endTime)
+        public List<EventsViewModel> GetEvents()
         {
-            Filter filter = new Filter(latitude, longitude, radius, startTime, endTime);
-            return Service.GetEvents(filter);
+            //Filter filter = new Filter(latitude, longitude, radius, startTime, endTime);
+            //return Service.GetEvents(filter);
+
+            return Data.GenerateMockData();
         }
     }
 }
