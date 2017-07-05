@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace GeoEvents.Repository.Common
 {
-    interface IImageRepository
+    public interface IImageRepository
     {
 
         List<IImageEntity> GetImages(Guid eventID);
