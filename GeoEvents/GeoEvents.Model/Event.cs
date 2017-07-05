@@ -7,6 +7,10 @@ using GeoEvents.Model.Common;
 
 namespace GeoEvents.Model
 {
+    /// <summary>
+    /// Event model.
+    /// </summary>
+    /// <seealso cref="IEvent"/>
     public class Event : IEvent
     {
         #region Properties

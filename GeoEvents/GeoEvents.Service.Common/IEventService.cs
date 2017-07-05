@@ -8,6 +8,9 @@ using GeoEvents.Common;
 
 namespace GeoEvents.Service.Common
 {
+    /// <summary>
+    /// The event service interface.
+    /// </summary>
     public interface IEventService
     {
         #region Methods

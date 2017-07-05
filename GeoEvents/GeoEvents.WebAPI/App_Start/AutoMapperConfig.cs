@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using GeoEvents.Model.Common;
+using GeoEvents.Repository.Common;
 
 namespace GeoEvents.WebAPI.App_Start
 {
@@ -9,11 +11,12 @@ namespace GeoEvents.WebAPI.App_Start
     {
         public static void Initialize()
         {
+            GeoEvents.Model.Mapping.AutoMapperMaps.Initialize();
             AutoMapper.Mapper.Initialize(config =>
             {
-                config.CreateMap<IEventEntity, IEvent>().ReverseMap();
+                config.CreateMap<IEvent, EventsViewModel>().ReverseMap();
+                config.CreateMap<IImage, ImagesViewModel>().ReverseMap();
             });
-
         }
     }
 }

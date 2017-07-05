@@ -11,6 +11,10 @@ using AutoMapper;
 
 namespace GeoEvents.Service
 {
+    /// <summary>
+    /// The image service.
+    /// </summary>
+    /// <seealso cref="IImageService"/>
     class ImageService : IImageService
     {
         #region Properties
@@ -36,6 +40,8 @@ namespace GeoEvents.Service
 
 
         #endregion Constructors
+
+
 
         #region Methods
 
