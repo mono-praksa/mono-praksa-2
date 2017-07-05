@@ -40,6 +40,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IEventEntity.cs" />
+    <Compile Include="IEventRepository.cs" />
+    <Compile Include="IImageEntity.cs" />
+    <Compile Include="IImageRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
