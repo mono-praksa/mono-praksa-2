@@ -51,22 +51,23 @@ namespace GeoEvents.Repository
             PostgresConn.OpenConnection();
 
             NpgsqlCommand command = new NpgsqlCommand
-                ("SELECT * FROM \"Images\" WHERE @eventID EQUALS \"EventId\"", 
+                ("SELECT * FROM \"Images\" WHERE @eventID EQUALS \"EventId\"",
                 PostgresConn.NpgConn());
             command.Parameters.AddWithValue("@eventID", eventID);
 
             NpgsqlDataReader dr = command.ExecuteReader();
 
-         
+
             List<IImageEntity> selectImages = new List<IImageEntity>();
 
             while (dr.Read())
             {
-                ImageEntity tmp = new ImageEntity();
-                long size = dr.GetBytes(0, 0, tmp.Content, 0,4096);  
-                    
-                tmp = new ImageEntity(new Guid(dr[0].ToString()), eventID );
-
+                ImageEntity tmp = new ImageEntity
+                {
+                    Id = new Guid(dr[0].ToString()),
+                    EventId = eventID
+                };
+                dr.GetBytes(1, 0, tmp.Content, 0, 4096);
                 selectImages.Add(tmp);
             }
 
