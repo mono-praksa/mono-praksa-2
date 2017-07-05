@@ -17,10 +17,10 @@ namespace GeoEvents.WebAPI.Controllers
     public class EventsController : ApiController
     {
         public MockData Data;
-        //public IEventService Service;
-        public EventsController(/*IEventService service*/)
+        public IEventService Service { get; set; }
+        public EventsController(IEventService service)
         {
-            //this.Service = service;
+            this.Service = service;
             Data = new MockData();
         }
 
