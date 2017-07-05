@@ -15,6 +15,7 @@ namespace GeoEvents.Model.Mapping
             AutoMapper.Mapper.Initialize(config =>
             {
                 config.CreateMap<IEventEntity, IEvent>().ReverseMap();
+                config.CreateMap<IImageEntity, IImage>().ReverseMap();
             });
 
         }
