@@ -9,7 +9,7 @@ using Npgsql;
 
 namespace GeoEvents.Repository
 {
-    public class ImageRepository
+    public class ImageRepository : IImageRepository
     {
         bool Flag = false;
         PostgresConnection PostgresConn;
@@ -64,7 +64,7 @@ namespace GeoEvents.Repository
             {
                 tmp = new ImageEntity
                 {
-                    Id = new Guid(dr[0].ToString()),
+                    Id = dr.GetBytes(0,0,)  //new Guid(dr[0].ToString()),
                     Content =Encoding.ASCII.GetBytes(dr[1].ToString()), 
                     EventId = eventID
 
