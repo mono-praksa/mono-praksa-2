@@ -52,7 +52,7 @@ namespace GeoEvents.Repository
 
 
 
-        public List<IEventEntity> GetEvents(IFilter filter)
+        public List<IEventEntity> GetEvents(Filter filter)
         {
             PostgresConn.OpenConnection();
 
