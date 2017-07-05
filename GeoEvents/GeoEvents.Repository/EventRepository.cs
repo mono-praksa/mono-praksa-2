@@ -57,8 +57,7 @@ namespace GeoEvents.Repository
             PostgresConn.OpenConnection();
 
             NpgsqlCommand command = new NpgsqlCommand("SELECT * FROM \"Events\"WHERE earth_box(ll_to_earth(@Lat, @Long), Radius)"+
-                " @> ll_to_earth(\"Events\".\"Lat\", \"Events\".\"Long\")"+"AND @UserStartTime < \"Events\".\"EndTime\" "+
-                "AND @UserEndTime > \"Events\".\"StartTime\"",
+                " @> ll_to_earth(\"Events\".\"Lat\", \"Events\".\"Long\") AND (@UserStartTime, @UserEndTime)OVRLAPS(\"Events\".\"StartTime\",\"Events\".\"EndTime\")",
                 PostgresConn.NpgConn());
             
             command.Parameters.AddWithValue("@Lat", filter.ULat);
