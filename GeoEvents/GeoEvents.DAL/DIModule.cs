@@ -15,6 +15,7 @@ namespace GeoEvents.DAL
         {
             Bind<IEventEntity>().To<EventEntity>();
             Bind<IImageEntity>().To<ImageEntity>();
+            Bind<IPostgresConnection>().To<PostgresConnection>();
         }
     }
 
