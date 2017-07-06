@@ -13,12 +13,12 @@ namespace GeoEvents.DAL
 
     {
         const string ConnStringDefault = "Server=198.168.21.10;Port=5432;Database=GeoEventsDb;User Id=postgres;Password=postgres;";
-        NpgsqlConnection connection;
+        NpgsqlConnection connection = new NpgsqlConnection(ConnStringDefault);
 
-        public PostgresConnection()
-        {           
-                connection = new NpgsqlConnection(ConnStringDefault);        
-        }
+        //public PostgresConnection()
+        //{           
+        //        connection = new NpgsqlConnection(ConnStringDefault);        
+        //}
 
         public void OpenConnection()
         {

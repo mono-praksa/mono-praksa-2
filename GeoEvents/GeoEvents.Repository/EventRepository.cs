@@ -15,14 +15,12 @@ namespace GeoEvents.Repository
     {
         protected IPostgresConnection PostgresConn { get; private set; }
 
-        public void EventRepo(IPostgresConnection postConn)
+
+        public EventRepository(IPostgresConnection postConn)
         {
             this.PostgresConn = postConn;
         }
-        public EventRepository()
-        {
-            EventRepo(new PostgresConnection());
-        }
+
 
         public bool CreateEvent(IEventEntity evt)
         {

@@ -9,7 +9,7 @@ namespace GeoEvents.Repository.Common
 {
     public interface IEventRepository
     {
-        void EventRepo(IPostgresConnection postConn);
+
         bool CreateEvent(IEventEntity evt);
         List<IEventEntity> GetEvents(Filter filter);
 
