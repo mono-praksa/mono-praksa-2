@@ -41,7 +41,7 @@ namespace GeoEvents.WebAPI.Controllers
         public List<EventsViewModel> GetEvents()
         {
             //Filter filter = new Filter(latitude, longitude, radius, startTime, endTime);
-            Filter filter = new Filter(40.71M,74.00M,3000000,new DateTime(2017-07-05),new DateTime(2017-07-07),1);
+            Filter filter = new Filter(40.71M,18.7M,3000,new DateTime(2017, 07, 05),new DateTime(2017, 07, 07),2);
 
             return Mapper.Map<List<EventsViewModel>>(Service.GetEvents(filter));
 
