@@ -37,13 +37,13 @@ namespace GeoEvents.Repository
                 PostgresConn.NpgConn());
 
             command.Parameters.AddWithValue("@Id", evt.Id);
-            command.Parameters.AddWithValue("@Category", evt.Category);
-            command.Parameters.AddWithValue("@Description", evt.Description);
-            command.Parameters.AddWithValue("@StartTime", evt.StartTime);
-            command.Parameters.AddWithValue("@EndTime", evt.EndTime);
-            command.Parameters.AddWithValue("@Lat", evt.Lat);
-            command.Parameters.AddWithValue("@Long", evt.Long);
-            command.Parameters.AddWithValue("@Name", evt.Name);
+            command.Parameters.AddWithValue("@Category", NpgsqlTypes.NpgsqlDbType.Integer, evt.Category);
+            command.Parameters.AddWithValue("@Description",NpgsqlTypes.NpgsqlDbType.Text, evt.Description);
+            command.Parameters.AddWithValue("@StartTime", NpgsqlTypes.NpgsqlDbType.Timestamp, evt.StartTime);
+            command.Parameters.AddWithValue("@EndTime", NpgsqlTypes.NpgsqlDbType.Timestamp, evt.EndTime);
+            command.Parameters.AddWithValue("@Lat", NpgsqlTypes.NpgsqlDbType.Double, evt.Lat);
+            command.Parameters.AddWithValue("@Long", NpgsqlTypes.NpgsqlDbType.Double, evt.Long);
+            command.Parameters.AddWithValue("@Name", NpgsqlTypes.NpgsqlDbType.Text, evt.Name);
 
             if (command.ExecuteNonQuery() == 1)
             {
@@ -93,8 +93,6 @@ namespace GeoEvents.Repository
 
                 SelectEvents.Add(tmp);
             }
-            //var x = new EventEntity(Guid.NewGuid(), new DateTime(2017-01-01), DateTime.Now, 2.0M, 2.1M, "MOCK", "oskdpodkbp", 3);
-            //SelectEvents.Add(x);
 
             return SelectEvents;
         }
