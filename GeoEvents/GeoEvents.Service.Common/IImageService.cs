@@ -27,7 +27,7 @@ namespace GeoEvents.Service.Common
             /// <param name="eventId">The event's id.</param>
             /// <param name="images">The list of images to add.</param>
             /// <returns></returns>
-            bool CreateImages(Guid eventId, List<IImage> images);
+            bool CreateImages(List<IImage> images);
 
             #endregion Methods
     }

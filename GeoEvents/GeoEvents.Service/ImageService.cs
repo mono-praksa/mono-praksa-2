@@ -61,9 +61,9 @@ namespace GeoEvents.Service
         /// <param name="eventId">The event's id.</param>
         /// <param name="images">The list of images to add.</param>
         /// <returns></returns>
-        public bool CreateImages(Guid eventId, List<IImage> images)
+        public bool CreateImages(List<IImage> images)
         {
-            return Repository.CreateImages(eventId, Mapper.Map<List<IImageEntity>>(images));
+            return Repository.CreateImages( Mapper.Map<List<IImageEntity>>(images));
         }
 
         #endregion Methods
