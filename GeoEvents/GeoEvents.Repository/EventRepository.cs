@@ -19,9 +19,14 @@ namespace GeoEvents.Repository
         {
             this.PostgresConn = postConn;
         }
+        public EventRepository()
+        {
+            EventRepo(new PostgresConnection());
+        }
 
         public bool CreateEvent(IEventEntity evt)
         {
+          
             PostgresConn.OpenConnection();
             bool Flag = false;
 
@@ -54,6 +59,7 @@ namespace GeoEvents.Repository
 
         public List<IEventEntity> GetEvents(Filter filter)
         {
+            
             PostgresConn.OpenConnection();
 
             NpgsqlCommand command = new NpgsqlCommand("SELECT * FROM \"Events\"WHERE (earth_box(ll_to_earth(@Lat, @Long), @Radius) @> ll_to_earth(\"Events\".\"Lat\", \"Events\".\"Long\")) AND ((@UserStartTime, @UserEndTime)OVERLAPS(\"Events\".\"StartTime\",\"Events\".\"EndTime\")) AND (@Category & \"Events\".\"Category\" > 0) ",
