@@ -27,11 +27,12 @@ namespace GeoEvents.WebAPI.Controllers
         //[HttpPost]
         //[Route("create/{name}/{description}/{longitude}/{latitude}/{categories}/{startTime}/{endTime}")]
         //public bool CreateEvent(string name, string description, decimal longitude, decimal latitude, List<int> categories, DateTime startTime, DateTime endTime)
+        [HttpGet]
+        [Route("create")]
         public bool CreateEvent()
         {
-            //Event evt = new Event(0, name, description, longitude, latitude, categories, startTime, endTime);
-            //return Service.CreateEvent(evt);
-            return true;
+            EventsViewModel evt = new EventsViewModel(Guid.NewGuid(), "Name", "desc", new DateTime(2017,5,7), new DateTime(2017,5,10), 45, 45, new List<int>() { 1,2,4 });
+            return Service.CreateEvent(Mapper.Map<IEvent>(evt));
         }
 
         [HttpGet]

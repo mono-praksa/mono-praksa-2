@@ -13,5 +13,16 @@ namespace GeoEvents.WebAPI
         public decimal Lat { get; set; }
         public decimal Long { get; set; }
         public List<int> Categories { get; set; }
+
+        public EventsViewModel(Guid id, string name, string description, DateTime starttime, DateTime endtime, decimal uLat, decimal uLong, List<int> categories) {
+            this.Id = id;
+            this.Name = name;
+            this.Description = description;
+            this.StartTime = starttime;
+            this.EndTime = endtime;
+            this.Lat = uLat;
+            this.Long = uLong;
+            this.Categories = categories;
+        }
     }
 }
