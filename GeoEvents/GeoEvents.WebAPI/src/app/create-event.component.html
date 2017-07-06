@@ -1,0 +1,70 @@
+﻿<div class="row">
+    <div class="col-md-offset-1 col-md-10">
+        <form>
+            <h2>Create Event</h2>
+            <div class="form-group">
+                <label for="name">Name</label>
+                <input type="text" class="form-control" id="name" placeholder="Name...">
+            </div>
+            <div class="form-group">
+                <label for="description">Description</label>
+                <textarea class="form-control" id="description" placeholder="Description..."></textarea>
+            </div>
+            <div class="form-group">
+                <fieldset>
+                    <legend>
+                        Date & Time
+                    </legend>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label for="fromdatetime">From</label>
+                            <input [(ngModel)]="date1" ngui-datetime-picker [close-on-select]="false" class="form-control" id="fromdatetime" placeholder="2017-07-11 00:00" />
+                        </div>
+                        <div class="col-md-6">
+                            <label for="todatetime">To</label>
+                            <input [(ngModel)]="date2" ngui-datetime-picker [close-on-select]="false" class="form-control" id="todatetime" placeholder="2017-07-28 00:00" />
+                        </div>
+                    </div>
+                </fieldset>
+            </div>
+            <div class="form-group">
+                <fieldset>
+                    <legend>
+                        Category
+                    </legend>
+                    <div class="row">
+                        <label class="col-md-3">
+                            <input type="checkbox" value="1" /> Music
+                        </label>
+                        <label class="col-md-3">
+                            <input type="checkbox" value="2" /> Culture
+                        </label>
+                        <label class="col-md-3">
+                            <input type="checkbox" value="4" /> Sport
+                        </label>
+                        <label class="col-md-3">
+                            <input type="checkbox" value="8" /> Gastro
+                        </label>
+
+                        <label class="col-md-3">
+                            <input type="checkbox" value="16" /> Religious
+                        </label>
+                        <label class="col-md-3">
+                            <input type="checkbox" value="32" /> Business
+                        </label>
+                        <label class="col-md-3">
+                            <input type="checkbox" value="64" /> Miscellaneous
+                        </label>
+                    </div>
+                </fieldset>
+            </div>
+            <div class="form-group">
+                <label for="address">
+                    Address
+                </label>
+                <input type="text" class="form-control" id="address" placeholder="Address..."/>
+            </div>
+            <button type="submit" class="btn btn-default">Submit</button>
+        </form>
+    </div>
+</div>
