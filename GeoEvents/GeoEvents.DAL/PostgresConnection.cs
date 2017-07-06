@@ -12,7 +12,7 @@ namespace GeoEvents.DAL
     public class PostgresConnection : IPostgresConnection
 
     {
-        const string ConnStringDefault = "Server=localhost;Port=5432;Database=Proba;User Id=postgres;Password=postgres;";
+        const string ConnStringDefault = "Server=198.168.21.10;Port=5432;Database=GeoEventsDb;User Id=postgres;Password=postgres;";
         NpgsqlConnection connection;
 
         public PostgresConnection()
