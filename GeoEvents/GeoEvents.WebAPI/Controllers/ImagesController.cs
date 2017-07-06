@@ -42,7 +42,7 @@ namespace GeoEvents.WebAPI.Controllers
             img1.EventId = new Guid(("98909782-c5b6-4d4c-8a89-0f9186018de4").ToString());
             img1.Content = new byte[2];
             img.Add(Mapper.Map<IImage>(img1));
-            return Service.CreateImages(img1.EventId, img);
+            return Service.CreateImages(img);
         }
     }
 }

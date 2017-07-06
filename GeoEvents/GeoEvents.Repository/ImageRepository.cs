@@ -19,7 +19,7 @@ namespace GeoEvents.Repository
         }
 
 
-        public bool CreateImages(Guid eventId, List<IImageEntity> img)
+        public bool CreateImages(List<IImageEntity> img)
         {
             PostgresConn.OpenConnection();
 
@@ -32,7 +32,7 @@ namespace GeoEvents.Repository
 
                 command.Parameters.AddWithValue("@Id", NpgsqlTypes.NpgsqlDbType.Uuid, item.Id);
                 command.Parameters.AddWithValue("@Content", NpgsqlTypes.NpgsqlDbType.Bytea ,item.Content);
-                command.Parameters.AddWithValue("@EventId", NpgsqlTypes.NpgsqlDbType.Uuid, eventId);
+                command.Parameters.AddWithValue("@EventId", NpgsqlTypes.NpgsqlDbType.Uuid, item.EventId);
             }
 
             if (command.ExecuteNonQuery() == 1)
