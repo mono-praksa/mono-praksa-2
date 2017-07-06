@@ -20,8 +20,6 @@ namespace GeoEvents.WebAPI
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
             AutoMapperConfig.Initialize();
-
-
         }
     }
 }
