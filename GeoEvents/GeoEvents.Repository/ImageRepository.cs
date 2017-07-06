@@ -30,9 +30,9 @@ namespace GeoEvents.Repository
                     ("insert into \"Images\" values(@Id, @Content, @EventId)",
                     PostgresConn.NpgConn());
 
-                command.Parameters.AddWithValue("@Id", item.Id);
-                command.Parameters.AddWithValue("@Content", item.Content);
-                command.Parameters.AddWithValue("@EventId", eventId);
+                command.Parameters.AddWithValue("@Id", NpgsqlTypes.NpgsqlDbType.Uuid, item.Id);
+                command.Parameters.AddWithValue("@Content", NpgsqlTypes.NpgsqlDbType.Bytea ,item.Content);
+                command.Parameters.AddWithValue("@EventId", NpgsqlTypes.NpgsqlDbType.Uuid, eventId);
             }
 
             if (command.ExecuteNonQuery() == 1)
@@ -51,9 +51,9 @@ namespace GeoEvents.Repository
             PostgresConn.OpenConnection();
 
             NpgsqlCommand command = new NpgsqlCommand
-                ("SELECT * FROM \"Images\" WHERE @eventID EQUALS \"EventId\"",
+                ("SELECT * FROM \"Images\" WHERE (@eventID = \"EventId\")",
                 PostgresConn.NpgConn());
-            command.Parameters.AddWithValue("@eventID", eventID);
+            command.Parameters.AddWithValue("@eventID", NpgsqlTypes.NpgsqlDbType.Uuid, eventID);
 
             NpgsqlDataReader dr = command.ExecuteReader();
 
@@ -67,7 +67,9 @@ namespace GeoEvents.Repository
                     Id = new Guid(dr[0].ToString()),
                     EventId = eventID
                 };
+
                 dr.GetBytes(1, 0, tmp.Content, 0, 4096);
+                //tmp.Content = new byte[2];
                 selectImages.Add(tmp);
             }
 

@@ -11,5 +11,6 @@ namespace GeoEvents.WebAPI
         public Guid Id { get; set; }
         public Guid EventId { get; set; }
         public byte[] Content { get; set; }
+
     }
 }

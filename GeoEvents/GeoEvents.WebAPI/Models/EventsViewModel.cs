@@ -24,5 +24,7 @@ namespace GeoEvents.WebAPI
             this.Long = uLong;
             this.Categories = categories;
         }
+
+        public EventsViewModel() { }
     }
 }
