@@ -5,20 +5,26 @@ using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
-using GeoEvents.Repository.Common;
 
 namespace GeoEvents.DAL
 {
-    public class PostgresConnection : IPostgresConnection
-
+    public class PostgresConnection
     {
-        const string ConnStringDefault = "Server=198.168.21.10;Port=5432;Database=GeoEventsDb;User Id=postgres;Password=postgres;";
-        NpgsqlConnection connection = new NpgsqlConnection(ConnStringDefault);
+        const string ConnStringDefault = "Server=192.168.21.10;Port=5432;Database=GeoEventsDb;User Id=postgres;Password=postgres;";
+        NpgsqlConnection connection;
 
-        //public PostgresConnection()
-        //{           
-        //        connection = new NpgsqlConnection(ConnStringDefault);        
-        //}
+        public PostgresConnection()
+        {
+            try
+            {
+                connection = new NpgsqlConnection(ConnStringDefault);
+            }
+            catch (PostgresException msg)
+            {
+                throw msg;
+            }
+
+        }
 
         public void OpenConnection()
         {

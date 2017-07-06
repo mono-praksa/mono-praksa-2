@@ -14,8 +14,7 @@ namespace GeoEvents.DAL
         public override void Load()
         {
             Bind<IEventEntity>().To<EventEntity>();
-            Bind<IImageEntity>().To<ImageEntity>();
-            Bind<IPostgresConnection>().To<PostgresConnection>();
+            Bind<IImageEntity>().To<ImageEntity>();     
         }
     }
 

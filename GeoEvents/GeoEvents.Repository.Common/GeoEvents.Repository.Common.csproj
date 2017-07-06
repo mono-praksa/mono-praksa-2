@@ -52,7 +52,6 @@
     <Compile Include="IEventRepository.cs" />
     <Compile Include="IImageEntity.cs" />
     <Compile Include="IImageRepository.cs" />
-    <Compile Include="IPostgresConnection.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

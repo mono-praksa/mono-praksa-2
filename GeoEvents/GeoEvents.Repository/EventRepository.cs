@@ -13,18 +13,16 @@ namespace GeoEvents.Repository
 {
     public class EventRepository : IEventRepository
     {
-        protected IPostgresConnection PostgresConn { get; private set; }
+        PostgresConnection PostgresConn;
 
-
-        public EventRepository(IPostgresConnection postConn)
+        public EventRepository()
         {
-            this.PostgresConn = postConn;
+            PostgresConn = new PostgresConnection();
         }
-
 
         public bool CreateEvent(IEventEntity evt)
         {
-          
+
             PostgresConn.OpenConnection();
             bool Flag = false;
 
@@ -36,7 +34,7 @@ namespace GeoEvents.Repository
 
             command.Parameters.AddWithValue("@Id", evt.Id);
             command.Parameters.AddWithValue("@Category", NpgsqlTypes.NpgsqlDbType.Integer, evt.Category);
-            command.Parameters.AddWithValue("@Description",NpgsqlTypes.NpgsqlDbType.Text, evt.Description);
+            command.Parameters.AddWithValue("@Description", NpgsqlTypes.NpgsqlDbType.Text, evt.Description);
             command.Parameters.AddWithValue("@StartTime", NpgsqlTypes.NpgsqlDbType.Timestamp, evt.StartTime);
             command.Parameters.AddWithValue("@EndTime", NpgsqlTypes.NpgsqlDbType.Timestamp, evt.EndTime);
             command.Parameters.AddWithValue("@Lat", NpgsqlTypes.NpgsqlDbType.Double, evt.Lat);
@@ -57,16 +55,16 @@ namespace GeoEvents.Repository
 
         public List<IEventEntity> GetEvents(Filter filter)
         {
-            
+
             PostgresConn.OpenConnection();
 
             NpgsqlCommand command = new NpgsqlCommand("SELECT * FROM \"Events\"WHERE (earth_box(ll_to_earth(@Lat, @Long), @Radius) @> ll_to_earth(\"Events\".\"Lat\", \"Events\".\"Long\")) AND ((@UserStartTime, @UserEndTime)OVERLAPS(\"Events\".\"StartTime\",\"Events\".\"EndTime\")) AND (@Category & \"Events\".\"Category\" > 0) ",
                 PostgresConn.NpgConn());
-            
+
             command.Parameters.AddWithValue("@Lat", NpgsqlTypes.NpgsqlDbType.Double, filter.ULat);
             command.Parameters.AddWithValue("@Long", NpgsqlTypes.NpgsqlDbType.Double, filter.ULong);
-            command.Parameters.AddWithValue("@Radius", NpgsqlTypes.NpgsqlDbType.Double, filter.Radius*1000);
-            command.Parameters.AddWithValue("@UserStartTime", NpgsqlTypes.NpgsqlDbType.Timestamp , filter.StartTime);
+            command.Parameters.AddWithValue("@Radius", NpgsqlTypes.NpgsqlDbType.Double, filter.Radius * 1000);
+            command.Parameters.AddWithValue("@UserStartTime", NpgsqlTypes.NpgsqlDbType.Timestamp, filter.StartTime);
             command.Parameters.AddWithValue("@UserEndTime", NpgsqlTypes.NpgsqlDbType.Timestamp, filter.EndTime);
             command.Parameters.AddWithValue("@Category", NpgsqlTypes.NpgsqlDbType.Integer, filter.Category);
 
@@ -74,7 +72,7 @@ namespace GeoEvents.Repository
 
             EventEntity tmp;
             List<IEventEntity> SelectEvents = new List<IEventEntity>();
-            
+
             while (dr.Read())
             {
                 tmp = new EventEntity
@@ -94,7 +92,6 @@ namespace GeoEvents.Repository
 
             return SelectEvents;
         }
-
 
     }
 }
