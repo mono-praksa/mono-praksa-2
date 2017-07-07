@@ -34,26 +34,26 @@
                     </legend>
                     <div class="row">
                         <label class="col-md-3">
-                            <input type="checkbox" value="1" /> Music
+                            <input type="checkbox" value="1" (change)="updateCategories(1)" /> Music
                         </label>
                         <label class="col-md-3">
-                            <input type="checkbox" value="2" /> Culture
+                            <input type="checkbox" value="2" (change)="updateCategories(2)" /> Culture
                         </label>
                         <label class="col-md-3">
-                            <input type="checkbox" value="4" /> Sport
+                            <input type="checkbox" value="4" (change)="updateCategories(4)" /> Sport
                         </label>
                         <label class="col-md-3">
-                            <input type="checkbox" value="8" /> Gastro
+                            <input type="checkbox" value="8" (change)="updateCategories(8)" /> Gastro
                         </label>
 
                         <label class="col-md-3">
-                            <input type="checkbox" value="16" /> Religious
+                            <input type="checkbox" value="16" (change)="updateCategories(16)" /> Religious
                         </label>
                         <label class="col-md-3">
-                            <input type="checkbox" value="32" /> Business
+                            <input type="checkbox" value="32" (change)="updateCategories(32)" /> Business
                         </label>
                         <label class="col-md-3">
-                            <input type="checkbox" value="64" /> Miscellaneous
+                            <input type="checkbox" value="64" (change)="updateCategories(64)" /> Miscellaneous
                         </label>
                     </div>
                 </fieldset>
