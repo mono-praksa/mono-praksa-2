@@ -15,7 +15,7 @@ namespace GeoEvents.Service
     /// The image service.
     /// </summary>
     /// <seealso cref="IImageService"/>
-    class ImageService : IImageService
+    public class ImageService : IImageService
     {
         #region Properties
         /// <summary>
