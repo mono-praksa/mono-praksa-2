@@ -5,6 +5,7 @@ import { ReactiveFormsModule } from '@angular/forms'
 import { AppComponent } from './app.component'
 import { CreateEventComponent } from './create-event.component'
 import { NguiDatetimePickerModule } from '@ngui/datetime-picker'
+import { DisplayListComponent } from './display-list.component'
 
 @NgModule({
     imports: [
@@ -14,7 +15,8 @@ import { NguiDatetimePickerModule } from '@ngui/datetime-picker'
     ],
     declarations: [
         AppComponent,
-        CreateEventComponent
+        CreateEventComponent,
+        DisplayListComponent
     ],
     bootstrap: [
         AppComponent
