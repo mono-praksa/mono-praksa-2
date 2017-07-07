@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 
 namespace GeoEvents.Repository.Common
 {
-    interface IImageRepository
+    public interface IImageRepository
     {
 
         List<IImageEntity> GetImages(Guid eventID);
 
-        bool CreateImages(Guid eventId, List<IImageEntity> img);
+        bool CreateImages(List<IImageEntity> img);
 
     }
 }

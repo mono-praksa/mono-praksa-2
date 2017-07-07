@@ -14,5 +14,23 @@ namespace GeoEvents.DAL
 
         public Guid EventId { get; set; }
 
+
+        public ImageEntity(Guid Id, byte[] Content, Guid EventId)
+        {
+            this.Id = Id;
+            this.Content = Content;
+            this.EventId = EventId;
+        }
+
+        public ImageEntity()
+        {
+
+        }
+        public ImageEntity(Guid Id, Guid EventId)
+        {
+            this.Id = Id;
+            this.EventId = EventId;
+        }
+
     }
 }
