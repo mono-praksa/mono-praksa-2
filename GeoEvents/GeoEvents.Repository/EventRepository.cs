@@ -32,7 +32,7 @@ namespace GeoEvents.Repository
                 ("insert into \"Events\" values(@Id, @StartTime, @EndTime, @Lat, @Long, @Name, @Description, @Category)",
                 PostgresConn.NpgConn());
 
-            command.Parameters.AddWithValue("@Id", evt.Id);
+            command.Parameters.AddWithValue("@Id", NpgsqlTypes.NpgsqlDbType.Uuid, evt.Id);
             command.Parameters.AddWithValue("@Category", NpgsqlTypes.NpgsqlDbType.Integer, evt.Category);
             command.Parameters.AddWithValue("@Description", NpgsqlTypes.NpgsqlDbType.Text, evt.Description);
             command.Parameters.AddWithValue("@StartTime", NpgsqlTypes.NpgsqlDbType.Timestamp, evt.StartTime);
