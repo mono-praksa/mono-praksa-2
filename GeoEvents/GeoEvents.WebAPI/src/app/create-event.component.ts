@@ -6,7 +6,6 @@ import { Observable } from 'rxjs/Rx'
 import { isEndDateBeforeStartDate } from './validators'
 
 @Component({
-    selector: "create-event",
     templateUrl: "app/create-event.component.html",
     styles: [`
         em {

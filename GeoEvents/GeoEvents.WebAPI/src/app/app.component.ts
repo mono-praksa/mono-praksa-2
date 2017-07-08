@@ -3,9 +3,8 @@ import { Component } from '@angular/core';
 @Component({
   selector: 'my-app',
   template: `
-    <div class="container">
-        <create-event></create-event>
-    </div>
+    <nav-bar></nav-bar>
+    <router-outlet></router-outlet>
   `
 })
 export class AppComponent  { }
