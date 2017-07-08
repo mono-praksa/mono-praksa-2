@@ -4,6 +4,7 @@ import { ReactiveFormsModule } from '@angular/forms'
 import { HttpModule } from '@angular/http'
 import { RouterModule } from '@angular/router'
 import { NguiDatetimePickerModule } from '@ngui/datetime-picker'
+import { AgmCoreModule } from '@agm/core'
 
 import { AppComponent } from './app.component'
 import { CreateEventComponent } from './create-event.component'
@@ -19,7 +20,11 @@ import { routes } from './routes'
         ReactiveFormsModule,
         HttpModule,
         RouterModule.forRoot(routes),
-        NguiDatetimePickerModule
+        NguiDatetimePickerModule,
+        AgmCoreModule.forRoot({
+            apiKey: 'AIzaSyDHKcbmM0jpW7BOet42_S92KJSr5PYKc5w',
+            libraries: ['places']
+        })
     ],
     declarations: [
         AppComponent,

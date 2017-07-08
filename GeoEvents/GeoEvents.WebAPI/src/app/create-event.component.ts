@@ -1,20 +1,27 @@
-﻿import { Component, OnInit } from '@angular/core'
+﻿import { Component, OnInit, ElementRef, NgZone, ViewChild } from '@angular/core'
 import { FormControl, FormGroup, FormBuilder, Validators } from '@angular/forms'
 import { Http, Response, Headers, RequestOptions } from '@angular/http'
 import { Observable } from 'rxjs/Rx'
+import { MapsAPILoader } from '@agm/core'
 
 import { endDateBeforeStartDate } from './validators'
 
 @Component({
     templateUrl: "app/create-event.component.html",
     styles: [`
-        em {
-            color: red;
-            font-size: 12px;
+        agm-map {
+            height: 300px;
         }
     `]
 })
 export class CreateEventComponent implements OnInit {
+    latitude: number;
+    longitude: number;
+    zoom: number;
+
+    @ViewChild("search")
+    searchElementRef: ElementRef;
+
     categories: any[] = [
         { id: 1, checked: false },
         { id: 2, checked: false },
@@ -33,7 +40,7 @@ export class CreateEventComponent implements OnInit {
     category: FormControl
     address: FormControl
 
-    constructor(private http: Http, private formBuilder: FormBuilder) { }
+    constructor(private http: Http, private formBuilder: FormBuilder, private mapsAPILoader: MapsAPILoader, private ngZone: NgZone) { }
 
     ngOnInit() {
         this.name = new FormControl('', Validators.required);
@@ -48,7 +55,46 @@ export class CreateEventComponent implements OnInit {
             start: this.start,
             end: this.end,
             address: this.address
-        }, { validator: endDateBeforeStartDate('start','end') });
+        }, { validator: endDateBeforeStartDate('start', 'end') });
+
+        //GOOGLE MAPS
+        this.zoom = 4;
+        this.latitude = 39.8282;
+        this.longitude = -98.5795;
+
+        this.setCurrentPosition();
+
+        this.mapsAPILoader.load().then(() => {
+            let autocomplete = new google.maps.places.Autocomplete(this.searchElementRef.nativeElement, {
+                types: ["address"]
+            });
+            autocomplete.addListener("place_changed", () => {
+                this.ngZone.run(() => {
+                    //get the place result
+                    let place: google.maps.places.PlaceResult = autocomplete.getPlace();
+
+                    //verify result
+                    if (place.geometry === undefined || place.geometry === null) {
+                        return;
+                    }
+
+                    //set latitude, longitude and zoom
+                    this.latitude = place.geometry.location.lat();
+                    this.longitude = place.geometry.location.lng();
+                    this.zoom = 12;
+                });
+            });
+        });
+    }
+
+    private setCurrentPosition() {
+        if ("geolocation" in navigator) {
+            navigator.geolocation.getCurrentPosition((position) => {
+                this.latitude = position.coords.latitude;
+                this.longitude = position.coords.longitude;
+                this.zoom = 12;
+            });
+        }
     }
 
     handleError(error: Response) {
@@ -62,24 +108,24 @@ export class CreateEventComponent implements OnInit {
                 chosenCategories.push(checkbox.id);
             }
         });
-
+        
         let newEvent = {
             Name: formValues.name,
             Description: formValues.description,
             StartTime: formValues.start,
             EndTime: formValues.end,
-            Lat: 45,
-            Long: 45,
+            Lat: this.latitude,
+            Long: this.longitude,
             Categories: chosenCategories
         }
-
-        let headers = new Headers({ 'Content-Type': 'application/json' });
-        let options = new RequestOptions({ headers: headers });
-        return this.http.post('/api/event/create', JSON.stringify(newEvent), options).map(function (response: Response) {
-            return response.json();
-        }).catch(this.handleError).subscribe((response: Response) => {
-            console.log(response);
-        });
+        console.log(newEvent);
+        //let headers = new Headers({ 'Content-Type': 'application/json' });
+        //let options = new RequestOptions({ headers: headers });
+        //return this.http.post('/api/event/create', JSON.stringify(newEvent), options).map(function (response: Response) {
+        //    return response.json();
+        //}).catch(this.handleError).subscribe((response: Response) => {
+        //    console.log(response);
+        //});
     }
 
     updateCategories(category: number) {
@@ -88,6 +134,11 @@ export class CreateEventComponent implements OnInit {
                 checkbox.checked = !checkbox.checked;
             }
         });
+    }
+
+    mapClicked($event: any) {
+        this.latitude = $event.coords.lat;
+        this.longitude = $event.coords.lng;
     }
 
     isAllUnchecked() {
