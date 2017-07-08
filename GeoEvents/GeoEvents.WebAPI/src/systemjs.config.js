@@ -30,7 +30,7 @@
     },
     // packages tells the System loader how to load when no filename and/or no extension
     packages: {
-        '@ngui/datetime-picker': {
+      '@ngui/datetime-picker': {
             main: 'datetime-picker.umd.js',
             defaultExtension: 'js'
       },

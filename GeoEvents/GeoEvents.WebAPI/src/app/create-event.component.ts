@@ -1,11 +1,19 @@
 ﻿import { Component, OnInit } from '@angular/core'
-import { FormControl, FormGroup, Validators } from '@angular/forms'
+import { FormControl, FormGroup, FormBuilder, Validators } from '@angular/forms'
 import { Http, Response, Headers, RequestOptions } from '@angular/http'
 import { Observable } from 'rxjs/Rx'
 
+import { isEndDateBeforeStartDate } from './validators'
+
 @Component({
     selector: "create-event",
-    templateUrl: "app/create-event.component.html"
+    templateUrl: "app/create-event.component.html",
+    styles: [`
+        em {
+            color: red;
+            font-size: 12px;
+        }
+    `]
 })
 export class CreateEventComponent implements OnInit {
     categories: any[] = [
@@ -15,7 +23,7 @@ export class CreateEventComponent implements OnInit {
         { id: 8, checked: false },
         { id: 16, checked: false },
         { id: 32, checked: false },
-        { id: 64, checked: false }
+        { id: 64, checked: true }
     ]
     eventForm: FormGroup
 
@@ -26,7 +34,7 @@ export class CreateEventComponent implements OnInit {
     category: FormControl
     address: FormControl
 
-    constructor(private http: Http) { }
+    constructor(private http: Http, private formBuilder: FormBuilder) { }
 
     ngOnInit() {
         this.name = new FormControl('', Validators.required);
@@ -35,13 +43,13 @@ export class CreateEventComponent implements OnInit {
         this.end = new FormControl('', Validators.required);
         this.address = new FormControl('', Validators.required);
 
-        this.eventForm = new FormGroup({
+        this.eventForm = this.formBuilder.group({
             name: this.name,
             description: this.description,
             start: this.start,
             end: this.end,
             address: this.address
-        });
+        }, { validator: isEndDateBeforeStartDate('start','end') });
     }
 
     handleError(error: Response) {
@@ -81,5 +89,15 @@ export class CreateEventComponent implements OnInit {
                 checkbox.checked = !checkbox.checked;
             }
         });
+    }
+
+    isAllUnchecked() {
+        let checkbox: any
+        for (checkbox of this.categories) {
+            if (checkbox.checked) {
+                return false;
+            }
+        }
+        return true;
     }
 }

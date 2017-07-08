@@ -4,10 +4,12 @@
             <h2>Create Event</h2>
             <div class="form-group">
                 <label for="name">Name</label>
+                <em *ngIf="name.touched && name.invalid">Required</em>
                 <input type="text" formControlName="name" class="form-control" id="name" placeholder="Name..." required>
             </div>
             <div class="form-group">
                 <label for="description">Description</label>
+                <em *ngIf="description.touched && description.invalid">Required</em>
                 <textarea formControlName="description" class="form-control" id="description" placeholder="Description..." required ></textarea>
             </div>
             <div class="form-group">
@@ -18,11 +20,14 @@
                     <div class="row">
                         <div class="col-md-6">
                             <label for="start">Start</label>
-                            <input formControlName="start" ngui-datetime-picker [close-on-select]="false" class="form-control" id="start" placeholder="2017-07-11 00:00" required />
+                            <em *ngIf="start.touched && start.invalid">Required</em>
+                            <input formControlName="start" ngui-datetime-picker [close-on-select]="false" class="form-control" id="start" placeholder="Click to enter date and time" required readonly style="cursor: pointer;"/>
                         </div>
                         <div class="col-md-6">
                             <label for="end">End</label>
-                            <input formControlName="end" ngui-datetime-picker [close-on-select]="false" class="form-control" id="end" placeholder="2017-07-28 00:00" required />
+                            <em *ngIf="end.touched && end.invalid">Required</em>
+                            <em *ngIf="eventForm.hasError('isEndDateBeforeStartDate')">End date must be after start date!</em>
+                            <input formControlName="end" ngui-datetime-picker [close-on-select]="false" class="form-control" id="end" placeholder="Click to enter date and time" required readonly style="cursor: pointer;" (change)="checkStartTime()" />
                         </div>
                     </div>
                 </fieldset>
@@ -30,7 +35,7 @@
             <div class="form-group">
                 <fieldset>
                     <legend>
-                        Category
+                        Categories <em *ngIf="isAllUnchecked()">Required at least one category!</em>
                     </legend>
                     <div class="row">
                         <label class="col-md-3">
@@ -53,7 +58,7 @@
                             <input type="checkbox" value="32" (change)="updateCategories(32)" /> Business
                         </label>
                         <label class="col-md-3">
-                            <input type="checkbox" value="64" (change)="updateCategories(64)" /> Miscellaneous
+                            <input type="checkbox" value="64" (change)="updateCategories(64)" checked /> Miscellaneous
                         </label>
                     </div>
                 </fieldset>
@@ -62,9 +67,10 @@
                 <label for="address">
                     Address
                 </label>
+                <em *ngIf="address.touched && address.invalid">Required</em>
                 <input type="text" formControlName="address" class="form-control" id="address" placeholder="Address..." required />
             </div>
-            <button type="submit" class="btn btn-default">Submit</button>
+            <button type="submit" class="btn btn-default" [disabled]="eventForm.invalid || isAllUnchecked()">Submit</button>
         </form>
     </div>
 </div>
