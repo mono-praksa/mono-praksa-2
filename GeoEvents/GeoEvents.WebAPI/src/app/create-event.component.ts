@@ -3,7 +3,7 @@ import { FormControl, FormGroup, FormBuilder, Validators } from '@angular/forms'
 import { Http, Response, Headers, RequestOptions } from '@angular/http'
 import { Observable } from 'rxjs/Rx'
 
-import { isEndDateBeforeStartDate } from './validators'
+import { endDateBeforeStartDate } from './validators'
 
 @Component({
     templateUrl: "app/create-event.component.html",
@@ -48,7 +48,7 @@ export class CreateEventComponent implements OnInit {
             start: this.start,
             end: this.end,
             address: this.address
-        }, { validator: isEndDateBeforeStartDate('start','end') });
+        }, { validator: endDateBeforeStartDate('start','end') });
     }
 
     handleError(error: Response) {

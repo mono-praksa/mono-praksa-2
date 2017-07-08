@@ -44,7 +44,7 @@ function stringToTimeArray(_time: string, _format: string, _delimiter: string) {
     return formatedTime.filter(function (n) { return n != undefined });
 }
 
-export function isEndDateBeforeStartDate(startKey: string, endKey: string) {
+export function endDateBeforeStartDate(startKey: string, endKey: string) {
     return (group: FormGroup): { [key: string]: any } => {
         let start = group.controls[startKey];
         let end = group.controls[endKey];
@@ -68,7 +68,7 @@ export function isEndDateBeforeStartDate(startKey: string, endKey: string) {
             
             if (startDateTime >= endDateTime) {
                 return {
-                    isEndDateBeforeStartDate: true
+                    endDateBeforeStartDate: true
                 }
             }
         }

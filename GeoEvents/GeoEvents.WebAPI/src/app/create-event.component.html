@@ -1,14 +1,14 @@
 ﻿<form [formGroup]="eventForm" (ngSubmit)="createEvent(eventForm.value)" autocomplete="off" novalidate>
     <h2>Create Event</h2>
-    <div class="form-group">
-        <label for="name">Name</label>
-        <em *ngIf="name.touched && name.invalid">Required</em>
+    <div class="form-group" [ngClass]="{'has-error': name.touched && name.invalid, 'has-success': name.touched && !name.invalid}">
+        <label for="name" class="control-label">Name</label>
         <input type="text" formControlName="name" class="form-control" id="name" placeholder="Name..." required>
+        <span class="help-block" *ngIf="name.touched && name.invalid">Required!</span>
     </div>
-    <div class="form-group">
-        <label for="description">Description</label>
-        <em *ngIf="description.touched && description.invalid">Required</em>
+    <div class="form-group" [ngClass]="{'has-error': description.touched && description.invalid, 'has-success': description.touched && !description.invalid}">
+        <label for="description" class="control-label">Description</label>
         <textarea formControlName="description" class="form-control" id="description" placeholder="Description..." required></textarea>
+        <span class="help-block" *ngIf="description.touched && description.invalid">Required!</span>
     </div>
     <div class="form-group">
         <fieldset>
@@ -16,26 +16,26 @@
                 Date & Time
             </legend>
             <div class="row">
-                <div class="col-md-6">
-                    <label for="start">Start</label>
-                    <em *ngIf="start.touched && start.invalid">Required</em>
+                <div class="col-md-6" [ngClass]="{'has-error': start.touched && start.invalid, 'has-success': start.touched && !start.invalid}">
+                    <label for="start" class="control-label">Start</label>
                     <input formControlName="start" ngui-datetime-picker [close-on-select]="false" class="form-control" id="start" placeholder="Click to enter date and time" required readonly style="cursor: pointer;" />
+                    <span class="help-block" *ngIf="start.touched && start.invalid">Required!</span>
                 </div>
-                <div class="col-md-6">
-                    <label for="end">End</label>
-                    <em *ngIf="end.touched && end.invalid">Required</em>
-                    <em *ngIf="eventForm.hasError('isEndDateBeforeStartDate')">End date must be after start date!</em>
+                <div class="col-md-6" [ngClass]="{'has-error': end.touched && (end.invalid || eventForm.hasError('endDateBeforeStartDate')), 'has-success': end.touched && !(end.invalid || eventForm.hasError('endDateBeforeStartDate'))}">
+                    <label for="end" class="control-label">End</label>
                     <input formControlName="end" ngui-datetime-picker [close-on-select]="false" class="form-control" id="end" placeholder="Click to enter date and time" required readonly style="cursor: pointer;" (change)="checkStartTime()" />
+                    <span class="help-block" *ngIf="end.touched && end.invalid">Required!</span>
+                    <span class="help-block" *ngIf="end.touched && eventForm.hasError('endDateBeforeStartDate')">End date must be after start date!</span>
                 </div>
             </div>
         </fieldset>
     </div>
-    <div class="form-group">
+    <div class="form-group" [ngClass]="{'has-error': isAllUnchecked(), 'has-success': !isAllUnchecked()}">
         <fieldset>
-            <legend>
-                Categories <em *ngIf="isAllUnchecked()">Required at least one category!</em>
+            <legend class="control-label">
+                Categories
             </legend>
-            <div class="row">
+            <div class="row control-label">
                 <label class="col-md-3">
                     <input type="checkbox" value="1" (change)="updateCategories(1)" /> Music
                 </label>
@@ -59,14 +59,13 @@
                     <input type="checkbox" value="64" (change)="updateCategories(64)" checked /> Miscellaneous
                 </label>
             </div>
+            <span class="help-block" *ngIf="isAllUnchecked()">Required at least one category!</span>
         </fieldset>
     </div>
-    <div class="form-group">
-        <label for="address">
-            Address
-        </label>
-        <em *ngIf="address.touched && address.invalid">Required</em>
+    <div class="form-group" [ngClass]="{'has-error': address.touched && address.invalid, 'has-success': address.touched && !address.invalid}">
+        <label for="address" class="control-label">Address</label>
         <input type="text" formControlName="address" class="form-control" id="address" placeholder="Address..." required />
+        <span class="help-block" *ngIf="address.touched && address.invalid">Required!</span>
     </div>
     <button type="submit" class="btn btn-default" [disabled]="eventForm.invalid || isAllUnchecked()">Submit</button>
 </form>
