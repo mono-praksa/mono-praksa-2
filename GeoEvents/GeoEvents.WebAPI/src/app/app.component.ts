@@ -1,10 +1,12 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'my-app',
+  selector: 'geo-events',
   template: `
     <nav-bar></nav-bar>
-    <router-outlet></router-outlet>
+    <div class="container">
+        <router-outlet></router-outlet>
+    </div>
   `
 })
 export class AppComponent  { }

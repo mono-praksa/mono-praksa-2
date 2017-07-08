@@ -9,6 +9,7 @@ import { AppComponent } from './app.component'
 import { CreateEventComponent } from './create-event.component'
 import { DisplayListComponent } from './display-list.component'
 import { NavbarComponent } from './navbar/navbar.component'
+import { Error404Component } from './errors/error-404.component'
 
 import { routes } from './routes'
 
@@ -24,7 +25,8 @@ import { routes } from './routes'
         AppComponent,
         CreateEventComponent,
         DisplayListComponent,
-        NavbarComponent
+        NavbarComponent,
+        Error404Component
     ],
     bootstrap: [
         AppComponent
