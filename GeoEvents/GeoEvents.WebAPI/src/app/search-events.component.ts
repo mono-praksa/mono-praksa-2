@@ -4,6 +4,7 @@ import { Http, Response, Headers, RequestOptions } from '@angular/http'
 import { Observable } from 'rxjs/Rx'
 import { MapsAPILoader } from '@agm/core'
 import { IEvent } from './event.model'
+import { IFilter } from './filter.model'
 
 @Component({
     templateUrl: "app/search-events.component.html",
@@ -156,5 +157,42 @@ export class SearchEventsComponent implements OnInit {
         this.detailsMode = true
     }
 
+    filterEvents(formValues: any) {
+        let chosenCategories: number[] = [];
+        this.categories.filter(checkbox => {
+            if (checkbox.checked) {
+                chosenCategories.push(checkbox.id);
+            }
+        });
 
+        var cat = 0
+        for (let c of chosenCategories) {
+            cat += c
+        }
+        var filter : IFilter = {
+            ULat: this.latitude,
+            ULong: this.longitude,
+            Radius: formValues.radius,
+            StartTime: formValues.start,
+            EndTime: formValues.end,
+            Category: cat
+        }
+
+        console.log('form values: ', formValues)
+        console.log('filter: ', filter)
+        this.getEvents(filter).subscribe(res => {
+            this.events = res
+        })
+    }
+
+    getEvents(filter: IFilter): Observable<IEvent[]> {
+
+        return this.http.get('/api/event/search/' + filter.ULat.toString() + '/' + filter.ULong.toString() + '/' + filter.Radius.toString() + '/' + filter.Category.toString() + '/' + filter.StartTime.toString() + '/' + filter.EndTime.toString()).map(function (response: Response) {
+            return <IEvent[]>response.json();
+        }).catch(this.handleError);
+    }
+
+    handleError(error: Response) {
+        return Observable.throw(error.statusText);
+    }
 }

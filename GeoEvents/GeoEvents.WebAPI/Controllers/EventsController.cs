@@ -39,16 +39,33 @@ namespace GeoEvents.WebAPI.Controllers
 
         [HttpGet]
         //[Route("get/{latitude}/{longitude}/{radius}/{startTime}/{endTime}")]
-        [Route("mockdata")]
-        //public List<IEvent> GetEvents(decimal latitude, decimal longitude, decimal radius, DateTime startTime, DateTime endTime)
-        public List<EventsViewModel> GetEvents()
+        [Route("search/{ULat}/{ULong}/{Radius}/{Category}/{StartTime}/{EndTime}")]
+        public List<EventsViewModel> GetEvents(decimal ULat, decimal ULong, decimal Radius, int Category, string StartTime, string EndTime)
         {
-            //Filter filter = new Filter(latitude, longitude, radius, startTime, endTime);
-            Filter filter = new Filter(40.71M,18.7M,3000,new DateTime(2017, 07, 05),new DateTime(2017, 07, 07),2);
+            var startDateTime = StartTime.Split(' ');
+            var startDate = startDateTime[0].Split('-');
+            var startTime = startDateTime[1].Split(':');
+
+            var startYear = startDate[0];
+            var startMonth = startDate[1];
+            var startDay = startDate[2];
+
+            var startHour = startTime[0];
+            var startMinute = startTime[1];
+
+            var endDateTime = EndTime.Split(' ');
+            var endDate = endDateTime[0].Split('-');
+            var endTime = endDateTime[1].Split(':');
+
+            var endYear = endDate[0];
+            var endMonth = endDate[1];
+            var endDay = endDate[2];
+
+            var endHour = endTime[0];
+            var endMinute = endTime[1];
+            Filter filter = new Filter(ULat, ULong, Radius, new DateTime((startYear, startMonth, startDay, startHour, startMinute, 0), new DateTime(EndTime), Category);
 
             return Mapper.Map<List<EventsViewModel>>(Service.GetEvents(filter));
-
-            //return Data.GenerateMockData();
         }
     }
 }

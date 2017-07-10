@@ -9,11 +9,11 @@
                     </legend>
                     <div class="row">
                         <div class="col-md-6">
-                            <label for="start">Start</label>
+                            <label for="start" class="control-label">Start</label>
                             <input formControlName="start" ngui-datetime-picker [close-on-select]="false" class="form-control" id="start" placeholder="Click to enter date and time" readonly style="cursor: pointer;" />
                         </div>
                         <div class="col-md-6">
-                            <label for="end">End</label>
+                            <label for="end" class="control-label">End</label>
                             <input formControlName="end" ngui-datetime-picker [close-on-select]="false" class="form-control" id="end" placeholder="Click to enter date and time" readonly style="cursor: pointer;" (change)="checkStartTime()" />
                         </div>
                     </div>
@@ -66,7 +66,7 @@
                     <input type="text" formControlName="radius" class="form-control" id="radius" placeholder="Radius..." />
                 </fieldset>
             </div>
-            <button type="submit" class="btn btn-default">Search</button>
+            <button type="submit" class="btn btn-default" [disabled]="filterForm.invalid">Search</button>
         </form>
     </div>
     <!--<div class="col-md-7">
