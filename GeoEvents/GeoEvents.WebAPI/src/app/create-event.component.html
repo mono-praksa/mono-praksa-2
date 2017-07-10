@@ -36,36 +36,17 @@
                 Categories
             </legend>
             <div class="row control-label">
-                <label class="col-md-3">
-                    <input type="checkbox" value="1" (change)="updateCategories(1)" /> Music
-                </label>
-                <label class="col-md-3">
-                    <input type="checkbox" value="2" (change)="updateCategories(2)" /> Culture
-                </label>
-                <label class="col-md-3">
-                    <input type="checkbox" value="4" (change)="updateCategories(4)" /> Sport
-                </label>
-                <label class="col-md-3">
-                    <input type="checkbox" value="8" (change)="updateCategories(8)" /> Gastro
-                </label>
-
-                <label class="col-md-3">
-                    <input type="checkbox" value="16" (change)="updateCategories(16)" /> Religious
-                </label>
-                <label class="col-md-3">
-                    <input type="checkbox" value="32" (change)="updateCategories(32)" /> Business
-                </label>
-                <label class="col-md-3">
-                    <input type="checkbox" value="64" (change)="updateCategories(64)" checked /> Miscellaneous
+                <label class="col-md-3" *ngFor="let category of keys()">
+                    <input type="checkbox" value="{{CategoryEnum[category]}}" (change)="updateCategories(CategoryEnum[category])" *ngIf="category!='Miscellaneous'" />
+                    <input type="checkbox" value="{{CategoryEnum[category]}}" (change)="updateCategories(CategoryEnum[category])" *ngIf="category=='Miscellaneous'" checked/> {{category}}
                 </label>
             </div>
             <span class="help-block" *ngIf="isAllUnchecked()">Required at least one category!</span>
         </fieldset>
     </div>
-    <div class="form-group" [ngClass]="{'has-error': address.touched && address.invalid, 'has-success': address.touched && !address.invalid}">
-        <label for="address" class="control-label">Address</label>
-        <input type="text" formControlName="address" class="form-control" id="address" placeholder="Address..." required #search />
-        <span class="help-block" *ngIf="address.touched && address.invalid">Required!</span>
+    <div class="form-group">
+        <label for="address">Address</label>
+        <input type="text" class="form-control" id="address" placeholder="Address..." #search />
     </div>
     <agm-map [latitude]="latitude" [longitude]="longitude" [scrollwheel]="true" [zoom]="zoom" (mapClick)="mapClicked($event)">
         <agm-marker [latitude]="latitude" [longitude]="longitude" [markerDraggable]="true"></agm-marker>
