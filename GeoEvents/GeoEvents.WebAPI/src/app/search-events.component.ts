@@ -3,11 +3,65 @@ import { FormControl, FormGroup, FormBuilder, Validators } from '@angular/forms'
 import { Http, Response, Headers, RequestOptions } from '@angular/http'
 import { Observable } from 'rxjs/Rx'
 import { MapsAPILoader } from '@agm/core'
+import { IEvent } from './event.model'
 
 @Component({
-    templateUrl: "app/search-events.component.html"
+    templateUrl: "app/search-events.component.html",
+    styles: [`/* The switch - the box around the slider */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 34px;
+}
+
+/* Hide default HTML checkbox */
+.switch input {display:none;}
+
+/* The slider */
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 26px;
+  width: 26px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+input:checked + .slider {
+  background-color: #2196F3;
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 1px #2196F3;
+}
+
+input:checked + .slider:before {
+  -webkit-transform: translateX(26px);
+  -ms-transform: translateX(26px);
+  transform: translateX(26px);
+}`]
+
 })
 export class SearchEventsComponent implements OnInit {
+
+    @ViewChild("search")
+    searchElementRef: ElementRef;
 
     categories: any[] = [
         { id: 1, checked: false },
@@ -25,8 +79,14 @@ export class SearchEventsComponent implements OnInit {
     category: FormControl
     address: FormControl
     radius: FormControl
+    latitude: number
+    longitude: number
 
     mapMode: boolean = false
+    detailsMode: boolean = false
+
+    events = []
+
 
     constructor(private http: Http, private formBuilder: FormBuilder, private mapsAPILoader: MapsAPILoader, private ngZone: NgZone) { }
 
@@ -43,7 +103,40 @@ export class SearchEventsComponent implements OnInit {
             radius: this.radius
         });
 
+        this.setCurrentPosition();
+
+        this.mapsAPILoader.load().then(() => {
+            let autocomplete = new google.maps.places.Autocomplete(this.searchElementRef.nativeElement, {
+                types: ["address"]
+            });
+            autocomplete.addListener("place_changed", () => {
+                this.ngZone.run(() => {
+                    //get the place result
+                    let place: google.maps.places.PlaceResult = autocomplete.getPlace();
+
+                    //verify result
+                    if (place.geometry === undefined || place.geometry === null) {
+                        return;
+                    }
+
+                    //set latitude, longitude and zoom
+                    this.latitude = place.geometry.location.lat();
+                    this.longitude = place.geometry.location.lng();
+                });
+            });
+        });
     }
+
+    private setCurrentPosition() {
+        if ("geolocation" in navigator) {
+            navigator.geolocation.getCurrentPosition((position) => {
+                this.latitude = position.coords.latitude;
+                this.longitude = position.coords.longitude;
+            });
+        }
+    }
+
+
     updateCategories(category: number) {
         this.categories.filter(checkbox => {
             if (checkbox.id == category) {
@@ -52,7 +145,11 @@ export class SearchEventsComponent implements OnInit {
         });
     }
 
+
+
     changeDisplayMode() {
         this.mapMode = !this.mapMode;
     }
+
+
 }

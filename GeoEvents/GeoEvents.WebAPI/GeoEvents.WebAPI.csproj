@@ -262,6 +262,7 @@
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
     <Content Include="src\app\create-event.component.html" />
+    <Content Include="src\app\display-list.component.html" />
     <Content Include="src\app\search-events.component.html" />
     <Content Include="src\app\navbar\navbar.component.html" />
     <Content Include="src\favicon.ico" />

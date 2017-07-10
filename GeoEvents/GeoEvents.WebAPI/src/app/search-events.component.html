@@ -55,7 +55,7 @@
                     <legend>
                         Address
                     </legend>
-                    <input type="text" formControlName="address" class="form-control" id="address" placeholder="Address..."/>
+                    <input type="text" formControlName="address" class="form-control" id="address" placeholder="Address..." #search />
                 </fieldset>
             </div>
             <div class="form-group">
@@ -63,7 +63,7 @@
                     <legend>
                         Radius
                     </legend>
-                    <input type="text" formControlName="radius" class="form-control" id="radius" placeholder="Radius..."/>
+                    <input type="text" formControlName="radius" class="form-control" id="radius" placeholder="Radius..." />
                 </fieldset>
             </div>
             <button type="submit" class="btn btn-default">Search</button>
@@ -76,7 +76,11 @@
             </li>
         </ul>
     </div>-->
-    <button (click)="changeDisplayMode()">Change Display Mode</button>
-    <display-list *ngIf="!this.mapMode"></display-list>
-    <display-map *ngIf="this.mapMode"></display-map>
+    <label class="switch">
+        <input type="checkbox" checked (change)="changeDisplayMode()">
+        <div class="slider"></div>
+    </label>
+    <display-list *ngIf="!this.mapMode && !this.detailsMode"></display-list>
+    <display-map *ngIf="this.mapMode && !this.detailsMode"></display-map>
+    <event-details [event]="this.event" *ngIf="this.detailsMode"></event-details>
 </div>
