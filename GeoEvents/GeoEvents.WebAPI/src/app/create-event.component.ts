@@ -22,14 +22,16 @@ export class CreateEventComponent implements OnInit {
     @ViewChild("search")
     searchElementRef: ElementRef;
 
+    CategoryEnum: any = CategoryEnum
+
     categories: any[] = [
-        { id: 1, checked: false },
-        { id: 2, checked: false },
-        { id: 4, checked: false },
-        { id: 8, checked: false },
-        { id: 16, checked: false },
-        { id: 32, checked: false },
-        { id: 64, checked: true }
+        { id: CategoryEnum["Music"], checked: false },
+        { id: CategoryEnum["Culture"], checked: false },
+        { id: CategoryEnum["Sport"], checked: false },
+        { id: CategoryEnum["Gastro"], checked: false },
+        { id: CategoryEnum["Religious"], checked: false },
+        { id: CategoryEnum["Business"], checked: false },
+        { id: CategoryEnum["Miscellaneous"], checked: true }
     ]
     eventForm: FormGroup
 
@@ -38,7 +40,6 @@ export class CreateEventComponent implements OnInit {
     start: FormControl
     end: FormControl
     category: FormControl
-    address: FormControl
 
     constructor(private http: Http, private formBuilder: FormBuilder, private mapsAPILoader: MapsAPILoader, private ngZone: NgZone) { }
 
@@ -47,14 +48,12 @@ export class CreateEventComponent implements OnInit {
         this.description = new FormControl('', Validators.required);
         this.start = new FormControl('', Validators.required);
         this.end = new FormControl('', Validators.required);
-        this.address = new FormControl('', Validators.required);
 
         this.eventForm = this.formBuilder.group({
             name: this.name,
             description: this.description,
             start: this.start,
-            end: this.end,
-            address: this.address
+            end: this.end
         }, { validator: endDateBeforeStartDate('start', 'end') });
 
         //GOOGLE MAPS
@@ -108,7 +107,7 @@ export class CreateEventComponent implements OnInit {
                 chosenCategories.push(checkbox.id);
             }
         });
-        
+
         let newEvent = {
             Name: formValues.name,
             Description: formValues.description,
@@ -118,14 +117,14 @@ export class CreateEventComponent implements OnInit {
             Long: this.longitude,
             Categories: chosenCategories
         }
-        console.log(newEvent);
-        //let headers = new Headers({ 'Content-Type': 'application/json' });
-        //let options = new RequestOptions({ headers: headers });
-        //return this.http.post('/api/event/create', JSON.stringify(newEvent), options).map(function (response: Response) {
-        //    return response.json();
-        //}).catch(this.handleError).subscribe((response: Response) => {
-        //    console.log(response);
-        //});
+        
+        let headers = new Headers({ 'Content-Type': 'application/json' });
+        let options = new RequestOptions({ headers: headers });
+        return this.http.post('/api/event/create', JSON.stringify(newEvent), options).map(function (response: Response) {
+            return response.json();
+        }).catch(this.handleError).subscribe((response: Response) => {
+            console.log(response);
+        });
     }
 
     updateCategories(category: number) {
@@ -150,4 +149,19 @@ export class CreateEventComponent implements OnInit {
         }
         return true;
     }
+
+    keys(): Array<string> {
+        var keys = Object.keys(CategoryEnum);
+        return keys.slice(keys.length / 2);
+    }
+}
+
+export enum CategoryEnum {
+    Music = 1,
+    Culture = 2,
+    Sport = 4,
+    Gastro = 8,
+    Religious = 16,
+    Business = 32,
+    Miscellaneous = 64
 }
