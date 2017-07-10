@@ -338,6 +338,7 @@
     <TypeScriptCompile Include="src\app\create-event.component.ts" />
     <TypeScriptCompile Include="src\app\display-list.component.ts" />
     <TypeScriptCompile Include="src\app\display-map.component.ts" />
+    <TypeScriptCompile Include="src\app\event-details.component.ts" />
     <TypeScriptCompile Include="src\app\search-events.component.ts" />
     <TypeScriptCompile Include="src\app\errors\error-404.component.ts" />
     <TypeScriptCompile Include="src\app\navbar\navbar.component.ts" />
