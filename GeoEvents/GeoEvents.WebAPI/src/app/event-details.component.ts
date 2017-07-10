@@ -5,7 +5,8 @@ import { Http, Response, Headers, RequestOptions } from '@angular/http'
 import { Observable } from 'rxjs/Rx'
 
 @Component({
-    templateUrl: 'app/event-details.component.html'
+    templateUrl: 'app/event-details.component.html',
+    selector: 'event-details'
 })
 
 export class EventDetailsComponent implements OnInit{
@@ -22,8 +23,8 @@ export class EventDetailsComponent implements OnInit{
         })
     }
 
-    getImages(id : number): Observable<IImage[]> {
-        return this.http.get('/api/image/get/' + this.event.Id).map(function (response: Response) {
+    getImages(id : string): Observable<IImage[]> {
+        return this.http.get('/api/images/get/' + this.event.Id).map(function (response: Response) {
             return <IImage[]>response.json();
         }).catch(this.handleError);
     }

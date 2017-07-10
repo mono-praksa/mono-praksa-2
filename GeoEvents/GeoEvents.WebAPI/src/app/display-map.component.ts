@@ -1,4 +1,5 @@
-﻿import { Component } from '@angular/core'
+﻿import { Component, Output, EventEmitter, Input } from '@angular/core'
+import { IEvent } from './event.model'
 
 @Component({
     template: '<h1>I AM DISPLAY MAP COMPONENT</h1>',
@@ -11,5 +12,10 @@
 })
 
 export class DisplayMapComponent {
+    @Input() events: IEvent[]
+    @Output() event = new EventEmitter()
 
+    displayEvent(evt: IEvent) {
+        this.event.emit(evt);
+    }
 }

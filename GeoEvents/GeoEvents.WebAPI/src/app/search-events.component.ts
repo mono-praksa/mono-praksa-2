@@ -85,8 +85,8 @@ export class SearchEventsComponent implements OnInit {
     mapMode: boolean = false
     detailsMode: boolean = false
 
-    events = []
-
+    events: IEvent[]
+    event: IEvent
 
     constructor(private http: Http, private formBuilder: FormBuilder, private mapsAPILoader: MapsAPILoader, private ngZone: NgZone) { }
 
@@ -149,6 +149,11 @@ export class SearchEventsComponent implements OnInit {
 
     changeDisplayMode() {
         this.mapMode = !this.mapMode;
+    }
+
+    eventDetails(event: IEvent) {
+        this.event = event
+        this.detailsMode = true
     }
 
 

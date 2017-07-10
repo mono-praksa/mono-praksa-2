@@ -68,8 +68,7 @@ namespace GeoEvents.Repository
                     EventId = eventID
                 };
 
-                dr.GetBytes(1, 0, tmp.Content, 0, 4096);
-                //tmp.Content = new byte[2];
+                tmp.Content = (byte[])dr["Content"];
                 selectImages.Add(tmp);
             }
 

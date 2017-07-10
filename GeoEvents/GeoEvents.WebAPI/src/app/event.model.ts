@@ -1,10 +1,10 @@
 ﻿export interface IEvent {
-    Id: number
+    Id: string
     Name: string
     Description: string
     StartTime: Date,
     EndTime: Date,
     Lat: number,
     Long: number,
-    Categories: number
+    Categories: number[]
 }

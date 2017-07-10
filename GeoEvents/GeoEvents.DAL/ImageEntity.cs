@@ -26,11 +26,6 @@ namespace GeoEvents.DAL
         {
 
         }
-        public ImageEntity(Guid Id, Guid EventId)
-        {
-            this.Id = Id;
-            this.EventId = EventId;
-        }
 
     }
 }
