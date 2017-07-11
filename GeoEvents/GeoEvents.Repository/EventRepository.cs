@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using GeoEvents.Common;
 using GeoEvents.DAL;
 using Npgsql;
-using System.Data;
+
 
 namespace GeoEvents.Repository
 {
@@ -29,7 +29,7 @@ namespace GeoEvents.Repository
 
             NpgsqlCommand command = PostgresConn.NpgComm();
             command = new NpgsqlCommand
-                ("insert into \"Events\" values(@Id, @StartTime, @EndTime, @Lat, @Long, @Name, @Description, @Category)",
+                (ConstRepository.GetInsertStringEvent(),
                 PostgresConn.NpgConn());
 
             command.Parameters.AddWithValue("@Id", NpgsqlTypes.NpgsqlDbType.Uuid, evt.Id);
@@ -58,7 +58,7 @@ namespace GeoEvents.Repository
 
             PostgresConn.OpenConnection();
 
-            NpgsqlCommand command = new NpgsqlCommand("SELECT * FROM \"Events\"WHERE (earth_box(ll_to_earth(@Lat, @Long), @Radius) @> ll_to_earth(\"Events\".\"Lat\", \"Events\".\"Long\")) AND ((@UserStartTime, @UserEndTime)OVERLAPS(\"Events\".\"StartTime\",\"Events\".\"EndTime\")) AND (@Category & \"Events\".\"Category\" > 0) ",
+            NpgsqlCommand command = new NpgsqlCommand(ConstRepository.GetSelectStringEvent(filter),
                 PostgresConn.NpgConn());
 
             command.Parameters.AddWithValue("@Lat", NpgsqlTypes.NpgsqlDbType.Double, filter.ULat);

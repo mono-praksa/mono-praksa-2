@@ -19,13 +19,13 @@ namespace GeoEvents.Service.Common
         /// </summary>
         /// <param name="filter">The filter.</param>
         /// <returns></returns>
-        List<IEvent> GetEvents(Filter filter);
+        Task<IEnumerable<IEvent>> GetEventsAsync(IFilter filter);
 
         /// <summary>
         /// Creates event.
         /// </summary>
         /// <returns></returns>
-        bool CreateEvent(IEvent evt);
+        Task<IEvent> CreateEventAsync(IEvent evt);
 
         #endregion Methods
     }

@@ -27,7 +27,7 @@ namespace GeoEvents.Repository
             foreach (var item in img)
             {
                 command = new NpgsqlCommand
-                    ("insert into \"Images\" values(@Id, @Content, @EventId)",
+                    (ConstRepository.GetInsertStringImages(),
                     PostgresConn.NpgConn());
 
                 command.Parameters.AddWithValue("@Id", NpgsqlTypes.NpgsqlDbType.Uuid, item.Id);
@@ -51,7 +51,7 @@ namespace GeoEvents.Repository
             PostgresConn.OpenConnection();
 
             NpgsqlCommand command = new NpgsqlCommand
-                ("SELECT * FROM \"Images\" WHERE (@eventID = \"EventId\")",
+                (ConstRepository.GetSelectStringImages(eventID),
                 PostgresConn.NpgConn());
             command.Parameters.AddWithValue("@eventID", NpgsqlTypes.NpgsqlDbType.Uuid, eventID);
 
