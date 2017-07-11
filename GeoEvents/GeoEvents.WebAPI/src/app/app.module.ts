@@ -14,7 +14,6 @@ import { DisplayMapComponent } from './display-map.component'
 import { EventDetailsComponent } from './event-details.component'
 import { NavbarComponent } from './navbar/navbar.component'
 import { Error404Component } from './errors/error-404.component'
-import { CreateImagesComponent } from './create-images.component'
 
 import { routes } from './routes'
 
@@ -38,8 +37,7 @@ import { routes } from './routes'
         DisplayMapComponent,
         EventDetailsComponent,
         NavbarComponent,
-        Error404Component,
-        CreateImagesComponent
+        Error404Component
     ],
     bootstrap: [
         AppComponent
