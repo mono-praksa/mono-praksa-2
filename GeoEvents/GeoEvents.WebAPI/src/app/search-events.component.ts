@@ -187,7 +187,7 @@ export class SearchEventsComponent implements OnInit {
 
     getEvents(filter: IFilter): Observable<IEvent[]> {
 
-        return this.http.get('/api/event/search/' + filter.ULat.toString() + '/' + filter.ULong.toString() + '/' + filter.Radius.toString() + '/' + filter.Category.toString() + '/' + filter.StartTime.toString() + '/' + filter.EndTime.toString()).map(function (response: Response) {
+        return this.http.get('/api/event/search/' + filter.ULat.toString() + '/' + filter.ULong.toString() + '/' + filter.Radius.toString() + '/' + filter.Category.toString() + '/' + filter.StartTime.toString().replace(':', 'h') + '/' + filter.EndTime.toString().replace(':', 'h')).map(function (response: Response) {
             return <IEvent[]>response.json();
         }).catch(this.handleError);
     }
