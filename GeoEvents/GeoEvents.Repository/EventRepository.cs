@@ -58,45 +58,6 @@ namespace GeoEvents.Repository
 
             PostgresConn.OpenConnection();
 
-
-
-            NpgsqlCommand CountCommand = new NpgsqlCommand(ConstRepository.GetCountSelectString(filter),
-                PostgresConn.NpgConn());
-
-            List<IEventEntity> ToBigCountIndicator = new List<IEventEntity>();
-            ToBigCountIndicator.Add(new EventEntity(new Guid(), new DateTime(), new DateTime(), 0M, 0M, "1Break", "", 0));
-
-
-
-            CountCommand.Parameters.AddWithValue("@Lat", NpgsqlTypes.NpgsqlDbType.Double, filter.ULat);
-            CountCommand.Parameters.AddWithValue("@Long", NpgsqlTypes.NpgsqlDbType.Double, filter.ULong);
-            CountCommand.Parameters.AddWithValue("@Radius", NpgsqlTypes.NpgsqlDbType.Double, filter.Radius);
-            CountCommand.Parameters.AddWithValue("@UserStartTime", NpgsqlTypes.NpgsqlDbType.Timestamp, filter.StartTime);
-            CountCommand.Parameters.AddWithValue("@UserEndTime", NpgsqlTypes.NpgsqlDbType.Timestamp, filter.EndTime);
-            CountCommand.Parameters.AddWithValue("@Category", NpgsqlTypes.NpgsqlDbType.Integer, filter.Category);
-            Int64 count = (Int64)CountCommand.ExecuteScalar();
-
-           
-            ToBigCountIndicator.Add(new EventEntity(new Guid(), new DateTime(), new DateTime(), 0M, 0M, "2Break", "", 0));
-        
-            if (count > 11)
-            {
-                List<IEventEntity> ToBigCountIndicator2 = new List<IEventEntity>();
-                ToBigCountIndicator2.Add(new EventEntity(new Guid(), new DateTime(), new DateTime(), 0M, 0M, count.ToString(), "", 0));
-                PostgresConn.CloseConnection();
-                return ToBigCountIndicator2;
-            }
-
-            ToBigCountIndicator.Add(new EventEntity(new Guid(), new DateTime(), new DateTime(), 0M, 0M, "3Break", "", 0));
-
-            //PostgresConn.CloseConnection();
-            //return ToBigCountIndicator;
-
-
-            PostgresConn.CloseConnection();
-            PostgresConn.OpenConnection();
-
-
             NpgsqlCommand command = new NpgsqlCommand(ConstRepository.GetSelectStringEvent(filter),
                 PostgresConn.NpgConn());
 

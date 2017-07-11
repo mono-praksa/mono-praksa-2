@@ -37,53 +37,12 @@ namespace GeoEvents.Repository
         static string TNameEventLat = TabeNameEventQ + "." + LatQ;
         static string TNameEventCat = TabeNameEventQ + "." + CategoryQ;
         static DateTime DefaulTime = new DateTime(0001, 01, 01);
-        static int PageSize=10;
+        static int PageSize;
+        static int PageNum;
         static string LimitString = "  LIMIT("+PageSize.ToString()+")";
         #endregion
 
         #region Metods
-
-        public static string GetCountSelectString(Filter filter)
-        {
-            string selectCountString;
-
-
-            if (filter.EndTime == DefaulTime && filter.StartTime > DefaulTime)
-            {
-                selectCountString = "SELECT COUNT (\"Id\") FROM " + TabeNameEventQ + " WHERE (earth_box(ll_to_earth(" + ParLat + "," + ParLong + ")," + ParRadius + ")@> ll_to_earth(" +
-                   TNameEventLat + ", " + TNameEventLong + ")) AND (" + ParUserStartTime + "<" + TNameEventEndTime + ")";
-            }
-
-            else if (filter.EndTime > DefaulTime && filter.StartTime > DefaulTime)
-            {
-                selectCountString = "SELECT COUNT (\"Id\") FROM " + TabeNameEventQ + " WHERE (earth_box(ll_to_earth(" + ParLat + "," + ParLong + ")," + ParRadius + ")@> ll_to_earth(" +
-                    TNameEventLat + ", " + TNameEventLong + ")) AND ((" + ParUserStartTime + "," + ParUserEndTime +
-                    ")OVERLAPS(" + TNameEventStartTime + "," + TNameEventEndTime + "))";
-
-                //selectCountString = string.Format("SELECT COUNT (\"Id\") FROM {0} WHERE (earth_box(ll_to_earth({1}, {2}), {3}) @> ll_to_earth({4}, {5}))",
-                //    TabeNameEventQ, ParLat, ParLong, ParRadius, TNameEventLat, TNameEventLong);
-            }
-
-            else
-            {
-                selectCountString = "SELECT COUNT (\"Id\") FROM " + TabeNameEventQ + " WHERE (earth_box(ll_to_earth(" + ParLat + "," + ParLong + ")," + ParRadius + ")@> ll_to_earth(" +
-                    TNameEventLat + ", " + TNameEventLong + "))";
-
-            }
-
-            if (filter.Category == 0)
-            {
-                return selectCountString+ LimitString;
-            }
-
-            else
-            {
-                return selectCountString + " AND (" + ParCategory + " & " + TNameEventCat + " > 0)" + LimitString;
-            }
-
-        }
-
-
 
         public static string GetSelectStringEvent(Filter filter)
         {
@@ -105,10 +64,8 @@ namespace GeoEvents.Repository
                     TNameEventLat + ", " + TNameEventLong + ")) AND ((" + ParUserStartTime + "," + ParUserEndTime +
                     ")OVERLAPS(" + TNameEventStartTime + "," + TNameEventEndTime + "))";
             }
-            //"SELECT * FROM \"Events\"WHERE 
-            //    (earth_box(ll_to_earth(@Lat, @Long), @Radius)@> ll_to_earth(\"Events\".\"Lat\", \"Events\".\"Long\"))
+            
 
-            //    AND ((@UserStartTime, @UserEndTime)OVERLAPS(\"Events\".\"StartTime\",\"Events\".\"EndTime\")) AND (@Category & \"Events\".\"Category\" > 0) ",
             else
             {
                 selectString = "SELECT * FROM " + TabeNameEventQ +
