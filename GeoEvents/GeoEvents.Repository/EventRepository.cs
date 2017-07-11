@@ -7,21 +7,24 @@ using System.Threading.Tasks;
 using GeoEvents.Common;
 using GeoEvents.DAL;
 using Npgsql;
-
+using GeoEvents.Model.Common;
+using AutoMapper;
 
 namespace GeoEvents.Repository
 {
-    public class EventRepository : IEventRepository
+    public class EventRepository 
     {
-        PostgresConnection PostgresConn;
+        protected IPostgresConnection PostgresConn { get; private set; }
 
-        public EventRepository()
+
+        public EventRepository(IPostgresConnection connection)
         {
-            PostgresConn = new PostgresConnection();
+            this.PostgresConn = connection;
         }
 
-        public bool CreateEvent(IEventEntity evt)
+        public bool CreateEvent(IEvent evt)
         {
+            ////////////////// mapirat iz IEvent u IeventEntity i onda insert radit ??? 
 
             PostgresConn.OpenConnection();
             bool Flag = false;
@@ -53,7 +56,7 @@ namespace GeoEvents.Repository
 
 
 
-        public List<IEventEntity> GetEvents(Filter filter)
+        public List<IEvent> GetEvents(Filter filter)
         {
 
             PostgresConn.OpenConnection();
@@ -71,7 +74,7 @@ namespace GeoEvents.Repository
             NpgsqlDataReader dr = command.ExecuteReader();
 
             EventEntity tmp;
-            List<IEventEntity> SelectEvents = new List<IEventEntity>();
+            List<IEvent> SelectEvents = new List<IEvent>();
 
             while (dr.Read())
             {
@@ -87,7 +90,7 @@ namespace GeoEvents.Repository
                     Category = Convert.ToInt32(dr[7])
                 };
 
-                SelectEvents.Add(tmp);
+                SelectEvents.Add(Mapper.Map<IEvent>(tmp));
             }
 
             return SelectEvents;

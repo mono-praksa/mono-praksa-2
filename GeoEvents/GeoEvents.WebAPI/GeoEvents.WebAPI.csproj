@@ -263,6 +263,8 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ImagesController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
+    <Compile Include="DbConnection\DIModule.cs" />
+    <Compile Include="DbConnection\GeoEventsConfiguration.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>

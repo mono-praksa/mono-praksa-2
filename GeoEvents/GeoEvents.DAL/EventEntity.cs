@@ -1,4 +1,4 @@
-﻿using GeoEvents.Repository.Common;
+﻿
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace GeoEvents.DAL
 {
-    public class EventEntity : IEventEntity
+    public class EventEntity 
     {
         public Guid Id { get; set; }
         public DateTime StartTime { get; set; }
