@@ -9,7 +9,7 @@ namespace GeoEvents.Common
     /// <summary>
     /// The filter model.
     /// </summary>
-    public class Filter
+    public class Filter : IFilter
     {
         #region Properties
         /// <summary>

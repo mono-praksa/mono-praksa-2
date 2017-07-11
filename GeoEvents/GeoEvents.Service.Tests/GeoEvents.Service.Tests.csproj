@@ -91,6 +91,10 @@
       <Project>{27529823-c319-4644-b863-49632214f5dd}</Project>
       <Name>GeoEvents.Common</Name>
     </ProjectReference>
+    <ProjectReference Include="..\GeoEvents.DAL\GeoEvents.DAL.csproj">
+      <Project>{EA5FF65D-7791-44E7-920F-7AFD0BF73D85}</Project>
+      <Name>GeoEvents.DAL</Name>
+    </ProjectReference>
     <ProjectReference Include="..\GeoEvents.Model.Common\GeoEvents.Model.Common.csproj">
       <Project>{be064c7f-8529-470c-87f1-323597d81f0d}</Project>
       <Name>GeoEvents.Model.Common</Name>
