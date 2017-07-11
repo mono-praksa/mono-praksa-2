@@ -6,32 +6,34 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using System.Configuration;
-
+using GeoEvents.Common;
 
 namespace GeoEvents.DAL
 {
-    public class PostgresConnection
+    public class PostgresConnection : IPostgresConnection
     {
 
-        string ConnStringDefault;
-        NpgsqlConnection connection;
+        
+        protected IGeoEventsConfiguration configuration { get; private set; }
+        public NpgsqlConnection connection { get; set; }
 
-
-        public PostgresConnection()
+        public PostgresConnection(IGeoEventsConfiguration configuration)
         {
+            this.configuration = configuration;
+            
+            connection = new NpgsqlConnection(configuration.ConnectionString);
 
-            this.ConnStringDefault = ConfigurationSettings.AppSettings["Constring"];
-            connection = new NpgsqlConnection(ConnStringDefault);
+
         }
 
         public void OpenConnection()
-        {      
-                connection.Open();       
+        {
+            connection.Open();
         }
 
         public void CloseConnection()
-        {                     
-                connection.Close();           
+        {
+            connection.Close();
         }
 
 

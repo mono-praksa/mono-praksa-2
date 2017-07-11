@@ -2,20 +2,16 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Web;
 
-namespace GeoEvents.DAL
+namespace GeoEvents.WebAPI.DbConnection
 {
-    #region Methods
-
     public class DIModule : Ninject.Modules.NinjectModule
     {
         public override void Load()
         {
-            Bind<IPostgresConnection>().To<PostgresConnection>();
+            Bind<IGeoEventsConfiguration>().To<GeoEventsConfiguration>();
+
         }
     }
-
-    #endregion Methods
 }

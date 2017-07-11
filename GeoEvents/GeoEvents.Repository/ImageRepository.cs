@@ -6,20 +6,26 @@ using System.Threading.Tasks;
 using GeoEvents.Repository.Common;
 using GeoEvents.DAL;
 using Npgsql;
+using GeoEvents.Common;
+using GeoEvents.Model.Common;
+using AutoMapper;
 
 namespace GeoEvents.Repository
 {
     public class ImageRepository : IImageRepository
     {
         bool Flag = false;
-        PostgresConnection PostgresConn;
-        public ImageRepository()
+
+        protected IPostgresConnection PostgresConn { get; private set; }
+
+        public ImageRepository(IPostgresConnection connection)
         {
-            PostgresConn = new PostgresConnection();
+            this.PostgresConn = connection;
         }
 
 
-        public bool CreateImages(List<IImageEntity> img)
+
+        public bool CreateImages(List<IImage> img)
         {
             PostgresConn.OpenConnection();
 
@@ -46,7 +52,7 @@ namespace GeoEvents.Repository
         }
 
 
-        public List<IImageEntity> GetImages(Guid eventID)
+        public List<IImage> GetImages(Guid eventID)
         {
             PostgresConn.OpenConnection();
 
@@ -58,7 +64,7 @@ namespace GeoEvents.Repository
             NpgsqlDataReader dr = command.ExecuteReader();
 
 
-            List<IImageEntity> selectImages = new List<IImageEntity>();
+            List<IImage> selectImages = new List<IImage>();
 
             while (dr.Read())
             {
@@ -69,7 +75,7 @@ namespace GeoEvents.Repository
                 };
 
                 tmp.Content = (byte[])dr["Content"];
-                selectImages.Add(tmp);
+                selectImages.Add(Mapper.Map<IImage>(tmp));
             }
 
             return selectImages;
