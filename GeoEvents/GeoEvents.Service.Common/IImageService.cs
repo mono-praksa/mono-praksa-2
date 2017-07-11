@@ -12,14 +12,14 @@ namespace GeoEvents.Service.Common
     /// </summary>
     public interface IImageService
     {
-            #region Methods
+        #region Methods
 
-            /// <summary>
-            /// Gets images attached to an event.
-            /// </summary>
-            /// <param name="eventId">The event's id.</param>
-            /// <returns></returns>
-            List<IImage> GetImages(Guid eventId);
+        /// <summary>
+        /// Gets images attached to an event.
+        /// </summary>
+        /// <param name="eventId">The event's id.</param>
+        /// <returns></returns>
+        Task<IEnumerable<IImage>> GetImagesAsync(Guid eventId);
 
             /// <summary>
             /// Adds images to an event.
@@ -27,7 +27,7 @@ namespace GeoEvents.Service.Common
             /// <param name="eventId">The event's id.</param>
             /// <param name="images">The list of images to add.</param>
             /// <returns></returns>
-            bool CreateImages(List<IImage> images);
+        Task<IImage> CreateImages(IEnumerable<IImage> images);
 
             #endregion Methods
     }

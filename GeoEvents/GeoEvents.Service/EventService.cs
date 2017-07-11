@@ -50,14 +50,12 @@ namespace GeoEvents.Service
         /// </summary>
         /// <param name="filter">The filter.</param>
         /// <returns></returns>
-        public List<IEvent> GetEvents(Filter filter)
+        public async Task<IEnumerable<IEvent>> GetEventsAsync(IFilter filter)
         {
-            var events = new List<IEvent>();
-            List<IEventEntity> entities = Repository.GetEvents(filter);
+            IEnumerable<IEvent> events = Repository.GetEventsAsync(filter);
 
-            foreach (IEventEntity entity in entities)
+            foreach (IEvent evt in events)
             {
-                IEvent evt = Mapper.Map<IEvent>(entity);
                 int mult = 1;
                 evt.Categories = new List<int>();
                 int cat = evt.Category;
@@ -71,24 +69,24 @@ namespace GeoEvents.Service
                     mult *= 2;
                     cat = cat >> 1;
                 }
-                events.Add(evt);
             }
 
-            return events;
+            return events;    //??????????????
         }
 
         /// <summary>
         /// Creates event.
         /// </summary>
         /// <returns></returns>
-        public bool CreateEvent(IEvent evt)
+        public async Task<IEvent> CreateEventAsync(IEvent evt)
         {
+            evt.Id = Guid.NewGuid();
             evt.Category = 0;
             for (int i = 0; i < evt.Categories.Count; i++)
             {
                 evt.Category += evt.Categories[i];
             }
-            return Repository.CreateEvent(Mapper.Map<IEventEntity>(evt));
+            return await Repository.CreateEventAsync(evt);
         }
 
         #endregion Methods
