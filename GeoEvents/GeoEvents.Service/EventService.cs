@@ -45,10 +45,10 @@ namespace GeoEvents.Service
         #region Methods
 
         /// <summary>
-        /// Gets events that satisfy the filter.
+        /// Gets events that satisfy a filter.
         /// </summary>
         /// <param name="filter">The filter.</param>
-        /// <returns></returns>
+        /// <returns>List of events.</returns>
         public async Task<IEnumerable<IEvent>> GetEventsAsync(IFilter filter)
         {
             IEnumerable<IEvent> events = await Repository.GetEventsAsync(filter);
@@ -74,9 +74,20 @@ namespace GeoEvents.Service
         }
 
         /// <summary>
-        /// Creates event.
+        /// Gets the number of events that satisfy a filter.
         /// </summary>
-        /// <returns></returns>
+        /// <param name="filter">The filter.</param>
+        /// <returns>The number.</returns>
+        public async Task<int> GetEventCountAsync(IFilter filter)
+        {
+            return await Repository.GetEventCountAsync(filter);
+        }
+
+        /// <summary>
+        /// Creates an event.
+        /// </summary>
+        /// <param name="evt">The event.</param>
+        /// <returns>The event that was created.</returns>
         public async Task<IEvent> CreateEventAsync(IEvent evt)
         {
             evt.Id = Guid.NewGuid();
