@@ -17,6 +17,8 @@ namespace GeoEvents.Repository
         static string StartTimeQ = "\"StartTime\"";
         static string EndTimeQ = "\"EndTime\"";
         static string CategoryQ = "\"Category\"";
+        static string IdQ = "\"Id\"";
+        static string EventIdQ = "\"EventId\"";
         static string ParLat = "@Lat";
         static string ParLong = "@Long";
         static string ParName = "@Name";
@@ -30,7 +32,6 @@ namespace GeoEvents.Repository
         static string ParRadius = "@Radius";
         static string ParEventId = "@EventId";
         static string ParContent = "@Contetnt";
-        static string EventIdQ = "\"EventId\"";
         static string TNameEventStartTime = TabeNameEventQ + "." + StartTimeQ;
         static string TNameEventEndTime = TabeNameEventQ + "." + EndTimeQ;
         static string TNameEventLong = TabeNameEventQ + "." + LongQ;
@@ -93,7 +94,7 @@ namespace GeoEvents.Repository
             return insertString;
         }
 
-        public static string GetSelectStringImages(Guid eventID)
+        public static string GetSelectStringImages()
         {
 
             string selectString = "SELECT * FROM " + TabeNameImagesQ + "WHERE (" + ParEventId + " = " + TabeNameImagesQ + "." + EventIdQ + ")";
@@ -108,6 +109,13 @@ namespace GeoEvents.Repository
                 " VALUES(" + ParId + "," + ParContent + "," + ParEventId + ")";
 
             return insertString;
+        }
+
+        public static string GetSelectStringImage()
+        {
+
+            string selectString = "SELECT * FROM " + TabeNameImagesQ + " WHERE "+TabeNameImagesQ+"."+IdQ+"="+ParId ;
+            return selectString;
         }
         #endregion
     }
