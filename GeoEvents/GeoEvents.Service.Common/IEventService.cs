@@ -15,16 +15,24 @@ namespace GeoEvents.Service.Common
     {
         #region Methods
         /// <summary>
-        /// Gets events that satisfy the filter.
+        /// Gets events that satisfy a filter.
         /// </summary>
         /// <param name="filter">The filter.</param>
-        /// <returns></returns>
+        /// <returns>List of events.</returns>
         Task<IEnumerable<IEvent>> GetEventsAsync(IFilter filter);
 
         /// <summary>
-        /// Creates event.
+        /// Gets the number of events that satisfy a filter.
         /// </summary>
-        /// <returns></returns>
+        /// <param name="filter">The filter.</param>
+        /// <returns>The number.</returns>
+        Task<Int64> GetEventCountAsync(IFilter filter);
+
+        /// <summary>
+        /// Creates an event.
+        /// </summary>
+        /// <param name="evt">The event.</param>
+        /// <returns>The event that was created.</returns>
         Task<IEvent> CreateEventAsync(IEvent evt);
 
         #endregion Methods
