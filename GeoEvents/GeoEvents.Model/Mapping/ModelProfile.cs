@@ -12,10 +12,11 @@ namespace GeoEvents.Model.Mapping
 {
     public class ModelProfile : Profile
     {
+
         public ModelProfile()
         {
-            CreateMap<IEventEntity, IEvent>().ReverseMap();
-            CreateMap<IImageEntity, IImage>().ReverseMap();
+            CreateMap<EventEntity, IEvent>().ReverseMap();
+            CreateMap<ImageEntity, IImage>().ReverseMap();
         }
     }
 }

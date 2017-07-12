@@ -22,7 +22,7 @@ namespace GeoEvents.Service.Common
         Task<IEnumerable<IImage>> GetImagesAsync(Guid eventId);
 
         /// <summary>
-        /// Adds image to an event.
+        /// Adds an image to an event.
         /// </summary>
         /// <param name="image">The list of images to add.</param>
         /// <returns></returns>

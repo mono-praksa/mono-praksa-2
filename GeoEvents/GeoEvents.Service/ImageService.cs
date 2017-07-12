@@ -7,7 +7,6 @@ using GeoEvents.Service.Common;
 using GeoEvents.Model.Common;
 using GeoEvents.Common;
 using GeoEvents.Repository.Common;
-using AutoMapper;
 
 namespace GeoEvents.Service
 {

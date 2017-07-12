@@ -5,18 +5,26 @@ using System.Web;
 using GeoEvents.Model.Mapping;
 using GeoEvents.Model.Common;
 using GeoEvents.Repository.Common;
+using AutoMapper;
 
 namespace GeoEvents.WebAPI.App_Start
 {
-    public class AutoMapperConfig
+    public class AutoMapperConfig : Ninject.Modules.NinjectModule
     {
-        public static void Initialize()
+        public override void Load()
         {
-            AutoMapper.Mapper.Initialize(config =>
+            Bind<IMapper>().ToConstant(Initialize());
+        }
+
+        private IMapper Initialize()
+        {
+            Mapper.Initialize(config =>
             {
                 config.AddProfile<ModelProfile>();
                 config.AddProfile<WebProfile>();
             });
+
+            return Mapper.Instance;
         }
     }
 }
