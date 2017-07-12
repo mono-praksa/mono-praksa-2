@@ -23,61 +23,29 @@ namespace GeoEvents.WebAPI.Controllers
             this.Service = service;
         }
 
-        [HttpGet]
-        [Route("get/{eventId:guid}")]
-        public List<ImageModel> GetImages(Guid eventId)
-        {
-            return Mapper.Map<List<ImageModel>>(Service.GetImages(eventId));
-        }
-
-        //async
         //[HttpGet]
-        //[Route("get/{eventId}")]
-        //public async Task<IEnumerable<ImageModel>> GetImagesAsync(Guid eventId)
+        //[Route("get/{eventId:guid}")]
+        //public List<ImageModel> GetImages(Guid eventId)
         //{
-        //    return Mapper.Map<IEnumerable<ImageModel>>(await Service.GetImages(eventId));
+        //    return Mapper.Map<List<ImageModel>>(Service.GetImages(eventId));
         //}
 
-        [HttpPost]
-        [Route("create")]
-        public async Task<HttpResponseMessage> CreateImages()
+        //async
+        [HttpGet]
+        [Route("get/{eventId}")]
+        public async Task<IEnumerable<ImageModel>> GetImagesAsync(Guid eventId)
         {
-            List<ImageModel> img = new List<ImageModel>();
-            ImageModel img1 = new ImageModel();
-            img1.Id = Guid.NewGuid();
-            img1.EventId = new Guid(("0b6b497b-7717-4a3e-bf1e-8bf7fca151d8").ToString());
-
-            if (!Request.Content.IsMimeMultipartContent())
-                throw new HttpResponseException(HttpStatusCode.UnsupportedMediaType);
-
-            var provider = new MultipartMemoryStreamProvider();
-
-            // Read the form data.
-            await Request.Content.ReadAsMultipartAsync(provider);
-
-            foreach (var file in provider.Contents)
-            {
-                var filename = file.Headers.ContentDisposition.FileName.Trim('\"');
-
-                if (!System.Web.MimeMapping.GetMimeMapping(filename).StartsWith("image/")) {
-                    throw new Exception("You can upload images only!");
-                }
-
-                img1.Content = await file.ReadAsByteArrayAsync();
-                //Do whatever you want with filename and its binaray data.
-                img.Add(img1);
-                Service.CreateImages(Mapper.Map<List<IImage>>(img));
-            }
-            return Request.CreateResponse(HttpStatusCode.OK, "Upload successful");
+            return Mapper.Map<IEnumerable<ImageModel>>(await Service.GetImagesAsync(eventId));
         }
 
-        //async
         //[HttpPost]
-        //[Route("create/{eventId: guid}")]
-        //public async Task<HttpResponseMessage> CreateImageAsync(Guid eventId)
+        //[Route("create")]
+        //public async Task<HttpResponseMessage> CreateImages()
         //{
-        //    ImageModel img = new ImageModel();
-        //    img.EventId = eventId;
+        //    List<ImageModel> img = new List<ImageModel>();
+        //    ImageModel img1 = new ImageModel();
+        //    img1.Id = Guid.NewGuid();
+        //    img1.EventId = new Guid(("0b6b497b-7717-4a3e-bf1e-8bf7fca151d8").ToString());
 
         //    if (!Request.Content.IsMimeMultipartContent())
         //        throw new HttpResponseException(HttpStatusCode.UnsupportedMediaType);
@@ -90,12 +58,44 @@ namespace GeoEvents.WebAPI.Controllers
         //    foreach (var file in provider.Contents)
         //    {
         //        var filename = file.Headers.ContentDisposition.FileName.Trim('\"');
-        //        img.Content = await file.ReadAsByteArrayAsync();
+
+        //        if (!System.Web.MimeMapping.GetMimeMapping(filename).StartsWith("image/")) {
+        //            throw new Exception("You can upload images only!");
+        //        }
+
+        //        img1.Content = await file.ReadAsByteArrayAsync();
         //        //Do whatever you want with filename and its binaray data.
-        //        await Service.CreateImages(Mapper.Map<IImage>(img));
+        //        img.Add(img1);
+        //        Service.CreateImages(Mapper.Map<List<IImage>>(img));
         //    }
         //    return Request.CreateResponse(HttpStatusCode.OK, "Upload successful");
         //}
+
+        //async
+        [HttpPost]
+        [Route("create/{eventId: guid}")]
+        public async Task<HttpResponseMessage> CreateImageAsync(Guid eventId)
+        {
+            ImageModel img = new ImageModel();
+            img.EventId = eventId;
+
+            if (!Request.Content.IsMimeMultipartContent())
+                throw new HttpResponseException(HttpStatusCode.UnsupportedMediaType);
+
+            var provider = new MultipartMemoryStreamProvider();
+
+            // Read the form data.
+            await Request.Content.ReadAsMultipartAsync(provider);
+
+            foreach (var file in provider.Contents)
+            {
+                var filename = file.Headers.ContentDisposition.FileName.Trim('\"');
+                img.Content = await file.ReadAsByteArrayAsync();
+                //Do whatever you want with filename and its binaray data.
+                await Service.CreateImageAsync(Mapper.Map<IImage>(img));
+            }
+            return Request.CreateResponse(HttpStatusCode.OK, "Upload successful");
+        }
     }
 
     public class ImageModel

@@ -23,41 +23,41 @@ namespace GeoEvents.WebAPI.Controllers
             this.Service = service;
         }
 
-        [HttpPost]
-        [Route("create")]
-        public bool CreateEvent([FromBody] EventModel evt)
-        {
-            evt.Id = Guid.NewGuid();
-            return Service.CreateEvent(Mapper.Map<IEvent>(evt));
-        }
-
-        //async
         //[HttpPost]
         //[Route("create")]
-        //public async Task<EventModel> CreateEvent([FromBody] EventModel evt)
+        //public bool CreateEvent([FromBody] EventModel evt)
         //{
-        //    evt.Id = new Guid();
-        //    return await Service.CreateEvent(Mapper.Map<IEvent>(evt));
+        //    evt.Id = Guid.NewGuid();
+        //    return Service.CreateEvent(Mapper.Map<IEvent>(evt));
         //}
 
-        [HttpGet]
-        [Route(@"search/{ULat:decimal}/{ULong:decimal}/{Radius:decimal}/{Category:int}/{StartTime:regex(^\d{4}-\d{2}-\d{2} \d{2}h\d{2}$)}/{EndTime:regex(^\d{4}-\d{2}-\d{2} \d{2}h\d{2}$)}")]
-        public List<EventModel> SearchEvents(decimal ULat, decimal ULong, decimal Radius, int Category, string StartTime, string EndTime)
+        //async
+        [HttpPost]
+        [Route("create")]
+        public async Task<EventModel> CreateEvent([FromBody] EventModel evt)
         {
-            Filter filter = new Filter(ULat, ULong, Radius, DateTime.Parse(StartTime.Replace('h', ':')), DateTime.Parse(EndTime.Replace('h', ':')), Category);
-
-            return Mapper.Map<List<EventModel>>(Service.GetEvents(filter));
+            evt.Id = new Guid();
+            return Mapper.Map<EventModel>(await Service.CreateEventAsync(Mapper.Map<IEvent>(evt)));
         }
 
-        //async
         //[HttpGet]
         //[Route(@"search/{ULat:decimal}/{ULong:decimal}/{Radius:decimal}/{Category:int}/{StartTime:regex(^\d{4}-\d{2}-\d{2} \d{2}h\d{2}$)}/{EndTime:regex(^\d{4}-\d{2}-\d{2} \d{2}h\d{2}$)}")]
-        //public async Task<IEnumerable<EventModel>> GetEventsAsync(decimal ULat, decimal ULong, decimal Radius, int Category, string StartTime, string EndTime)
+        //public List<EventModel> SearchEvents(decimal ULat, decimal ULong, decimal Radius, int Category, string StartTime, string EndTime)
         //{
         //    Filter filter = new Filter(ULat, ULong, Radius, DateTime.Parse(StartTime.Replace('h', ':')), DateTime.Parse(EndTime.Replace('h', ':')), Category);
 
-        //    return Mapper.Map<List<EventModel>>(await Service.GetEvents(filter));
+        //    return Mapper.Map<List<EventModel>>(Service.GetEvents(filter));
         //}
+
+        //async
+        [HttpGet]
+        [Route(@"search/{ULat:decimal}/{ULong:decimal}/{Radius:decimal}/{Category:int}/{StartTime:regex(^\d{4}-\d{2}-\d{2} \d{2}h\d{2}$)}/{EndTime:regex(^\d{4}-\d{2}-\d{2} \d{2}h\d{2}$)}")]
+        public async Task<IEnumerable<EventModel>> GetEventsAsync(decimal ULat, decimal ULong, decimal Radius, int Category, string StartTime, string EndTime)
+        {
+            Filter filter = new Filter(ULat, ULong, Radius, DateTime.Parse(StartTime.Replace('h', ':')), DateTime.Parse(EndTime.Replace('h', ':')), Category, 1, 10, "proba", "Name", true);
+
+            return Mapper.Map<List<EventModel>>(await Service.GetEventsAsync(filter));
+        }
 
     }
 }
