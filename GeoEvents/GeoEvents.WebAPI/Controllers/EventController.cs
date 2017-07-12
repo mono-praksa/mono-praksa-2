@@ -41,7 +41,7 @@ namespace GeoEvents.WebAPI.Controllers
         //}
 
         [HttpGet]
-        [Route("search/{ULat}/{ULong}/{Radius}/{Category}/{StartTime}/{EndTime}")]
+        [Route("search/{ULat: decimal}/{ULong: decimal}/{Radius: decimal}/{Category: list<int>}/{StartTime: DateTime}/{EndTime: DateTime}")]
         public List<EventModel> SearchEvents(decimal ULat, decimal ULong, decimal Radius, int Category, string StartTime, string EndTime)
         {
             Filter filter = new Filter(ULat, ULong, Radius, DateTime.Parse(StartTime.Replace('h', ':')), DateTime.Parse(EndTime.Replace('h', ':')), Category);
@@ -51,7 +51,7 @@ namespace GeoEvents.WebAPI.Controllers
 
         //async
         //[HttpGet]
-        //[Route("search/{ULat}/{ULong}/{Radius}/{Category}/{StartTime}/{EndTime}")]
+        //[Route("search/{ULat: decimal}/{ULong: decimal}/{Radius: decimal}/{Category: list<int>}/{StartTime: DateTime}/{EndTime: EndTime}")]
         //public async Task<IEnumerable<EventModel>> GetEventsAsync(decimal ULat, decimal ULong, decimal Radius, int Category, string StartTime, string EndTime)
         //{
         //    Filter filter = new Filter(ULat, ULong, Radius, DateTime.Parse(StartTime.Replace('h', ':')), DateTime.Parse(EndTime.Replace('h', ':')), Category);

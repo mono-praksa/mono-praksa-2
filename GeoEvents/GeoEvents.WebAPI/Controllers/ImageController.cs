@@ -24,7 +24,7 @@ namespace GeoEvents.WebAPI.Controllers
         }
 
         [HttpGet]
-        [Route("get/{eventId}")]
+        [Route("get/{eventId: guid}")]
         public List<ImageModel> GetImages(Guid eventId)
         {
             return Mapper.Map<List<ImageModel>>(Service.GetImages(eventId));
@@ -68,7 +68,7 @@ namespace GeoEvents.WebAPI.Controllers
 
         //async
         //[HttpPost]
-        //[Route("create/{eventId}")]
+        //[Route("create/{eventId: guid}")]
         //public async Task<HttpResponseMessage> CreateImageAsync(Guid eventId)
         //{
         //    ImageModel img = new ImageModel();
