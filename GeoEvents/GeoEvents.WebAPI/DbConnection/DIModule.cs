@@ -10,7 +10,7 @@ namespace GeoEvents.WebAPI.DbConnection
     {
         public override void Load()
         {
-            Bind<IGeoEventsConfiguration>().To<GeoEventsConfiguration>();
+            Bind<IGeoEventsConfiguration>().To<GeoEventsConfiguration>().InSingletonScope();
 
         }
     }

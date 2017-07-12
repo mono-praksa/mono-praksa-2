@@ -63,6 +63,13 @@ namespace GeoEvents.Common
         string SearchString { get; set; }
 
         /// <summary>
+        /// Gets or sets the boolean value representing whether the filter should search by name only or
+        /// by both name and description.
+        /// </summary>
+        /// <value>The boolean.</value>
+        bool? NameOnly { get; set; }
+
+        /// <summary>
         /// Gets or sets the attribute by which the result should be sorted.
         /// </summary>
         /// <value>The attribute.</value>

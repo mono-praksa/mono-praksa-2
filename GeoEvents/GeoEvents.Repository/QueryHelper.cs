@@ -47,13 +47,13 @@ namespace GeoEvents.Repository
 
         #region Metods
 
-        public static string GetNumberOfPages(Filter filter) {
+        public static string GetNumberOfPages(IFilter filter) {
 
             CountString=CountString.Replace("SELECT *","SELECT COUNT("+TNameEventId+") ");
             return CountString;
         }
 
-        public static string GetSelectStringEvent(Filter filter)
+        public static string GetSelectStringEvent(IFilter filter)
         {
 
             string selectString;
