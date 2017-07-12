@@ -25,7 +25,7 @@ namespace GeoEvents.Repository
             this.PostgresConn = connection;
         }
 
-        public async Task<IEvent> CreateEventAsync (IEvent evt)
+        public async Task<IEvent> CreateEventAsync(IEvent evt)
         {
             EventEntity evte = Mapper.Map<EventEntity>(evt);
             evte = null;
@@ -65,7 +65,7 @@ namespace GeoEvents.Repository
                             Category = Convert.ToInt32(dr[7])
                         };
                     }
-                    
+
 
                 };
             }
@@ -73,11 +73,7 @@ namespace GeoEvents.Repository
             {
                 throw ex;
             }
-            catch (Exception)
-            {
-                throw new Exception();
-            }
-            
+
             return Mapper.Map<IEvent>(evte);
 
 
@@ -85,46 +81,52 @@ namespace GeoEvents.Repository
 
 
 
-    public async Task <IEnumerable<IEvent>> GetEventsAsync (IFilter filter)
-    {
-
-            using (PostgresConn.NpgConn())
-            using (NpgsqlCommand command = new NpgsqlCommand(ConstRepository.GetSelectStringEvent(Mapper.Map<Filter>(filter)), PostgresConn.NpgConn()))
+        public async Task<IEnumerable<IEvent>> GetEventsAsync(IFilter filter)
+        {
+            EventEntity tmp;
+            List<IEvent> SelectEvents = new List<IEvent>();
+            try
             {
-                command.Parameters.AddWithValue("@Lat", NpgsqlTypes.NpgsqlDbType.Double, filter.ULat);
-                command.Parameters.AddWithValue("@Long", NpgsqlTypes.NpgsqlDbType.Double, filter.ULong);
-                command.Parameters.AddWithValue("@Radius", NpgsqlTypes.NpgsqlDbType.Double, filter.Radius * 1000);
-                command.Parameters.AddWithValue("@UserStartTime", NpgsqlTypes.NpgsqlDbType.Timestamp, filter.StartTime);
-                command.Parameters.AddWithValue("@UserEndTime", NpgsqlTypes.NpgsqlDbType.Timestamp, filter.EndTime);
-                command.Parameters.AddWithValue("@Category", NpgsqlTypes.NpgsqlDbType.Integer, filter.Category);
-
-                await PostgresConn.NpgConn().OpenAsync();
-                DbDataReader dr = await command.ExecuteReaderAsync();
-
-                EventEntity tmp;
-                List<IEvent> SelectEvents = new List<IEvent>();
-
-                while (dr.Read())
+                using (PostgresConn.NpgConn())
+                using (NpgsqlCommand command = new NpgsqlCommand(ConstRepository.GetSelectStringEvent(Mapper.Map<Filter>(filter)), PostgresConn.NpgConn()))
                 {
-                    tmp = new EventEntity
+                    command.Parameters.AddWithValue("@Lat", NpgsqlTypes.NpgsqlDbType.Double, filter.ULat);
+                    command.Parameters.AddWithValue("@Long", NpgsqlTypes.NpgsqlDbType.Double, filter.ULong);
+                    command.Parameters.AddWithValue("@Radius", NpgsqlTypes.NpgsqlDbType.Double, filter.Radius * 1000);
+                    command.Parameters.AddWithValue("@UserStartTime", NpgsqlTypes.NpgsqlDbType.Timestamp, filter.StartTime);
+                    command.Parameters.AddWithValue("@UserEndTime", NpgsqlTypes.NpgsqlDbType.Timestamp, filter.EndTime);
+                    command.Parameters.AddWithValue("@Category", NpgsqlTypes.NpgsqlDbType.Integer, filter.Category);
+
+                    await PostgresConn.NpgConn().OpenAsync();
+                    DbDataReader dr = await command.ExecuteReaderAsync();
+
+                    while (dr.Read())
                     {
-                        Id = new Guid(dr[0].ToString()),
-                        StartTime = Convert.ToDateTime(dr[1]),
-                        EndTime = Convert.ToDateTime(dr[2]),
-                        Lat = Convert.ToDecimal(dr[3]),
-                        Long = Convert.ToDecimal(dr[4]),
-                        Name = dr[5].ToString(),
-                        Description = dr[6].ToString(),
-                        Category = Convert.ToInt32(dr[7])
-                    };
+                        tmp = new EventEntity
+                        {
+                            Id = new Guid(dr[0].ToString()),
+                            StartTime = Convert.ToDateTime(dr[1]),
+                            EndTime = Convert.ToDateTime(dr[2]),
+                            Lat = Convert.ToDecimal(dr[3]),
+                            Long = Convert.ToDecimal(dr[4]),
+                            Name = dr[5].ToString(),
+                            Description = dr[6].ToString(),
+                            Category = Convert.ToInt32(dr[7])
+                        };
 
-                    SelectEvents.Add(Mapper.Map<IEvent>(tmp));
+                        SelectEvents.Add(Mapper.Map<IEvent>(tmp));
+                    }
+
+
                 }
-
-                return SelectEvents;
             }
-        
-    }
+            catch (NpgsqlException ex)
+            {
+                throw ex;
+            }
+            return SelectEvents;
 
-}
+        }
+
+    }
 }
