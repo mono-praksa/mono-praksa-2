@@ -20,6 +20,8 @@ namespace GeoEvents.Repository
         static string CategoryQ = "\"Category\"";
         static string IdQ = "\"Id\"";
         static string EventIdQ = "\"EventId\"";
+        static string DescriptionQ = "\"Description\"";
+
         static string ParLat = "@Lat";
         static string ParLong = "@Long";
         static string ParName = "@Name";
@@ -34,13 +36,16 @@ namespace GeoEvents.Repository
         static string ParEventId = "@EventId";
         static string ParContent = "@Contetnt";
         static string ParSearcString ="@SearchString";
+
         static string TNameEventName = TabeNameEventQ + "." + NameQ;
+        static string TNameEventDescription = TabeNameEventQ + "." + DescriptionQ;
         static string TNameEventStartTime = TabeNameEventQ + "." + StartTimeQ;
         static string TNameEventEndTime = TabeNameEventQ + "." + EndTimeQ;
         static string TNameEventLong = TabeNameEventQ + "." + LongQ;
         static string TNameEventLat = TabeNameEventQ + "." + LatQ;
         static string TNameEventCat = TabeNameEventQ + "." + CategoryQ;
         static string TNameEventId = TabeNameEventQ + "." + IdQ;
+
         static DateTime DefaulTime = new DateTime(0001, 01, 01);
         static string CountString;
         #endregion
@@ -101,12 +106,14 @@ namespace GeoEvents.Repository
             {
                 selectString += " AND";
 
-                selectString += TabeNameEventQ + " ILIKE '%" + ParSearcString + "%'";
+                selectString += TNameEventName + " ILIKE '%" + ParSearcString + "%'";
+
+                if (filter.NameOnly == false)
+                {
+                    selectString += " AND" +  TNameEventDescription + " ILIKE '%" + ParSearcString + "%'";
+                }
+
             }
-            ///
-
-
-
 
             /// adding category filter in query if there is category
             if (filter.Category > 0)
@@ -143,8 +150,7 @@ namespace GeoEvents.Repository
 
             return selectString;
 
-            CountString =CountString.Replace("SELECT *","SELECT COUNT("+TNameEventId+") ");
-            return CountString;
+            
         }
 
         public static string GetSelectStringEvent(IFilter filter)
@@ -260,7 +266,7 @@ namespace GeoEvents.Repository
 
             string selectString = "SELECT * FROM " + TabeNameImagesQ + "WHERE (" + ParEventId + " = " + TabeNameImagesQ + "." + EventIdQ + ")";
 
-            return selectString + LimitString;
+            return selectString ;
         }
 
         public static string GetInsertStringImages()
