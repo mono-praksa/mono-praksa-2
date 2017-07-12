@@ -9,92 +9,107 @@ using GeoEvents.DAL;
 using Npgsql;
 using GeoEvents.Model.Common;
 using AutoMapper;
+using System.Data.Common;
 
 namespace GeoEvents.Repository
 {
-    public class EventRepository 
+    public class EventRepository : IEventRepository
     {
         protected IPostgresConnection PostgresConn { get; private set; }
 
+        //protected IMapper Mapper { get; private set; }
 
-        public EventRepository(IPostgresConnection connection)
+        public EventRepository(IPostgresConnection connection/*, IMapper mapper*/)
         {
+            //this.Mapper = mapper;
             this.PostgresConn = connection;
         }
 
-        public bool CreateEvent(IEvent evt)
+        public async Task<IEvent> CreateEventAsync (IEvent evt)
         {
-            ////////////////// mapirat iz IEvent u IeventEntity i onda insert radit ??? 
+            EventEntity evte = Mapper.Map<EventEntity>(evt);
 
-            PostgresConn.OpenConnection();
-            bool Flag = false;
-
-
-            NpgsqlCommand command = PostgresConn.NpgComm();
-            command = new NpgsqlCommand
-                (ConstRepository.GetInsertStringEvent(),
-                PostgresConn.NpgConn());
-
-            command.Parameters.AddWithValue("@Id", NpgsqlTypes.NpgsqlDbType.Uuid, evt.Id);
-            command.Parameters.AddWithValue("@Category", NpgsqlTypes.NpgsqlDbType.Integer, evt.Category);
-            command.Parameters.AddWithValue("@Description", NpgsqlTypes.NpgsqlDbType.Text, evt.Description);
-            command.Parameters.AddWithValue("@StartTime", NpgsqlTypes.NpgsqlDbType.Timestamp, evt.StartTime);
-            command.Parameters.AddWithValue("@EndTime", NpgsqlTypes.NpgsqlDbType.Timestamp, evt.EndTime);
-            command.Parameters.AddWithValue("@Lat", NpgsqlTypes.NpgsqlDbType.Double, evt.Lat);
-            command.Parameters.AddWithValue("@Long", NpgsqlTypes.NpgsqlDbType.Double, evt.Long);
-            command.Parameters.AddWithValue("@Name", NpgsqlTypes.NpgsqlDbType.Text, evt.Name);
-
-            if (command.ExecuteNonQuery() == 1)
+            using (PostgresConn.NpgConn())
+            using (NpgsqlCommand commandInsert = new NpgsqlCommand(ConstRepository.GetInsertStringEvent(), PostgresConn.NpgConn()))
+            using (NpgsqlCommand commandSelect = new NpgsqlCommand("Select * from \"Events\" where \"Events\".\"Id\" = @evteId Limit (1)", PostgresConn.NpgConn()))
             {
-                Flag = true;
-            }
+                commandInsert.Parameters.AddWithValue("@Id", NpgsqlTypes.NpgsqlDbType.Uuid, evte.Id);
+                commandInsert.Parameters.AddWithValue("@Category", NpgsqlTypes.NpgsqlDbType.Integer, evte.Category);
+                commandInsert.Parameters.AddWithValue("@Description", NpgsqlTypes.NpgsqlDbType.Text, evte.Description);
+                commandInsert.Parameters.AddWithValue("@StartTime", NpgsqlTypes.NpgsqlDbType.Timestamp, evte.StartTime);
+                commandInsert.Parameters.AddWithValue("@EndTime", NpgsqlTypes.NpgsqlDbType.Timestamp, evte.EndTime);
+                commandInsert.Parameters.AddWithValue("@Lat", NpgsqlTypes.NpgsqlDbType.Double, evte.Lat);
+                commandInsert.Parameters.AddWithValue("@Long", NpgsqlTypes.NpgsqlDbType.Double, evte.Long);
+                commandInsert.Parameters.AddWithValue("@Name", NpgsqlTypes.NpgsqlDbType.Text, evte.Name);
 
-            PostgresConn.CloseConnection();
+                commandSelect.Parameters.AddWithValue("@evteId", NpgsqlTypes.NpgsqlDbType.Uuid, evte.Id);
 
-            return Flag;
-        }
+                await PostgresConn.NpgConn().OpenAsync();
+                await commandInsert.ExecuteNonQueryAsync();
 
-
-
-        public List<IEvent> GetEvents(Filter filter)
-        {
-
-            PostgresConn.OpenConnection();
-
-            NpgsqlCommand command = new NpgsqlCommand(ConstRepository.GetSelectStringEvent(filter),
-                PostgresConn.NpgConn());
-
-            command.Parameters.AddWithValue("@Lat", NpgsqlTypes.NpgsqlDbType.Double, filter.ULat);
-            command.Parameters.AddWithValue("@Long", NpgsqlTypes.NpgsqlDbType.Double, filter.ULong);
-            command.Parameters.AddWithValue("@Radius", NpgsqlTypes.NpgsqlDbType.Double, filter.Radius * 1000);
-            command.Parameters.AddWithValue("@UserStartTime", NpgsqlTypes.NpgsqlDbType.Timestamp, filter.StartTime);
-            command.Parameters.AddWithValue("@UserEndTime", NpgsqlTypes.NpgsqlDbType.Timestamp, filter.EndTime);
-            command.Parameters.AddWithValue("@Category", NpgsqlTypes.NpgsqlDbType.Integer, filter.Category);
-
-            NpgsqlDataReader dr = command.ExecuteReader();
-
-            EventEntity tmp;
-            List<IEvent> SelectEvents = new List<IEvent>();
-
-            while (dr.Read())
-            {
-                tmp = new EventEntity
+                DbDataReader dr = await commandSelect.ExecuteReaderAsync();
+                while (dr.Read())
                 {
-                    Id = new Guid(dr[0].ToString()),
-                    StartTime = Convert.ToDateTime(dr[1]),
-                    EndTime = Convert.ToDateTime(dr[2]),
-                    Lat = Convert.ToDecimal(dr[3]),
-                    Long = Convert.ToDecimal(dr[4]),
-                    Name = dr[5].ToString(),
-                    Description = dr[6].ToString(),
-                    Category = Convert.ToInt32(dr[7])
-                };
+                    EventEntity evtR = new EventEntity
+                    {
+                        Id = new Guid(dr[0].ToString()),
+                        StartTime = Convert.ToDateTime(dr[1]),
+                        EndTime = Convert.ToDateTime(dr[2]),
+                        Lat = Convert.ToDecimal(dr[3]),
+                        Long = Convert.ToDecimal(dr[4]),
+                        Name = dr[5].ToString(),
+                        Description = dr[6].ToString(),
+                        Category = Convert.ToInt32(dr[7])
+                    };
+                }
+                return Mapper.Map<IEvent>(evte);
 
-                SelectEvents.Add(Mapper.Map<IEvent>(tmp));
-            }
-
-            return SelectEvents;
-        }
-
+            };
+        
     }
+
+
+
+    public async Task <IEnumerable<IEvent>> GetEventsAsync (IFilter filter)
+    {
+
+            using (PostgresConn.NpgConn())
+            using (NpgsqlCommand command = new NpgsqlCommand(ConstRepository.GetSelectStringEvent(Mapper.Map<Filter>(filter)), PostgresConn.NpgConn()))
+            {
+                command.Parameters.AddWithValue("@Lat", NpgsqlTypes.NpgsqlDbType.Double, filter.ULat);
+                command.Parameters.AddWithValue("@Long", NpgsqlTypes.NpgsqlDbType.Double, filter.ULong);
+                command.Parameters.AddWithValue("@Radius", NpgsqlTypes.NpgsqlDbType.Double, filter.Radius * 1000);
+                command.Parameters.AddWithValue("@UserStartTime", NpgsqlTypes.NpgsqlDbType.Timestamp, filter.StartTime);
+                command.Parameters.AddWithValue("@UserEndTime", NpgsqlTypes.NpgsqlDbType.Timestamp, filter.EndTime);
+                command.Parameters.AddWithValue("@Category", NpgsqlTypes.NpgsqlDbType.Integer, filter.Category);
+
+                await PostgresConn.NpgConn().OpenAsync();
+                DbDataReader dr = await command.ExecuteReaderAsync();
+
+                EventEntity tmp;
+                List<IEvent> SelectEvents = new List<IEvent>();
+
+                while (dr.Read())
+                {
+                    tmp = new EventEntity
+                    {
+                        Id = new Guid(dr[0].ToString()),
+                        StartTime = Convert.ToDateTime(dr[1]),
+                        EndTime = Convert.ToDateTime(dr[2]),
+                        Lat = Convert.ToDecimal(dr[3]),
+                        Long = Convert.ToDecimal(dr[4]),
+                        Name = dr[5].ToString(),
+                        Description = dr[6].ToString(),
+                        Category = Convert.ToInt32(dr[7])
+                    };
+
+                    SelectEvents.Add(Mapper.Map<IEvent>(tmp));
+                }
+
+                return SelectEvents;
+            }
+        
+    }
+
+}
 }
