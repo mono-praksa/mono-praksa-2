@@ -58,6 +58,11 @@ namespace GeoEvents.WebAPI.Controllers
             foreach (var file in provider.Contents)
             {
                 var filename = file.Headers.ContentDisposition.FileName.Trim('\"');
+
+                if (!System.Web.MimeMapping.GetMimeMapping(filename).StartsWith("image/")) {
+                    throw new Exception("You can upload images only!");
+                }
+
                 img1.Content = await file.ReadAsByteArrayAsync();
                 //Do whatever you want with filename and its binaray data.
                 img.Add(img1);
