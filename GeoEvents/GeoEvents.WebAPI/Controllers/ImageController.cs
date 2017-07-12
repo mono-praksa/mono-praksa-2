@@ -24,7 +24,7 @@ namespace GeoEvents.WebAPI.Controllers
         }
 
         [HttpGet]
-        [Route("get/{eventId: guid}")]
+        [Route("get/{eventId:guid}")]
         public List<ImageModel> GetImages(Guid eventId)
         {
             return Mapper.Map<List<ImageModel>>(Service.GetImages(eventId));
