@@ -14,10 +14,8 @@ namespace GeoEvents.Model.Mapping
     {
         public ModelProfile()
         {
-
-            CreateMap<IEvent, Event>();
-            CreateMap<IImage, Image>();
-
+            CreateMap<IEventEntity, IEvent>().ReverseMap();
+            CreateMap<IImageEntity, IImage>().ReverseMap();
         }
     }
 }
