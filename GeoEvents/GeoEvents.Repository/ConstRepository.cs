@@ -65,6 +65,7 @@ namespace GeoEvents.Repository
                     TNameEventLat + ", " + TNameEventLong + ")) AND ((" + ParUserStartTime + "," + ParUserEndTime +
                     ")OVERLAPS(" + TNameEventStartTime + "," + TNameEventEndTime + "))";
             }
+
             
 
             else
@@ -74,14 +75,17 @@ namespace GeoEvents.Repository
                     TabeNameEventQ + "." + LatQ + ", " + TabeNameEventQ + "." + LongQ + "))";
             }
 
+
+            selectString=selectString + LimitString;
+
             if (filter.Category == 0)
             {
-                return selectString + LimitString;
+                return selectString;
             }
 
             else
             {
-                return selectString + " AND (" + ParCategory + " & " + TNameEventCat + " > 0)" + LimitString;
+                return selectString + " AND (" + ParCategory + " & " + TNameEventCat + " > 0)" ;
             }
         }
 
@@ -117,6 +121,8 @@ namespace GeoEvents.Repository
             string selectString = "SELECT * FROM " + TabeNameImagesQ + " WHERE "+TabeNameImagesQ+"."+IdQ+"="+ParId ;
             return selectString;
         }
+
+
         #endregion
     }
 }

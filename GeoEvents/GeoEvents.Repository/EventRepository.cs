@@ -17,11 +17,11 @@ namespace GeoEvents.Repository
     {
         protected IPostgresConnection PostgresConn { get; private set; }
 
-        //protected IMapper Mapper { get; private set; }
+        protected IMapper Mapper { get; private set; }
 
-        public EventRepository(IPostgresConnection connection/*, IMapper mapper*/)
+        public EventRepository(IPostgresConnection connection, IMapper mapper)
         {
-            //this.Mapper = mapper;
+            this.Mapper = mapper;
             this.PostgresConn = connection;
         }
 
