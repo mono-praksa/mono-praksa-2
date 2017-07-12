@@ -56,14 +56,13 @@ namespace GeoEvents.Service
         }
 
         /// <summary>
-        /// Adds images to an event.
+        /// Adds image to an event.
         /// </summary>
-        /// <param name="eventId">The event's id.</param>
-        /// <param name="images">The list of images to add.</param>
+        /// <param name="image">The list of images to add.</param>
         /// <returns></returns>
-        public async Task<IImage> CreateImagesAsync(IEnumerable<IImage> images)
+        public async Task<IImage> CreateImageAsync(IImage image)
         {
-            return await Repository.CreateImagesAsync(images);
+            return await Repository.CreateImageAsync(image);
         }
 
         #endregion Methods

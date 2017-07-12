@@ -21,13 +21,12 @@ namespace GeoEvents.Service.Common
         /// <returns></returns>
         Task<IEnumerable<IImage>> GetImagesAsync(Guid eventId);
 
-            /// <summary>
-            /// Adds images to an event.
-            /// </summary>
-            /// <param name="eventId">The event's id.</param>
-            /// <param name="images">The list of images to add.</param>
-            /// <returns></returns>
-        Task<IImage> CreateImages(IEnumerable<IImage> images);
+        /// <summary>
+        /// Adds image to an event.
+        /// </summary>
+        /// <param name="image">The list of images to add.</param>
+        /// <returns></returns>
+        Task<IImage> CreateImageAsync(IImage image);
 
             #endregion Methods
     }
