@@ -38,8 +38,8 @@ namespace GeoEvents.Repository
         static string TNameEventLat = TabeNameEventQ + "." + LatQ;
         static string TNameEventCat = TabeNameEventQ + "." + CategoryQ;
         static DateTime DefaulTime = new DateTime(0001, 01, 01);
-        static int PageSize;
-        static int PageNum;
+        static int? PageSize;
+        static int? PageNum;
         static string LimitString = "  LIMIT("+PageSize.ToString()+")";
         #endregion
 
@@ -48,7 +48,8 @@ namespace GeoEvents.Repository
         public static string GetSelectStringEvent(Filter filter)
         {
             string selectString;
-
+            PageSize = filter.PageSize;
+            PageNum = filter.PageNumber;
 
             if (filter.EndTime == DefaulTime && filter.StartTime > DefaulTime)
             {
@@ -66,7 +67,7 @@ namespace GeoEvents.Repository
                     ")OVERLAPS(" + TNameEventStartTime + "," + TNameEventEndTime + "))";
             }
 
-            
+
 
             else
             {
@@ -76,17 +77,21 @@ namespace GeoEvents.Repository
             }
 
 
-            selectString=selectString + LimitString;
 
-            if (filter.Category == 0)
+            if (filter.Category > 0)
             {
-                return selectString;
+
+                selectString = selectString + " AND (" + ParCategory + " & " + TNameEventCat + " > 0)";
             }
 
-            else
-            {
-                return selectString + " AND (" + ParCategory + " & " + TNameEventCat + " > 0)" ;
-            }
+            
+
+
+
+            selectString = selectString + LimitString;
+
+
+            return selectString;
         }
 
         public static string GetInsertStringEvent()
