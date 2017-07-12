@@ -28,45 +28,60 @@ namespace GeoEvents.Repository
         public async Task<IEvent> CreateEventAsync (IEvent evt)
         {
             EventEntity evte = Mapper.Map<EventEntity>(evt);
+            evte = null;
 
-            using (PostgresConn.NpgConn())
-            using (NpgsqlCommand commandInsert = new NpgsqlCommand(ConstRepository.GetInsertStringEvent(), PostgresConn.NpgConn()))
-            using (NpgsqlCommand commandSelect = new NpgsqlCommand("Select * from \"Events\" where \"Events\".\"Id\" = @evteId Limit (1)", PostgresConn.NpgConn()))
+            try
             {
-                commandInsert.Parameters.AddWithValue("@Id", NpgsqlTypes.NpgsqlDbType.Uuid, evte.Id);
-                commandInsert.Parameters.AddWithValue("@Category", NpgsqlTypes.NpgsqlDbType.Integer, evte.Category);
-                commandInsert.Parameters.AddWithValue("@Description", NpgsqlTypes.NpgsqlDbType.Text, evte.Description);
-                commandInsert.Parameters.AddWithValue("@StartTime", NpgsqlTypes.NpgsqlDbType.Timestamp, evte.StartTime);
-                commandInsert.Parameters.AddWithValue("@EndTime", NpgsqlTypes.NpgsqlDbType.Timestamp, evte.EndTime);
-                commandInsert.Parameters.AddWithValue("@Lat", NpgsqlTypes.NpgsqlDbType.Double, evte.Lat);
-                commandInsert.Parameters.AddWithValue("@Long", NpgsqlTypes.NpgsqlDbType.Double, evte.Long);
-                commandInsert.Parameters.AddWithValue("@Name", NpgsqlTypes.NpgsqlDbType.Text, evte.Name);
-
-                commandSelect.Parameters.AddWithValue("@evteId", NpgsqlTypes.NpgsqlDbType.Uuid, evte.Id);
-
-                await PostgresConn.NpgConn().OpenAsync();
-                await commandInsert.ExecuteNonQueryAsync();
-
-                DbDataReader dr = await commandSelect.ExecuteReaderAsync();
-                while (dr.Read())
+                using (PostgresConn.NpgConn())
+                using (NpgsqlCommand commandInsert = new NpgsqlCommand(ConstRepository.GetInsertStringEvent(), PostgresConn.NpgConn()))
+                using (NpgsqlCommand commandSelect = new NpgsqlCommand("Select * from \"Events\" where \"Events\".\"Id\" = @evteId Limit (1)", PostgresConn.NpgConn()))
                 {
-                    EventEntity evtR = new EventEntity
-                    {
-                        Id = new Guid(dr[0].ToString()),
-                        StartTime = Convert.ToDateTime(dr[1]),
-                        EndTime = Convert.ToDateTime(dr[2]),
-                        Lat = Convert.ToDecimal(dr[3]),
-                        Long = Convert.ToDecimal(dr[4]),
-                        Name = dr[5].ToString(),
-                        Description = dr[6].ToString(),
-                        Category = Convert.ToInt32(dr[7])
-                    };
-                }
-                return Mapper.Map<IEvent>(evte);
+                    commandInsert.Parameters.AddWithValue("@Id", NpgsqlTypes.NpgsqlDbType.Uuid, evte.Id);
+                    commandInsert.Parameters.AddWithValue("@Category", NpgsqlTypes.NpgsqlDbType.Integer, evte.Category);
+                    commandInsert.Parameters.AddWithValue("@Description", NpgsqlTypes.NpgsqlDbType.Text, evte.Description);
+                    commandInsert.Parameters.AddWithValue("@StartTime", NpgsqlTypes.NpgsqlDbType.Timestamp, evte.StartTime);
+                    commandInsert.Parameters.AddWithValue("@EndTime", NpgsqlTypes.NpgsqlDbType.Timestamp, evte.EndTime);
+                    commandInsert.Parameters.AddWithValue("@Lat", NpgsqlTypes.NpgsqlDbType.Double, evte.Lat);
+                    commandInsert.Parameters.AddWithValue("@Long", NpgsqlTypes.NpgsqlDbType.Double, evte.Long);
+                    commandInsert.Parameters.AddWithValue("@Name", NpgsqlTypes.NpgsqlDbType.Text, evte.Name);
 
-            };
-        
-    }
+                    commandSelect.Parameters.AddWithValue("@evteId", NpgsqlTypes.NpgsqlDbType.Uuid, evte.Id);
+
+                    await PostgresConn.NpgConn().OpenAsync();
+                    await commandInsert.ExecuteNonQueryAsync();
+
+                    DbDataReader dr = await commandSelect.ExecuteReaderAsync();
+                    while (dr.Read())
+                    {
+                        EventEntity evtR = new EventEntity
+                        {
+                            Id = new Guid(dr[0].ToString()),
+                            StartTime = Convert.ToDateTime(dr[1]),
+                            EndTime = Convert.ToDateTime(dr[2]),
+                            Lat = Convert.ToDecimal(dr[3]),
+                            Long = Convert.ToDecimal(dr[4]),
+                            Name = dr[5].ToString(),
+                            Description = dr[6].ToString(),
+                            Category = Convert.ToInt32(dr[7])
+                        };
+                    }
+                    
+
+                };
+            }
+            catch (NpgsqlException ex)
+            {
+                throw ex;
+            }
+            catch (Exception)
+            {
+                throw new Exception();
+            }
+            
+            return Mapper.Map<IEvent>(evte);
+
+
+        }
 
 
 
