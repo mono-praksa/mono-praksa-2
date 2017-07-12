@@ -150,8 +150,7 @@ namespace GeoEvents.Repository
 
             return selectString;
 
-            CountString =CountString.Replace("SELECT *","SELECT COUNT("+TNameEventId+") ");
-            return CountString;
+            
         }
 
         public static string GetSelectStringEvent(IFilter filter)
