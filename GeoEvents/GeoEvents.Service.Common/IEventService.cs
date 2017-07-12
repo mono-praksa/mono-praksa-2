@@ -26,7 +26,7 @@ namespace GeoEvents.Service.Common
         /// </summary>
         /// <param name="filter">The filter.</param>
         /// <returns>The number.</returns>
-        Task<int> GetEventCountAsync(IFilter filter);
+        Task<Int64> GetEventCountAsync(IFilter filter);
 
         /// <summary>
         /// Creates an event.

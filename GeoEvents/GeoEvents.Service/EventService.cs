@@ -78,7 +78,7 @@ namespace GeoEvents.Service
         /// </summary>
         /// <param name="filter">The filter.</param>
         /// <returns>The number.</returns>
-        public async Task<int> GetEventCountAsync(IFilter filter)
+        public async Task<Int64> GetEventCountAsync(IFilter filter)
         {
             return await Repository.GetEventCountAsync(filter);
         }
