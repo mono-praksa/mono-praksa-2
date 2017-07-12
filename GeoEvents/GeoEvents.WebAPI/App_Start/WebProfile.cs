@@ -11,8 +11,8 @@ namespace GeoEvents.WebAPI.App_Start
     {
         public WebProfile()
         {
-            CreateMap<IEvent, EventsViewModel>().ReverseMap();
-            CreateMap<IImage, ImagesViewModel>().ReverseMap();
+            CreateMap<IEvent, EventModel>().ReverseMap();
+            CreateMap<IImage, ImageModel>().ReverseMap();
         }
     }
 }

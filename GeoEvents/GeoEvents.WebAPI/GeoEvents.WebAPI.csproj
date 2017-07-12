@@ -259,18 +259,18 @@
     <Compile Include="Areas\HelpPage\SampleGeneration\TextSample.cs" />
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
     <Compile Include="Controllers\AccountController.cs" />
-    <Compile Include="Controllers\EventsController.cs" />
+    <Compile Include="Controllers\EventController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
-    <Compile Include="Controllers\ImagesController.cs" />
+    <Compile Include="Controllers\ImageController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Providers\Models\AccountBindingModels.cs" />
     <Compile Include="Providers\Models\AccountViewModels.cs" />
-    <Compile Include="Providers\Models\EventsViewModel.cs" />
+    <Compile Include="Providers\Models\EventModel.cs" />
     <Compile Include="Providers\Models\IdentityModels.cs" />
-    <Compile Include="Providers\Models\ImagesViewModel.cs" />
+    <Compile Include="Providers\Models\ImageModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Providers\ApplicationOAuthProvider.cs" />
     <Compile Include="Results\ChallengeResult.cs" />
@@ -320,12 +320,12 @@
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
-    <Content Include="src\app\create-event.component.html" />
-    <Content Include="src\app\create-images.component.html" />
-    <Content Include="src\app\display-list.component.html" />
+    <Content Include="src\app\create\create-event.component.html" />
+    <Content Include="src\app\create\create-images.component.html" />
+    <Content Include="src\app\display\display-list.component.html" />
     <Content Include="src\app\event-details.component.html" />
     <Content Include="src\app\navbar\navbar.component.html" />
-    <Content Include="src\app\search-events.component.html" />
+    <Content Include="src\app\search\search-events.component.html" />
     <Content Include="src\favicon.ico" />
     <Content Include="src\index.html" />
     <Content Include="src\styles.css" />
@@ -365,19 +365,21 @@
     <TypeScriptCompile Include="src\app\app.component.spec.ts" />
     <TypeScriptCompile Include="src\app\app.component.ts" />
     <TypeScriptCompile Include="src\app\app.module.ts" />
-    <TypeScriptCompile Include="src\app\create-event.component.ts" />
-    <TypeScriptCompile Include="src\app\create-images.component.ts" />
-    <TypeScriptCompile Include="src\app\display-list.component.ts" />
+    <TypeScriptCompile Include="src\app\create\create-event.component.ts" />
+    <TypeScriptCompile Include="src\app\create\create-images.component.ts" />
+    <TypeScriptCompile Include="src\app\create\create.component.ts" />
     <TypeScriptCompile Include="src\app\display-map.component.ts" />
+    <TypeScriptCompile Include="src\app\display\display-list.component.ts" />
+    <TypeScriptCompile Include="src\app\display\display-map.component.ts" />
     <TypeScriptCompile Include="src\app\errors\error-404.component.ts" />
     <TypeScriptCompile Include="src\app\event-details.component.ts" />
-    <TypeScriptCompile Include="src\app\event.model.ts" />
-    <TypeScriptCompile Include="src\app\filter.model.ts" />
-    <TypeScriptCompile Include="src\app\image.model.ts" />
+    <TypeScriptCompile Include="src\app\models\event.model.ts" />
+    <TypeScriptCompile Include="src\app\models\filter.model.ts" />
+    <TypeScriptCompile Include="src\app\models\image.model.ts" />
     <TypeScriptCompile Include="src\app\navbar\navbar.component.ts" />
     <TypeScriptCompile Include="src\app\routes.ts" />
-    <TypeScriptCompile Include="src\app\search-events.component.ts" />
-    <TypeScriptCompile Include="src\app\validators.ts" />
+    <TypeScriptCompile Include="src\app\search\search-events.component.ts" />
+    <TypeScriptCompile Include="src\app\validators\validator.ts" />
     <TypeScriptCompile Include="src\main.ts" />
   </ItemGroup>
   <ItemGroup>

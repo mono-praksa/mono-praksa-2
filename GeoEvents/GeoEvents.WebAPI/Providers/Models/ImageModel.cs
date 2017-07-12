@@ -6,11 +6,10 @@ using System.Threading.Tasks;
 
 namespace GeoEvents.WebAPI
 {
-    public class ImagesViewModel
+    public class ImageModel
     {
         public Guid Id { get; set; }
         public Guid EventId { get; set; }
         public byte[] Content { get; set; }
-
     }
 }

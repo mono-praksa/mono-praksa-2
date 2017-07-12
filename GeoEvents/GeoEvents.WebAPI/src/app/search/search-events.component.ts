@@ -3,11 +3,12 @@ import { FormControl, FormGroup, FormBuilder, Validators } from '@angular/forms'
 import { Http, Response, Headers, RequestOptions } from '@angular/http'
 import { Observable } from 'rxjs/Rx'
 import { MapsAPILoader } from '@agm/core'
-import { IEvent } from './event.model'
-import { IFilter } from './filter.model'
+
+import { IEvent } from './../models/event.model'
+import { IFilter } from './../models/filter.model'
 
 @Component({
-    templateUrl: "app/search-events.component.html",
+    templateUrl: "app/search/search-events.component.html",
     styles: [`/* The switch - the box around the slider */
 .switch {
   position: relative;

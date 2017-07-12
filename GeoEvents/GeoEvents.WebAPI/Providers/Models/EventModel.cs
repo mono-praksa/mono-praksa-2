@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace GeoEvents.WebAPI
 {
-    public class EventsViewModel
+    public class EventModel
     {
         public Guid Id { get; set; }
         public string Name { get; set; }
@@ -14,7 +14,7 @@ namespace GeoEvents.WebAPI
         public decimal Long { get; set; }
         public List<int> Categories { get; set; }
 
-        public EventsViewModel(Guid id, string name, string description, DateTime starttime, DateTime endtime, decimal uLat, decimal uLong, List<int> categories) {
+        public EventModel(Guid id, string name, string description, DateTime starttime, DateTime endtime, decimal uLat, decimal uLong, List<int> categories) {
             this.Id = id;
             this.Name = name;
             this.Description = description;
@@ -25,6 +25,6 @@ namespace GeoEvents.WebAPI
             this.Categories = categories;
         }
 
-        public EventsViewModel() { }
+        public EventModel() { }
     }
 }

@@ -1,5 +1,5 @@
 ﻿import { Component, Output, EventEmitter, Input } from '@angular/core'
-import { IEvent } from './event.model'
+import { IEvent } from './../models/event.model'
 
 @Component({
     template: '<h1>I AM DISPLAY MAP COMPONENT</h1>',
