@@ -11,12 +11,7 @@ namespace GeoEvents.Common
     {
         NpgsqlConnection connection { get; set; }
 
-        void OpenConnection();
-
-        void CloseConnection();
-
         NpgsqlCommand NpgComm();
-
 
         NpgsqlConnection NpgConn();
     }

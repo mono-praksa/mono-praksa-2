@@ -12,7 +12,6 @@ namespace GeoEvents.DAL
 {
     public class PostgresConnection : IPostgresConnection
     {
-
         
         protected IGeoEventsConfiguration configuration { get; private set; }
         public NpgsqlConnection connection { get; set; }
@@ -23,17 +22,6 @@ namespace GeoEvents.DAL
             
             connection = new NpgsqlConnection(configuration.ConnectionString);
 
-
-        }
-
-        public void OpenConnection()
-        {
-            connection.Open();
-        }
-
-        public void CloseConnection()
-        {
-            connection.Close();
         }
 
 

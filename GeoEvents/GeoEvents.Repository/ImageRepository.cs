@@ -17,49 +17,71 @@ namespace GeoEvents.Repository
         bool Flag = false;
 
         protected IPostgresConnection PostgresConn { get; private set; }
+        protected IMapper Mapper { get; private set; }
 
-        public ImageRepository(IPostgresConnection connection)
+        public ImageRepository(IPostgresConnection connection,IMapper mapper)
         {
             this.PostgresConn = connection;
+            this.Mapper = mapper;
         }
 
 
 
-        public bool CreateImages(List<IImage> img)
+        public async Task<IImage> CreateImages(IImage img)
         {
-            PostgresConn.OpenConnection();
+            ImageEntity DbImage = Mapper.Map<ImageEntity>(img);
 
-            NpgsqlCommand command = PostgresConn.NpgComm();
-            foreach (var item in img)
+            using (PostgresConn.NpgConn())
+            using (NpgsqlCommand commandInsert = new NpgsqlCommand
+                     (ConstRepository.GetInsertStringImages(),
+                     PostgresConn.NpgConn()))
+            using (NpgsqlCommand commandSelect = new NpgsqlCommand
+                (ConstRepository.GetSelectStringImages(),
+                PostgresConn.NpgConn()))
             {
-                command = new NpgsqlCommand
-                    (ConstRepository.GetInsertStringImages(),
-                    PostgresConn.NpgConn());
+                // // insert image
+                commandInsert.Parameters.AddWithValue("@Id", NpgsqlTypes.NpgsqlDbType.Uuid, DbImage.Id);
+                commandInsert.Parameters.AddWithValue("@Content", NpgsqlTypes.NpgsqlDbType.Bytea, DbImage.Content);
+                commandInsert.Parameters.AddWithValue("@EventId", NpgsqlTypes.NpgsqlDbType.Uuid, DbImage.EventId);
 
-                command.Parameters.AddWithValue("@Id", NpgsqlTypes.NpgsqlDbType.Uuid, item.Id);
-                command.Parameters.AddWithValue("@Content", NpgsqlTypes.NpgsqlDbType.Bytea ,item.Content);
-                command.Parameters.AddWithValue("@EventId", NpgsqlTypes.NpgsqlDbType.Uuid, item.EventId);
+                await PostgresConn.connection.OpenAsync();
+                await commandInsert.ExecuteNonQueryAsync();
+                // //
+
+                // // Select image ,that we just inserted, from db 
+                commandSelect.Parameters.AddWithValue("@Id", NpgsqlTypes.NpgsqlDbType.Uuid, DbImage.Id);
+
+                NpgsqlDataReader dr = commandSelect.ExecuteReader();
+                ImageEntity selectImage = null;
+
+                while (dr.Read())
+                {
+                    selectImage = new ImageEntity
+                    {
+                        Id = new Guid(dr[0].ToString()),
+                        EventId = DbImage.EventId
+                    };
+
+                    selectImage.Content = (byte[])dr["Content"];
+                }
+                // //
+
+                return Mapper.Map<IImage>(selectImage);
             }
 
-            if (command.ExecuteNonQuery() == 1)
-            {
-                Flag = true;
-            }
 
-            PostgresConn.CloseConnection();
-
-            return Flag;
         }
 
 
-        public List<IImage> GetImages(Guid eventID)
+        public async Task<IEnumerable<IImage>> GetImagesAsync(Guid eventID)
         {
             PostgresConn.OpenConnection();
 
             NpgsqlCommand command = new NpgsqlCommand
-                (ConstRepository.GetSelectStringImages(eventID),
+                (ConstRepository.GetSelectStringImages(),
                 PostgresConn.NpgConn());
-            command.Parameters.AddWithValue("@eventID", NpgsqlTypes.NpgsqlDbType.Uuid, eventID);
+
+            command.Parameters.AddWithValue("@EventID", NpgsqlTypes.NpgsqlDbType.Uuid, eventID);
 
             NpgsqlDataReader dr = command.ExecuteReader();
 
