@@ -52,7 +52,7 @@ namespace GeoEvents.Service
         /// <returns></returns>
         public async Task<IEnumerable<IEvent>> GetEventsAsync(IFilter filter)
         {
-            IEnumerable<IEvent> events = Repository.GetEventsAsync(filter);
+            IEnumerable<IEvent> events = await Repository.GetEventsAsync(filter);
 
             foreach (IEvent evt in events)
             {
@@ -71,7 +71,7 @@ namespace GeoEvents.Service
                 }
             }
 
-            return events;    //??????????????
+            return events;
         }
 
         /// <summary>
