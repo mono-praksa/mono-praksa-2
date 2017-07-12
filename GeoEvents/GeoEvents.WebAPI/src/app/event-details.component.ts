@@ -1,8 +1,9 @@
 ﻿import { Component, Input, OnInit } from '@angular/core'
-import { IEvent } from './event.model'
-import { IImage } from './image.model'
 import { Http, Response, Headers, RequestOptions } from '@angular/http'
 import { Observable } from 'rxjs/Rx'
+
+import { IEvent } from './models/event.model'
+import { IImage } from './models/image.model'
 
 @Component({
     templateUrl: 'app/event-details.component.html',

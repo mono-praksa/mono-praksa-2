@@ -1,8 +1,8 @@
 ﻿import { Component, Output, EventEmitter, Input } from '@angular/core'
-import { IEvent } from './event.model'
+import { IEvent } from './../models/event.model'
 
 @Component({
-    templateUrl:'app/display-list.component.html',
+    templateUrl:'app/display/display-list.component.html',
     selector: 'display-list'
 })
 

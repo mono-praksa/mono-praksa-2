@@ -3,11 +3,12 @@ import { FormControl, FormGroup, FormBuilder, Validators } from '@angular/forms'
 import { Http, Response, Headers, RequestOptions } from '@angular/http'
 import { Observable } from 'rxjs/Rx'
 import { MapsAPILoader } from '@agm/core'
-import { IEvent } from './event.model'
-import { IFilter } from './filter.model'
+
+import { IEvent } from './../models/event.model'
+import { IFilter } from './../models/filter.model'
 
 @Component({
-    templateUrl: "app/search-events.component.html",
+    templateUrl: "app/search/search-events.component.html",
     styles: [`/* The switch - the box around the slider */
 .switch {
   position: relative;
@@ -187,7 +188,7 @@ export class SearchEventsComponent implements OnInit {
 
     getEvents(filter: IFilter): Observable<IEvent[]> {
 
-        return this.http.get('/api/event/search/' + filter.ULat.toString() + '/' + filter.ULong.toString() + '/' + filter.Radius.toString() + '/' + filter.Category.toString() + '/' + filter.StartTime.toString().replace(':', 'h') + '/' + filter.EndTime.toString().replace(':', 'h')).map(function (response: Response) {
+        return this.http.get('/api/events/search/' + filter.ULat.toString() + '/' + filter.ULong.toString() + '/' + filter.Radius.toString() + '/' + filter.Category.toString() + '/' + filter.StartTime.toString().replace(':', 'h') + '/' + filter.EndTime.toString().replace(':', 'h')).map(function (response: Response) {
             return <IEvent[]>response.json();
         }).catch(this.handleError);
     }

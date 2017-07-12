@@ -1,13 +1,16 @@
-﻿import { Component, OnInit, ElementRef, NgZone, ViewChild } from '@angular/core'
+﻿import { Component, OnInit, ElementRef, NgZone, ViewChild, Output, EventEmitter } from '@angular/core'
 import { FormControl, FormGroup, FormBuilder, Validators } from '@angular/forms'
 import { Http, Response, Headers, RequestOptions } from '@angular/http'
 import { Observable } from 'rxjs/Rx'
 import { MapsAPILoader } from '@agm/core'
+import { Router } from '@angular/router'
 
-import { endDateBeforeStartDate } from './validators'
+import { endDateBeforeStartDate } from './../validators/validator'
+import { IEvent } from './../models/event.model'
 
 @Component({
-    templateUrl: "app/create-event.component.html",
+    selector: "create-event",
+    templateUrl: "app/create/create-event.component.html",
     styles: [`
         agm-map {
             height: 300px;
@@ -15,16 +18,20 @@ import { endDateBeforeStartDate } from './validators'
     `]
 })
 export class CreateEventComponent implements OnInit {
+    @Output() eventEmitter = new EventEmitter();
+    creatingEvent: boolean = false;
     latitude: number;
     longitude: number;
     zoom: number;
+
+    createdEvent: IEvent
 
     @ViewChild("search")
     searchElementRef: ElementRef;
 
     CategoryEnum: any = CategoryEnum
 
-    categories: any[] = [
+    categories: Array<ICategoryElement> = [
         { id: CategoryEnum["Music"], checked: false },
         { id: CategoryEnum["Culture"], checked: false },
         { id: CategoryEnum["Sport"], checked: false },
@@ -41,9 +48,9 @@ export class CreateEventComponent implements OnInit {
     end: FormControl
     category: FormControl
 
-    constructor(private http: Http, private formBuilder: FormBuilder, private mapsAPILoader: MapsAPILoader, private ngZone: NgZone) { }
+    constructor(private http: Http, private formBuilder: FormBuilder, private mapsAPILoader: MapsAPILoader, private ngZone: NgZone, private router: Router) { }
 
-    ngOnInit() {
+    ngOnInit(): void {
         this.name = new FormControl('', Validators.required);
         this.description = new FormControl('', Validators.required);
         this.start = new FormControl('', Validators.required);
@@ -86,7 +93,7 @@ export class CreateEventComponent implements OnInit {
         });
     }
 
-    private setCurrentPosition() {
+    private setCurrentPosition(): void {
         if ("geolocation" in navigator) {
             navigator.geolocation.getCurrentPosition((position) => {
                 this.latitude = position.coords.latitude;
@@ -101,6 +108,7 @@ export class CreateEventComponent implements OnInit {
     }
 
     createEvent(formValues: any) {
+        this.creatingEvent = true;
         let chosenCategories: number[] = [];
         this.categories.filter(checkbox => {
             if (checkbox.checked) {
@@ -108,7 +116,8 @@ export class CreateEventComponent implements OnInit {
             }
         });
 
-        let newEvent = {
+        let newEvent: IEvent = {
+            Id: undefined,
             Name: formValues.name,
             Description: formValues.description,
             StartTime: formValues.start,
@@ -118,16 +127,22 @@ export class CreateEventComponent implements OnInit {
             Categories: chosenCategories
         }
         
-        let headers = new Headers({ 'Content-Type': 'application/json' });
-        let options = new RequestOptions({ headers: headers });
-        return this.http.post('/api/event/create', JSON.stringify(newEvent), options).map(function (response: Response) {
-            return response.json();
-        }).catch(this.handleError).subscribe((response: Response) => {
-            console.log(response);
-        });
+        //let headers = new Headers({ 'Content-Type': 'application/json' });
+        //let options = new RequestOptions({ headers: headers });
+        //this.http.post('/api/events/create', JSON.stringify(newEvent), options).map(function (response: Response) {
+        //    return response.json();
+        //}).catch(this.handleError).subscribe((response: Response) => {
+        //    console.log(response);
+        //    //this.createdEvent = response;
+        //    //this.eventEmitter.emit(this.createdEvent)
+        //});
+
+        //delete
+        newEvent.Id = "afjkjh834agfhkjaf";
+        this.eventEmitter.emit(newEvent);
     }
 
-    updateCategories(category: number) {
+    updateCategories(category: number): void {
         this.categories.filter(checkbox => {
             if (checkbox.id == category) {
                 checkbox.checked = !checkbox.checked;
@@ -135,13 +150,13 @@ export class CreateEventComponent implements OnInit {
         });
     }
 
-    mapClicked($event: any) {
-        this.latitude = $event.coords.lat;
-        this.longitude = $event.coords.lng;
+    mapClicked(event: any): void {
+        this.latitude = event.coords.lat;
+        this.longitude = event.coords.lng;
     }
 
-    isAllUnchecked() {
-        let checkbox: any
+    isAllUnchecked(): boolean {
+        let checkbox: ICategoryElement
         for (checkbox of this.categories) {
             if (checkbox.checked) {
                 return false;
@@ -164,4 +179,9 @@ export enum CategoryEnum {
     Religious = 16,
     Business = 32,
     Miscellaneous = 64
+}
+
+interface ICategoryElement {
+    id: number,
+    checked: boolean
 }
