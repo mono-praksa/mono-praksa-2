@@ -130,5 +130,38 @@ namespace GeoEvents.Repository
 
         }
 
+        public async Task<Int64> GetEventCountAsync(IFilter filter)
+        {
+            Int64 Count;
+            try
+            {
+                using (PostgresConn.NpgConn())
+                using (NpgsqlCommand command = new NpgsqlCommand(QueryHelper.GetEventCountString(filter), PostgresConn.NpgConn()))
+                {
+                    command.Parameters.AddWithValue("@Lat", NpgsqlTypes.NpgsqlDbType.Double, filter.ULat);
+                    command.Parameters.AddWithValue("@Long", NpgsqlTypes.NpgsqlDbType.Double, filter.ULong);
+                    command.Parameters.AddWithValue("@Radius", NpgsqlTypes.NpgsqlDbType.Double, filter.Radius * 1000);
+                    command.Parameters.AddWithValue("@UserStartTime", NpgsqlTypes.NpgsqlDbType.Timestamp, filter.StartTime);
+                    command.Parameters.AddWithValue("@UserEndTime", NpgsqlTypes.NpgsqlDbType.Timestamp, filter.EndTime);
+                    command.Parameters.AddWithValue("@Category", NpgsqlTypes.NpgsqlDbType.Integer, filter.Category);
+
+
+                    await PostgresConn.NpgConn().OpenAsync();
+                    object dr = await command.ExecuteScalarAsync();
+
+                    Count = Convert.ToInt64(dr);
+
+                }
+            }
+            catch (NpgsqlException ex)
+            {
+                throw ex;
+            }
+
+
+
+            return Count;
+
+        }
     }
 }

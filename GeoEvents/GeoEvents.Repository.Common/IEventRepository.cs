@@ -13,7 +13,7 @@ namespace GeoEvents.Repository.Common
 
         Task<IEnumerable<IEvent>> GetEventsAsync (IFilter filter);
         Task<IEvent> CreateEventAsync(IEvent evt);
-
+        Task<Int64> GetEventCountAsync(IFilter filter);
 
     }
 }

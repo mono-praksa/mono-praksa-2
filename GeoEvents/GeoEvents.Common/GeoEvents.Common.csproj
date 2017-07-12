@@ -57,11 +57,16 @@
     <Compile Include="IFilter.cs" />
     <Compile Include="IGeoEventsConfiguration.cs" />
     <Compile Include="IPostgresConnection.cs" />
-    <Compile Include="PagedList.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\GeoEvents.Model.Common\GeoEvents.Model.Common.csproj">
+      <Project>{BE064C7F-8529-470C-87F1-323597D81F0D}</Project>
+      <Name>GeoEvents.Model.Common</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

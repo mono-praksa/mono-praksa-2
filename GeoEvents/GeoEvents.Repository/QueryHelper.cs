@@ -47,9 +47,103 @@ namespace GeoEvents.Repository
 
         #region Metods
 
-        public static string GetNumberOfPages(IFilter filter) {
+        public static string GetEventCountString(IFilter filter) {
 
-            CountString=CountString.Replace("SELECT *","SELECT COUNT("+TNameEventId+") ");
+            string selectString;
+
+            if (filter.OrderBy == "Distance")
+            {
+   
+                   selectString = "SELECT COUNT("+ TNameEventId+"), earth_distance(ll_to_earth(" + ParLat + "," + ParLong + "), ll_to_earth(" + TNameEventLat + ","
+                    + TNameEventLong + ")) as distance from" + TabeNameEventQ + "WHERE";
+            }
+            else
+            {
+                selectString = "SELECT COUNT("+TNameEventId+")  FROM " + TabeNameEventQ + " WHERE ";
+            }
+
+
+
+            /// adding Distance filter to query if there is Location and radius
+            if (filter.ULat != null && filter.ULong != null && filter.Radius != null)
+            {
+
+                selectString += " (earth_box(ll_to_earth(" + ParLat + "," + ParLong + ")," + ParRadius + ")@> ll_to_earth(" +
+                   TNameEventLat + ", " + TNameEventLong + ")) ";
+            }
+
+            /// Adding Time filter query if there is time in filter
+
+            if (filter.EndTime > DefaulTime && filter.StartTime > DefaulTime)
+            {
+                selectString += " AND ";
+
+                selectString += " ((" + ParUserStartTime + "," + ParUserEndTime +
+                    ")OVERLAPS(" + TNameEventStartTime + "," + TNameEventEndTime + ")) ";
+            }
+            else if (filter.EndTime == null && filter.StartTime > DefaulTime)
+            {
+                selectString += " AND ";
+
+                selectString += " (" + ParUserStartTime + "<" + TNameEventEndTime + ") ";
+            }
+            else if (filter.EndTime > DefaulTime && filter.StartTime == null)
+            {
+                selectString += " AND ";
+
+                selectString += "(" + ParUserEndTime + ">" + TNameEventStartTime + ") ";
+            }
+            ///
+
+
+            ///Adding searcstring filter in queri if there is searchstring 
+            if (filter.SearchString != null)
+            {
+                selectString += " AND";
+
+                selectString += TabeNameEventQ + " ILIKE '%" + ParSearcString + "%'";
+            }
+            ///
+
+
+
+
+            /// adding category filter in query if there is category
+            if (filter.Category > 0)
+            {
+                selectString += " AND ";
+                selectString = selectString + " (" + ParCategory + " & " + TNameEventCat + " > 0)";
+            }
+
+
+            ///ORDERING orderby orderAscend
+            ///
+
+            switch (filter.OrderBy)
+            {
+                case "Name": selectString += "order by" + TNameEventName; break;
+                case "StartTime": selectString += "order by" + TNameEventStartTime; break;
+                case "EndTime": selectString += "order by" + TNameEventEndTime; break;
+                case "Distance": selectString += "order by distance"; break;
+            }
+
+            if (filter.OrderAscending == true)
+            {
+                selectString += "asc";
+            }
+            else
+            {
+                selectString += "desc";
+            }
+
+            ///pageing 
+            selectString += "LIMIT(" + filter.PageSize.ToString() + ") OFFSET (" + ((filter.PageNumber - 1) * filter.PageSize).ToString() + ")";
+            ///
+
+
+            return selectString;
+
+            CountString =CountString.Replace("SELECT *","SELECT COUNT("+TNameEventId+") ");
             return CountString;
         }
 
