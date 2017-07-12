@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using AutoMapper;
 using GeoEvents.Model.Common;
+using GeoEvents.WebAPI.Controllers;
 
 namespace GeoEvents.WebAPI.App_Start
 {

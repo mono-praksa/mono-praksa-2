@@ -92,5 +92,12 @@ namespace GeoEvents.WebAPI.Controllers
         //    return Request.CreateResponse(HttpStatusCode.OK, "Upload successful");
         //}
     }
+
+    public class ImageModel
+    {
+        public Guid Id { get; set; }
+        public Guid EventId { get; set; }
+        public byte[] Content { get; set; }
+    }
 }
 
