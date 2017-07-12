@@ -31,9 +31,9 @@ namespace GeoEvents.Repository
             ImageEntity DbImage = Mapper.Map<ImageEntity>(img);
 
             using (PostgresConn.NpgConn())
-            using (NpgsqlCommand commandInsert = new NpgsqlCommand(ConstRepository.GetInsertStringImages(),
+            using (NpgsqlCommand commandInsert = new NpgsqlCommand(QueryHelper.GetInsertStringImages(),
                      PostgresConn.NpgConn()))
-            using (NpgsqlCommand commandSelect = new NpgsqlCommand(ConstRepository.GetSelectStringImage(),
+            using (NpgsqlCommand commandSelect = new NpgsqlCommand(QueryHelper.GetSelectStringImage(),
                      PostgresConn.NpgConn()))
             {
                 // // insert image
@@ -73,7 +73,7 @@ namespace GeoEvents.Repository
         public async Task<IEnumerable<IImage>> GetImagesAsync(Guid eventID)
         {
             using (PostgresConn.connection)
-            using (NpgsqlCommand command = new NpgsqlCommand(ConstRepository.GetSelectStringImages(),
+            using (NpgsqlCommand command = new NpgsqlCommand(QueryHelper.GetSelectStringImages(),
                  PostgresConn.NpgConn()))
             {
                 command.Parameters.AddWithValue("@EventID", NpgsqlTypes.NpgsqlDbType.Uuid, eventID);

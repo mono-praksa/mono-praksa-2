@@ -57,6 +57,7 @@
     <Compile Include="IFilter.cs" />
     <Compile Include="IGeoEventsConfiguration.cs" />
     <Compile Include="IPostgresConnection.cs" />
+    <Compile Include="PagedList.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

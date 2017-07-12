@@ -30,7 +30,7 @@ namespace GeoEvents.Repository
             EventEntity evte = Mapper.Map<EventEntity>(evt);
 
             using (PostgresConn.NpgConn())
-            using (NpgsqlCommand commandInsert = new NpgsqlCommand(ConstRepository.GetInsertStringEvent(), PostgresConn.NpgConn()))
+            using (NpgsqlCommand commandInsert = new NpgsqlCommand(QueryHelper.GetInsertStringEvent(), PostgresConn.NpgConn()))
             using (NpgsqlCommand commandSelect = new NpgsqlCommand("Select * from \"Events\" where \"Events\".\"Id\" = @evteId Limit (1)", PostgresConn.NpgConn()))
             {
                 commandInsert.Parameters.AddWithValue("@Id", NpgsqlTypes.NpgsqlDbType.Uuid, evte.Id);
@@ -74,7 +74,7 @@ namespace GeoEvents.Repository
     {
 
             using (PostgresConn.NpgConn())
-            using (NpgsqlCommand command = new NpgsqlCommand(ConstRepository.GetSelectStringEvent(Mapper.Map<Filter>(filter)), PostgresConn.NpgConn()))
+            using (NpgsqlCommand command = new NpgsqlCommand(QueryHelper.GetSelectStringEvent(Mapper.Map<Filter>(filter)), PostgresConn.NpgConn()))
             {
                 command.Parameters.AddWithValue("@Lat", NpgsqlTypes.NpgsqlDbType.Double, filter.ULat);
                 command.Parameters.AddWithValue("@Long", NpgsqlTypes.NpgsqlDbType.Double, filter.ULong);
@@ -82,7 +82,7 @@ namespace GeoEvents.Repository
                 command.Parameters.AddWithValue("@UserStartTime", NpgsqlTypes.NpgsqlDbType.Timestamp, filter.StartTime);
                 command.Parameters.AddWithValue("@UserEndTime", NpgsqlTypes.NpgsqlDbType.Timestamp, filter.EndTime);
                 command.Parameters.AddWithValue("@Category", NpgsqlTypes.NpgsqlDbType.Integer, filter.Category);
-
+                command.Parameters.AddWithValue("@SearchString", NpgsqlTypes.NpgsqlDbType.Text,filter.SearchString);
                 await PostgresConn.NpgConn().OpenAsync();
                 DbDataReader dr = await command.ExecuteReaderAsync();
 
