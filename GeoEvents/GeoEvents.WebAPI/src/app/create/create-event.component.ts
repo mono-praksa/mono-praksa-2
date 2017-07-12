@@ -127,19 +127,19 @@ export class CreateEventComponent implements OnInit {
             Categories: chosenCategories
         }
         
-        //let headers = new Headers({ 'Content-Type': 'application/json' });
-        //let options = new RequestOptions({ headers: headers });
-        //this.http.post('/api/events/create', JSON.stringify(newEvent), options).map(function (response: Response) {
-        //    return response.json();
-        //}).catch(this.handleError).subscribe((response: Response) => {
-        //    console.log(response);
-        //    //this.createdEvent = response;
-        //    //this.eventEmitter.emit(this.createdEvent)
-        //});
+        let headers = new Headers({ 'Content-Type': 'application/json' });
+        let options = new RequestOptions({ headers: headers });
+        this.http.post('/api/events/create', JSON.stringify(newEvent), options).map(function (response: Response) {
+            return response.json();
+        }).catch(this.handleError).subscribe((response: Response) => {
+            console.log(response);
+            this.createdEvent = <IEvent>response.json();
+            this.eventEmitter.emit(this.createdEvent)
+        });
 
         //delete
-        newEvent.Id = "afjkjh834agfhkjaf";
-        this.eventEmitter.emit(newEvent);
+        //newEvent.Id = "afjkjh834agfhkjaf";
+        //this.eventEmitter.emit(newEvent);
     }
 
     updateCategories(category: number): void {
