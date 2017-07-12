@@ -17,10 +17,12 @@ namespace GeoEvents.WebAPI.Controllers
     public class ImageController : ApiController
     {
         protected IImageService Service { get; private set; }
+        protected IMapper Mapper { get; private set; }
 
-        public ImageController(IImageService service)
+        public ImageController(IImageService service, IMapper mapper)
         {
             this.Service = service;
+            this.Mapper = mapper;
         }
 
         //[HttpGet]
@@ -97,12 +99,11 @@ namespace GeoEvents.WebAPI.Controllers
             return Request.CreateResponse(HttpStatusCode.OK, "Upload successful");
         }
     }
-
-    public class ImageModel
-    {
-        public Guid Id { get; set; }
-        public Guid EventId { get; set; }
-        public byte[] Content { get; set; }
-    }
+}
+public class ImageModel
+{
+    public Guid Id { get; set; }
+    public Guid EventId { get; set; }
+    public byte[] Content { get; set; }
 }
 

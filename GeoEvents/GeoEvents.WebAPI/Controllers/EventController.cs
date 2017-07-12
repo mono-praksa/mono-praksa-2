@@ -17,10 +17,12 @@ namespace GeoEvents.WebAPI.Controllers
     public class EventController : ApiController
     {
         protected IEventService Service { get; private set; }
+        protected IMapper Mapper { get; private set; }
 
-        public EventController(IEventService service)
+        public EventController(IEventService service, IMapper mapper)
         {
             this.Service = service;
+            this.Mapper = mapper;
         }
 
         //[HttpPost]
