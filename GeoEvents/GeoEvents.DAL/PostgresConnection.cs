@@ -18,10 +18,7 @@ namespace GeoEvents.DAL
 
         public PostgresConnection(IGeoEventsConfiguration configuration)
         {
-            this.configuration = configuration;
-            
-            connection = new NpgsqlConnection(configuration.ConnectionString);
-
+            this.configuration = configuration; 
         }
 
 
@@ -32,6 +29,7 @@ namespace GeoEvents.DAL
 
         public NpgsqlConnection NpgConn()
         {
+            connection = new NpgsqlConnection(configuration.ConnectionString);
             return connection;
         }
 
