@@ -116,7 +116,7 @@ export class CreateEventComponent implements OnInit {
             }
         });
 
-        let newEvent: IEvent = {
+        let newEvent : IEvent = {
             Id: undefined,
             Name: formValues.name,
             Description: formValues.description,

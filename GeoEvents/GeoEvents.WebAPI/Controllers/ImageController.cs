@@ -75,7 +75,7 @@ namespace GeoEvents.WebAPI.Controllers
 
         //async
         [HttpPost]
-        [Route("create/{eventId: guid}")]
+        [Route("create/{eventId:guid}")]
         public async Task<HttpResponseMessage> CreateImageAsync(Guid eventId)
         {
             ImageModel img = new ImageModel();
