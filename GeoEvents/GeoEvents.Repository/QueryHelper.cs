@@ -122,7 +122,7 @@ namespace GeoEvents.Repository
 
 
             ///Adding searcstring filter in queri if there is searchstring 
-            if (filter.SearchString != "" || filter.SearchString != null)
+            if (!string.IsNullOrEmpty(filter.SearchString))
             {
                 selectString += " AND";
 
@@ -230,7 +230,7 @@ namespace GeoEvents.Repository
 
 
             ///Adding searcstring filter in queri if there is searchstring 
-            if (filter.SearchString != "")
+            if (!String.IsNullOrWhiteSpace(filter.SearchString))
             {
                 selectString += " AND";
 
