@@ -61,6 +61,7 @@ namespace GeoEvents.Service
         /// <returns></returns>
         public async Task<IImage> CreateImageAsync(IImage image)
         {
+            image.Id = Guid.NewGuid();
             return await Repository.CreateImageAsync(image);
         }
 

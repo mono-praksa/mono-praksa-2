@@ -14,6 +14,7 @@ export class EventDetailsComponent implements OnInit{
     @Input() event: IEvent
     @Output() cancel = new EventEmitter()
     images: IImage[]
+    CategoryEnum: any = CategoryEnum
 
     constructor(private http: Http) {
 
