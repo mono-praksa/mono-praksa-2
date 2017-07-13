@@ -1,7 +1,8 @@
-﻿import { Component, Input } from '@angular/core'
+﻿import { Component, Input, EventEmitter, Output } from '@angular/core'
 import { Http, RequestOptions, Headers, Response } from '@angular/http'
 import { Observable } from 'rxjs/Rx'
 import { IEvent } from './../models/event.model'
+
 
 @Component({
     selector: "create-images",
@@ -15,6 +16,7 @@ export class CreateImagesComponent {
     private _formData: FormData;
     fileList: FileList;
     btnUploadClicked: boolean = false;
+    @Output() emittSkip = new EventEmitter();
 
     constructor(private http: Http) { }
 
@@ -79,6 +81,11 @@ export class CreateImagesComponent {
         }
         return false;
     }
+
+    skip() {
+        this.emittSkip.emit(true);
+    }
+
 }
 
 interface file {

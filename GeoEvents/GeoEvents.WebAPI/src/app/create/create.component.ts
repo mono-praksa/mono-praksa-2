@@ -3,14 +3,19 @@ import { IEvent } from './../models/event.model'
 
 @Component({
     template: `
-        <create-event (eventEmitter)="eventEmitted($event)" *ngIf="!createdEvent"></create-event>
-        <create-images *ngIf="createdEvent" [createdEvent]="createdEvent"></create-images>
+        <create-event (eventEmitter)="eventEmitted($event)" *ngIf="!createdEvent || _skip"></create-event>
+        <create-images *ngIf="createdEvent && !_skip" (emittSkip)="skip($event)" [createdEvent]="createdEvent"></create-images>
     `
 })
 export class CreateComponent {
     createdEvent: IEvent;
+    _skip: boolean = false;
 
     eventEmitted(event: IEvent) {
         this.createdEvent = event;
+    }
+
+    skip(variable: boolean) {
+        this._skip = variable;
     }
 }
