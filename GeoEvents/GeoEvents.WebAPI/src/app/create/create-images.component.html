@@ -1,0 +1,12 @@
+﻿<h2>Uploading images for event {{createdEvent?.Name}}</h2>
+<div id="form-group">
+    <label for="file" class="control-label">File</label>
+    <input type="file" id="file" value="Upload" (change)="onChange($event, showFileNames)" class="form-control" multiple accept="image/*" />
+    <div *ngIf="files">
+        <ul>
+            <li *ngFor="let i of indices">{{files[i].name}} <span *ngIf="files[i].error">There was error while uploading this file!</span><span [hidden]="!files[i].finished">uploaded</span><i class="fa fa-spinner fa-spin" style="font-size:24px" *ngIf="files[i].uploading"></i></li>
+        </ul>
+        <input type="button" value="Upload" (click)="upload()" [disabled]="btnUploadClicked"/>
+    </div>
+    <span *ngIf="uploadingFilter()">Uploading <i class="fa fa-spinner fa-spin" style="font-size:24px"></i></span>
+</div>

@@ -1,0 +1,56 @@
+﻿<form [formGroup]="eventForm" (ngSubmit)="createEvent(eventForm.value)" autocomplete="off" novalidate>
+    <h2>Create Event</h2>
+    <div class="form-group" [ngClass]="{'has-error': name.touched && name.invalid, 'has-success': name.touched && !name.invalid}">
+        <label for="name" class="control-label">Name</label>
+        <input type="text" formControlName="name" class="form-control" id="name" placeholder="Name..." required>
+        <span class="help-block" *ngIf="name.touched && name.invalid">Required!</span>
+    </div>
+    <div class="form-group" [ngClass]="{'has-error': description.touched && description.invalid, 'has-success': description.touched && !description.invalid}">
+        <label for="description" class="control-label">Description</label>
+        <textarea formControlName="description" class="form-control" id="description" placeholder="Description..." required></textarea>
+        <span class="help-block" *ngIf="description.touched && description.invalid">Required!</span>
+    </div>
+    <div class="form-group">
+        <fieldset>
+            <legend>
+                Date & Time
+            </legend>
+            <div class="row">
+                <div class="col-md-6" [ngClass]="{'has-error': start.touched && start.invalid, 'has-success': start.touched && !start.invalid}">
+                    <label for="start" class="control-label">Start</label>
+                    <input formControlName="start" ngui-datetime-picker [close-on-select]="false" class="form-control" id="start" placeholder="Click to enter date and time" required readonly style="cursor: pointer;" />
+                    <span class="help-block" *ngIf="start.touched && start.invalid">Required!</span>
+                </div>
+                <div class="col-md-6" [ngClass]="{'has-error': end.touched && (end.invalid || eventForm.hasError('endDateBeforeStartDate')), 'has-success': end.touched && !(end.invalid || eventForm.hasError('endDateBeforeStartDate'))}">
+                    <label for="end" class="control-label">End</label>
+                    <input formControlName="end" ngui-datetime-picker [close-on-select]="false" class="form-control" id="end" placeholder="Click to enter date and time" required readonly style="cursor: pointer;" (change)="checkStartTime()" />
+                    <span class="help-block" *ngIf="end.touched && end.invalid">Required!</span>
+                    <span class="help-block" *ngIf="end.touched && eventForm.hasError('endDateBeforeStartDate')">End date must be after start date!</span>
+                </div>
+            </div>
+        </fieldset>
+    </div>
+    <div class="form-group" [ngClass]="{'has-error': isAllUnchecked(), 'has-success': !isAllUnchecked()}">
+        <fieldset>
+            <legend class="control-label">
+                Categories
+            </legend>
+            <div class="row control-label">
+                <label class="col-md-3" *ngFor="let category of keys()">
+                    <input type="checkbox" value="{{CategoryEnum[category]}}" (change)="updateCategories(CategoryEnum[category])" *ngIf="category!='Miscellaneous'" />
+                    <input type="checkbox" value="{{CategoryEnum[category]}}" (change)="updateCategories(CategoryEnum[category])" *ngIf="category=='Miscellaneous'" checked/> {{category}}
+                </label>
+            </div>
+            <span class="help-block" *ngIf="isAllUnchecked()">Required at least one category!</span>
+        </fieldset>
+    </div>
+    <div class="form-group">
+        <label for="address">Address</label>
+        <input type="text" class="form-control" id="address" placeholder="Address..." #search />
+        <agm-map [latitude]="latitude" [longitude]="longitude" [scrollwheel]="true" [zoom]="zoom" (mapClick)="mapClicked($event)">
+            <agm-marker [latitude]="latitude" [longitude]="longitude" [markerDraggable]="true"></agm-marker>
+        </agm-map>
+    </div>
+    <button type="submit" class="btn btn-default" [disabled]="eventForm.invalid || isAllUnchecked() || creatingEvent">Submit</button>
+    <i class="fa fa-spinner fa-spin" style="font-size:24px" *ngIf="creatingEvent"></i>
+</form>

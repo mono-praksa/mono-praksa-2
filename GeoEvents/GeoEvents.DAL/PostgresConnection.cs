@@ -5,67 +5,49 @@ using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using System.Configuration;
+using GeoEvents.Common;
 
 namespace GeoEvents.DAL
 {
-    public class PostgresConnection
+    public class PostgresConnection : IPostgresConnection
     {
-        const string ConnStringDefault = "Server=localhost;Port=5432;Database=Proba;User Id=postgres;Password=postgres;";
-        NpgsqlConnection connection;
+        #region Properties
+        protected IGeoEventsConfiguration configuration { get; private set; }
+        protected NpgsqlConnection connection { get; private set; }
+        #endregion Properties
 
-        public PostgresConnection()
+        #region Constructor
+        public PostgresConnection(IGeoEventsConfiguration configuration)
         {
-            try
-            {
-                connection = new NpgsqlConnection(ConnStringDefault);
-            }
-            catch (PostgresException msg)
-            {
-                throw msg;
-            }
-
+            this.configuration = configuration;
+            connection = new NpgsqlConnection(configuration.ConnectionString);
         }
-
-        public void OpenConnection()
-        {
-            try
-            {
-                connection.Open();
-            }
-            catch (PostgresException msg)
-            {
-                throw msg;
-            }
+        #endregion Constructor
 
 
-        }
+        #region Methods
 
-        public void CloseConnection()
-        {
-            try
-            {
-                connection.Close();
-            }
-            catch (PostgresException msg)
-            {
-                throw msg;
-            }
-
-        }
-
-
+        /// <summary>
+        /// return Npgcommand
+        /// </summary>
+        /// <returns>NpgsqlConnection connection.CreateCommand() </returns>
         public NpgsqlCommand NpgComm()
         {
             return connection.CreateCommand();
-
         }
+  
 
+        /// <summary>
+        /// returns Npqconnection
+        /// </summary>
+        /// <returns>NpgsqlConnection connection </returns>
         public NpgsqlConnection NpgConn()
         {
-
+            
             return connection;
         }
-
+        #endregion Methods
 
     }
 }

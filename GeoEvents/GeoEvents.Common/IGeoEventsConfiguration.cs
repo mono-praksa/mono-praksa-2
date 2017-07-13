@@ -4,9 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GeoEvents.Repository
+namespace GeoEvents.Common
 {
-    static public class ConstRepository
+    public interface IGeoEventsConfiguration
     {
+        string ConnectionString { get; set; }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using GeoEvents.Common;
+using GeoEvents.Model.Common;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,8 +11,9 @@ namespace GeoEvents.Repository.Common
     public interface IEventRepository
     {
 
-        bool CreateEvent(IEventEntity evt);
-        List<IEventEntity> GetEvents(Filter filter);
+        Task<IEnumerable<IEvent>> GetEventsAsync (IFilter filter);
+        Task<IEvent> CreateEventAsync(IEvent evt);
+        Task<Int64> GetEventCountAsync(IFilter filter);
 
     }
 }
