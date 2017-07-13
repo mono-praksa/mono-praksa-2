@@ -365,6 +365,7 @@
     <TypeScriptCompile Include="src\app\app.component.spec.ts" />
     <TypeScriptCompile Include="src\app\app.component.ts" />
     <TypeScriptCompile Include="src\app\app.module.ts" />
+    <TypeScriptCompile Include="src\app\common\category-enum.ts" />
     <TypeScriptCompile Include="src\app\create\create-event.component.ts" />
     <TypeScriptCompile Include="src\app\create\create-images.component.ts" />
     <TypeScriptCompile Include="src\app\create\create.component.ts" />

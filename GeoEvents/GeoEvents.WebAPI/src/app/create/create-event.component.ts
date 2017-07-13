@@ -7,6 +7,7 @@ import { Router } from '@angular/router'
 
 import { endDateBeforeStartDate } from './../validators/validator'
 import { IEvent } from './../models/event.model'
+import { CategoryEnum } from '../common/category-enum'
 
 @Component({
     selector: "create-event",
@@ -130,7 +131,7 @@ export class CreateEventComponent implements OnInit {
         let headers = new Headers({ 'Content-Type': 'application/json' });
         let options = new RequestOptions({ headers: headers });
         this.http.post('/api/events/create', JSON.stringify(newEvent), options).map(function (response: Response) {
-            return response.json();
+            return response;
         }).catch(this.handleError).subscribe((response: Response) => {
             console.log(response);
             this.createdEvent = <IEvent>response.json();
@@ -169,16 +170,6 @@ export class CreateEventComponent implements OnInit {
         var keys = Object.keys(CategoryEnum);
         return keys.slice(keys.length / 2);
     }
-}
-
-export enum CategoryEnum {
-    Music = 1,
-    Culture = 2,
-    Sport = 4,
-    Gastro = 8,
-    Religious = 16,
-    Business = 32,
-    Miscellaneous = 64
 }
 
 interface ICategoryElement {
