@@ -12,7 +12,7 @@ namespace GeoEvents.Repository
         #region Constants
 
         /// <summary>
-        /// 
+        /// Quoted Constant string
         /// </summary>
         static string TabelNameEventQ = "\"Events\"";
         static string TabelNameImagesQ = "\"Images\"";
@@ -26,6 +26,10 @@ namespace GeoEvents.Repository
         static string EventIdQ = "\"EventId\"";
         static string DescriptionQ = "\"Description\"";
 
+
+        /// <summary>
+        /// Parametar Constant strings
+        /// </summary>
         static string ParLat = "@Lat";
         static string ParLong = "@Long";
         static string ParName = "@Name";
@@ -41,6 +45,9 @@ namespace GeoEvents.Repository
         static string ParContent = "@Content";
         static string ParSearcString ="@SearchString";
 
+        /// <summary>
+        /// Added Qouted strings
+        /// </summary>
         static string TNameEventName = TabelNameEventQ + "." + NameQ;
         static string TNameEventDescription = TabelNameEventQ + "." + DescriptionQ;
         static string TNameEventStartTime = TabelNameEventQ + "." + StartTimeQ;
@@ -50,12 +57,21 @@ namespace GeoEvents.Repository
         static string TNameEventCat = TabelNameEventQ + "." + CategoryQ;
         static string TNameEventId = TabelNameEventQ + "." + IdQ;
 
+        /// <summary>
+        /// Default DateTime
+        /// </summary>
         static DateTime DefaulTime = new DateTime(0001, 01, 01);
-        static string CountString;
+
         #endregion
 
         #region Metods
 
+
+        /// <summary>
+        /// Gets query string with filter for count query
+        /// </summary>
+        /// <param name="filter"></param>
+        /// <returns>Query string</returns>
         public static string GetEventCountString(IFilter filter) {
 
             string selectString;
@@ -157,6 +173,12 @@ namespace GeoEvents.Repository
             
         }
 
+
+        /// <summary>
+        /// Gets query filter select string for query events
+        /// </summary>
+        /// <param name="filter"></param>
+        /// <returns> query string </returns>
         public static string GetSelectStringEvent(IFilter filter)
         {
 
@@ -255,17 +277,19 @@ namespace GeoEvents.Repository
             }
 
 
-            /// COunt string befor pageing
-            CountString = selectString;
-
-            ///pageing 
+            
             selectString += " LIMIT(" + filter.PageSize.ToString() + ") OFFSET ("+((filter.PageNumber-1)*filter.PageSize).ToString()+") ";
-            ///
+          
 
 
             return selectString;
         }
 
+
+        /// <summary>
+        /// gets query insert string for event
+        /// </summary>
+        /// <returns>Query string</returns>
         public static string GetInsertStringEvent()
         {
 
@@ -275,6 +299,10 @@ namespace GeoEvents.Repository
             return insertString;
         }
 
+        /// <summary>
+        /// Gets query select string for Images
+        /// </summary>
+        /// <returns>Query string</returns>
         public static string GetSelectStringImages()
         {
 
@@ -283,6 +311,11 @@ namespace GeoEvents.Repository
             return selectString ;
         }
 
+
+        /// <summary>
+        /// get query Insert string for images
+        /// </summary>
+        /// <returns>guery string</returns>
         public static string GetInsertStringImages()
         {
 
@@ -292,6 +325,11 @@ namespace GeoEvents.Repository
             return insertString;
         }
 
+
+        /// <summary>
+        /// get query select string form images
+        /// </summary>
+        /// <returns></returns>
         public static string GetSelectStringImage()
         {
 
