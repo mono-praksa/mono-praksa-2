@@ -201,6 +201,8 @@ namespace GeoEvents.Repository
             ///
 
 
+
+
             ///Adding searcstring filter in queri if there is searchstring 
             if (filter.SearchString != "")
             {
@@ -229,6 +231,8 @@ namespace GeoEvents.Repository
             ///ORDERING orderby orderAscend
             ///
 
+            
+
             switch (filter.OrderBy)
             {
                 case "Name": selectString += " order by " + TNameEventName; break;
@@ -237,7 +241,7 @@ namespace GeoEvents.Repository
                 case "Distance": selectString += " order by distance "; break;      
             }
 
-            if (filter.OrderAscending == true)
+            if (filter.OrderAscending == true  && String.IsNullOrEmpty(filter.OrderBy) == false )
             {
                 selectString += " asc ";
             }
