@@ -1,11 +1,20 @@
 ﻿<div class="col-sm-4">
-    <h3>{{event.Id}}</h3>
-    <h3>{{event.Name}}</h3>
-    <h3>{{event.Description}}</h3>
-    <h3>{{event.StartTime}} - {{event.EndTime}}</h3>
-    <h3>Location: {{event.Lat}}, {{event.Long}}</h3>
-    <h3>{{event.Categories}}</h3>
-    <div *ngFor="let image of images">
-        <span>{{image.Id}}, {{image.EventId}}, {{image.Content}}</span>
+    <h2>{{event.Name}}</h2>
+    <h3>Details</h3> 
+    <div class="well-sm">
+        <h4>Time: {{event.StartTime}} - {{event.EndTime}}</h4>
+        <p>{{event.Description}}</p>
+        
+        <h4>Location: {{event.Lat}}, {{event.Long}}</h4>
+        <ul>Categories
+            <li *ngFor="let category of event.Categories">
+                {{CategoryEnum[category]}}
+            </li>
+        </ul>
     </div>
+    <h3>Images</h3>
+    <div *ngFor="let image of images">
+        <img [src]="data:image/jpeg;base64,{{image.Content}}"/>
+    </div>
+    <button (click)="handleCancelClick()">Return</button>
 </div>

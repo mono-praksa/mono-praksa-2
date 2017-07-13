@@ -1,4 +1,4 @@
-﻿import { Component, Input, OnInit } from '@angular/core'
+﻿import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core'
 import { Http, Response, Headers, RequestOptions } from '@angular/http'
 import { Observable } from 'rxjs/Rx'
 
@@ -12,6 +12,7 @@ import { IImage } from './models/image.model'
 
 export class EventDetailsComponent implements OnInit{
     @Input() event: IEvent
+    @Output() cancel = new EventEmitter()
     images: IImage[]
 
     constructor(private http: Http) {
@@ -34,4 +35,18 @@ export class EventDetailsComponent implements OnInit{
         return Observable.throw(error.statusText);
     }
 
+    handleCancelClick() {
+        this.cancel.emit()
+    }
+
+}
+
+enum CategoryEnum {
+    Music = 1,
+    Culture = 2,
+    Sport = 4,
+    Gastro = 8,
+    Religious = 16,
+    Business = 32,
+    Miscellaneous = 64
 }
