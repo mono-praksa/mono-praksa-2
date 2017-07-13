@@ -13,8 +13,39 @@
         </ul>
     </div>
     <h3>Images</h3>
-    <div *ngFor="let image of images">
+    <span *ngIf="imagesLoading" class="glyphicon glyphicon-refresh glyphicon-refresh-animate">Loading...</span>
+    <!--<div *ngFor="let image of images">
         <img [src]="'data:image/jpeg;base64,'+image.Content"/>
+    </div>-->
+
+    <div id="myCarousel" class="carousel slide" data-ride="carousel">
+        <!-- Indicators -->
+        <ol class="carousel-indicators">
+            <li data-taget="#myCarousel" data-slide-to="0" class="active"></li>
+            <li data-target="#myCarousel" *ngIf="let image of images; let i=index+1 | slice:1" data-slide-to="i"></li>
+        </ol>
+
+        <!-- Wrapper for slides -->
+        <div class="carousel-inner">
+            <div class="item active">
+                <img [src]="'data:image/jpeg;base64,'+ images[0].Content" alt="event.Name + '_image0'" width="640" height="480"/>
+            </div>
+            <div class="item" *ngFor="let image of images; let i=index+1">
+                <img [src]="'data:image/jpeg;base64,'+image.Content" alt="event.Name + '_image' + i"/>
+            </div>
+        </div>
+
+        <!-- Left and right controls -->
+        <a class="left carousel-control" href="#myCarousel" data-slide="prev">
+            <span class="glyphicon glyphicon-chevron-left"></span>
+            <span class="sr-only">Previous</span>
+        </a>
+        <a class="right carousel-control" href="#myCarousel" data-slide="next">
+            <span class="glyphicon glyphicon-chevron-right"></span>
+            <span class="sr-only">Next</span>
+        </a>
     </div>
+
     <button (click)="handleCancelClick()">Return</button>
+
 </div>

@@ -15,6 +15,7 @@ export class EventDetailsComponent implements OnInit{
     @Output() cancel = new EventEmitter()
     images: IImage[]
     CategoryEnum: any = CategoryEnum
+    imagesLoading : boolean = true
 
     constructor(private http: Http) {
 
@@ -22,6 +23,7 @@ export class EventDetailsComponent implements OnInit{
 
     ngOnInit() {
         this.getImages(this.event.Id).subscribe(res => {
+            this.imagesLoading = false
             this.images = res
         })
     }
