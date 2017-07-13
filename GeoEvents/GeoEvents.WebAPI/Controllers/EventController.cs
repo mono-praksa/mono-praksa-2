@@ -54,9 +54,9 @@ namespace GeoEvents.WebAPI.Controllers
         //async
         [HttpGet]
         [Route(@"search/{ULat:decimal}/{ULong:decimal}/{Radius:decimal}/{Category:int}/{StartTime:regex(^\d{4}-\d{2}-\d{2} \d{2}h\d{2}$)}/{EndTime:regex(^\d{4}-\d{2}-\d{2} \d{2}h\d{2}$)}")]
-        public async Task<IEnumerable<EventModel>> GetEventsAsync(decimal ULat, decimal ULong, decimal Radius, int Category, string StartTime, string EndTime)
+        public async Task<IEnumerable<EventModel>> GetEventsAsync(decimal? ULat, decimal? ULong, decimal? Radius, int? Category, string StartTime, string EndTime)
         {
-            Filter filter = new Filter(ULat, ULong, Radius, DateTime.Parse(StartTime.Replace('h', ':')), DateTime.Parse(EndTime.Replace('h', ':')), Category, 1, 10, "proba", "Name", true);
+            Filter filter = new Filter(ULat, ULong, Radius, DateTime.Parse(StartTime.Replace('h', ':')), DateTime.Parse(EndTime.Replace('h', ':')), Category, 1, 10, "", "Name", true);
 
             return Mapper.Map<List<EventModel>>(await Service.GetEventsAsync(filter));
         }
