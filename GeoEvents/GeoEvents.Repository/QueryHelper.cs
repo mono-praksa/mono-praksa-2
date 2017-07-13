@@ -201,6 +201,8 @@ namespace GeoEvents.Repository
             ///
 
 
+
+
             ///Adding searcstring filter in queri if there is searchstring 
             if (filter.SearchString != "")
             {
