@@ -53,12 +53,19 @@ namespace GeoEvents.WebAPI.Controllers
 
         //async
         [HttpGet]
-        [Route(@"search/{ULat:decimal}/{ULong:decimal}/{Radius:decimal}/{Category:int}/{StartTime:regex(^\d{4}-\d{2}-\d{2} \d{2}h\d{2}$)}/{EndTime:regex(^\d{4}-\d{2}-\d{2} \d{2}h\d{2}$)}")]
-        public async Task<IEnumerable<EventModel>> GetEventsAsync(decimal? ULat, decimal? ULong, decimal? Radius, int? Category, string StartTime, string EndTime)
+        [Route(@"search/{uLat:decimal}/{uLong:decimal}/{radius:decimal}/{startTime:regex(^\d{4}-\d{2}-\d{2} \d{2}h\d{2}$)}/{endTime:regex(^\d{4}-\d{2}-\d{2} \d{2}h\d{2}$)}/{category:int}/{pageNumber:int}/{pageSize:int}/{searchString}/{orderBy}/{orderAscending:bool}")]
+        public async Task<IEnumerable<EventModel>> GetEventsAsync(decimal? uLat, decimal? uLong, decimal? radius, string startTime, string endTime, int? category, int? pageNumber, int? pageSize, string searchString, string orderBy, bool? orderAscending)
         {
-            Filter filter = new Filter(ULat, ULong, Radius, DateTime.Parse(StartTime.Replace('h', ':')), DateTime.Parse(EndTime.Replace('h', ':')), Category, 1, 10, "", "Name", true);
+            Filter filter = new Filter(uLat, uLong, radius, DateTime.Parse(startTime.Replace('h', ':')), DateTime.Parse(endTime.Replace('h', ':')), category, pageNumber, pageSize, searchString, orderBy, orderAscending);
 
             return Mapper.Map<List<EventModel>>(await Service.GetEventsAsync(filter));
+        }
+
+        [HttpGet]
+        [Route(@"search/{uLat:decimal}/{uLong:decimal}/{radius:decimal}/{startTime:regex(^\d{4}-\d{2}-\d{2} \d{2}h\d{2}$)}/{endTime:regex(^\d{4}-\d{2}-\d{2} \d{2}h\d{2}$)}/{category:int}/{pageNumber:int}/{pageSize:int}/{searchString}/{orderBy}/{orderAscending:bool}")]
+        public async Task<Int64> GetEventCountAsync(decimal? uLat, decimal? uLong, decimal? radius, string startTime, string endTime, int? category, int? pageNumber, int? pageSize, string searchString, string orderBy, bool? orderAscending) {
+            Filter filter = new Filter(uLat, uLong, radius, DateTime.Parse(startTime.Replace('h', ':')), DateTime.Parse(endTime.Replace('h', ':')), category, pageNumber, pageSize, searchString, orderBy, orderAscending);
+            return await Service.GetEventCountAsync(filter);
         }
 
     }
