@@ -10,8 +10,8 @@ namespace GeoEvents.Repository
     static public class QueryHelper
     {
         #region Constants
-        static string TabeNameEventQ = "\"Events\"";
-        static string TabeNameImagesQ = "\"Images\"";
+        static string TabelNameEventQ = "\"Events\"";
+        static string TabelNameImagesQ = "\"Images\"";
         static string NameQ = "\"Name\"";
         static string LatQ = "\"Lat\"";
         static string LongQ = "\"Long\"";
@@ -34,17 +34,17 @@ namespace GeoEvents.Repository
         static string ParDescription = "@Description";
         static string ParRadius = "@Radius";
         static string ParEventId = "@EventId";
-        static string ParContent = "@Contetnt";
+        static string ParContent = "@Content";
         static string ParSearcString ="@SearchString";
 
-        static string TNameEventName = TabeNameEventQ + "." + NameQ;
-        static string TNameEventDescription = TabeNameEventQ + "." + DescriptionQ;
-        static string TNameEventStartTime = TabeNameEventQ + "." + StartTimeQ;
-        static string TNameEventEndTime = TabeNameEventQ + "." + EndTimeQ;
-        static string TNameEventLong = TabeNameEventQ + "." + LongQ;
-        static string TNameEventLat = TabeNameEventQ + "." + LatQ;
-        static string TNameEventCat = TabeNameEventQ + "." + CategoryQ;
-        static string TNameEventId = TabeNameEventQ + "." + IdQ;
+        static string TNameEventName = TabelNameEventQ + "." + NameQ;
+        static string TNameEventDescription = TabelNameEventQ + "." + DescriptionQ;
+        static string TNameEventStartTime = TabelNameEventQ + "." + StartTimeQ;
+        static string TNameEventEndTime = TabelNameEventQ + "." + EndTimeQ;
+        static string TNameEventLong = TabelNameEventQ + "." + LongQ;
+        static string TNameEventLat = TabelNameEventQ + "." + LatQ;
+        static string TNameEventCat = TabelNameEventQ + "." + CategoryQ;
+        static string TNameEventId = TabelNameEventQ + "." + IdQ;
 
         static DateTime DefaulTime = new DateTime(0001, 01, 01);
         static string CountString;
@@ -60,11 +60,11 @@ namespace GeoEvents.Repository
             {
    
                    selectString = "SELECT COUNT("+ TNameEventId+"), earth_distance(ll_to_earth(" + ParLat + "," + ParLong + "), ll_to_earth(" + TNameEventLat + ","
-                    + TNameEventLong + ")) as distance from" + TabeNameEventQ + "WHERE";
+                    + TNameEventLong + ")) as distance from" + TabelNameEventQ + "WHERE";
             }
             else
             {
-                selectString = "SELECT COUNT("+TNameEventId+")  FROM " + TabeNameEventQ + " WHERE ";
+                selectString = "SELECT COUNT("+TNameEventId+")  FROM " + TabelNameEventQ + " WHERE ";
             }
 
 
@@ -161,11 +161,11 @@ namespace GeoEvents.Repository
             if (filter.OrderBy == "Distance")
             {
                 selectString = "SELECT *, earth_distance(ll_to_earth(" + ParLat + "," + ParLong + "), ll_to_earth(" + TNameEventLat + "," 
-                    + TNameEventLong + ")) as distance from" + TabeNameEventQ + "WHERE ";
+                    + TNameEventLong + ")) as distance from" + TabelNameEventQ + "WHERE ";
             }
             else
             {
-                selectString = "SELECT * FROM " + TabeNameEventQ + " WHERE ";
+                selectString = "SELECT * FROM " + TabelNameEventQ + " WHERE ";
             }
             
 
@@ -265,7 +265,7 @@ namespace GeoEvents.Repository
         public static string GetInsertStringEvent()
         {
 
-            string insertString = " INSERT INTO " + TabeNameEventQ + "values(" + ParId + "," + ParStartTime + "," + ParEndTime +
+            string insertString = " INSERT INTO " + TabelNameEventQ + "values(" + ParId + "," + ParStartTime + "," + ParEndTime +
                 "," + ParLat + "," + ParLong + "," + ParName + "," + ParDescription + "," + ParCategory + ") ";
 
             return insertString;
@@ -274,7 +274,7 @@ namespace GeoEvents.Repository
         public static string GetSelectStringImages()
         {
 
-            string selectString = " SELECT * FROM " + TabeNameImagesQ + "WHERE (" + ParEventId + " = " + TabeNameImagesQ + "." + EventIdQ + ") ";
+            string selectString = " SELECT * FROM " + TabelNameImagesQ + "WHERE (" + ParEventId + " = " + TabelNameImagesQ + "." + EventIdQ + ") ";
 
             return selectString ;
         }
@@ -282,7 +282,7 @@ namespace GeoEvents.Repository
         public static string GetInsertStringImages()
         {
 
-            string insertString = " INSERT INTO " + TabeNameImagesQ +
+            string insertString = " INSERT INTO " + TabelNameImagesQ +
                 " VALUES(" + ParId + "," + ParContent + "," + ParEventId + ") ";
 
             return insertString;
@@ -291,7 +291,7 @@ namespace GeoEvents.Repository
         public static string GetSelectStringImage()
         {
 
-            string selectString = " SELECT * FROM " + TabeNameImagesQ + " WHERE "+TabeNameImagesQ+"."+IdQ+"="+ParId ;
+            string selectString = " SELECT * FROM " + TabelNameImagesQ + " WHERE "+TabelNameImagesQ+"."+IdQ+"="+ParId ;
             return selectString;
         }
 
