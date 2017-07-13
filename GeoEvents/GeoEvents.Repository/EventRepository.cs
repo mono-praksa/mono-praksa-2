@@ -28,7 +28,6 @@ namespace GeoEvents.Repository
         public async Task<IEvent> CreateEventAsync(IEvent evt)
         {
             EventEntity evte = Mapper.Map<EventEntity>(evt);
-            evte = null;
 
             try
 
@@ -97,7 +96,7 @@ namespace GeoEvents.Repository
                     command.Parameters.AddWithValue("@UserStartTime", NpgsqlTypes.NpgsqlDbType.Timestamp, filter.StartTime);
                     command.Parameters.AddWithValue("@UserEndTime", NpgsqlTypes.NpgsqlDbType.Timestamp, filter.EndTime);
                     command.Parameters.AddWithValue("@Category", NpgsqlTypes.NpgsqlDbType.Integer, filter.Category);
-
+                    command.Parameters.AddWithValue("@SearchString", NpgsqlTypes.NpgsqlDbType.Text, filter.SearchString);
 
                     await PostgresConn.NpgConn().OpenAsync();
                     DbDataReader dr = await command.ExecuteReaderAsync();
