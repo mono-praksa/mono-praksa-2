@@ -15,17 +15,28 @@ namespace GeoEvents.Repository
 {
     public class ImageRepository : IImageRepository
     {
+        #region Properties
         protected IPostgresConnection PostgresConn { get; private set; }
         protected IMapper Mapper { get; private set; }
+        #endregion Properties
 
+        #region Constructors
         public ImageRepository(IPostgresConnection connection, IMapper mapper)
         {
             this.PostgresConn = connection;
             this.Mapper = mapper;
         }
+        #endregion Constructors
 
+        #region Methods
 
-
+        /// <summary>
+        /// Creates Image asynchronously.
+        /// </summary>
+        /// <param name="img"></param>
+        /// <returns>  
+        /// return Created image (IEvent)
+        /// </returns>
         public async Task<IImage> CreateImageAsync(IImage img)
         {
             ImageEntity DbImage = Mapper.Map<ImageEntity>(img);
@@ -76,7 +87,13 @@ namespace GeoEvents.Repository
             return Mapper.Map<IImage>(selectImage);
         }
 
-
+        /// <summary>
+        /// Gets Images asynchronously.
+        /// </summary>
+        /// <param name="eventID"></param>
+        /// <returns>
+        /// list of Images.
+        /// </returns>
         public async Task<IEnumerable<IImage>> GetImagesAsync(Guid eventID)
         {
 
@@ -111,7 +128,7 @@ namespace GeoEvents.Repository
             }
             return Mapper.Map<IEnumerable<IImage>>(selectImages);
         }
-
+        #endregion Methods
 
 
     }
