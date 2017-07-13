@@ -64,6 +64,9 @@ export class SearchEventsComponent implements OnInit {
 
     @ViewChild("search")
     searchElementRef: ElementRef;
+    lat: number;
+    lng: number;
+
 
     categories: any[] = [
         { id: 1, checked: false },
@@ -134,6 +137,8 @@ export class SearchEventsComponent implements OnInit {
             navigator.geolocation.getCurrentPosition((position) => {
                 this.latitude = position.coords.latitude;
                 this.longitude = position.coords.longitude;
+                this.lat = position.coords.latitude;
+                this.lng = position.coords.longitude;
             });
         }
     }
@@ -170,7 +175,10 @@ export class SearchEventsComponent implements OnInit {
         for (let c of chosenCategories) {
             cat += c
         }
-        var filter : IFilter = {
+        this.lat = this.latitude
+        this.lng = this.longitude
+
+        var filter: IFilter = {
             ULat: this.latitude,
             ULong: this.longitude,
             Radius: formValues.radius,
@@ -179,10 +187,13 @@ export class SearchEventsComponent implements OnInit {
             Category: cat
         }
 
+
         console.log('form values: ', formValues)
         console.log('filter: ', filter)
         this.getEvents(filter).subscribe(res => {
             this.events = res
+            this.latitude = this.lat
+            this.longitude = this.lng
         })
     }
 
