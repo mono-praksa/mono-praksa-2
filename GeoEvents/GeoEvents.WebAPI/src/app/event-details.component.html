@@ -1,11 +1,10 @@
-﻿<div class="col-sm-4">
-    <h2>{{event.Name}}</h2>
+﻿<div class="col-md-7">
+    <h2 class="event-name">{{event.Name}}</h2> <p class="event-time">Time: {{event.StartTime | date:'fullDate'}} {{event.StartTime | date:'shortTime'}} - {{event.EndTime | date:'fullDate'}} {{event.EndTime | date:'shortTime'}}</p>
     <h3>Details</h3> 
-    <div class="well-sm">
-        <h4>Time: {{event.StartTime}} - {{event.EndTime}}</h4>
+    <div class="well">
         <p>{{event.Description}}</p>
         
-        <h4>Location: {{event.Lat}}, {{event.Long}}</h4>
+        <h4>Location: {{address}}</h4>
         <ul>Categories
             <li *ngFor="let category of event.Categories">
                 {{CategoryEnum[category]}}
@@ -14,8 +13,10 @@
     </div>
     <h3>Images</h3>
     <span *ngIf="imagesLoading" class="glyphicon glyphicon-refresh glyphicon-refresh-animate">Loading...</span>
-
-    <div id="myCarousel" class="carousel slide" data-ride="carousel">
+    <div *ngIf="!imagesLoading && images.length === 0">
+        <h4>No images for this event...</h4>
+    </div>
+    <div *ngIf="!imagesLoading && images.length !== 0" id="myCarousel" class="carousel slide" data-ride="carousel">
         <!-- Indicators -->
         <ol class="carousel-indicators">
             <li data-target="#myCarousel" *ngFor="let image of images; let i=index" [attr.data-slide-to]="i" [ngClass]="i === 0 ? 'active' : '' "></li>

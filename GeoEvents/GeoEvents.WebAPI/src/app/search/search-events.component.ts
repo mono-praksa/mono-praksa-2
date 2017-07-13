@@ -198,10 +198,11 @@ export class SearchEventsComponent implements OnInit {
     }
 
     getEvents(filter: IFilter): Observable<IEvent[]> {
-
-        return this.http.get('/api/events/search/' + filter.ULat.toString() + '/' + filter.ULong.toString() + '/' + filter.Radius.toString() + '/' + filter.Category.toString() + '/' + filter.StartTime.toString().replace(':', 'h') + '/' + filter.EndTime.toString().replace(':', 'h')).map(function (response: Response) {
-            return <IEvent[]>response.json();
-        }).catch(this.handleError);
+        if (filter.ULat && filter.Radius) {
+            return this.http.get('/api/events/search/test?pageNumber=1&pageSize=10&orderBy=Name&orderAscending=true&category=' + filter.Category.toString() + '&uLat=' + filter.ULat.toString() + '&uLong=' + filter.ULong.toString() + '&radius=' + filter.Radius.toString() + '&startTime=s' + filter.StartTime.toString().replace(':', 'h') + '&endTime=e' + filter.EndTime.toString().replace(':', 'h')).map(function (response: Response) {
+                return <IEvent[]>response.json();
+            }).catch(this.handleError);
+        }
     }
 
     handleError(error: Response) {
