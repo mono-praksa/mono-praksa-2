@@ -14,7 +14,7 @@ namespace GeoEvents.DAL
     {
         
         protected IGeoEventsConfiguration configuration { get; private set; }
-        public NpgsqlConnection connection { get; set; }
+        protected NpgsqlConnection connection { get; private set; }
 
         public PostgresConnection(IGeoEventsConfiguration configuration)
         {

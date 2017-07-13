@@ -47,7 +47,7 @@ namespace GeoEvents.Repository
                     commandInsert.Parameters.AddWithValue("@Content", NpgsqlTypes.NpgsqlDbType.Bytea, DbImage.Content);
                     commandInsert.Parameters.AddWithValue("@EventId", NpgsqlTypes.NpgsqlDbType.Uuid, DbImage.EventId);
 
-                    await PostgresConn.connection.OpenAsync();
+                    await PostgresConn.NpgConn().OpenAsync();
                     await commandInsert.ExecuteNonQueryAsync();
                     // //
 
@@ -89,7 +89,7 @@ namespace GeoEvents.Repository
                      PostgresConn.NpgConn()))
                 {
                     command.Parameters.AddWithValue("@EventID", NpgsqlTypes.NpgsqlDbType.Uuid, eventID);
-                    await PostgresConn.connection.OpenAsync();
+                    await PostgresConn.NpgConn().OpenAsync();
                     DbDataReader dr = await command.ExecuteReaderAsync();
 
                     while (dr.Read())
