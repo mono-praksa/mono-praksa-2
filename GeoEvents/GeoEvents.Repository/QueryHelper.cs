@@ -10,6 +10,10 @@ namespace GeoEvents.Repository
     static public class QueryHelper
     {
         #region Constants
+
+        /// <summary>
+        /// 
+        /// </summary>
         static string TabelNameEventQ = "\"Events\"";
         static string TabelNameImagesQ = "\"Images\"";
         static string NameQ = "\"Name\"";

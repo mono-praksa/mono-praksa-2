@@ -15,16 +15,29 @@ namespace GeoEvents.Repository
 {
     public class EventRepository : IEventRepository
     {
+        #region Properties
         protected IPostgresConnection PostgresConn { get; private set; }
 
         protected IMapper Mapper { get; private set; }
+        #endregion Properties
 
+        #region Constructors
         public EventRepository(IPostgresConnection connection, IMapper mapper)
         {
             this.Mapper = mapper;
             this.PostgresConn = connection;
         }
+        #endregion Constructors
 
+        #region Methods
+
+        /// <summary>
+        /// Creates Event asynchronously.
+        /// </summary>
+        /// <param name="evt"></param>
+        /// <returns>  
+        /// return Created event (IEvent)
+        /// </returns>
         public async Task<IEvent> CreateEventAsync(IEvent evt)
         {
             EventEntity evte = Mapper.Map<EventEntity>(evt);
@@ -80,7 +93,13 @@ namespace GeoEvents.Repository
 
         }
 
-
+        /// <summary>
+        /// Gets filtered Events asynchronously.
+        /// </summary>
+        /// <param name="filter"></param>
+        /// <returns>
+        /// list of Events.
+        /// </returns>
         public async Task<IEnumerable<IEvent>> GetEventsAsync(IFilter filter)
         {
             EventEntity tmp;
@@ -129,6 +148,14 @@ namespace GeoEvents.Repository
 
         }
 
+
+        /// <summary>
+        /// Get event count asynchronously.
+        /// </summary>
+        /// <param name="filter"></param>
+        /// <returns>
+        /// number of events .
+        /// </returns>
         public async Task<Int64> GetEventCountAsync(IFilter filter)
         {
             Int64 Count;
@@ -162,5 +189,7 @@ namespace GeoEvents.Repository
             return Count;
 
         }
+
+        #endregion Methods
     }
 }
