@@ -1,73 +1,88 @@
 ﻿<div class="row">
     <div class="col-md-5">
-        <form [formGroup]="filterForm" (ngSubmit)="filterEvents(filterForm.value)" autocomplete="off" novalidate>
-            <h2>Filter</h2>
-            <div class="form-group">
-                <fieldset>
-                    <legend>
-                        Date & Time
-                    </legend>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <label for="start" class="control-label">Start</label>
-                            <input formControlName="start" ngui-datetime-picker [close-on-select]="false" class="form-control" id="start" placeholder="Click to enter date and time" readonly style="cursor: pointer;" />
-                        </div>
-                        <div class="col-md-6">
-                            <label for="end" class="control-label">End</label>
-                            <input formControlName="end" ngui-datetime-picker [close-on-select]="false" class="form-control" id="end" placeholder="Click to enter date and time" readonly style="cursor: pointer;" (change)="checkStartTime()" />
-                        </div>
-                    </div>
-                </fieldset>
-            </div>
-            <div class="form-group">
-                <fieldset>
-                    <legend>
-                        Categories
-                    </legend>
-                    <div class="row">
-                        <label class="col-md-3">
-                            <input type="checkbox" value="1" (change)="updateCategories(1)" /> Music
-                        </label>
-                        <label class="col-md-3">
-                            <input type="checkbox" value="2" (change)="updateCategories(2)" /> Culture
-                        </label>
-                        <label class="col-md-3">
-                            <input type="checkbox" value="4" (change)="updateCategories(4)" /> Sport
-                        </label>
-                        <label class="col-md-3">
-                            <input type="checkbox" value="8" (change)="updateCategories(8)" /> Gastro
-                        </label>
+		<div *ngIf="!this.detailsMode">
+			<form [formGroup]="filterForm" (ngSubmit)="onSubmit(filterForm.value)" autocomplete="off" novalidate>
+				<h2>Filter</h2>
+				<div class="form-group">
+					<fieldset>
+						<legend>
+							Date & Time
+						</legend>
+						<div class="row">
+							<div class="col-md-6">
+								<label for="start" class="control-label">Start</label>
+								<input formControlName="start" ngui-datetime-picker [close-on-select]="false" class="form-control" id="start" placeholder="Click to enter date and time" readonly style="cursor: pointer;" />
+							</div>
+							<div class="col-md-6">
+								<label for="end" class="control-label">End</label>
+								<input formControlName="end" ngui-datetime-picker [close-on-select]="false" class="form-control" id="end" placeholder="Click to enter date and time" readonly style="cursor: pointer;" (change)="checkStartTime()" />
+							</div>
+						</div>
+					</fieldset>
+				</div>
+				<div class="form-group">
+					<fieldset>
+						<legend>
+							Categories
+						</legend>
+						<div class="row">
+							<label class="col-md-3">
+								<input type="checkbox" value="1" (change)="updateCategories(1)" /> Music
+							</label>
+							<label class="col-md-3">
+								<input type="checkbox" value="2" (change)="updateCategories(2)" /> Culture
+							</label>
+							<label class="col-md-3">
+								<input type="checkbox" value="4" (change)="updateCategories(4)" /> Sport
+							</label>
+							<label class="col-md-3">
+								<input type="checkbox" value="8" (change)="updateCategories(8)" /> Gastro
+							</label>
 
-                        <label class="col-md-3">
-                            <input type="checkbox" value="16" (change)="updateCategories(16)" /> Religious
-                        </label>
-                        <label class="col-md-3">
-                            <input type="checkbox" value="32" (change)="updateCategories(32)" /> Business
-                        </label>
-                        <label class="col-md-6">
-                            <input type="checkbox" value="64" (change)="updateCategories(64)" /> Miscellaneous
-                        </label>
-                    </div>
-                </fieldset>
-            </div>
-            <div class="form-group">
-                <fieldset>
-                    <legend>
-                        Address
-                    </legend>
-                    <input type="text" formControlName="address" class="form-control" id="address" placeholder="Address..." #search />
-                </fieldset>
-            </div>
-            <div class="form-group">
-                <fieldset>
-                    <legend>
-                        Radius
-                    </legend>
-                    <input type="text" formControlName="radius" class="form-control" id="radius" placeholder="Radius..." />
-                </fieldset>
-            </div>
-            <button type="submit" class="btn btn-default" [disabled]="filterForm.invalid">Search</button>
-        </form>
+							<label class="col-md-3">
+								<input type="checkbox" value="16" (change)="updateCategories(16)" /> Religious
+							</label>
+							<label class="col-md-3">
+								<input type="checkbox" value="32" (change)="updateCategories(32)" /> Business
+							</label>
+							<label class="col-md-6">
+								<input type="checkbox" value="64" (change)="updateCategories(64)" /> Miscellaneous
+							</label>
+						</div>
+					</fieldset>
+				</div>
+				<div class="form-group">
+					<fieldset>
+						<legend>
+							Address
+						</legend>
+						<input type="text" formControlName="address" class="form-control" id="address" placeholder="Address..." #search />
+					</fieldset>
+				</div>
+				<div class="form-group">
+					<fieldset>
+						<legend>
+							Radius
+						</legend>
+						<input type="text" formControlName="radius" class="form-control" id="radius" placeholder="Radius..." />
+					</fieldset>
+				</div>
+				<div class="form-group">
+					<fieldset>
+						<legend>
+							Search term
+						</legend>
+						<input type="text" formControlName="searchString" class="form-control" id="radius" placeholder="Search..." />
+						<input type="checkbox" id="searchNameOnlyCheckbox" formControlName="searchNameOnly">
+						<label for="searchNameOnlyCheckbox">Search Name Only?</label>
+					</fieldset>
+				</div>
+				
+				<button type="submit" class="btn btn-default" [disabled]="filterForm.invalid">Search</button>
+
+			</form>
+		</div>
+	    <event-details [event]="this.event" *ngIf="this.detailsMode"></event-details>
     </div>
     <!--<div class="col-md-7">
         <h2>Search Results</h2>
@@ -76,12 +91,33 @@
             </li>
         </ul>
     </div>-->
-    <label class="switch">
-        <input type="checkbox" checked (change)="changeDisplayMode()"><div class="slider"></div>
-    </label>
+	<div class="col-md-7">
+		<label class="switch">
+			<input type="checkbox" checked (change)="changeDisplayMode()"><div class="slider"></div>
+		</label>
+		
+		<div *ngIf="!this.mapMode" class="row">
+			
+			<select (change)="getEventsOrderChanged($event.target.value)" class="form-control">
+				<option value="Name">Name</option>
+				<option value="Distance">Distance</option>
+				<option value="StartTime">Start time</option>
+				<option value="EndTime">End time</option>
+			</select>
+			<input type="checkbox" #isAscending id="ascendingCheckbox" (change)="getEventsAscendingChanged(isAscending.value)"/>
+			<label for="ascendingCheckbox">Ascending Order?</label>
 
-    <display-list *ngIf="!this.mapMode && !this.detailsMode" (event)="eventDetails($event)" [events]="this.events"></display-list>
-    <display-map [radius]="radius" [latitude]="lat" [longitude]="lng" *ngIf="this.mapMode && !this.detailsMode" (event)="eventDetails($event)" [events]="this.events"></display-map>
-    <event-details [event]="this.event" *ngIf="this.detailsMode"></event-details>
-
+		</div>
+		
+		<div class="row">
+			<display-list *ngIf="!this.mapMode && !this.detailsMode" (event)="eventDetails($event)" [events]="this.events"></display-list>
+			<display-map [radius]="radius" [latitude]="lat" [longitude]="lng" *ngIf="this.mapMode && !this.detailsMode" (event)="eventDetails($event)" [events]="this.events"></display-map>
+		</div>
+		
+		<div *ngIf="!this.mapMode" class="row">
+			<input type="button" value="First page" class="btn btn-default" (click)="getEventsFirstPage()">
+			<input type="button" value="Previous page" class="btn btn-default" (click)="getEventsPreviousPage()">
+			<input type="button" value="Next page" class="btn btn-default" (click)="getEventsNextPage()">
+		</div>
+	</div>
 </div>
