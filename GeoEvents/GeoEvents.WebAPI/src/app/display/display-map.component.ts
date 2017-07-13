@@ -15,11 +15,12 @@ import { Router } from '@angular/router'
     agm-map {
       height: 500px;
     }
+    
   `],
     template: `
-  <agm-map [latitude]="latitude" [longitude]="longitude">
-<agm-marker *ngFor= "let evt of events" [latitude]="evt.Lat" [longitude]="evt.Long" ></agm-marker>
-</agm-map>
+    <agm-map [latitude]="latitude" [longitude]="longitude">
+    <agm-marker *ngFor= "let evt of events" [latitude]="evt.Lat" [longitude]="evt.Long" (markerClick)="displayEvent(evt)" [title]="evt.Name + ' (See more)'"></agm-marker>
+    </agm-map>
   `
 })
 
@@ -31,17 +32,12 @@ export class DisplayMapComponent {
     zoom: number;
     lat: number;
     lng: number;
-
-
-
     @Output() event = new EventEmitter()
 
     constructor(private http: Http, private mapsAPILoader: MapsAPILoader, private ngZone: NgZone, private router: Router) {
         this.lat = this.latitude;
         this.lng = this.longitude;
         this.zoom = 16;
-
-
     }
 
 
