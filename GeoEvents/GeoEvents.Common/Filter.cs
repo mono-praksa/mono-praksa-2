@@ -89,7 +89,7 @@ namespace GeoEvents.Common
 
         #region Constructors
 
-        public Filter(decimal? uLat, decimal? uLong, decimal? radius, DateTime? startTime, DateTime? endTime, int? category, int? pageNumber, int? pageSize, string searchString, string orderBy, bool? orderAscending)
+        public Filter(decimal? uLat, decimal? uLong, decimal? radius, DateTime? startTime, DateTime? endTime, int? category, int? pageNumber, int? pageSize, string searchString, string orderBy, bool? orderAscending, bool? nameOnly)
         {
             ULat = uLat;
             ULong = uLong;
@@ -102,6 +102,7 @@ namespace GeoEvents.Common
             SearchString = searchString;
             OrderBy = orderBy;
             OrderAscending = orderAscending;
+            NameOnly = nameOnly;
         }
 
         #endregion Constructors

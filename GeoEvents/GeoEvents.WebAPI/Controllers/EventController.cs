@@ -54,41 +54,45 @@ namespace GeoEvents.WebAPI.Controllers
         //async
 
         [HttpGet]
-        [Route(@"search/test")]
-        public async Task<IEnumerable<EventModel>> TestEvent(int pageNumber, int pageSize, string orderBy, bool orderAscending, int category, decimal uLat, decimal uLong, decimal radius, string startTime = "", string endTime = "", string searchString = "", bool? nameOnly = true)
+        [Route("search/test")]
+        public async Task<IEnumerable<EventModel>> TestEvent(int pageNumber=1, int pageSize=10, string orderBy="", bool orderAscending=false, int category=0, decimal uLat=1000M, decimal uLong=1000M, decimal radius=0, string startTime = "", string endTime = "", string searchString = "", bool? nameOnly = true)
         {
-            Filter filter;
-            if (startTime != "" && endTime != "")
-            {
-                filter = new Filter(uLat, uLong, radius, DateTime.Parse(startTime.Replace('h', ':').Remove(0, 1)), DateTime.Parse(endTime.Replace('h', ':').Remove(0, 1)), category, pageNumber, pageSize, searchString, orderBy, orderAscending);
-            }
-            else
-            {
-                filter = new Filter(uLat, uLong, radius, new DateTime(), new DateTime(), category, pageNumber, pageSize, searchString, orderBy, orderAscending);
-            }
-            return Mapper.Map<List<EventModel>>(await Service.GetEventsAsync(filter));
+            Filter filter = new Filter(uLat, uLong, radius, null, null, category, pageNumber, pageSize, searchString, orderBy, orderAscending, nameOnly);
+
+            if (startTime != "") { filter.StartTime = DateTime.Parse(startTime.Replace('h', ':').Remove(0, 1)); }
+            if (endTime != "") { filter.EndTime = DateTime.Parse(endTime.Replace('h', ':').Remove(0, 1)); }
+            //if (uLat == 1000M || uLong == 1000M) { filter.ULat = null; filter.ULong = null; }
+            
+
+            return Mapper.Map<IEnumerable<EventModel>>(await Service.GetEventsAsync(filter));
         }
 
-        [HttpGet]
-        [Route(@"search/{pageNumber:int}/{pageSize:int}/{orderBy}/{orderAscending:bool}/{category:int}/{uLat:decimal}/{uLong:decimal}/{radius:decimal}/{startTime:regex(^s\d{4}-\d{2}-\d{2} \d{2}h\d{2}$)?}/{endTime:regex(^e\d{4}-\d{2}-\d{2} \d{2}h\d{2}$)?}/{searchString?}/{nameOnly:bool?}")]
-        public async Task<IEnumerable<EventModel>> GetEventsAsync(int pageNumber, int pageSize, string orderBy, bool orderAscending, int category, decimal uLat, decimal uLong, decimal radius, string startTime = "", string endTime = "", string searchString = "", bool? nameOnly = true )
-        {
-            Filter filter;
-            if (startTime != "" && endTime != "")
-            {
-                filter = new Filter(uLat, uLong, radius, DateTime.Parse(startTime.Replace('h', ':').Remove(0, 1)), DateTime.Parse(endTime.Replace('h', ':').Remove(0, 1)), category, pageNumber, pageSize, searchString, orderBy, orderAscending);
-            }
-            else
-            {
-                filter = new Filter(uLat, uLong, radius, new DateTime(), new DateTime(), category, pageNumber, pageSize, searchString, orderBy, orderAscending);
-            }
-            return Mapper.Map<List<EventModel>>(await Service.GetEventsAsync(filter));
-        }
+        //[HttpGet]
+        //[Route(@"search/{pageNumber:int}/{pageSize:int}/{orderBy}/{orderAscending:bool}/{category:int}/{uLat:decimal}/{uLong:decimal}/{radius:decimal}/{startTime:regex(^s\d{4}-\d{2}-\d{2} \d{2}h\d{2}$)?}/{endTime:regex(^e\d{4}-\d{2}-\d{2} \d{2}h\d{2}$)?}/{searchString?}/{nameOnly:bool?}")]
+        //public async Task<IEnumerable<EventModel>> GetEventsAsync(int pageNumber, int pageSize, string orderBy, bool orderAscending, int category, decimal uLat, decimal uLong, decimal radius, string startTime = "", string endTime = "", string searchString = "", bool? nameOnly = true )
+        //{
+        //    Filter filter;
+        //    if (startTime != "" && endTime != "")
+        //    {
+        //        filter = new Filter(uLat, uLong, radius, DateTime.Parse(startTime.Replace('h', ':').Remove(0, 1)), DateTime.Parse(endTime.Replace('h', ':').Remove(0, 1)), category, pageNumber, pageSize, searchString, orderBy, orderAscending);
+        //    }
+        //    else
+        //    {
+        //        filter = new Filter(uLat, uLong, radius, new DateTime(), new DateTime(), category, pageNumber, pageSize, searchString, orderBy, orderAscending);
+        //    }
+        //    return Mapper.Map<List<EventModel>>(await Service.GetEventsAsync(filter));
+        //}
 
         [HttpGet]
-        [Route(@"search/count/{uLat:decimal}/{uLong:decimal}/{radius:decimal}/{startTime:regex(^\d{4}-\d{2}-\d{2} \d{2}h\d{2}$)}/{endTime:regex(^\d{4}-\d{2}-\d{2} \d{2}h\d{2}$)}/{category:int}/{pageNumber:int}/{pageSize:int}/{searchString}/{orderBy}/{orderAscending:bool}")]
-        public async Task<Int64> GetEventCountAsync(decimal? uLat, decimal? uLong, decimal? radius, string startTime, string endTime, int? category, int? pageNumber, int? pageSize, string searchString, string orderBy, bool? orderAscending) {
-            Filter filter = new Filter(uLat, uLong, radius, DateTime.Parse(startTime.Replace('h', ':')), DateTime.Parse(endTime.Replace('h', ':')), category, pageNumber, pageSize, searchString, orderBy, orderAscending);
+        [Route("search/count")]
+        public async Task<Int64> GetEventCountAsync(int pageNumber = 1, int pageSize = 10, string orderBy = "", bool orderAscending = false, int category = 0, decimal uLat = 1000M, decimal uLong = 1000M, decimal radius = 0, string startTime = "", string endTime = "", string searchString = "", bool? nameOnly = true)
+        {
+            Filter filter = new Filter(uLat, uLong, radius, null, null, category, pageNumber, pageSize, searchString, orderBy, orderAscending, nameOnly);
+
+            if (startTime != "") { filter.StartTime = DateTime.Parse(startTime.Replace('h', ':').Remove(0, 1)); }
+            if (endTime != "") { filter.EndTime = DateTime.Parse(endTime.Replace('h', ':').Remove(0, 1)); }
+            //if (uLat == 1000M || uLong == 1000M) { filter.ULat = null; filter.ULong = null; }
+
             return await Service.GetEventCountAsync(filter);
         }
 
