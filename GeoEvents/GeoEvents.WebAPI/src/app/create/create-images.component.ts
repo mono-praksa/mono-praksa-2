@@ -10,14 +10,11 @@ import { IEvent } from './../models/event.model'
 export class CreateImagesComponent {
     @Input() createdEvent: IEvent;
 
-    files: Array<string>;
+    files: Array<file>;
     indices: Array<number>;
     private _formData: FormData;
     fileList: FileList;
-
-    public uploading: boolean[] = [];
-    public finished: Array<boolean> = [];
-    public error: Array<boolean> = [];
+    btnUploadClicked: boolean = false;
 
     constructor(private http: Http) { }
 
@@ -38,45 +35,55 @@ export class CreateImagesComponent {
 
         this.files = [];
         this.indices = [];
-        this.uploading = [];
-        this.error = [];
-        this.finished = [];
         //this.files = filesTmp.map((f: any) => f.name);
 
         for (var el of filesTmp) {
-            this.files.push(el.name);
+            this.files.push({
+                name: el.name,
+                uploading: false,
+                finished: false,
+                error: false
+            })
             this.indices.push(i);
-            this.finished.push(false);
-            this.uploading.push(false);
-            this.error.push(false);
             i += 1;
         }
     }
 
     upload(fileInput: any) {
-        for (var i = 0; i < this.fileList.length; i++) {
-            this.uploading[i] = true;
+        this.btnUploadClicked = true;
+        this.files.forEach((listItem, i) => {
+            this.files[i].uploading = true;
             this.formData.append("name" + i, this.fileList[i], this.fileList[i].name);
 
             let options = new RequestOptions();
             this.http.post('/api/images/create/' + this.createdEvent.Id, this.formData, options)
-                .map(res => res.json())
-                .catch(error => Observable.throw(error))
-                .subscribe(data => {
+                .map((res: Response) => res.json())
+                .catch((error:any) => Observable.throw(error))
+                .subscribe((data:any) => {
                     console.log(data);
-                    this.uploading[i] = false;
-                    this.finished[i] = true;
-                }, error => {
+                    this.files[i].uploading = false;
+                    this.files[i].finished = true;
+                    console.log(this.files);
+                }, (error:any) => {
                     console.log(error);
-                    this.error[i] = true;
+                    this.files[i].error = true;
                 });
             this.formData = new FormData();
-        }
+        })
     }
     uploadingFilter() {
-        if (this.uploading.length != 0) {
-            return this.uploading.filter(f => { if (f) return f }).length != 0;
+        if (this.files) {
+            return this.files.filter((file) => {
+                return file.uploading;
+            }).length > 0;
         }
         return false;
     }
+}
+
+interface file {
+    name: string
+    uploading: boolean
+    finished: boolean
+    error: boolean
 }
