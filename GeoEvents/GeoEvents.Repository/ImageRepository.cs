@@ -84,12 +84,12 @@ namespace GeoEvents.Repository
             try
 
             {
-                using (PostgresConn.connection)
+                using (PostgresConn.NpgConn())
                 using (NpgsqlCommand command = new NpgsqlCommand(QueryHelper.GetSelectStringImages(),
                      PostgresConn.NpgConn()))
                 {
                     command.Parameters.AddWithValue("@EventID", NpgsqlTypes.NpgsqlDbType.Uuid, eventID);
-
+                    await PostgresConn.connection.OpenAsync();
                     DbDataReader dr = await command.ExecuteReaderAsync();
 
                     while (dr.Read())
