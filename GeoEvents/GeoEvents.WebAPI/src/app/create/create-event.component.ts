@@ -135,6 +135,7 @@ export class CreateEventComponent implements OnInit {
         }).catch(this.handleError).subscribe((response: Response) => {
             console.log(response);
             this.createdEvent = <IEvent>response.json();
+            console.log(this.createdEvent);
             this.eventEmitter.emit(this.createdEvent)
         });
 

@@ -10,8 +10,8 @@ import { IEvent } from './../models/event.model'
 export class CreateImagesComponent {
     @Input() createdEvent: IEvent;
 
-    files: Array<string> = [];
-    indices: Array<number> = [];
+    files: Array<string>;
+    indices: Array<number>;
     private _formData: FormData;
     fileList: FileList;
 
@@ -35,6 +35,12 @@ export class CreateImagesComponent {
 
         this.fileList = fileInput.target.files;
         let filesTmp = [].slice.call(this.fileList);
+
+        this.files = [];
+        this.indices = [];
+        this.uploading = [];
+        this.error = [];
+        this.finished = [];
         //this.files = filesTmp.map((f: any) => f.name);
 
         for (var el of filesTmp) {
@@ -53,7 +59,7 @@ export class CreateImagesComponent {
             this.formData.append("name" + i, this.fileList[i], this.fileList[i].name);
 
             let options = new RequestOptions();
-            this.http.post('/api/images/create', this.formData, options)
+            this.http.post('/api/images/create/' + this.createdEvent.Id, this.formData, options)
                 .map(res => res.json())
                 .catch(error => Observable.throw(error))
                 .subscribe(data => {
