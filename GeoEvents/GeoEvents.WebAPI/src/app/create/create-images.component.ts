@@ -37,7 +37,6 @@ export class CreateImagesComponent {
 
         this.files = [];
         this.indices = [];
-        //this.files = filesTmp.map((f: any) => f.name);
 
         for (var el of filesTmp) {
             this.files.push({
@@ -63,12 +62,9 @@ export class CreateImagesComponent {
                 .map((res: Response) => res.json())
                 .catch((error:any) => Observable.throw(error))
                 .subscribe((data:any) => {
-                    console.log(data);
                     this.files[i].uploading = false;
                     this.files[i].finished = true;
-                    console.log(this.files);
                 }, (error:any) => {
-                    console.log(error);
                     this.files[i].error = true;
                 });
             this.formData = new FormData();

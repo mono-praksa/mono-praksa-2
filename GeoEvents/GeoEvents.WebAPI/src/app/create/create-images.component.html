@@ -1,7 +1,6 @@
 ﻿<h2>Uploading images for event {{createdEvent?.Name}}</h2>
 <div id="form-group">
     <label for="file" class="control-label">File</label>
-    <!--<input type="file" id="file" value="Upload" (change)="onChange($event, showFileNames)" class="form-control" multiple accept="image/*" />-->
     <div class="input-group">
         <label class="input-group-btn">
             <span class="btn btn-primary" >
@@ -12,7 +11,7 @@
                                       />
             </span>
         </label>
-        <input type="text" class="form-control" #showFileNum readonly />
+        <input type="text" class="form-control" #showFileNum readonly value="No files selected" />
     </div>
     <div *ngIf="files">
         <ul>
