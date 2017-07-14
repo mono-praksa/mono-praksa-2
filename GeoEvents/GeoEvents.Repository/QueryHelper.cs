@@ -240,10 +240,18 @@ namespace GeoEvents.Repository
             if (!String.IsNullOrWhiteSpace(filter.SearchString))
             {
                 if (isNotFirst) { selectString += " AND "; } else { isNotFirst = true; }
+                selectString += " ( ";
+                //selectString += "("+TNameEventNameQ + " ILIKE (\'%" + ParSearcString + "%\'))";
+                selectString += String.Format("({0} ILIKE (\'%{1}%\'))", TNameEventNameQ, ParSearcString);
 
-                selectString += "("+TNameEventNameQ + " ILIKE (\'%" + ParSearcString + "%\'))";
-                //selectString += String.Format("({0} ILIKE (\'%{1}%\'))", TNameEventNameQ, ParSearcString);
-
+                if (filter.NameOnly == false)
+                {
+                    //selectString += " OR(" + TNameEventDescriptionQ + " ILIKE (\'%" + ParSearcString + "%\')))";
+                    selectString += string.Format(" OR ({0} ILIKE (\'%{1}%\')))", TNameEventDescriptionQ, ParSearcString);
+                }
+                else {
+                    selectString += ") ";
+                }
             }
 
 
