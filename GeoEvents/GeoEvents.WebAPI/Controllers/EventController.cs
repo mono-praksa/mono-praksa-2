@@ -54,15 +54,15 @@ namespace GeoEvents.WebAPI.Controllers
         //async
 
         [HttpGet]
-        [Route("search/test")]
+        [Route("search")]
         public async Task<IEnumerable<EventModel>> TestEvent(int pageNumber=1, int pageSize=10, string orderBy="", bool orderAscending=false, int category=0, decimal uLat=1000M, decimal uLong=1000M, decimal radius=0, string startTime = "", string endTime = "", string searchString = "", bool? nameOnly = true)
         {
             Filter filter = new Filter(uLat, uLong, radius, null, null, category, pageNumber, pageSize, searchString, orderBy, orderAscending, nameOnly);
 
-            if (startTime != "") { filter.StartTime = DateTime.Parse(startTime.Replace('h', ':').Remove(0, 1)); }
-            if (endTime != "") { filter.EndTime = DateTime.Parse(endTime.Replace('h', ':').Remove(0, 1)); }
-            //if (uLat == 1000M || uLong == 1000M) { filter.ULat = null; filter.ULong = null; }
-            
+            if (startTime != "") { filter.StartTime = DateTime.Parse(startTime.Replace('h', ':')); }
+            if (endTime != "") { filter.EndTime = DateTime.Parse(endTime.Replace('h', ':')); }
+            if (uLat == 1000M || uLong == 1000M) { filter.ULat = null; filter.ULong = null; filter.Radius = null; }
+
 
             return Mapper.Map<IEnumerable<EventModel>>(await Service.GetEventsAsync(filter));
         }
@@ -89,9 +89,9 @@ namespace GeoEvents.WebAPI.Controllers
         {
             Filter filter = new Filter(uLat, uLong, radius, null, null, category, pageNumber, pageSize, searchString, orderBy, orderAscending, nameOnly);
 
-            if (startTime != "") { filter.StartTime = DateTime.Parse(startTime.Replace('h', ':').Remove(0, 1)); }
-            if (endTime != "") { filter.EndTime = DateTime.Parse(endTime.Replace('h', ':').Remove(0, 1)); }
-            //if (uLat == 1000M || uLong == 1000M) { filter.ULat = null; filter.ULong = null; }
+            if (startTime != "") { filter.StartTime = DateTime.Parse(startTime.Replace('h', ':')); }
+            if (endTime != "") { filter.EndTime = DateTime.Parse(endTime.Replace('h', ':')); }
+            if (uLat == 1000M || uLong == 1000M) { filter.ULat = null; filter.ULong = null; filter.Radius = null; }
 
             return await Service.GetEventCountAsync(filter);
         }
