@@ -9,5 +9,7 @@
         <input type="button" value="Upload" (click)="upload()" [disabled]="btnUploadClicked"/>
     </div>
     <span *ngIf="uploadingFilter()">Uploading <i class="fa fa-spinner fa-spin" style="font-size:24px"></i></span>
-    <button (click)=skip()> Skip </button>
+    <div style="width:100%; text-align:right; padding-top:10px"> 
+        <button style="width:85px" class="btn btn-primary"> Skip </button> 
+    </div>
 </div>
