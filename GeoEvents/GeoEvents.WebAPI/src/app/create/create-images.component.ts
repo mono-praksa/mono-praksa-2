@@ -29,7 +29,7 @@ export class CreateImagesComponent {
 
     set formData(value: FormData) { this._formData = value; }
 
-    onChange(fileInput: any) {
+    onChange(fileInput: any, showFileNum: any) {
         let i: number = 0;
 
         this.fileList = fileInput.target.files;
@@ -49,6 +49,7 @@ export class CreateImagesComponent {
             this.indices.push(i);
             i += 1;
         }
+        showFileNum.value = i + " files selected";
     }
 
     upload(fileInput: any) {
