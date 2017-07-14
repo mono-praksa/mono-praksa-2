@@ -252,14 +252,16 @@ export class SearchEventsComponent implements OnInit {
 	getEventsPreviousPage()
 	{
 		let filter = this.oldFilter;
-		filter.PageNumber = filter.PageNumber - 1;
-		
-		//get the events
-        this.getEvents(filter).subscribe(res => {
-            this.events = res
-            this.latitude = this.lat
-            this.longitude = this.lng
-        })
+		if(filter.PageNumber > 1){
+			filter.PageNumber = filter.PageNumber - 1;
+			
+			//get the events
+			this.getEvents(filter).subscribe(res => {
+				this.events = res
+				this.latitude = this.lat
+				this.longitude = this.lng
+			})
+		}
 	}
 	
 	getEventsFirstPage()
