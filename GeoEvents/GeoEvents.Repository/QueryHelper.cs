@@ -200,33 +200,34 @@ namespace GeoEvents.Repository
             {
                 selectString = "SELECT * FROM " + TabelNameEventQ + " WHERE ";
             }
-            
 
+            bool isNotFirst = false;
 
             /// adding Distance filter to query if there is Location and radius
             if (filter.ULat != null && filter.ULong != null && filter.Radius!=0) {
 
                 selectString += " (earth_box(ll_to_earth(" + ParLat + "," + ParLong + ")," + ParRadius + ")@> ll_to_earth(" +
                    TNameEventLatQ + ", " + TNameEventLongQ + ")) ";
+                isNotFirst = true;
             }
 
             /// Adding Time filter query if there is time in filter
                 if (filter.EndTime > DefaulTime && filter.StartTime > DefaulTime)
             {
-                selectString += " AND ";
+                if (isNotFirst) { selectString += " AND "; } else { isNotFirst = true; }
 
                 selectString += " ((" + ParUserStartTime + "," + ParUserEndTime +
                     ")OVERLAPS(" + TNameEventStartTimeQ + "," + TNameEventEndTimeQ + ")) ";
             }
             else if (filter.EndTime == null && filter.StartTime > DefaulTime)
             {
-                selectString += " AND ";
+                if (isNotFirst) { selectString += " AND "; } else { isNotFirst = true; }
 
                 selectString += " (" + ParUserStartTime + "<" + TNameEventEndTimeQ + ") ";
             }
             else if (filter.EndTime > DefaulTime && filter.StartTime == null) 
             {
-                selectString += " AND ";
+                if (isNotFirst) { selectString += " AND "; } else { isNotFirst = true; }
 
                 selectString += "(" + ParUserEndTime + ">" + TNameEventStartTimeQ+") ";
             }
@@ -238,14 +239,10 @@ namespace GeoEvents.Repository
             ///Adding searcstring filter in queri if there is searchstring 
             if (!String.IsNullOrWhiteSpace(filter.SearchString))
             {
-                selectString += " AND";
+                if (isNotFirst) { selectString += " AND "; } else { isNotFirst = true; }
 
-                selectString += TNameEventNameQ + " ILIKE '%" + ParSearcString + "%'";
-
-                if (filter.NameOnly == false)
-                {
-                    selectString += " AND" + TNameEventDescriptionQ + " ILIKE '%" + ParSearcString + "%'";
-                }
+                selectString += "("+TNameEventNameQ + " ILIKE (\'%" + ParSearcString + "%\'))";
+                //selectString += String.Format("({0} ILIKE (\'%{1}%\'))", TNameEventNameQ, ParSearcString);
 
             }
 
@@ -255,7 +252,7 @@ namespace GeoEvents.Repository
             /// adding category filter in query if there is category
             if (filter.Category > 0)
             {
-                selectString += " AND ";
+                if (isNotFirst) { selectString += " AND "; } else { isNotFirst = true; }
                 selectString = selectString +  " (" + ParCategory + " & " + TNameEventCatQ + " > 0)";
             }
 
