@@ -46,20 +46,19 @@ namespace GeoEvents.Repository
 
             {
                 using (PostgresConn.NpgConn())
-                using (NpgsqlCommand commandInsert = new NpgsqlCommand(QueryHelper.GetInsertStringEvent(), PostgresConn.NpgConn()))
-                using (NpgsqlCommand commandSelect = new NpgsqlCommand("Select * from \"Events\" where \"Events\".\"Id\" = @evteId Limit (1)", PostgresConn.NpgConn()))
+                using (NpgsqlCommand commandInsert = new NpgsqlCommand(QueryHelper.GetInsertEventString(), PostgresConn.NpgConn()))
+                using (NpgsqlCommand commandSelect = new NpgsqlCommand(QueryHelper.GetSelectEventStringById(), PostgresConn.NpgConn()))
 
                 {
-                    commandInsert.Parameters.AddWithValue("@Id", NpgsqlTypes.NpgsqlDbType.Uuid, evte.Id);
-                    commandInsert.Parameters.AddWithValue("@Category", NpgsqlTypes.NpgsqlDbType.Integer, evte.Category);
-                    commandInsert.Parameters.AddWithValue("@Description", NpgsqlTypes.NpgsqlDbType.Text, evte.Description);
-                    commandInsert.Parameters.AddWithValue("@StartTime", NpgsqlTypes.NpgsqlDbType.Timestamp, evte.StartTime);
-                    commandInsert.Parameters.AddWithValue("@EndTime", NpgsqlTypes.NpgsqlDbType.Timestamp, evte.EndTime);
-                    commandInsert.Parameters.AddWithValue("@Lat", NpgsqlTypes.NpgsqlDbType.Double, evte.Lat);
-                    commandInsert.Parameters.AddWithValue("@Long", NpgsqlTypes.NpgsqlDbType.Double, evte.Long);
-                    commandInsert.Parameters.AddWithValue("@Name", NpgsqlTypes.NpgsqlDbType.Text, evte.Name);
-
-                    commandSelect.Parameters.AddWithValue("@EvteId", NpgsqlTypes.NpgsqlDbType.Uuid, evte.Id);
+                    commandInsert.Parameters.AddWithValue(QueryHelper.ParId, NpgsqlTypes.NpgsqlDbType.Uuid, evte.Id);
+                    commandInsert.Parameters.AddWithValue(QueryHelper.ParCategory, NpgsqlTypes.NpgsqlDbType.Integer, evte.Category);
+                    commandInsert.Parameters.AddWithValue(QueryHelper.ParDescription, NpgsqlTypes.NpgsqlDbType.Text, evte.Description);
+                    commandInsert.Parameters.AddWithValue(QueryHelper.ParStartTime, NpgsqlTypes.NpgsqlDbType.Timestamp, evte.StartTime);
+                    commandInsert.Parameters.AddWithValue(QueryHelper.ParEndTime, NpgsqlTypes.NpgsqlDbType.Timestamp, evte.EndTime);
+                    commandInsert.Parameters.AddWithValue(QueryHelper.ParLat, NpgsqlTypes.NpgsqlDbType.Double, evte.Lat);
+                    commandInsert.Parameters.AddWithValue(QueryHelper.ParLong, NpgsqlTypes.NpgsqlDbType.Double, evte.Long);
+                    commandInsert.Parameters.AddWithValue(QueryHelper.ParName, NpgsqlTypes.NpgsqlDbType.Text, evte.Name);
+                    commandSelect.Parameters.AddWithValue(QueryHelper.ParEventId, NpgsqlTypes.NpgsqlDbType.Uuid, evte.Id);
 
                     await PostgresConn.NpgConn().OpenAsync();
                     await commandInsert.ExecuteNonQueryAsync();
@@ -107,10 +106,10 @@ namespace GeoEvents.Repository
             try
             {
                 using (PostgresConn.NpgConn())
-                using (NpgsqlCommand command = new NpgsqlCommand(QueryHelper.GetSelectStringEvent(filter), PostgresConn.NpgConn()))
+                using (NpgsqlCommand command = new NpgsqlCommand(QueryHelper.GetSelectEventString(filter), PostgresConn.NpgConn()))
                 {
 
-                    SetParametrsSearchEvents(filter, command);
+                    SetParametersSearchEvents(filter, command);
 
                     await PostgresConn.NpgConn().OpenAsync();
                     DbDataReader dr = await command.ExecuteReaderAsync();
@@ -157,10 +156,10 @@ namespace GeoEvents.Repository
             try
             {
                 using (PostgresConn.NpgConn())
-                using (NpgsqlCommand command = new NpgsqlCommand(QueryHelper.GetEventCountString(filter), PostgresConn.NpgConn()))
+                using (NpgsqlCommand command = new NpgsqlCommand(QueryHelper.GetSelectCountEventString(filter), PostgresConn.NpgConn()))
                 {
 
-                    SetParametrsSearchEvents(filter, command);
+                    SetParametersSearchEvents(filter, command);
 
                     await PostgresConn.NpgConn().OpenAsync();
                     object dr = await command.ExecuteScalarAsync();
@@ -180,17 +179,21 @@ namespace GeoEvents.Repository
 
         }
 
-
-        private void SetParametrsSearchEvents(IFilter filter,NpgsqlCommand command)
+        /// <summary>
+        /// Sets Parameters of NpgsqlCommand by Filter
+        /// </summary>
+        /// <param name="filter"></param>
+        /// <param name="command"></param>
+        private void SetParametersSearchEvents(IFilter filter,NpgsqlCommand command)
         {
 
-            if (filter.ULat != null) { command.Parameters.AddWithValue("@Lat", NpgsqlTypes.NpgsqlDbType.Double, filter.ULat); }
-            if (filter.ULong != null) { command.Parameters.AddWithValue("@Long", NpgsqlTypes.NpgsqlDbType.Double, filter.ULong); }
-            if (filter.Radius != null) { command.Parameters.AddWithValue("@Radius", NpgsqlTypes.NpgsqlDbType.Double, filter.Radius * 1000); }
-            if (filter.StartTime != null) { command.Parameters.AddWithValue("@UserStartTime", NpgsqlTypes.NpgsqlDbType.Timestamp, filter.StartTime); }
-            if (filter.EndTime != null) { command.Parameters.AddWithValue("@UserEndTime", NpgsqlTypes.NpgsqlDbType.Timestamp, filter.EndTime); }
-            if (filter.Category != null) { command.Parameters.AddWithValue("@Category", NpgsqlTypes.NpgsqlDbType.Integer, filter.Category); }
-            if (!string.IsNullOrWhiteSpace(filter.SearchString)) { command.Parameters.AddWithValue("@SearchString", NpgsqlTypes.NpgsqlDbType.Text, filter.SearchString); }
+            if (filter.ULat != null) { command.Parameters.AddWithValue(QueryHelper.ParLat, NpgsqlTypes.NpgsqlDbType.Double, filter.ULat); }
+            if (filter.ULong != null) { command.Parameters.AddWithValue(QueryHelper.ParLong, NpgsqlTypes.NpgsqlDbType.Double, filter.ULong); }
+            if (filter.Radius != null) { command.Parameters.AddWithValue(QueryHelper.ParRadius, NpgsqlTypes.NpgsqlDbType.Double, filter.Radius * 1000); }
+            if (filter.StartTime != null) { command.Parameters.AddWithValue(QueryHelper.ParUserStartTime, NpgsqlTypes.NpgsqlDbType.Timestamp, filter.StartTime); }
+            if (filter.EndTime != null) { command.Parameters.AddWithValue(QueryHelper.ParUserEndTime, NpgsqlTypes.NpgsqlDbType.Timestamp, filter.EndTime); }
+            if (filter.Category != null) { command.Parameters.AddWithValue(QueryHelper.ParCategory, NpgsqlTypes.NpgsqlDbType.Integer, filter.Category); }
+            if (!string.IsNullOrWhiteSpace(filter.SearchString)) { command.Parameters.AddWithValue(QueryHelper.ParSearcString, NpgsqlTypes.NpgsqlDbType.Text, filter.SearchString); }
 
          
         }
