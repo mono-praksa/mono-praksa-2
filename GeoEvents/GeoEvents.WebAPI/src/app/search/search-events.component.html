@@ -76,7 +76,8 @@
 
 			</form>
 		</div>
-	    <event-details [event]="this.event" *ngIf="this.detailsMode"></event-details>
+		
+	    <event-details [event]="this.event" *ngIf="this.detailsMode" (notify)='onClosedDetails($event)'></event-details>
     </div>
     <!--<div class="col-md-7">
         <h2>Search Results</h2>
@@ -104,8 +105,8 @@
 		</div>
 		
 		<div class="row">
-			<display-list *ngIf="!this.mapMode && !this.detailsMode" (event)="eventDetails($event)" [events]="this.events"></display-list>
-			<display-map [radius]="radius" [latitude]="lat" [longitude]="lng" *ngIf="this.mapMode && !this.detailsMode" (event)="eventDetails($event)" [events]="this.events"></display-map>
+			<display-list *ngIf="!this.mapMode" (event)="eventDetails($event)" [events]="this.events"></display-list>
+			<display-map [radius]="radius" [latitude]="lat" [longitude]="lng" *ngIf="this.mapMode" (event)="eventDetails($event)" [events]="this.events"></display-map>
 		</div>
 		
 		<div *ngIf="!this.mapMode && this.events" class="row">

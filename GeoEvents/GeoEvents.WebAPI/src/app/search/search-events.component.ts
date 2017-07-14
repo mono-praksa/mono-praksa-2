@@ -303,14 +303,21 @@ export class SearchEventsComponent implements OnInit {
 			querry += '&endTime=' + filter.EndTime.toString().replace(':', 'h');
 		}
 		
-		if(filter.SearchString != null && filter.SearchString != "")
+		if(filter.SearchString != null || filter.SearchString != "")
 		{
 			querry += '&searchString=' + filter.SearchString.toString();
 		}
 		
-		if(filter.SearchNameOnly != null && filter.SearchString != null && filter.SearchString != "")
+		if(filter.SearchString != null || filter.SearchString != "")
 		{
-			querry += '&nameOnly=' + filter.SearchNameOnly.toString();
+			if( filter.SearchNameOnly.toString() != "")
+			{
+				querry += '&nameOnly=' + filter.SearchNameOnly.toString();
+			}
+			else
+			{
+				querry += '&nameOnly=false';
+			}
 		}
 
 		querry += '&pageNumber=' + filter.PageNumber.toString();
@@ -323,6 +330,10 @@ export class SearchEventsComponent implements OnInit {
             return <IEvent[]>response.json();
         }).catch(this.handleError);
     }
+	
+	onClosedDetails(){
+		this.detailsMode = false;
+	}
 
     handleError(error: Response) {
         return Observable.throw(error.statusText);
