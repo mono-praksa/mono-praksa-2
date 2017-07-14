@@ -303,12 +303,12 @@ export class SearchEventsComponent implements OnInit {
 			querry += '&endTime=' + filter.EndTime.toString().replace(':', 'h');
 		}
 		
-		if(filter.SearchString != null)
+		if(filter.SearchString != null && filter.SearchString != "")
 		{
 			querry += '&searchString=' + filter.SearchString.toString();
 		}
 		
-		if(filter.SearchNameOnly != null)
+		if(filter.SearchNameOnly != null && filter.SearchString != null && filter.SearchString != "")
 		{
 			querry += '&nameOnly=' + filter.SearchNameOnly.toString();
 		}
