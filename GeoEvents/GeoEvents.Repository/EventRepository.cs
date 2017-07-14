@@ -109,13 +109,8 @@ namespace GeoEvents.Repository
                 using (PostgresConn.NpgConn())
                 using (NpgsqlCommand command = new NpgsqlCommand(QueryHelper.GetSelectStringEvent(filter), PostgresConn.NpgConn()))
                 {
-                    command.Parameters.AddWithValue("@Lat", NpgsqlTypes.NpgsqlDbType.Double, filter.ULat);
-                    command.Parameters.AddWithValue("@Long", NpgsqlTypes.NpgsqlDbType.Double, filter.ULong);
-                    command.Parameters.AddWithValue("@Radius", NpgsqlTypes.NpgsqlDbType.Double, filter.Radius * 1000);
-                    command.Parameters.AddWithValue("@UserStartTime", NpgsqlTypes.NpgsqlDbType.Timestamp, filter.StartTime);
-                    command.Parameters.AddWithValue("@UserEndTime", NpgsqlTypes.NpgsqlDbType.Timestamp, filter.EndTime);
-                    command.Parameters.AddWithValue("@Category", NpgsqlTypes.NpgsqlDbType.Integer, filter.Category);
-                    command.Parameters.AddWithValue("@SearchString", NpgsqlTypes.NpgsqlDbType.Text, filter.SearchString);
+
+                    SetParametrsSearchEvents(filter, command);
 
                     await PostgresConn.NpgConn().OpenAsync();
                     DbDataReader dr = await command.ExecuteReaderAsync();
@@ -164,13 +159,8 @@ namespace GeoEvents.Repository
                 using (PostgresConn.NpgConn())
                 using (NpgsqlCommand command = new NpgsqlCommand(QueryHelper.GetEventCountString(filter), PostgresConn.NpgConn()))
                 {
-                    command.Parameters.AddWithValue("@Lat", NpgsqlTypes.NpgsqlDbType.Double, filter.ULat);
-                    command.Parameters.AddWithValue("@Long", NpgsqlTypes.NpgsqlDbType.Double, filter.ULong);
-                    command.Parameters.AddWithValue("@Radius", NpgsqlTypes.NpgsqlDbType.Double, filter.Radius * 1000);
-                    command.Parameters.AddWithValue("@UserStartTime", NpgsqlTypes.NpgsqlDbType.Timestamp, filter.StartTime);
-                    command.Parameters.AddWithValue("@UserEndTime", NpgsqlTypes.NpgsqlDbType.Timestamp, filter.EndTime);
-                    command.Parameters.AddWithValue("@Category", NpgsqlTypes.NpgsqlDbType.Integer, filter.Category);
 
+                    SetParametrsSearchEvents(filter, command);
 
                     await PostgresConn.NpgConn().OpenAsync();
                     object dr = await command.ExecuteScalarAsync();
@@ -188,6 +178,21 @@ namespace GeoEvents.Repository
 
             return Count;
 
+        }
+
+
+        private NpgsqlCommand SetParametrsSearchEvents(IFilter filter,NpgsqlCommand command)
+        {
+
+            if (filter.ULat != null) { command.Parameters.AddWithValue("@Lat", NpgsqlTypes.NpgsqlDbType.Double, filter.ULat); }
+            if (filter.ULong != null) { command.Parameters.AddWithValue("@Long", NpgsqlTypes.NpgsqlDbType.Double, filter.ULong); }
+            if (filter.Radius != null) { command.Parameters.AddWithValue("@Radius", NpgsqlTypes.NpgsqlDbType.Double, filter.Radius * 1000); }
+            if (filter.StartTime != null) { command.Parameters.AddWithValue("@UserStartTime", NpgsqlTypes.NpgsqlDbType.Timestamp, filter.StartTime); }
+            if (filter.EndTime != null) { command.Parameters.AddWithValue("@UserEndTime", NpgsqlTypes.NpgsqlDbType.Timestamp, filter.EndTime); }
+            if (filter.Category != null) { command.Parameters.AddWithValue("@Category", NpgsqlTypes.NpgsqlDbType.Integer, filter.Category); }
+            if (!string.IsNullOrWhiteSpace(filter.SearchString)) { command.Parameters.AddWithValue("@SearchString", NpgsqlTypes.NpgsqlDbType.Text, filter.SearchString); }
+
+            return command;
         }
 
         #endregion Methods

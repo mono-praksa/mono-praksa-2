@@ -184,7 +184,7 @@ namespace GeoEvents.Repository
 
             string selectString;
            
-            if (filter.OrderBy == "Distance" && filter.ULat != 1000M && filter.ULong != 1000M)
+            if (filter.OrderBy == "Distance" && filter.ULat != null && filter.ULong != null)
             {
                 selectString = "SELECT *, earth_distance(ll_to_earth(" + ParLat + "," + ParLong + "), ll_to_earth(" + TNameEventLat + "," 
                     + TNameEventLong + ")) as distance from" + TabelNameEventQ + "WHERE ";
@@ -197,14 +197,13 @@ namespace GeoEvents.Repository
 
 
             /// adding Distance filter to query if there is Location and radius
-            if (filter.ULat != 1000M && filter.ULong != 1000M && filter.Radius!=0) {
+            if (filter.ULat != null && filter.ULong != null && filter.Radius!=0) {
 
                 selectString += " (earth_box(ll_to_earth(" + ParLat + "," + ParLong + ")," + ParRadius + ")@> ll_to_earth(" +
                    TNameEventLat + ", " + TNameEventLong + ")) ";
             }
 
             /// Adding Time filter query if there is time in filter
-
                 if (filter.EndTime > DefaulTime && filter.StartTime > DefaulTime)
             {
                 selectString += " AND ";
