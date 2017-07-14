@@ -293,12 +293,12 @@ export class SearchEventsComponent implements OnInit {
 			querry += '&radius=' + filter.Radius.toString();
 		}
 		
-		if(filter.StartTime != null)
+		if(filter.StartTime != null && filter.StartTime.toString() != "" )
 		{
 			querry += '&startTime=' + filter.StartTime.toString().replace(':', 'h');
 		}
 		
-		if(filter.EndTime != null)
+		if(filter.EndTime != null && filter.EndTime.toString() != "" )
 		{
 			querry += '&endTime=' + filter.EndTime.toString().replace(':', 'h');
 		}

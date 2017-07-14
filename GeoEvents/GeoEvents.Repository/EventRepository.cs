@@ -181,7 +181,7 @@ namespace GeoEvents.Repository
         }
 
 
-        private NpgsqlCommand SetParametrsSearchEvents(IFilter filter,NpgsqlCommand command)
+        private void SetParametrsSearchEvents(IFilter filter,NpgsqlCommand command)
         {
 
             if (filter.ULat != null) { command.Parameters.AddWithValue("@Lat", NpgsqlTypes.NpgsqlDbType.Double, filter.ULat); }
@@ -192,7 +192,7 @@ namespace GeoEvents.Repository
             if (filter.Category != null) { command.Parameters.AddWithValue("@Category", NpgsqlTypes.NpgsqlDbType.Integer, filter.Category); }
             if (!string.IsNullOrWhiteSpace(filter.SearchString)) { command.Parameters.AddWithValue("@SearchString", NpgsqlTypes.NpgsqlDbType.Text, filter.SearchString); }
 
-            return command;
+         
         }
 
         #endregion Methods
