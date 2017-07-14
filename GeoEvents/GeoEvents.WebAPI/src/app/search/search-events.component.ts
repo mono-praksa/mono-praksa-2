@@ -331,7 +331,7 @@ export class SearchEventsComponent implements OnInit {
         }).catch(this.handleError);
     }
 	
-	onClosedDetails(){
+	closeDetailsMode(){
 		this.detailsMode = false;
 	}
 

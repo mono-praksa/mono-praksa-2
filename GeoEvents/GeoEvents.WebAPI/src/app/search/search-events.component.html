@@ -77,7 +77,10 @@
 			</form>
 		</div>
 		
-	    <event-details [event]="this.event" *ngIf="this.detailsMode" (notify)='onClosedDetails($event)'></event-details>
+	    <event-details [event]="this.event" *ngIf="this.detailsMode"></event-details>
+		<div *ngIf="this.detailsMode">
+			<input type="button" value="Close details" class="btn btn-default" (click)="closeDetailsMode()">
+		</div>
     </div>
     <!--<div class="col-md-7">
         <h2>Search Results</h2>
