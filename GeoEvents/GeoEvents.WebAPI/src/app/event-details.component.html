@@ -23,10 +23,10 @@
         </ol>
 
         <!-- Wrapper for slides -->
-        <div class="carousel-inner">
-            <div *ngFor="let image of images; let i=index" [ngClass]="i === 0 ? 'item active' : 'item'">
+        <div class="carousel-inner" id="carousel-inner">
+            <!--<div *ngFor="let image of images; let i=index" [ngClass]="i === 0 ? 'item active' : 'item'">
                 <img [src]="'data:image/jpeg;base64,'+image.Content" alt="event.Name + '_image' + i"/>
-            </div>
+            </div>-->
         </div>
 
         <!-- Left and right controls -->

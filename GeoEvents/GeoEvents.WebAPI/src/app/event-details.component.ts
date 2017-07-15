@@ -49,6 +49,25 @@ export class EventDetailsComponent implements OnInit{
         this.getImages(this.event.Id).subscribe(res => {
             this.imagesLoading = false
             this.images = res
+            for (var i = 0; i < this.images.length; i++) {
+                var item = document.createElement("div");
+
+                if (i == 0) item.setAttribute("class", "item active");
+                else item.setAttribute("class", "item");
+
+                if (this.images[i].Content.substr(0, 10) != 'PD94bWwgdm') {
+                    var img = document.createElement("img");
+                    img.setAttribute("src", "data:image/jpeg;base64," + this.images[i].Content);
+
+                    item.appendChild(img);
+                } else {
+                    var svg = this.parseSvg(this.decodeBase64(this.images[i].Content));
+
+                    item.appendChild(svg);
+                }
+
+                document.getElementById("carousel-inner").appendChild(item);
+            }
         })
 
         this.http.get('https://maps.googleapis.com/maps/api/geocode/json?latlng=' + this.event.Lat + ',' + this.event.Long + '&key=AIzaSyDHKcbmM0jpW7BOet42_S92KJSr5PYKc5w')
@@ -75,6 +94,23 @@ export class EventDetailsComponent implements OnInit{
         this.cancel.emit()
     }
 
+    decodeBase64(s: string) {
+        var e = {}, i, b = 0, c, x, l = 0, a, r = '', w = String.fromCharCode, L = s.length;
+        var A = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+        for (i = 0; i < 64; i++) { e[A.charAt(i)] = i; }
+        for (x = 0; x < L; x++) {
+            c = e[s.charAt(x)]; b = (b << 6) + c; l += 6;
+            while (l >= 8) { ((a = (b >>> (l -= 8)) & 0xff) || (x < (L - 2))) && (r += w(a)); }
+        }
+        return r;
+    }
+
+    parseSvg(xmlString: string) {
+        let parser = new DOMParser();
+        let doc = parser.parseFromString(xmlString, "image/svg+xml");
+        return doc.documentElement;
+        //document.getElementById("carousel-inner").appendChild(doc.documentElement);
+    }
 }
 
 enum CategoryEnum {
