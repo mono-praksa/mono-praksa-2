@@ -9,32 +9,11 @@ import { IImage } from '../models/image.model';
     templateUrl: 'app/components/event/views/event-detail.component.html',
     selector: 'event-details',
     styles: [`
-    .carousel {
+    .carousel, :host /deep/ img, :host /deep/ svg {
         width: 640px;
         max-width: 640px;
         height: 480px;
         max-height: 480px;
-}
-
-    :host /deep/ img {
-        width: 640px;
-        max-width: 640px;
-        height: 480px;
-        max-height: 480px;
-}
-    :host /deep/ svg {
-        width: 640px;
-        max-width: 640px;
-        height: 480px;
-        max-height: 480px;
-}
-
-    .eventName {
-        float: left;
-}
-
-    .eventTime {
-        float: right;
 }
 `]
 })
