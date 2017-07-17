@@ -117,32 +117,42 @@ namespace GeoEvents.WebAPI.Controllers
             return await Service.GetEventCountAsync(filter);
         }
     }
+    public class EventModel
+    {
+        public Guid Id { get; internal set; }
+        public string Name { get; internal set; }
+        public string Description { get; internal set; }
+        public DateTime StartTime { get; internal set; }
+        public DateTime EndTime { get; internal set; }
+        public decimal Lat { get; internal set; }
+        public decimal Long { get; internal set; }
+        public List<int> Categories { get; internal set; }
+        public decimal Price { get; internal set; }
+        public int Capacity { get; internal set; }
+        public int Reserved { get; internal set; }
+        public decimal Rating { get; internal set; }
+        public int RateCount { get; internal set; }
+
+        public EventModel(Guid id, string name, string description, DateTime starttime, DateTime endtime, decimal uLat, decimal uLong, List<int> categories, decimal price, int capacity, int reserved, decimal rating, int rateCount)
+        {
+            this.Id = id;
+            this.Name = name;
+            this.Description = description;
+            this.StartTime = starttime;
+            this.EndTime = endtime;
+            this.Lat = uLat;
+            this.Long = uLong;
+            this.Categories = categories;
+            this.Price = price;
+            this.Capacity = capacity;
+            this.Reserved = reserved;
+            this.Rating = rating;
+            this.RateCount = rateCount;
+        }
+
+        public EventModel()
+        {
+        }
+    }
 }
 
-public class EventModel
-{
-    public Guid Id { get; set; }
-    public string Name { get; set; }
-    public string Description { get; set; }
-    public DateTime StartTime { get; set; }
-    public DateTime EndTime { get; set; }
-    public decimal Lat { get; set; }
-    public decimal Long { get; set; }
-    public List<int> Categories { get; set; }
-
-    public EventModel(Guid id, string name, string description, DateTime starttime, DateTime endtime, decimal uLat, decimal uLong, List<int> categories)
-    {
-        this.Id = id;
-        this.Name = name;
-        this.Description = description;
-        this.StartTime = starttime;
-        this.EndTime = endtime;
-        this.Lat = uLat;
-        this.Long = uLong;
-        this.Categories = categories;
-    }
-
-    public EventModel()
-    {
-    }
-}

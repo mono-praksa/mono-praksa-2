@@ -1,32 +1,34 @@
-﻿using GeoEvents.Repository.Common;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using AutoMapper;
 using GeoEvents.Common;
 using GeoEvents.DAL;
-using Npgsql;
 using GeoEvents.Model.Common;
-using AutoMapper;
+using GeoEvents.Repository.Common;
+using Npgsql;
+using System;
+using System.Collections.Generic;
 using System.Data.Common;
+using System.Threading.Tasks;
 
 namespace GeoEvents.Repository
 {
     public class EventRepository : IEventRepository
     {
         #region Properties
+
         protected IPostgresConnection Connection { get; private set; }
 
         protected IMapper Mapper { get; private set; }
+
         #endregion Properties
 
         #region Constructors
+
         public EventRepository(IPostgresConnection connection, IMapper mapper)
         {
             this.Mapper = mapper;
             this.Connection = connection;
         }
+
         #endregion Constructors
 
         #region Methods
@@ -35,13 +37,11 @@ namespace GeoEvents.Repository
         /// Creates Event asynchronously.
         /// </summary>
         /// <param name="evt"></param>
-        /// <returns>  
+        /// <returns>
         /// return Created event (IEvent)
         /// </returns>
         public async Task<IEvent> CreateEventAsync(IEvent evt)
         {
-
-
             using (Connection.CreateConnection())
             using (NpgsqlCommand commandInsert = new NpgsqlCommand(QueryHelper.GetInsertEventString(), Connection.CreateConnection()))
             using (NpgsqlCommand commandSelect = new NpgsqlCommand(QueryHelper.GetSelectEventStringById(), Connection.CreateConnection()))
@@ -85,14 +85,9 @@ namespace GeoEvents.Repository
                         RateCount = Convert.ToInt32(dr[12])
                     };
                 }
-
-
             };
 
-
             return evt;
-
-
         }
 
         /// <summary>
@@ -110,7 +105,6 @@ namespace GeoEvents.Repository
             using (Connection.CreateConnection())
             using (NpgsqlCommand command = new NpgsqlCommand(QueryHelper.GetSelectEventString(filter), Connection.CreateConnection()))
             {
-
                 SetParametersSearchEvents(filter, command);
 
                 await Connection.CreateConnection().OpenAsync();
@@ -133,19 +127,14 @@ namespace GeoEvents.Repository
                         Reserved = Convert.ToInt32(dr[10]),
                         Rating = Convert.ToDecimal(dr[11]),
                         RateCount = Convert.ToInt32(dr[12])
-
                     };
 
                     SelectEvents.Add(Mapper.Map<IEvent>(tmp));
                 }
-
-
             }
 
             return SelectEvents;
-
         }
-
 
         /// <summary>
         /// Get event count asynchronously.
@@ -161,21 +150,15 @@ namespace GeoEvents.Repository
             using (Connection.CreateConnection())
             using (NpgsqlCommand command = new NpgsqlCommand(QueryHelper.GetSelectCountEventString(filter), Connection.CreateConnection()))
             {
-
                 SetParametersSearchEvents(filter, command);
 
                 await Connection.CreateConnection().OpenAsync();
                 object dr = await command.ExecuteScalarAsync();
 
                 Count = Convert.ToInt64(dr);
-
             }
 
-
-
-
             return Count;
-
         }
 
         /// <summary>
@@ -185,7 +168,6 @@ namespace GeoEvents.Repository
         /// <param name="command"></param>
         private void SetParametersSearchEvents(IFilter filter, NpgsqlCommand command)
         {
-
             if (filter.ULat != null) { command.Parameters.AddWithValue(QueryHelper.ParLat, NpgsqlTypes.NpgsqlDbType.Double, filter.ULat); }
             if (filter.ULong != null) { command.Parameters.AddWithValue(QueryHelper.ParLong, NpgsqlTypes.NpgsqlDbType.Double, filter.ULong); }
             if (filter.Radius != null) { command.Parameters.AddWithValue(QueryHelper.ParRadius, NpgsqlTypes.NpgsqlDbType.Double, filter.Radius * 1000); }
@@ -193,10 +175,7 @@ namespace GeoEvents.Repository
             if (filter.EndTime != null) { command.Parameters.AddWithValue(QueryHelper.ParUserEndTime, NpgsqlTypes.NpgsqlDbType.Timestamp, filter.EndTime); }
             if (filter.Category != null) { command.Parameters.AddWithValue(QueryHelper.ParCategory, NpgsqlTypes.NpgsqlDbType.Integer, filter.Category); }
             if (!string.IsNullOrWhiteSpace(filter.SearchString)) { command.Parameters.AddWithValue(QueryHelper.ParSearchString, NpgsqlTypes.NpgsqlDbType.Varchar, "%" + filter.SearchString + "%"); }
-
-
         }
-
 
         /// <summary>
         /// Updates the rating asynchronous.
