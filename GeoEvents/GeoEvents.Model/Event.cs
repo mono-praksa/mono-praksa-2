@@ -96,6 +96,46 @@ namespace GeoEvents.Model
         /// </value>
         public List<int> Categories { get; set; }
 
+
+        /// <summary>
+        /// Gets or sets the price.
+        /// </summary>
+        /// <value>
+        /// The price.
+        /// </value>
+        public decimal Price { get; set; }
+
+        /// <summary>
+        /// Gets or sets the capacity.
+        /// </summary>
+        /// <value>
+        /// The capacity.
+        /// </value>
+        public int Capacity { get; set; }
+
+        /// <summary>
+        /// Gets or sets the reserved.
+        /// </summary>
+        /// <value>
+        /// The reserved.
+        /// </value>
+        public int Reserved { get; set; }
+
+        /// <summary>
+        /// Gets or sets the rating.
+        /// </summary>
+        /// <value>
+        /// The rating.
+        /// </value>
+        public decimal Rating { get; set; }
+
+        /// <summary>
+        /// Gets or sets the rate count.
+        /// </summary>
+        /// <value>
+        /// The rate count.
+        /// </value>
+        public int RateCount { get; set; }
         #endregion Properties
     }
 }
