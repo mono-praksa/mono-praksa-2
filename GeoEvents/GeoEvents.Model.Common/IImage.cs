@@ -9,6 +9,7 @@ namespace GeoEvents.Model.Common
     public interface IImage
     {
         #region Properties
+
         /// <summary>
         /// Gets or sets the identifier.
         /// </summary>
@@ -16,6 +17,7 @@ namespace GeoEvents.Model.Common
         /// The identifier.
         /// </value>
         Guid Id { get; set; }
+
 
 
         /// <summary>
@@ -27,11 +29,12 @@ namespace GeoEvents.Model.Common
         Guid EventId { get; set; }
 
 
+
         /// <summary>
-        /// Gets or sets the content of the image.
+        /// Gets or sets the content.
         /// </summary>
         /// <value>
-        /// The content of the image.
+        /// The content.
         /// </value>
         byte[] Content { get; set; }
 

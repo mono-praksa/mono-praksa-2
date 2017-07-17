@@ -14,6 +14,7 @@ namespace GeoEvents.Model
     public class Image : IImage
     {
         #region Properties
+
         /// <summary>
         /// Gets or sets the identifier.
         /// </summary>
@@ -23,6 +24,7 @@ namespace GeoEvents.Model
         public Guid Id { get; set; }
 
 
+
         /// <summary>
         /// Gets or sets the event identifier.
         /// </summary>
@@ -30,6 +32,7 @@ namespace GeoEvents.Model
         /// The event identifier.
         /// </value>
         public Guid EventId { get; set; }
+
 
 
         /// <summary>
