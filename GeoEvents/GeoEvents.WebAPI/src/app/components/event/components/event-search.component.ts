@@ -115,6 +115,10 @@ export class EventSearchComponent implements OnInit {
 			OrderIsAscending: true
 		}
 		
+		if (newFilter.SearchString == null) {
+			newFilter.SearchString == "";
+		}
+		
 		this.getEvents(newFilter);
 	}
 	
