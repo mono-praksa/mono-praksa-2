@@ -54,10 +54,22 @@ namespace GeoEvents.WebAPI.Controllers
         public async Task<IEnumerable<EventModel>> TestEvent(int pageNumber = 1, int pageSize = 10, string orderBy = "", bool orderAscending = false, int category = 0, decimal uLat = 1000M, decimal uLong = 1000M, decimal radius = 0, string startTime = "", string endTime = "", string searchString = "", bool? nameOnly = true)
         {
             Filter filter = new Filter(uLat, uLong, radius, null, null, category, pageNumber, pageSize, searchString, orderBy, orderAscending, nameOnly);
-
-            if (startTime != "") { filter.StartTime = DateTime.Parse(startTime.Replace('h', ':')); }
-            if (endTime != "") { filter.EndTime = DateTime.Parse(endTime.Replace('h', ':')); }
-            if (uLat == 1000M || uLong == 1000M) { filter.ULat = null; filter.ULong = null; filter.Radius = null; }
+            DateTime dateValueStart;
+            DateTime dateValueEnd;
+            if (startTime != "")
+            {
+                DateTime.TryParse(startTime.Replace('h', ':'), out dateValueStart);
+                filter.StartTime = dateValueStart;
+            }
+            if (endTime != "")
+            {
+                DateTime.TryParse(endTime.Replace('h', ':'), out dateValueEnd);
+                filter.EndTime = dateValueEnd;
+            }
+            if (uLat == 1000M || uLong == 1000M)
+            {
+                filter.ULat = null; filter.ULong = null; filter.Radius = null;
+            }
 
             return Mapper.Map<IEnumerable<EventModel>>(await Service.GetEventsAsync(filter));
         }
@@ -83,10 +95,22 @@ namespace GeoEvents.WebAPI.Controllers
         public async Task<Int64> GetEventCountAsync(int pageNumber = 1, int pageSize = 10, string orderBy = "", bool orderAscending = false, int category = 0, decimal uLat = 1000M, decimal uLong = 1000M, decimal radius = 0, string startTime = "", string endTime = "", string searchString = "", bool? nameOnly = true)
         {
             Filter filter = new Filter(uLat, uLong, radius, null, null, category, pageNumber, pageSize, searchString, orderBy, orderAscending, nameOnly);
-
-            if (startTime != "") { filter.StartTime = DateTime.Parse(startTime.Replace('h', ':')); }
-            if (endTime != "") { filter.EndTime = DateTime.Parse(endTime.Replace('h', ':')); }
-            if (uLat == 1000M || uLong == 1000M) { filter.ULat = null; filter.ULong = null; filter.Radius = null; }
+            DateTime dateValueStart;
+            DateTime dateValueEnd;
+            if (startTime != "")
+            {
+                DateTime.TryParse(startTime.Replace('h', ':'), out dateValueStart);
+                filter.StartTime = dateValueStart;
+            }
+            if (endTime != "")
+            {
+                DateTime.TryParse(endTime.Replace('h', ':'), out dateValueEnd);
+                filter.EndTime = dateValueEnd;
+            }
+            if (uLat == 1000M || uLong == 1000M)
+            {
+                filter.ULat = null; filter.ULong = null; filter.Radius = null;
+            }
 
             return await Service.GetEventCountAsync(filter);
         }
