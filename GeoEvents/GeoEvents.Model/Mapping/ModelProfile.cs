@@ -1,18 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using GeoEvents.Model.Common;
-using GeoEvents.Repository.Common;
+﻿using AutoMapper;
 using GeoEvents.DAL;
-using AutoMapper;
+using GeoEvents.Model.Common;
 
 namespace GeoEvents.Model.Mapping
 {
     public class ModelProfile : Profile
     {
-
         public ModelProfile()
         {
             CreateMap<EventEntity, IEvent>().ReverseMap();

@@ -1,16 +1,11 @@
-﻿
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System;
 
 namespace GeoEvents.DAL
 {
     /// <summary>
     /// Database model EventEntity
     /// </summary>
-    public class EventEntity 
+    public class EventEntity
     {
         #region Properties
 
@@ -22,7 +17,6 @@ namespace GeoEvents.DAL
         /// </value>
         public Guid Id { get; set; }
 
-
         /// <summary>
         /// Gets or sets the start time.
         /// </summary>
@@ -30,7 +24,6 @@ namespace GeoEvents.DAL
         /// The start time.
         /// </value>
         public DateTime StartTime { get; set; }
-
 
         /// <summary>
         /// Gets or sets the end time.
@@ -40,7 +33,6 @@ namespace GeoEvents.DAL
         /// </value>
         public DateTime EndTime { get; set; }
 
-
         /// <summary>
         /// Gets or sets the lat.
         /// </summary>
@@ -48,7 +40,6 @@ namespace GeoEvents.DAL
         /// The lat.
         /// </value>
         public Decimal Lat { get; set; }
-
 
         /// <summary>
         /// Gets or sets the long.
@@ -58,7 +49,6 @@ namespace GeoEvents.DAL
         /// </value>
         public Decimal Long { get; set; }
 
-
         /// <summary>
         /// Gets or sets the name.
         /// </summary>
@@ -66,7 +56,6 @@ namespace GeoEvents.DAL
         /// The name.
         /// </value>
         public string Name { get; set; }
-
 
         /// <summary>
         /// Gets or sets the description.
@@ -76,7 +65,6 @@ namespace GeoEvents.DAL
         /// </value>
         public string Description { get; set; }
 
-
         /// <summary>
         /// Gets or sets the category.
         /// </summary>
@@ -84,15 +72,15 @@ namespace GeoEvents.DAL
         /// The category.
         /// </value>
         public int Category { get; set; }
+
         #endregion Properties
 
-
         #region Constructors
+
         /// <summary>
         /// Initializes a new instance of the <see cref="EventEntity"/> class.
         /// </summary>
         public EventEntity() { }
-
 
         /// <summary>
         /// Initializes a new instance of the <see cref="EventEntity"/> class.
@@ -117,8 +105,7 @@ namespace GeoEvents.DAL
             this.Description = Description;
             this.Category = Category;
         }
-        #endregion Constructors
 
+        #endregion Constructors
     }
 }
-

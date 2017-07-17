@@ -1,9 +1,7 @@
-﻿using System;
+﻿using GeoEvents.Model.Common;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using GeoEvents.Model.Common;
 
 namespace GeoEvents.Service.Common
 {
@@ -14,14 +12,12 @@ namespace GeoEvents.Service.Common
     {
         #region Methods
 
-
         /// <summary>
         /// Gets the images asynchronous.
         /// </summary>
         /// <param name="eventId">The event identifier.</param>
         /// <returns></returns>
         Task<IEnumerable<IImage>> GetImagesAsync(Guid eventId);
-
 
         /// <summary>
         /// Creates the image asynchronous.
@@ -30,6 +26,6 @@ namespace GeoEvents.Service.Common
         /// <returns></returns>
         Task<IImage> CreateImageAsync(IImage image);
 
-            #endregion Methods
+        #endregion Methods
     }
 }

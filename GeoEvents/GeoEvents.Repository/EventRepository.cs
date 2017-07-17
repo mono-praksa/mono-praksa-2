@@ -1,32 +1,34 @@
-﻿using GeoEvents.Repository.Common;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using AutoMapper;
 using GeoEvents.Common;
 using GeoEvents.DAL;
-using Npgsql;
 using GeoEvents.Model.Common;
-using AutoMapper;
+using GeoEvents.Repository.Common;
+using Npgsql;
+using System;
+using System.Collections.Generic;
 using System.Data.Common;
+using System.Threading.Tasks;
 
 namespace GeoEvents.Repository
 {
     public class EventRepository : IEventRepository
     {
         #region Properties
+
         protected IPostgresConnection PostgresConn { get; private set; }
 
         protected IMapper Mapper { get; private set; }
+
         #endregion Properties
 
         #region Constructors
+
         public EventRepository(IPostgresConnection connection, IMapper mapper)
         {
             this.Mapper = mapper;
             this.PostgresConn = connection;
         }
+
         #endregion Constructors
 
         #region Methods
@@ -35,7 +37,7 @@ namespace GeoEvents.Repository
         /// Creates Event asynchronously.
         /// </summary>
         /// <param name="evt"></param>
-        /// <returns>  
+        /// <returns>
         /// return Created event (IEvent)
         /// </returns>
         public async Task<IEvent> CreateEventAsync(IEvent evt)
@@ -78,8 +80,6 @@ namespace GeoEvents.Repository
                             Category = Convert.ToInt32(dr[7])
                         };
                     }
-
-
                 };
             }
             catch (NpgsqlException ex)
@@ -88,8 +88,6 @@ namespace GeoEvents.Repository
             }
 
             return Mapper.Map<IEvent>(evte);
-
-
         }
 
         /// <summary>
@@ -108,7 +106,6 @@ namespace GeoEvents.Repository
                 using (PostgresConn.NpgConn())
                 using (NpgsqlCommand command = new NpgsqlCommand(QueryHelper.GetSelectEventString(filter), PostgresConn.NpgConn()))
                 {
-
                     SetParametersSearchEvents(filter, command);
 
                     await PostgresConn.NpgConn().OpenAsync();
@@ -130,8 +127,6 @@ namespace GeoEvents.Repository
 
                         SelectEvents.Add(Mapper.Map<IEvent>(tmp));
                     }
-
-
                 }
             }
             catch (NpgsqlException ex)
@@ -139,9 +134,7 @@ namespace GeoEvents.Repository
                 throw ex;
             }
             return SelectEvents;
-
         }
-
 
         /// <summary>
         /// Get event count asynchronously.
@@ -158,14 +151,12 @@ namespace GeoEvents.Repository
                 using (PostgresConn.NpgConn())
                 using (NpgsqlCommand command = new NpgsqlCommand(QueryHelper.GetSelectCountEventString(filter), PostgresConn.NpgConn()))
                 {
-
                     SetParametersSearchEvents(filter, command);
 
                     await PostgresConn.NpgConn().OpenAsync();
                     object dr = await command.ExecuteScalarAsync();
 
                     Count = Convert.ToInt64(dr);
-
                 }
             }
             catch (NpgsqlException ex)
@@ -173,10 +164,7 @@ namespace GeoEvents.Repository
                 throw ex;
             }
 
-
-
             return Count;
-
         }
 
         /// <summary>
@@ -184,9 +172,8 @@ namespace GeoEvents.Repository
         /// </summary>
         /// <param name="filter"></param>
         /// <param name="command"></param>
-        private void SetParametersSearchEvents(IFilter filter,NpgsqlCommand command)
+        private void SetParametersSearchEvents(IFilter filter, NpgsqlCommand command)
         {
-
             if (filter.ULat != null) { command.Parameters.AddWithValue(QueryHelper.ParLat, NpgsqlTypes.NpgsqlDbType.Double, filter.ULat); }
             if (filter.ULong != null) { command.Parameters.AddWithValue(QueryHelper.ParLong, NpgsqlTypes.NpgsqlDbType.Double, filter.ULong); }
             if (filter.Radius != null) { command.Parameters.AddWithValue(QueryHelper.ParRadius, NpgsqlTypes.NpgsqlDbType.Double, filter.Radius * 1000); }
@@ -194,8 +181,6 @@ namespace GeoEvents.Repository
             if (filter.EndTime != null) { command.Parameters.AddWithValue(QueryHelper.ParUserEndTime, NpgsqlTypes.NpgsqlDbType.Timestamp, filter.EndTime); }
             if (filter.Category != null) { command.Parameters.AddWithValue(QueryHelper.ParCategory, NpgsqlTypes.NpgsqlDbType.Integer, filter.Category); }
             if (!string.IsNullOrWhiteSpace(filter.SearchString)) { command.Parameters.AddWithValue(QueryHelper.ParSearcString, NpgsqlTypes.NpgsqlDbType.Varchar, filter.SearchString); }
-
-         
         }
 
         #endregion Methods

@@ -1,16 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 
 namespace GeoEvents.DAL
 {
     /// <summary>
     /// Database model ImageEntity
     /// </summary>
-    public class ImageEntity 
+    public class ImageEntity
     {
         #region Properties
 
@@ -22,7 +17,6 @@ namespace GeoEvents.DAL
         /// </value>
         public Guid Id { get; set; }
 
-
         /// <summary>
         /// Gets or sets the content.
         /// </summary>
@@ -31,7 +25,6 @@ namespace GeoEvents.DAL
         /// </value>
         public byte[] Content { get; set; }
 
-
         /// <summary>
         /// Gets or sets the event identifier.
         /// </summary>
@@ -39,6 +32,7 @@ namespace GeoEvents.DAL
         /// The event identifier.
         /// </value>
         public Guid EventId { get; set; }
+
         #endregion Properties
 
         #region Constructors
@@ -60,7 +54,7 @@ namespace GeoEvents.DAL
             this.Content = Content;
             this.EventId = EventId;
         }
-        #endregion Constructors
 
+        #endregion Constructors
     }
 }

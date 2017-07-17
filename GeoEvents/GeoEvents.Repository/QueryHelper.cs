@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using GeoEvents.Common;
+﻿using GeoEvents.Common;
+using System;
 
 namespace GeoEvents.Repository
 {
@@ -14,23 +10,24 @@ namespace GeoEvents.Repository
         /// <summary>
         /// Quoted Constant string
         /// </summary>
-        static string TabelNameEventQ = "\"Events\"";
-        static string TabelNameImagesQ = "\"Images\"";
-        static string NameQ = "\"Name\"";
-        static string LatQ = "\"Lat\"";
-        static string LongQ = "\"Long\"";
-        static string StartTimeQ = "\"StartTime\"";
-        static string EndTimeQ = "\"EndTime\"";
-        static string CategoryQ = "\"Category\"";
-        static string IdQ = "\"Id\"";
-        static string EventIdQ = "\"EventId\"";
-        static string DescriptionQ = "\"Description\"";
+        private static string TabelNameEventQ = "\"Events\"";
 
+        private static string TabelNameImagesQ = "\"Images\"";
+        private static string NameQ = "\"Name\"";
+        private static string LatQ = "\"Lat\"";
+        private static string LongQ = "\"Long\"";
+        private static string StartTimeQ = "\"StartTime\"";
+        private static string EndTimeQ = "\"EndTime\"";
+        private static string CategoryQ = "\"Category\"";
+        private static string IdQ = "\"Id\"";
+        private static string EventIdQ = "\"EventId\"";
+        private static string DescriptionQ = "\"Description\"";
 
         /// <summary>
         /// Parametar Constant strings
         /// </summary>
         public static string ParLat = "@Lat";
+
         public static string ParLong = "@Long";
         public static string ParName = "@Name";
         public static string ParEndTime = "@EndTime";
@@ -43,56 +40,52 @@ namespace GeoEvents.Repository
         public static string ParRadius = "@Radius";
         public static string ParEventId = "@EventId";
         public static string ParContent = "@Content";
-        public static string ParSearcString ="@SearchString";
+        public static string ParSearcString = "@SearchString";
 
         /// <summary>
         /// Added Qouted strings
         /// </summary>
-        static string TNameEventNameQ = TabelNameEventQ + "." + NameQ;
-        static string TNameEventDescriptionQ = TabelNameEventQ + "." + DescriptionQ;
-        static string TNameEventStartTimeQ = TabelNameEventQ + "." + StartTimeQ;
-        static string TNameEventEndTimeQ = TabelNameEventQ + "." + EndTimeQ;
-        static string TNameEventLongQ = TabelNameEventQ + "." + LongQ;
-        static string TNameEventLatQ = TabelNameEventQ + "." + LatQ;
-        static string TNameEventCatQ = TabelNameEventQ + "." + CategoryQ;
-        static string TNameEventIdQ = TabelNameEventQ + "." + IdQ;
+        private static string TNameEventNameQ = TabelNameEventQ + "." + NameQ;
+
+        private static string TNameEventDescriptionQ = TabelNameEventQ + "." + DescriptionQ;
+        private static string TNameEventStartTimeQ = TabelNameEventQ + "." + StartTimeQ;
+        private static string TNameEventEndTimeQ = TabelNameEventQ + "." + EndTimeQ;
+        private static string TNameEventLongQ = TabelNameEventQ + "." + LongQ;
+        private static string TNameEventLatQ = TabelNameEventQ + "." + LatQ;
+        private static string TNameEventCatQ = TabelNameEventQ + "." + CategoryQ;
+        private static string TNameEventIdQ = TabelNameEventQ + "." + IdQ;
 
         /// <summary>
         /// Default DateTime
         /// </summary>
-        static DateTime DefaulTime = new DateTime(0001, 01, 01);
+        private static DateTime DefaulTime = new DateTime(0001, 01, 01);
 
-        #endregion
+        #endregion Constants
 
         #region Metods
-
 
         /// <summary>
         /// Gets query string with filter for count query
         /// </summary>
         /// <param name="filter"></param>
         /// <returns>Query string</returns>
-        public static string GetSelectCountEventString(IFilter filter) {
-
+        public static string GetSelectCountEventString(IFilter filter)
+        {
             string selectString;
 
             if (filter.OrderBy == "Distance")
             {
-   
-                   selectString = "SELECT COUNT("+ TNameEventIdQ+"), earth_distance(ll_to_earth(" + ParLat + "," + ParLong + "), ll_to_earth(" + TNameEventLatQ + ","
-                    + TNameEventLongQ + ")) as distance from" + TabelNameEventQ + "WHERE";
+                selectString = "SELECT COUNT(" + TNameEventIdQ + "), earth_distance(ll_to_earth(" + ParLat + "," + ParLong + "), ll_to_earth(" + TNameEventLatQ + ","
+                 + TNameEventLongQ + ")) as distance from" + TabelNameEventQ + "WHERE";
             }
             else
             {
-                selectString = "SELECT COUNT("+TNameEventIdQ+")  FROM " + TabelNameEventQ + " WHERE ";
+                selectString = "SELECT COUNT(" + TNameEventIdQ + ")  FROM " + TabelNameEventQ + " WHERE ";
             }
-
-
 
             /// adding Distance filter to query if there is Location and radius
             if (filter.ULat != null && filter.ULong != null && filter.Radius != 0)
             {
-
                 selectString += " (earth_box(ll_to_earth(" + ParLat + "," + ParLong + ")," + ParRadius + ")@> ll_to_earth(" +
                    TNameEventLatQ + ", " + TNameEventLongQ + ")) ";
             }
@@ -120,8 +113,7 @@ namespace GeoEvents.Repository
             }
             ///
 
-
-            ///Adding searcstring filter in queri if there is searchstring 
+            ///Adding searcstring filter in queri if there is searchstring
             if (!string.IsNullOrEmpty(filter.SearchString))
             {
                 selectString += " AND";
@@ -130,9 +122,8 @@ namespace GeoEvents.Repository
 
                 if (filter.NameOnly == false)
                 {
-                    selectString += " AND" +  TNameEventDescriptionQ + " ILIKE '%" + ParSearcString + "%'";
+                    selectString += " AND" + TNameEventDescriptionQ + " ILIKE '%" + ParSearcString + "%'";
                 }
-
             }
 
             /// adding category filter in query if there is category
@@ -141,7 +132,6 @@ namespace GeoEvents.Repository
                 selectString += " AND ";
                 selectString = selectString + " (" + ParCategory + " & " + TNameEventCatQ + " > 0)";
             }
-
 
             ///ORDERING orderby orderAscend
             ///
@@ -163,23 +153,19 @@ namespace GeoEvents.Repository
                 selectString += "desc ";
             }
 
-            ///pageing 
+            ///pageing
             selectString += "LIMIT(" + filter.PageSize.ToString() + ") OFFSET (" + ((filter.PageNumber - 1) * filter.PageSize).ToString() + ")";
             ///
 
-
             return selectString;
-
-
         }
 
-        public static string GetSelectEventStringById() {
+        public static string GetSelectEventStringById()
+        {
+            string selectString = "Select * from " + TabelNameEventQ + " where " + TNameEventIdQ + "=" + ParEventId + " Limit (1)";
 
-            string selectString = "Select * from "+TabelNameEventQ+" where "+TNameEventIdQ + "="+ParEventId +" Limit (1)";
-
-
-                return selectString;
-                }
+            return selectString;
+        }
 
         /// <summary>
         /// Gets query filter select string for query events
@@ -188,12 +174,11 @@ namespace GeoEvents.Repository
         /// <returns> query string </returns>
         public static string GetSelectEventString(IFilter filter)
         {
-
             string selectString;
-           
+
             if (filter.OrderBy == "Distance" && filter.ULat != null && filter.ULong != null)
             {
-                selectString = "SELECT *, earth_distance(ll_to_earth(" + ParLat + "," + ParLong + "), ll_to_earth(" + TNameEventLatQ + "," 
+                selectString = "SELECT *, earth_distance(ll_to_earth(" + ParLat + "," + ParLong + "), ll_to_earth(" + TNameEventLatQ + ","
                     + TNameEventLongQ + ")) as distance from" + TabelNameEventQ + "WHERE ";
             }
             else
@@ -204,15 +189,15 @@ namespace GeoEvents.Repository
             bool isNotFirst = false;
 
             /// adding Distance filter to query if there is Location and radius
-            if (filter.ULat != null && filter.ULong != null && filter.Radius!=0) {
-
+            if (filter.ULat != null && filter.ULong != null && filter.Radius != 0)
+            {
                 selectString += " (earth_box(ll_to_earth(" + ParLat + "," + ParLong + ")," + ParRadius + ")@> ll_to_earth(" +
                    TNameEventLatQ + ", " + TNameEventLongQ + ")) ";
                 isNotFirst = true;
             }
 
             /// Adding Time filter query if there is time in filter
-                if (filter.EndTime > DefaulTime && filter.StartTime > DefaulTime)
+            if (filter.EndTime > DefaulTime && filter.StartTime > DefaulTime)
             {
                 if (isNotFirst) { selectString += " AND "; } else { isNotFirst = true; }
 
@@ -225,18 +210,15 @@ namespace GeoEvents.Repository
 
                 selectString += " (" + ParUserStartTime + "<" + TNameEventEndTimeQ + ") ";
             }
-            else if (filter.EndTime > DefaulTime && filter.StartTime == null) 
+            else if (filter.EndTime > DefaulTime && filter.StartTime == null)
             {
                 if (isNotFirst) { selectString += " AND "; } else { isNotFirst = true; }
 
-                selectString += "(" + ParUserEndTime + ">" + TNameEventStartTimeQ+") ";
+                selectString += "(" + ParUserEndTime + ">" + TNameEventStartTimeQ + ") ";
             }
             ///
 
-
-
-
-            ///Adding searcstring filter in queri if there is searchstring 
+            ///Adding searcstring filter in queri if there is searchstring
             if (!String.IsNullOrWhiteSpace(filter.SearchString))
             {
                 if (isNotFirst) { selectString += " AND "; } else { isNotFirst = true; }
@@ -254,31 +236,25 @@ namespace GeoEvents.Repository
                 //}
             }
 
-
-
-
             /// adding category filter in query if there is category
             if (filter.Category > 0)
             {
                 if (isNotFirst) { selectString += " AND "; } else { isNotFirst = true; }
-                selectString = selectString +  " (" + ParCategory + " & " + TNameEventCatQ + " > 0)";
+                selectString = selectString + " (" + ParCategory + " & " + TNameEventCatQ + " > 0)";
             }
-
 
             ///ORDERING orderby orderAscend
             ///
-
-            
 
             switch (filter.OrderBy)
             {
                 case "Name": selectString += " order by " + TNameEventNameQ; break;
                 case "StartTime": selectString += " order by " + TNameEventStartTimeQ; break;
                 case "EndTime": selectString += " order by " + TNameEventEndTimeQ; break;
-                case "Distance": selectString += " order by distance "; break;      
+                case "Distance": selectString += " order by distance "; break;
             }
 
-            if (filter.OrderAscending == true  && String.IsNullOrEmpty(filter.OrderBy) == false )
+            if (filter.OrderAscending == true && String.IsNullOrEmpty(filter.OrderBy) == false)
             {
                 selectString += " asc ";
             }
@@ -287,15 +263,10 @@ namespace GeoEvents.Repository
                 selectString += " desc ";
             }
 
-
-            
-            selectString += " LIMIT(" + filter.PageSize.ToString() + ") OFFSET ("+((filter.PageNumber-1)*filter.PageSize).ToString()+") ";
-          
-
+            selectString += " LIMIT(" + filter.PageSize.ToString() + ") OFFSET (" + ((filter.PageNumber - 1) * filter.PageSize).ToString() + ") ";
 
             return selectString;
         }
-
 
         /// <summary>
         /// gets query insert string for event
@@ -303,7 +274,6 @@ namespace GeoEvents.Repository
         /// <returns>Query string</returns>
         public static string GetInsertEventString()
         {
-
             string insertString = " INSERT INTO " + TabelNameEventQ + "values(" + ParId + "," + ParStartTime + "," + ParEndTime +
                 "," + ParLat + "," + ParLong + "," + ParName + "," + ParDescription + "," + ParCategory + ") ";
 
@@ -316,12 +286,10 @@ namespace GeoEvents.Repository
         /// <returns>Query string</returns>
         public static string GetSelectImagesString()
         {
-
             string selectString = " SELECT * FROM " + TabelNameImagesQ + "WHERE (" + ParEventId + " = " + TabelNameImagesQ + "." + EventIdQ + ") ";
 
-            return selectString ;
+            return selectString;
         }
-
 
         /// <summary>
         /// get query Insert string for images
@@ -329,13 +297,11 @@ namespace GeoEvents.Repository
         /// <returns>guery string</returns>
         public static string GetInsertImagesString()
         {
-
             string insertString = " INSERT INTO " + TabelNameImagesQ +
                 " VALUES(" + ParId + "," + ParContent + "," + ParEventId + ") ";
 
             return insertString;
         }
-
 
         /// <summary>
         /// get query select string form images
@@ -343,12 +309,10 @@ namespace GeoEvents.Repository
         /// <returns></returns>
         public static string GetSelectImageString()
         {
-
-            string selectString = " SELECT * FROM " + TabelNameImagesQ + " WHERE "+TabelNameImagesQ+"."+IdQ+"="+ParId ;
+            string selectString = " SELECT * FROM " + TabelNameImagesQ + " WHERE " + TabelNameImagesQ + "." + IdQ + "=" + ParId;
             return selectString;
         }
 
-
-        #endregion
+        #endregion Metods
     }
 }

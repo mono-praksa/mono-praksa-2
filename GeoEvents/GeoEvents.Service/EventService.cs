@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using GeoEvents.Service.Common;
+﻿using GeoEvents.Common;
 using GeoEvents.Model.Common;
-using GeoEvents.Common;
 using GeoEvents.Repository.Common;
+using GeoEvents.Service.Common;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace GeoEvents.Service
 {
@@ -28,8 +26,6 @@ namespace GeoEvents.Service
 
         #endregion Properties
 
-
-
         #region Constructors
 
         /// <summary>
@@ -41,13 +37,9 @@ namespace GeoEvents.Service
             this.Repository = repository;
         }
 
-
         #endregion Constructors
 
-
-
         #region Methods
-
 
         /// <summary>
         /// Gets events that satisfy a filter.
@@ -80,7 +72,6 @@ namespace GeoEvents.Service
             return events;
         }
 
-
         /// <summary>
         /// Gets the number of events that satisfy a filter.
         /// </summary>
@@ -92,7 +83,6 @@ namespace GeoEvents.Service
         {
             return Repository.GetEventCountAsync(filter);
         }
-
 
         /// <summary>
         /// Creates an event.
@@ -113,6 +103,5 @@ namespace GeoEvents.Service
         }
 
         #endregion Methods
-
     }
 }

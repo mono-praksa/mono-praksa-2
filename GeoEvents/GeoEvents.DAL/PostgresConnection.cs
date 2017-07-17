@@ -1,30 +1,26 @@
-﻿using Npgsql;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http;
-using System.Text;
-using System.Threading.Tasks;
-using System.Configuration;
-using GeoEvents.Common;
+﻿using GeoEvents.Common;
+using Npgsql;
 
 namespace GeoEvents.DAL
 {
     public class PostgresConnection : IPostgresConnection
     {
         #region Properties
+
         protected IGeoEventsConfiguration configuration { get; private set; }
         protected NpgsqlConnection connection { get; private set; }
+
         #endregion Properties
 
         #region Constructor
+
         public PostgresConnection(IGeoEventsConfiguration configuration)
         {
             this.configuration = configuration;
             connection = new NpgsqlConnection(configuration.ConnectionString);
         }
-        #endregion Constructor
 
+        #endregion Constructor
 
         #region Methods
 
@@ -36,7 +32,6 @@ namespace GeoEvents.DAL
         {
             return connection.CreateCommand();
         }
-  
 
         /// <summary>
         /// returns Npqconnection
@@ -44,10 +39,9 @@ namespace GeoEvents.DAL
         /// <returns>NpgsqlConnection connection </returns>
         public NpgsqlConnection NpgConn()
         {
-            
             return connection;
         }
-        #endregion Methods
 
+        #endregion Methods
     }
 }
