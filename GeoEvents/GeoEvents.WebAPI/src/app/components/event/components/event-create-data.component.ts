@@ -170,40 +170,40 @@ export class EventCreateDataComponent implements OnInit {
         return this._latitude;
     }
 
-    set latitude(latitude: number) {
-        this._latitude = latitude;
+    set latitude(theLatitude: number) {
+        this._latitude = theLatitude;
     }
 
     get longitude(): number {
         return this._longitude;
     }
 
-    set longitude(longitude: number) {
-        this._longitude = longitude;
+    set longitude(theLongitude: number) {
+        this._longitude = theLongitude;
     }
 
     get zoom(): number {
         return this._zoom;
     }
 
-    set zoom(zoom: number) {
-        this._zoom = zoom;
+    set zoom(theZoom: number) {
+        this._zoom = theZoom;
     }
 
     get creatingEvent(): boolean {
         return this._creatingEvent;
     }
 
-    set creatingEvent(creatingEvent: boolean) {
-        this._creatingEvent = creatingEvent;
+    set creatingEvent(isCreatingEvent: boolean) {
+        this._creatingEvent = isCreatingEvent;
     }
 
     get createdEvent(): IEvent {
         return this._createdEvent;
     }
 
-    set createdEvent(createdEvent: IEvent) {
-        this._createdEvent = createdEvent;
+    set createdEvent(theCreatedEvent: IEvent) {
+        this._createdEvent = theCreatedEvent;
     }
 }
 

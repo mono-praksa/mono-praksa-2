@@ -18,20 +18,20 @@ export class EventSearchComponent implements OnInit {
 
 
 	//variables for storing data
-	events: IEvent[];
-	event: IEvent;
-	errorMessage: string;
+	private _events: IEvent[];
+	private _event: IEvent;
+	private _errorMessage: string;
 	//isLoadingData: boolean = false;
 	
 	//variables for the filter and retrieving data
 	filterForm: FormGroup;
-	filter: IFilter;
+	private _filter: IFilter;
 	private dataServiceSubscription: Subscription;
 	
 	//variables for the location services
-	latitude: number;
-	longitude: number;
-	isMapZoomListenerStarted: boolean = false;
+	private _latitude: number;
+	private _longitude: number;
+	private _isMapZoomListenerStarted: boolean = false;
 	
 	@ViewChild("search") searchElementRef: ElementRef;
 	
@@ -46,13 +46,118 @@ export class EventSearchComponent implements OnInit {
 	]
 	
 	//booleans for displaying ui elements
-    isMapMode: boolean = false;
-    isDetailMode: boolean = false;
-	isAdvancedSearch: boolean = false;
-	isDateSearch: boolean = false;
-	isLocationSearch: boolean = false;
-	isCategoriesSearch: boolean = false;
-		
+    private _isMapMode: boolean = false;
+    private _isDetailMode: boolean = false;
+	private _isAdvancedSearch: boolean = false;
+	private _isDateSearch: boolean = false;
+	private _isLocationSearch: boolean = false;
+	private _isCategoriesSearch: boolean = false;
+
+    get events(): IEvent[] {
+        return this._events;
+    }
+
+    set events(theEvents: IEvent[]) {
+        this._events = theEvents;
+    }
+
+    get event(): IEvent {
+        return this._event;
+    }	
+
+    set event(theEvent: IEvent) {
+        this._event = theEvent;
+    }
+
+    get errorMessage(): string {
+        return this._errorMessage;
+    }
+
+    set errorMessage(theErrorMessage: string) {
+        this._errorMessage = theErrorMessage;
+    }
+
+    get filter(): IFilter {
+        return this._filter;
+    }
+
+    set filter(theFilter: IFilter) {
+        this._filter = theFilter;
+    }
+
+    get latitude(): number {
+        return this._latitude;
+    }
+
+    set latitude(theLatitude: number) {
+        this._latitude = theLatitude;
+    }
+
+    get longitude(): number {
+        return this._longitude;
+    }
+
+    set longitude(theLongitude: number) {
+        this._longitude = theLongitude;
+    }
+
+    get isMapZoomListenerStarted(): boolean {
+        return this._isMapZoomListenerStarted;
+    }
+
+    set isMapZoomListenerStarted(isMapZoomListenerStarted: boolean) {
+        this._isMapZoomListenerStarted = isMapZoomListenerStarted;
+    }
+
+    get isMapMode(): boolean {
+        return this._isMapMode;
+    }
+
+    set isMapMode(isMapMode: boolean) {
+        this._isMapMode = isMapMode;
+    }
+
+    get isDetailMode(): boolean {
+        return this._isDetailMode;
+    }
+
+    set isDetailMode(isDetailMode: boolean) {
+        this._isDetailMode = isDetailMode;
+    }
+
+    get isAdvancedSearch(): boolean {
+        return this._isAdvancedSearch;
+    }
+
+    set isAdvancedSearch(isAdvancedSearch: boolean) {
+        this._isAdvancedSearch = isAdvancedSearch;
+    }
+
+    get isLocationSearch(): boolean {
+        return this._isLocationSearch;
+    }
+
+    set isLocationSearch(isLocationSearch: boolean) {
+        this._isLocationSearch = isLocationSearch;
+    }
+
+    get isDateSearch(): boolean {
+        return this._isDateSearch;
+    }
+
+    set isDateSearch(isDateSearch: boolean) {
+        this._isDateSearch = isDateSearch;
+    }
+
+    get isCategoriesSearch(): boolean {
+        return this._isCategoriesSearch;
+    }
+
+    set isCategoriesSearch(isCategoriesSearch: boolean) {
+        this._isCategoriesSearch = isCategoriesSearch;
+    }
+
+
 	//constructor
 	constructor(private _eventService: EventService, private _preserveSearchQuerryService: PreserveSearchQuerryService, private _mapsAPILoader: MapsAPILoader, private _ngZone: NgZone) {
 		this.createForm();

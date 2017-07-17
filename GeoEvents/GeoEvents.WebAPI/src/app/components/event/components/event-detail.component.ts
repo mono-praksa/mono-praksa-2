@@ -43,10 +43,10 @@ export class EventDetailComponent implements OnInit{
     @Input() event: IEvent
     @Output() cancel = new EventEmitter()
     @ViewChild("carousel") carouselElement: ElementRef
-    images: IImage[]
+    private _images: IImage[]
     CategoryEnum: any = CategoryEnum
-    imagesLoading: boolean = true
-    address: string = ""
+    private _imagesLoading: boolean = true
+    private _address: string = ""
 
     constructor(private http: Http) {
 
@@ -117,6 +117,30 @@ export class EventDetailComponent implements OnInit{
         let doc = parser.parseFromString(xmlString, "image/svg+xml");
         return doc.documentElement;
         //document.getElementById("carousel-inner").appendChild(doc.documentElement);
+    }
+
+    get images() : IImage[] {
+        return this._images;
+    }
+
+    set images(theImages: IImage[]) {
+        this._images = theImages;
+    }
+
+    get imagesLoading(): boolean {
+        return this._imagesLoading;
+    }
+
+    set imagesLoading(areImagesLoading: boolean) {
+        this._imagesLoading = areImagesLoading;
+    }
+
+    get address(): string {
+        return this._address;
+    }
+
+    set address(theAddress: string) {
+        this._address = theAddress;
     }
 }
 
