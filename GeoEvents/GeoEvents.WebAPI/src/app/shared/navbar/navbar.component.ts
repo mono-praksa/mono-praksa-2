@@ -2,7 +2,7 @@
 
 @Component({
     selector: 'nav-bar',
-    templateUrl: 'app/navbar/navbar.component.html',
+    templateUrl: 'app/shared/navbar/navbar.component.html',
     styles: [`
         li > a.active {
             background-color: rgb(240,240,240);

@@ -1,12 +1,13 @@
 ﻿import { Component, Output, EventEmitter, NgZone, Input } from '@angular/core'
-import { IEvent } from './../models/event.model'
+import { IEvent } from '../models/event.model'
 import { MapsAPILoader } from '@agm/core'
-import { Observable } from 'rxjs/Rx'
+import { Observable } from 'rxjs/Observable'
 
 import { FormControl, FormGroup, FormBuilder, Validators } from '@angular/forms'
 import { Http, Response, Headers, RequestOptions } from '@angular/http'
 
 import { Router } from '@angular/router'
+
 
 @Component({
     selector: 'display-map',
@@ -14,7 +15,7 @@ import { Router } from '@angular/router'
     agm-map {
       height: 500px;
     }
-
+    
   `],
     template: `
     <agm-map [latitude]="latitude" [longitude]="longitude" [zoom]="zoom">
@@ -23,7 +24,7 @@ import { Router } from '@angular/router'
   `
 })
 
-export class DisplayMapComponent {
+export class EventMapComponent {
     @Input() events: IEvent[]
     @Input() radius: number
     @Input() latitude: number
@@ -41,5 +42,7 @@ export class DisplayMapComponent {
 
     displayEvent(evt: IEvent) {
         this.event.emit(evt);
+
     }
+
 }

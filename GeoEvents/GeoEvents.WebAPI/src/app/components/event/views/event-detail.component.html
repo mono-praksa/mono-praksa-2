@@ -1,9 +1,9 @@
 ﻿<div class="col-md-7">
     <h2 class="event-name">{{event.Name}}</h2> <p class="event-time">Time: {{event.StartTime | date:'fullDate'}} {{event.StartTime | date:'shortTime'}} - {{event.EndTime | date:'fullDate'}} {{event.EndTime | date:'shortTime'}}</p>
-    <h3>Details</h3>
+    <h3>Details</h3> 
     <div class="well">
         <p>{{event.Description}}</p>
-
+        
         <h4>Location: {{address}}</h4>
         <ul>Categories
             <li *ngFor="let category of event.Categories">
@@ -25,7 +25,7 @@
         <!-- Wrapper for slides -->
         <div class="carousel-inner" id="carousel-inner">
             <!--<div *ngFor="let image of images; let i=index" [ngClass]="i === 0 ? 'item active' : 'item'">
-                <img [src]="'data:image/jpeg;base64,'+image.Content" alt="event.Name + '_image' + i" />
+                <img [src]="'data:image/jpeg;base64,'+image.Content" alt="event.Name + '_image' + i"/>
             </div>-->
         </div>
 

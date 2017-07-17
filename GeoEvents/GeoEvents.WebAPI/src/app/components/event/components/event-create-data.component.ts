@@ -5,20 +5,20 @@ import { Observable } from 'rxjs/Rx'
 import { MapsAPILoader } from '@agm/core'
 import { Router } from '@angular/router'
 
-import { endDateBeforeStartDate } from './../validators/validator'
-import { IEvent } from './../models/event.model'
-import { CategoryEnum } from '../common/category-enum'
+import { endDateBeforeStartDate } from '../validators/validator'
+import { IEvent } from '../models/event.model'
+import { CategoryEnum } from '../../../shared/common/category-enum'
 
 @Component({
     selector: "create-event",
-    templateUrl: "app/create/create-event.component.html",
+    templateUrl: "app/components/event/views/event-create-data.component.html",
     styles: [`
         agm-map {
             height: 300px;
         }
     `]
 })
-export class CreateEventComponent implements OnInit {
+export class EventCreateDataComponent implements OnInit {
     @Output() eventEmitter = new EventEmitter();
     creatingEvent: boolean = false;
     latitude: number;
@@ -117,7 +117,7 @@ export class CreateEventComponent implements OnInit {
             }
         });
 
-        let newEvent: IEvent = {
+        let newEvent : IEvent = {
             Id: undefined,
             Name: formValues.name,
             Description: formValues.description,
@@ -127,7 +127,7 @@ export class CreateEventComponent implements OnInit {
             Long: this.longitude,
             Categories: chosenCategories
         }
-
+        
         let headers = new Headers({ 'Content-Type': 'application/json' });
         let options = new RequestOptions({ headers: headers });
         this.http.post('/api/events/create', JSON.stringify(newEvent), options).map(function (response: Response) {

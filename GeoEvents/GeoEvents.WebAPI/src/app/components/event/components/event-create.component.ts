@@ -1,5 +1,5 @@
 ﻿import { Component } from '@angular/core'
-import { IEvent } from './../models/event.model'
+import { IEvent } from '../models/event.model'
 
 @Component({
     template: `
@@ -7,7 +7,7 @@ import { IEvent } from './../models/event.model'
         <create-images *ngIf="createdEvent && !_skip" (emittSkip)="skip($event)" [createdEvent]="createdEvent"></create-images>
     `
 })
-export class CreateComponent {
+export class EventCreateComponent {
     createdEvent: IEvent;
     _skip: boolean = false;
 

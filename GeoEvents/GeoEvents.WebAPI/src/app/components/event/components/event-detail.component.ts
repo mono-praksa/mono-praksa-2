@@ -1,12 +1,12 @@
-﻿import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core'
-import { Http, Response, Headers, RequestOptions } from '@angular/http'
-import { Observable } from 'rxjs/Rx'
+﻿import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
+import { Http, Response, Headers, RequestOptions } from '@angular/http';
+import { Observable } from 'rxjs/Observable';
 
-import { IEvent } from './models/event.model'
-import { IImage } from './models/image.model'
+import { IEvent } from '../models/event.model';
+import { IImage } from '../models/image.model';
 
 @Component({
-    templateUrl: 'app/event-details.component.html',
+    templateUrl: 'app/components/event/views/event-detail.component.html',
     selector: 'event-details',
     styles: [`
     .carousel {
@@ -33,7 +33,7 @@ import { IImage } from './models/image.model'
 `]
 })
 
-export class EventDetailsComponent implements OnInit {
+export class EventDetailComponent implements OnInit{
     @Input() event: IEvent
     @Output() cancel = new EventEmitter()
     images: IImage[]
@@ -42,6 +42,7 @@ export class EventDetailsComponent implements OnInit {
     address: string = ""
 
     constructor(private http: Http) {
+
     }
 
     ngOnInit() {
@@ -79,7 +80,7 @@ export class EventDetailsComponent implements OnInit {
             })
     }
 
-    getImages(id: string): Observable<IImage[]> {
+    getImages(id : string): Observable<IImage[]> {
         return this.http.get('/api/images/get/' + this.event.Id).map(function (response: Response) {
             return <IImage[]>response.json();
         }).catch(this.handleError);

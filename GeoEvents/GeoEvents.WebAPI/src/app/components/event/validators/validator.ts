@@ -63,9 +63,9 @@ export function endDateBeforeStartDate(startKey: string, endKey: string) {
             var endDateComponents = stringToDateArray(endDate, "yyyy-mm-dd", '-');
             var endTimeComponents = stringToTimeArray(endTime, "hh:mm", ':');
 
-            var startDateTime = new Date(startDateComponents[0], startDateComponents[1] - 1, startDateComponents[2], startTimeComponents[0], startTimeComponents[1]);
-            var endDateTime = new Date(endDateComponents[0], endDateComponents[1] - 1, endDateComponents[2], endTimeComponents[0], endTimeComponents[1]);
-
+            var startDateTime = new Date(startDateComponents[0], startDateComponents[1]-1, startDateComponents[2], startTimeComponents[0], startTimeComponents[1]);
+            var endDateTime = new Date(endDateComponents[0], endDateComponents[1]-1, endDateComponents[2], endTimeComponents[0], endTimeComponents[1]);
+            
             if (startDateTime >= endDateTime) {
                 return {
                     endDateBeforeStartDate: true

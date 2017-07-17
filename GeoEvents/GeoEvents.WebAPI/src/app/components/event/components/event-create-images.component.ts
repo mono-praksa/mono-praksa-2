@@ -1,13 +1,14 @@
 ﻿import { Component, Input, EventEmitter, Output } from '@angular/core'
 import { Http, RequestOptions, Headers, Response } from '@angular/http'
-import { Observable } from 'rxjs/Rx'
-import { IEvent } from './../models/event.model'
+import { Observable } from 'rxjs/Observable'
+import { IEvent } from '../models/event.model'
+
 
 @Component({
     selector: "create-images",
-    templateUrl: "app/create/create-images.component.html"
+    templateUrl: "app/components/event/views/event-create-images.component.html"
 })
-export class CreateImagesComponent {
+export class EventCreateImagesComponent {
     @Input() createdEvent: IEvent;
 
     files: Array<file>;
@@ -59,11 +60,11 @@ export class CreateImagesComponent {
             let options = new RequestOptions();
             this.http.post('/api/images/create/' + this.createdEvent.Id, this.formData, options)
                 .map((res: Response) => res.json())
-                .catch((error: any) => Observable.throw(error))
-                .subscribe((data: any) => {
+                .catch((error:any) => Observable.throw(error))
+                .subscribe((data:any) => {
                     this.files[i].uploading = false;
                     this.files[i].finished = true;
-                }, (error: any) => {
+                }, (error:any) => {
                     this.files[i].error = true;
                 });
             this.formData = new FormData();

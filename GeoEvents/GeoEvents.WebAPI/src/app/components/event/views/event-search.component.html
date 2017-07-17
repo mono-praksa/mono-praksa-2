@@ -1,0 +1,113 @@
+<div [hidden]="this.isDetailMode">
+	<div>
+		<form [formGroup]="filterForm" (ngSubmit)="onSubmit(filterForm.value)" autocomplete="off" novalidate>
+			<div class="row">
+				<div class="col-sm-4">
+					<input type="text" formControlName="searchString" class="form-control" id="searchString" placeholder="Search..." />
+				</div>
+				<div class="col-sm-6">
+					<button type="submit" class="btn btn-default" [disabled]="filterForm.invalid">Search</button>
+					<button type="button" class="btn btn-default btn-xs" (click)="toggleAdvancedSearch()">Advanced search?</button>
+				</div>
+				<div class="col-sm-2">
+					<button type="button" class="btn btn-primary" (click)="this.toggleMapMode()" >Map / List Display Mode</button>
+				</div>	
+			</div>
+			<div [hidden]="!this.isAdvancedSearch">
+				<div class="row">
+					<div class="col-sm-3">
+						<button type="button" class="btn btn-default btn-block" (click)="this.isDateSearch = !this.isDateSearch;">Search By Date</button>
+					</div>
+					<div class="col-sm-3">
+						<button type="button" class="btn btn-default btn-block" (click)="this.toggleLocationMode()">Search By Location</button>
+					</div>				
+					<div class="col-sm-3">
+						<button type="button" class="btn btn-default btn-block" (click)="this.isCategoriesSearch = !this.isCategoriesSearch">Search By Category</button>
+					</div>
+					<div class="col-sm-3">
+						<!--placeholder for custom search-->
+					</div>
+				</div>
+				<div class="row">
+					<br/>
+					<div class="col-sm-3">
+						<div *ngIf="this.isDateSearch">
+							<input formControlName="start" ngui-datetime-picker [close-on-select]="false" class="form-control" id="start" placeholder="Click to enter date and time" readonly style="cursor: pointer;" />						
+							<p>Start Time</p>
+						
+							<input formControlName="end" ngui-datetime-picker [close-on-select]="false" class="form-control" id="end" placeholder="Click to enter date and time" readonly style="cursor: pointer;" />						
+							<p>End Time</p>
+						</div>
+					</div>
+					<div class="col-sm-3">
+						<div [hidden]="!this.isLocationSearch">
+							<input type="text" formControlName="address" class="form-control" id="address" placeholder="Address..." #search />
+							<p>Location</p>
+							
+							<input type="text" formControlName="radius" class="form-control" id="radius" placeholder="Radius (km)" />	
+							<p>Radius</p>
+						</div>
+					</div>
+					<div class="col-sm-3">
+						<div *ngIf="this.isCategoriesSearch">
+							<div class="row">
+								<label class="col-xs-4">
+									<input type="checkbox" value="1" (change)="updateCategories(1)" /> Music
+								</label>
+								<label class="col-xs-4">
+									<input type="checkbox" value="2" (change)="updateCategories(2)" /> Culture
+								</label>
+								<label class="col-xs-4">
+									<input type="checkbox" value="4" (change)="updateCategories(4)" /> Sport
+								</label>
+							</div>
+							<div class="row">
+								<label class="col-xs-4">
+									<input type="checkbox" value="8" (change)="updateCategories(8)" /> Gastro
+								</label>
+								<label class="col-xs-4">
+									<input type="checkbox" value="16" (change)="updateCategories(16)" /> Religious
+								</label>
+								<label class="col-xs-4">
+									<input type="checkbox" value="32" (change)="updateCategories(32)" /> Business
+								</label>
+							</div>
+							<div class="row">
+								<label class="col-xs-4">
+									<input type="checkbox" value="64" (change)="updateCategories(64)" /> Miscellaneous
+								</label>
+							</div>
+						</div>
+					</div>
+					<div class="col-sm-3">
+						<!-- placeholder for custom search-->
+					</div>				
+				</div>
+			</div>
+		</form>
+	</div>
+	<div>
+		
+		<div *ngIf="!this.isMapMode">
+			<div *ngIf="this.events" class="row" align="right">
+			
+				<select (change)="getEventsOrderChanged($event.target.value)" class="form-control">
+					<option value="Name">Name</option>
+					<option value="Distance">Distance</option>
+					<option value="StartTime">Start time</option>
+					<option value="EndTime">End time</option>
+				</select>
+				<input type="checkbox" #isAscending id="ascendingCheckbox" (change)="getEventsAscendingChanged(isAscending.value)"/>
+				<label for="ascendingCheckbox">Ascending Order?</label>
+				
+			</div>
+			<display-list (event)="eventDetails($event)" [events]="this.events"></display-list>
+			<div *ngIf="this.events">
+				<p>pager</p>
+			</div>
+		</div>
+		<display-map [radius]="radius" [latitude]="latitude" [longitude]="longitude" *ngIf="this.isMapMode" (event)="eventDetails($event)" [events]="this.events"></display-map>
+	</div>
+</div>
+
+<event-details [event]="this.event" *ngIf="this.isDetailsMode"></event-details>
