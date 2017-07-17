@@ -78,9 +78,9 @@ namespace GeoEvents.Service
         /// </summary>
         /// <param name="filter">The filter.</param>
         /// <returns>The number.</returns>
-        public async Task<Int64> GetEventCountAsync(IFilter filter)
+        public Task<Int64> GetEventCountAsync(IFilter filter)
         {
-            return await Repository.GetEventCountAsync(filter);
+            return Repository.GetEventCountAsync(filter);
         }
 
         /// <summary>
@@ -88,7 +88,7 @@ namespace GeoEvents.Service
         /// </summary>
         /// <param name="evt">The event.</param>
         /// <returns>The event that was created.</returns>
-        public async Task<IEvent> CreateEventAsync(IEvent evt)
+        public Task<IEvent> CreateEventAsync(IEvent evt)
         {
             evt.Id = Guid.NewGuid();
             evt.Category = 0;
@@ -96,7 +96,7 @@ namespace GeoEvents.Service
             {
                 evt.Category += evt.Categories[i];
             }
-            return await Repository.CreateEventAsync(evt);
+            return Repository.CreateEventAsync(evt);
         }
 
         #endregion Methods

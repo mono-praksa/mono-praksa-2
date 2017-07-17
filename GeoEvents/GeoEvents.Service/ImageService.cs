@@ -49,9 +49,9 @@ namespace GeoEvents.Service
         /// </summary>
         /// <param name="eventId">The event's id.</param>
         /// <returns></returns>
-        public async Task<IEnumerable<IImage>> GetImagesAsync(Guid eventId)
+        public Task<IEnumerable<IImage>> GetImagesAsync(Guid eventId)
         {
-            return await Repository.GetImagesAsync(eventId);
+            return Repository.GetImagesAsync(eventId);
         }
 
         /// <summary>
@@ -59,10 +59,10 @@ namespace GeoEvents.Service
         /// </summary>
         /// <param name="image">The list of images to add.</param>
         /// <returns></returns>
-        public async Task<IImage> CreateImageAsync(IImage image)
+        public Task<IImage> CreateImageAsync(IImage image)
         {
             image.Id = Guid.NewGuid();
-            return await Repository.CreateImageAsync(image);
+            return Repository.CreateImageAsync(image);
         }
 
         #endregion Methods
