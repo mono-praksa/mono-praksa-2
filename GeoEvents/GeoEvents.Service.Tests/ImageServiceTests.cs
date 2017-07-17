@@ -1,15 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using GeoEvents.Common;
-using GeoEvents.Model;
-using GeoEvents.Model.Mapping;
-using Xunit;
-using Moq;
-using GeoEvents.Repository.Common;
+﻿using GeoEvents.Model;
 using GeoEvents.Model.Common;
+using GeoEvents.Repository.Common;
+using Moq;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using Xunit;
 
 namespace GeoEvents.Service.Tests
 {

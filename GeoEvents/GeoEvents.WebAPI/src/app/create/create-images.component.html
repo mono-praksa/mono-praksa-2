@@ -3,12 +3,11 @@
     <label for="file" class="control-label">File</label>
     <div class="input-group">
         <label class="input-group-btn">
-            <span class="btn btn-primary" >
+            <span class="btn btn-primary">
                 Browse&hellip; <input type="file"
-                                      style="display: none;" multiple 
+                                      style="display: none;" multiple
                                       (change)="onChange($event,showFileNum)"
-                                      accept="image/*"
-                                      />
+                                      accept="image/*" />
             </span>
         </label>
         <input type="text" class="form-control" #showFileNum readonly value="No files selected" />
@@ -17,11 +16,11 @@
         <ul>
             <li *ngFor="let i of indices">{{files[i].name}} <span *ngIf="files[i].error">There was error while uploading this file!</span><span [hidden]="!files[i].finished">uploaded</span><i class="fa fa-spinner fa-spin" style="font-size:24px" *ngIf="files[i].uploading"></i></li>
         </ul>
-        <input type="button" value="Upload" (click)="upload()" class="btn btn-primary" [disabled]="btnUploadClicked"/>
+        <input type="button" value="Upload" (click)="upload()" class="btn btn-primary" [disabled]="btnUploadClicked" />
     </div>
     <span *ngIf="uploadingFilter()">Uploading <i class="fa fa-spinner fa-spin" style="font-size:24px"></i></span>
-    <div style="width:100%; text-align:right; padding-top:10px"> 
-        <button *ngIf="!btnUploadClicked" style="width:85px" class="btn btn-primary" (click)="skip()"> Skip </button> 
-        <button *ngIf="btnUploadClicked" style="width:85px" class="btn btn-primary" (click)="skip()"> Close </button> 
+    <div style="width:100%; text-align:right; padding-top:10px">
+        <button *ngIf="!btnUploadClicked" style="width:85px" class="btn btn-primary" (click)="skip()"> Skip </button>
+        <button *ngIf="btnUploadClicked" style="width:85px" class="btn btn-primary" (click)="skip()"> Close </button>
     </div>
 </div>

@@ -58,10 +58,8 @@ input:checked + .slider:before {
   -ms-transform: translateX(26px);
   transform: translateX(26px);
 }`]
-
 })
 export class SearchEventsComponent implements OnInit {
-
     @ViewChild("search")
     searchElementRef: ElementRef;
     lat: number;
@@ -83,9 +81,9 @@ export class SearchEventsComponent implements OnInit {
     category: FormControl
     address: FormControl
     radius: FormControl
-	searchString: FormControl
-	searchNameOnly: FormControl
-	
+    searchString: FormControl
+    searchNameOnly: FormControl
+
     latitude: number
     longitude: number
 
@@ -94,8 +92,8 @@ export class SearchEventsComponent implements OnInit {
 
     events: IEvent[]
     event: IEvent
-	
-	oldFilter: IFilter
+
+    oldFilter: IFilter
 
     constructor(private http: Http, private formBuilder: FormBuilder, private mapsAPILoader: MapsAPILoader, private ngZone: NgZone) { }
 
@@ -104,20 +102,20 @@ export class SearchEventsComponent implements OnInit {
         this.end = new FormControl('');
         this.address = new FormControl('');
         this.radius = new FormControl('');
-		this.searchString = new FormControl('');
-		this.searchNameOnly = new FormControl('');
+        this.searchString = new FormControl('');
+        this.searchNameOnly = new FormControl('');
 
-		//build the form
+        //build the form
         this.filterForm = this.formBuilder.group({
             start: this.start,
             end: this.end,
             address: this.address,
             radius: this.radius,
-			searchString: this.searchString,
-			searchNameOnly: this.searchNameOnly
+            searchString: this.searchString,
+            searchNameOnly: this.searchNameOnly
         });
 
-		//set current location
+        //set current location
         this.setCurrentPosition();
 
         this.mapsAPILoader.load().then(() => {
@@ -170,11 +168,11 @@ export class SearchEventsComponent implements OnInit {
         this.detailsMode = true
     }
 
-	//this function is called when the submit button is pressed
-	//it sets undefined filter values to some default values and saves the filter into the variable
-	//then it calls the getEvents function which gets the events form the server
-    onSubmit(formValues: any) {	
-		//set the chosen categories 
+    //this function is called when the submit button is pressed
+    //it sets undefined filter values to some default values and saves the filter into the variable
+    //then it calls the getEvents function which gets the events form the server
+    onSubmit(formValues: any) {
+        //set the chosen categories
         let chosenCategories: number[] = [];
         this.categories.filter(checkbox => {
             if (checkbox.checked) {
@@ -185,12 +183,12 @@ export class SearchEventsComponent implements OnInit {
         for (let c of chosenCategories) {
             cat += c
         }
-		
-		//set lat and long (for map component, so the location is reset on change)
+
+        //set lat and long (for map component, so the location is reset on change)
         this.lat = this.latitude
         this.lng = this.longitude
 
-		//get values from the forms and set the default values
+        //get values from the forms and set the default values
         var filter: IFilter = {
             ULat: this.latitude,
             ULong: this.longitude,
@@ -198,142 +196,132 @@ export class SearchEventsComponent implements OnInit {
             StartTime: formValues.start,
             EndTime: formValues.end,
             Category: cat,
-			SearchString: formValues.searchString,
-			SearchNameOnly: formValues.searchNameOnly,
-			
-			PageNumber: 1,
-			PageSize: 10,
-			OrderByString: "Name",
-			OrderIsAscending: true
+            SearchString: formValues.searchString,
+            SearchNameOnly: formValues.searchNameOnly,
+
+            PageNumber: 1,
+            PageSize: 10,
+            OrderByString: "Name",
+            OrderIsAscending: true
         }
 
-		//get the events
+        //get the events
         this.getEvents(filter).subscribe(res => {
             this.events = res
             this.latitude = this.lat
             this.longitude = this.lng
         })
     }
-	
-	getEventsAscendingChanged(isAscending: boolean){
-		let filter = this.oldFilter;
-		filter.OrderIsAscending = !filter.OrderIsAscending;
-		//get the events
-        this.getEvents(filter).subscribe(res => {
-            this.events = res
-            this.latitude = this.lat
-            this.longitude = this.lng
-        })
-	}
-	
-	getEventsOrderChanged(newOrder: string){
-		let filter = this.oldFilter;
-		filter.OrderByString = newOrder
-		this.getEvents(filter).subscribe(res => {
-            this.events = res
-            this.latitude = this.lat
-            this.longitude = this.lng
-        })
-	}
-	//this function is called when a new page is selected or when the order parameters changed
-	getEventsNextPage()
-	{
-		let filter = this.oldFilter;
-		filter.PageNumber = filter.PageNumber + 1;
-		
-		//get the events
-        this.getEvents(filter).subscribe(res => {
-            this.events = res
-            this.latitude = this.lat
-            this.longitude = this.lng
-        })
-	}
-	
-	getEventsPreviousPage()
-	{
-		let filter = this.oldFilter;
-		if(filter.PageNumber > 1){
-			filter.PageNumber = filter.PageNumber - 1;
-			
-			//get the events
-			this.getEvents(filter).subscribe(res => {
-				this.events = res
-				this.latitude = this.lat
-				this.longitude = this.lng
-			})
-		}
-	}
-	
-	getEventsFirstPage()
-	{
-		let filter = this.oldFilter;
-		filter.PageNumber = 1;
-		
-		//get the events
-        this.getEvents(filter).subscribe(res => {
-            this.events = res
-            this.latitude = this.lat
-            this.longitude = this.lng
-        })
-	}
 
-	//this builds the querry from the filter and gets the events
+    getEventsAscendingChanged(isAscending: boolean) {
+        let filter = this.oldFilter;
+        filter.OrderIsAscending = !filter.OrderIsAscending;
+        //get the events
+        this.getEvents(filter).subscribe(res => {
+            this.events = res
+            this.latitude = this.lat
+            this.longitude = this.lng
+        })
+    }
+
+    getEventsOrderChanged(newOrder: string) {
+        let filter = this.oldFilter;
+        filter.OrderByString = newOrder
+        this.getEvents(filter).subscribe(res => {
+            this.events = res
+            this.latitude = this.lat
+            this.longitude = this.lng
+        })
+    }
+    //this function is called when a new page is selected or when the order parameters changed
+    getEventsNextPage() {
+        let filter = this.oldFilter;
+        filter.PageNumber = filter.PageNumber + 1;
+
+        //get the events
+        this.getEvents(filter).subscribe(res => {
+            this.events = res
+            this.latitude = this.lat
+            this.longitude = this.lng
+        })
+    }
+
+    getEventsPreviousPage() {
+        let filter = this.oldFilter;
+        if (filter.PageNumber > 1) {
+            filter.PageNumber = filter.PageNumber - 1;
+
+            //get the events
+            this.getEvents(filter).subscribe(res => {
+                this.events = res
+                this.latitude = this.lat
+                this.longitude = this.lng
+            })
+        }
+    }
+
+    getEventsFirstPage() {
+        let filter = this.oldFilter;
+        filter.PageNumber = 1;
+
+        //get the events
+        this.getEvents(filter).subscribe(res => {
+            this.events = res
+            this.latitude = this.lat
+            this.longitude = this.lng
+        })
+    }
+
+    //this builds the querry from the filter and gets the events
     getEvents(filter: IFilter): Observable<IEvent[]> {
-		//save the filter to preserve it for use in other function
-		this.oldFilter = filter;
-		
-		//building the querry 
-		let querry = '/api/events/search?category=';
-		querry += filter.Category.toString();
-		
-		if(filter.ULat != null && filter.ULong != null && filter.Radius != null && filter.Radius != 0)
-		{
-			querry += '&uLat=' + filter.ULat.toString();
-			querry += '&uLong=' + filter.ULong.toString(); 
-			querry += '&radius=' + filter.Radius.toString();
-		}
-		
-		if(filter.StartTime != null && filter.StartTime.toString() != "" )
-		{
-			querry += '&startTime=' + filter.StartTime.toString().replace(':', 'h');
-		}
-		
-		if(filter.EndTime != null && filter.EndTime.toString() != "" )
-		{
-			querry += '&endTime=' + filter.EndTime.toString().replace(':', 'h');
-		}
-		
-		if(filter.SearchString != null || filter.SearchString != "")
-		{
-			querry += '&searchString=' + filter.SearchString.toString();
-		}
-		
-		if(filter.SearchString != null || filter.SearchString != "")
-		{
-			if( filter.SearchNameOnly.toString() != "")
-			{
-				querry += '&nameOnly=' + filter.SearchNameOnly.toString();
-			}
-			else
-			{
-				querry += '&nameOnly=false';
-			}
-		}
+        //save the filter to preserve it for use in other function
+        this.oldFilter = filter;
 
-		querry += '&pageNumber=' + filter.PageNumber.toString();
-		querry += '&pageSize=' + filter.PageSize.toString();
-		querry += '&orderAscending=' + filter.OrderIsAscending.toString();
-		querry += '&orderBy=' + filter.OrderByString.toString();
-		
-		//execute http call
+        //building the querry
+        let querry = '/api/events/search?category=';
+        querry += filter.Category.toString();
+
+        if (filter.ULat != null && filter.ULong != null && filter.Radius != null && filter.Radius != 0) {
+            querry += '&uLat=' + filter.ULat.toString();
+            querry += '&uLong=' + filter.ULong.toString();
+            querry += '&radius=' + filter.Radius.toString();
+        }
+
+        if (filter.StartTime != null && filter.StartTime.toString() != "") {
+            querry += '&startTime=' + filter.StartTime.toString().replace(':', 'h');
+        }
+
+        if (filter.EndTime != null && filter.EndTime.toString() != "") {
+            querry += '&endTime=' + filter.EndTime.toString().replace(':', 'h');
+        }
+
+        if (filter.SearchString != null || filter.SearchString != "") {
+            querry += '&searchString=' + filter.SearchString.toString();
+        }
+
+        if (filter.SearchString != null || filter.SearchString != "") {
+            if (filter.SearchNameOnly.toString() != "") {
+                querry += '&nameOnly=' + filter.SearchNameOnly.toString();
+            }
+            else {
+                querry += '&nameOnly=false';
+            }
+        }
+
+        querry += '&pageNumber=' + filter.PageNumber.toString();
+        querry += '&pageSize=' + filter.PageSize.toString();
+        querry += '&orderAscending=' + filter.OrderIsAscending.toString();
+        querry += '&orderBy=' + filter.OrderByString.toString();
+
+        //execute http call
         return this.http.get(querry).map(function (response: Response) {
             return <IEvent[]>response.json();
         }).catch(this.handleError);
     }
-	
-	closeDetailsMode(){
-		this.detailsMode = false;
-	}
+
+    closeDetailsMode() {
+        this.detailsMode = false;
+    }
 
     handleError(error: Response) {
         return Observable.throw(error.statusText);

@@ -3,16 +3,14 @@
 
 namespace GeoEvents.WebAPI.App_Start
 {
-    using System;
-    using System.Web;
-
     using Microsoft.Web.Infrastructure.DynamicModuleHelper;
-    using System.Linq;
-
     using Ninject;
     using Ninject.Web.Common;
-    using System.Web.Http;
     using Ninject.Web.WebApi;
+    using System;
+    using System.Linq;
+    using System.Web;
+    using System.Web.Http;
 
     public static class NinjectWebCommon
     {

@@ -1,8 +1,4 @@
 ﻿using GeoEvents.Common;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 
 namespace GeoEvents.WebAPI.DbConnection
 {
@@ -11,7 +7,6 @@ namespace GeoEvents.WebAPI.DbConnection
         public override void Load()
         {
             Bind<IGeoEventsConfiguration>().To<GeoEventsConfiguration>().InSingletonScope();
-
         }
     }
 }

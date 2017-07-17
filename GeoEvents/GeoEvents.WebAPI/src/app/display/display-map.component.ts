@@ -8,14 +8,13 @@ import { Http, Response, Headers, RequestOptions } from '@angular/http'
 
 import { Router } from '@angular/router'
 
-
 @Component({
     selector: 'display-map',
     styles: [`
     agm-map {
       height: 500px;
     }
-    
+
   `],
     template: `
     <agm-map [latitude]="latitude" [longitude]="longitude" [zoom]="zoom">
@@ -42,7 +41,5 @@ export class DisplayMapComponent {
 
     displayEvent(evt: IEvent) {
         this.event.emit(evt);
-
     }
-
 }

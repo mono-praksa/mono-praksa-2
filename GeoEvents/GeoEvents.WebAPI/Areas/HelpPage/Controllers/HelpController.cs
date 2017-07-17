@@ -1,8 +1,8 @@
+using GeoEvents.WebAPI.Areas.HelpPage.ModelDescriptions;
+using GeoEvents.WebAPI.Areas.HelpPage.Models;
 using System;
 using System.Web.Http;
 using System.Web.Mvc;
-using GeoEvents.WebAPI.Areas.HelpPage.ModelDescriptions;
-using GeoEvents.WebAPI.Areas.HelpPage.Models;
 
 namespace GeoEvents.WebAPI.Areas.HelpPage.Controllers
 {

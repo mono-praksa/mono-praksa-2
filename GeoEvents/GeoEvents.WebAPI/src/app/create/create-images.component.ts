@@ -3,7 +3,6 @@ import { Http, RequestOptions, Headers, Response } from '@angular/http'
 import { Observable } from 'rxjs/Rx'
 import { IEvent } from './../models/event.model'
 
-
 @Component({
     selector: "create-images",
     templateUrl: "app/create/create-images.component.html"
@@ -60,11 +59,11 @@ export class CreateImagesComponent {
             let options = new RequestOptions();
             this.http.post('/api/images/create/' + this.createdEvent.Id, this.formData, options)
                 .map((res: Response) => res.json())
-                .catch((error:any) => Observable.throw(error))
-                .subscribe((data:any) => {
+                .catch((error: any) => Observable.throw(error))
+                .subscribe((data: any) => {
                     this.files[i].uploading = false;
                     this.files[i].finished = true;
-                }, (error:any) => {
+                }, (error: any) => {
                     this.files[i].error = true;
                 });
             this.formData = new FormData();
@@ -82,7 +81,6 @@ export class CreateImagesComponent {
     skip() {
         this.emittSkip.emit(true);
     }
-
 }
 
 interface file {

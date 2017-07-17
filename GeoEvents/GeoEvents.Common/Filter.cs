@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GeoEvents.Common
 {
@@ -12,6 +8,7 @@ namespace GeoEvents.Common
     public class Filter : IFilter
     {
         #region Properties
+
         /// <summary>
         /// Gets or sets the latitude of the filter's location.
         /// </summary>
@@ -61,7 +58,7 @@ namespace GeoEvents.Common
         public int? PageSize { get; set; }
 
         /// <summary>
-        /// Gets or sets the filter's search string. 
+        /// Gets or sets the filter's search string.
         /// </summary>
         /// <value>The search string.</value>
         public string SearchString { get; set; }
@@ -106,6 +103,5 @@ namespace GeoEvents.Common
         }
 
         #endregion Constructors
-
     }
 }

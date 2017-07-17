@@ -1,11 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿using AutoMapper;
 using GeoEvents.Model.Mapping;
-using GeoEvents.Model.Common;
-using GeoEvents.Repository.Common;
-using AutoMapper;
 
 namespace GeoEvents.WebAPI.App_Start
 {

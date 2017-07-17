@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GeoEvents.Common
 {
@@ -57,7 +53,7 @@ namespace GeoEvents.Common
         int? PageSize { get; set; }
 
         /// <summary>
-        /// Gets or sets the filter's search string. 
+        /// Gets or sets the filter's search string.
         /// </summary>
         /// <value>The search string.</value>
         string SearchString { get; set; }
@@ -80,6 +76,5 @@ namespace GeoEvents.Common
         /// </summary>
         /// <value>The boolean.</value>
         bool? OrderAscending { get; set; }
-
     }
 }

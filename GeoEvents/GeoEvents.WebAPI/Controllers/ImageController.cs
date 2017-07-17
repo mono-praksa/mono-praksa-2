@@ -1,15 +1,12 @@
-﻿using GeoEvents.Model.Common;
+﻿using AutoMapper;
+using GeoEvents.Model.Common;
 using GeoEvents.Service.Common;
-using GeoEvents.Common;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Net;
 using System.Net.Http;
+using System.Threading.Tasks;
 using System.Web.Http;
-using AutoMapper;
 
 namespace GeoEvents.WebAPI.Controllers
 {
@@ -100,10 +97,10 @@ namespace GeoEvents.WebAPI.Controllers
         }
     }
 }
+
 public class ImageModel
 {
     public Guid Id { get; set; }
     public Guid EventId { get; set; }
     public byte[] Content { get; set; }
 }
-

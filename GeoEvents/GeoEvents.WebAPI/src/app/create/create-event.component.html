@@ -38,7 +38,7 @@
             <div class="row control-label">
                 <label class="col-md-3" *ngFor="let category of keys()">
                     <input type="checkbox" value="{{CategoryEnum[category]}}" (change)="updateCategories(CategoryEnum[category])" *ngIf="category!='Miscellaneous'" />
-                    <input type="checkbox" value="{{CategoryEnum[category]}}" (change)="updateCategories(CategoryEnum[category])" *ngIf="category=='Miscellaneous'" checked/> {{category}}
+                    <input type="checkbox" value="{{CategoryEnum[category]}}" (change)="updateCategories(CategoryEnum[category])" *ngIf="category=='Miscellaneous'" checked /> {{category}}
                 </label>
             </div>
             <span class="help-block" *ngIf="isAllUnchecked()">Required at least one category!</span>

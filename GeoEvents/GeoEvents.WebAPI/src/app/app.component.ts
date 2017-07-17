@@ -1,12 +1,12 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'geo-events',
-  template: `
+    selector: 'geo-events',
+    template: `
     <nav-bar></nav-bar>
     <div class="container">
         <router-outlet></router-outlet>
     </div>
   `
 })
-export class AppComponent  { }
+export class AppComponent { }

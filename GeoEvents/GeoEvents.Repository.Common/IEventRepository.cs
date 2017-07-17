@@ -2,8 +2,6 @@
 using GeoEvents.Model.Common;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace GeoEvents.Repository.Common
@@ -11,14 +9,15 @@ namespace GeoEvents.Repository.Common
     public interface IEventRepository
     {
         #region Methods
+
         /// <summary>
         /// Creates Event asynchronously.
         /// </summary>
         /// <param name="evt"></param>
-        /// <returns>  
+        /// <returns>
         /// return Created event (IEvent)
         /// </returns>
-        Task<IEnumerable<IEvent>> GetEventsAsync (IFilter filter);
+        Task<IEnumerable<IEvent>> GetEventsAsync(IFilter filter);
 
         /// <summary>
         /// Gets filtered Events asynchronously.

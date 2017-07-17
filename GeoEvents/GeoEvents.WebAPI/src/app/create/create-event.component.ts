@@ -117,7 +117,7 @@ export class CreateEventComponent implements OnInit {
             }
         });
 
-        let newEvent : IEvent = {
+        let newEvent: IEvent = {
             Id: undefined,
             Name: formValues.name,
             Description: formValues.description,
@@ -127,7 +127,7 @@ export class CreateEventComponent implements OnInit {
             Long: this.longitude,
             Categories: chosenCategories
         }
-        
+
         let headers = new Headers({ 'Content-Type': 'application/json' });
         let options = new RequestOptions({ headers: headers });
         this.http.post('/api/events/create', JSON.stringify(newEvent), options).map(function (response: Response) {

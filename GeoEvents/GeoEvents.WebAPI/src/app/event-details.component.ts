@@ -33,7 +33,7 @@ import { IImage } from './models/image.model'
 `]
 })
 
-export class EventDetailsComponent implements OnInit{
+export class EventDetailsComponent implements OnInit {
     @Input() event: IEvent
     @Output() cancel = new EventEmitter()
     images: IImage[]
@@ -42,7 +42,6 @@ export class EventDetailsComponent implements OnInit{
     address: string = ""
 
     constructor(private http: Http) {
-
     }
 
     ngOnInit() {
@@ -80,7 +79,7 @@ export class EventDetailsComponent implements OnInit{
             })
     }
 
-    getImages(id : string): Observable<IImage[]> {
+    getImages(id: string): Observable<IImage[]> {
         return this.http.get('/api/images/get/' + this.event.Id).map(function (response: Response) {
             return <IImage[]>response.json();
         }).catch(this.handleError);

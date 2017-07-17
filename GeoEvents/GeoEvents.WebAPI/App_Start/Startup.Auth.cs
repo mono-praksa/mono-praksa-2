@@ -1,15 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using GeoEvents.WebAPI.Models;
+using GeoEvents.WebAPI.Providers;
 using Microsoft.AspNet.Identity;
-using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.Owin;
 using Microsoft.Owin.Security.Cookies;
-using Microsoft.Owin.Security.Google;
 using Microsoft.Owin.Security.OAuth;
 using Owin;
-using GeoEvents.WebAPI.Providers;
-using GeoEvents.WebAPI.Models;
+using System;
 
 namespace GeoEvents.WebAPI
 {
