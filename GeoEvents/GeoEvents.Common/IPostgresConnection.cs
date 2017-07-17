@@ -4,8 +4,8 @@ namespace GeoEvents.Common
 {
     public interface IPostgresConnection
     {
-        NpgsqlCommand NpgComm();
+        NpgsqlCommand CreateCommand();
 
-        NpgsqlConnection NpgConn();
+        NpgsqlConnection CreateConnection();
     }
 }
