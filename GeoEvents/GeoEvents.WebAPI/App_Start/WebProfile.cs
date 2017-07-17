@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using GeoEvents.Model.Common;
+using GeoEvents.WebAPI.Controllers;
 
 namespace GeoEvents.WebAPI.App_Start
 {
@@ -7,8 +8,8 @@ namespace GeoEvents.WebAPI.App_Start
     {
         public WebProfile()
         {
-            CreateMap<IEvent, EventModel>().ReverseMap();
-            CreateMap<IImage, ImageModel>().ReverseMap();
+            CreateMap<IEvent, EventController.EventModel>().ReverseMap();
+            CreateMap<IImage, ImageController.ImageModel>().ReverseMap();
         }
     }
 }
