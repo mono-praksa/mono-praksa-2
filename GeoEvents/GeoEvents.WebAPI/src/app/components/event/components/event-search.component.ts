@@ -100,7 +100,7 @@ export class EventSearchComponent implements OnInit {
 	onSubmit(formValues: any): void {
 		let selectedCategories = this.getSelectedCategories();
 		
-		var newFilter : IFilter = {
+		let newFilter : IFilter = {
             ULat: this.latitude,
             ULong: this.longitude,
             Radius: formValues.radius,

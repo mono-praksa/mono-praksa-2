@@ -32,8 +32,10 @@ export class EventService
 			querry += '&endTime=' + filter.EndTime.toString().replace(':', 'h');
 		}
 		
-		if(filter.SearchString != null || filter.SearchString != "") {
-			querry += '&searchString=' + filter.SearchString.toString();
+		if(filter.SearchString != null) {
+			if(filter.SearchString.toString() != "") {
+				querry += '&searchString=' + filter.SearchString.toString();
+			}
 		}
 
 		querry += '&pageNumber=' + filter.PageNumber.toString();
