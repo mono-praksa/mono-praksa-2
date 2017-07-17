@@ -47,18 +47,18 @@ namespace GeoEvents.Repository
             try
 
             {
-                using (PostgresConn.CreateConnection())
+                using (PostgresConn.NpgConn())
                 using (NpgsqlCommand commandInsert = new NpgsqlCommand(QueryHelper.GetInsertImagesString(),
-                         PostgresConn.CreateConnection()))
+                         PostgresConn.NpgConn()))
                 using (NpgsqlCommand commandSelect = new NpgsqlCommand(QueryHelper.GetSelectImageString(),
-                         PostgresConn.CreateConnection()))
+                         PostgresConn.NpgConn()))
                 {
                     // // insert image
                     commandInsert.Parameters.AddWithValue(QueryHelper.ParId, NpgsqlTypes.NpgsqlDbType.Uuid, DbImage.Id);
                     commandInsert.Parameters.AddWithValue(QueryHelper.ParContent, NpgsqlTypes.NpgsqlDbType.Bytea, DbImage.Content);
                     commandInsert.Parameters.AddWithValue(QueryHelper.ParEventId, NpgsqlTypes.NpgsqlDbType.Uuid, DbImage.EventId);
 
-                    await PostgresConn.CreateConnection().OpenAsync();
+                    await PostgresConn.NpgConn().OpenAsync();
                     await commandInsert.ExecuteNonQueryAsync();
                     // //
 
@@ -99,12 +99,12 @@ namespace GeoEvents.Repository
             try
 
             {
-                using (PostgresConn.CreateConnection())
+                using (PostgresConn.NpgConn())
                 using (NpgsqlCommand command = new NpgsqlCommand(QueryHelper.GetSelectImagesString(),
-                     PostgresConn.CreateConnection()))
+                     PostgresConn.NpgConn()))
                 {
                     command.Parameters.AddWithValue(QueryHelper.ParEventId, NpgsqlTypes.NpgsqlDbType.Uuid, eventID);
-                    await PostgresConn.CreateConnection().OpenAsync();
+                    await PostgresConn.NpgConn().OpenAsync();
                     DbDataReader dr = await command.ExecuteReaderAsync();
 
                     while (dr.Read())

@@ -45,9 +45,9 @@ namespace GeoEvents.Repository
             try
 
             {
-                using (PostgresConn.CreateConnection())
-                using (NpgsqlCommand commandInsert = new NpgsqlCommand(QueryHelper.GetInsertEventString(), PostgresConn.CreateConnection()))
-                using (NpgsqlCommand commandSelect = new NpgsqlCommand(QueryHelper.GetSelectEventStringById(), PostgresConn.CreateConnection()))
+                using (PostgresConn.NpgConn())
+                using (NpgsqlCommand commandInsert = new NpgsqlCommand(QueryHelper.GetInsertEventString(), PostgresConn.NpgConn()))
+                using (NpgsqlCommand commandSelect = new NpgsqlCommand(QueryHelper.GetSelectEventStringById(), PostgresConn.NpgConn()))
 
                 {
                     commandInsert.Parameters.AddWithValue(QueryHelper.ParId, NpgsqlTypes.NpgsqlDbType.Uuid, evte.Id);
@@ -60,7 +60,7 @@ namespace GeoEvents.Repository
                     commandInsert.Parameters.AddWithValue(QueryHelper.ParName, NpgsqlTypes.NpgsqlDbType.Text, evte.Name);
                     commandSelect.Parameters.AddWithValue(QueryHelper.ParEventId, NpgsqlTypes.NpgsqlDbType.Uuid, evte.Id);
 
-                    await PostgresConn.CreateConnection().OpenAsync();
+                    await PostgresConn.NpgConn().OpenAsync();
                     await commandInsert.ExecuteNonQueryAsync();
 
                     DbDataReader dr = await commandSelect.ExecuteReaderAsync();
@@ -105,13 +105,13 @@ namespace GeoEvents.Repository
             List<IEvent> SelectEvents = new List<IEvent>();
             try
             {
-                using (PostgresConn.CreateConnection())
-                using (NpgsqlCommand command = new NpgsqlCommand(QueryHelper.GetSelectEventString(filter), PostgresConn.CreateConnection()))
+                using (PostgresConn.NpgConn())
+                using (NpgsqlCommand command = new NpgsqlCommand(QueryHelper.GetSelectEventString(filter), PostgresConn.NpgConn()))
                 {
 
                     SetParametersSearchEvents(filter, command);
 
-                    await PostgresConn.CreateConnection().OpenAsync();
+                    await PostgresConn.NpgConn().OpenAsync();
                     DbDataReader dr = await command.ExecuteReaderAsync();
 
                     while (dr.Read())
@@ -155,13 +155,13 @@ namespace GeoEvents.Repository
             Int64 Count;
             try
             {
-                using (PostgresConn.CreateConnection())
-                using (NpgsqlCommand command = new NpgsqlCommand(QueryHelper.GetSelectCountEventString(filter), PostgresConn.CreateConnection()))
+                using (PostgresConn.NpgConn())
+                using (NpgsqlCommand command = new NpgsqlCommand(QueryHelper.GetSelectCountEventString(filter), PostgresConn.NpgConn()))
                 {
 
                     SetParametersSearchEvents(filter, command);
 
-                    await PostgresConn.CreateConnection().OpenAsync();
+                    await PostgresConn.NpgConn().OpenAsync();
                     object dr = await command.ExecuteScalarAsync();
 
                     Count = Convert.ToInt64(dr);

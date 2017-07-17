@@ -27,22 +27,22 @@ namespace GeoEvents.DAL
 
 
         #region Methods
+
         /// <summary>
-        /// Creates the command.
+        /// return Npgcommand
         /// </summary>
-        /// <returns>NpgsqlCommand</returns>
-        public NpgsqlCommand CreateCommand()
+        /// <returns>NpgsqlConnection connection.CreateCommand() </returns>
+        public NpgsqlCommand NpgComm()
         {
             return connection.CreateCommand();
         }
-
-
+  
 
         /// <summary>
-        /// Creates the connection.
+        /// returns Npqconnection
         /// </summary>
-        /// <returns>NpgsqlConnection</returns>
-        public NpgsqlConnection CreateConnection()
+        /// <returns>NpgsqlConnection connection </returns>
+        public NpgsqlConnection NpgConn()
         {
             
             return connection;
