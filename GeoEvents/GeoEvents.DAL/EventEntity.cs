@@ -84,6 +84,46 @@ namespace GeoEvents.DAL
         /// The category.
         /// </value>
         public int Category { get; set; }
+
+        /// <summary>
+        /// Gets or sets the price.
+        /// </summary>
+        /// <value>
+        /// The price.
+        /// </value>
+        public decimal Price { get; set; }
+
+        /// <summary>
+        /// Gets or sets the capacity.
+        /// </summary>
+        /// <value>
+        /// The capacity.
+        /// </value>
+        public int Capacity { get; set; }
+
+        /// <summary>
+        /// Gets or sets the reserved.
+        /// </summary>
+        /// <value>
+        /// The reserved.
+        /// </value>
+        public int Reserved { get; set; }
+
+        /// <summary>
+        /// Gets or sets the rating.
+        /// </summary>
+        /// <value>
+        /// The rating.
+        /// </value>
+        public decimal Rating { get; set; }
+
+        /// <summary>
+        /// Gets or sets the rate count.
+        /// </summary>
+        /// <value>
+        /// The rate count.
+        /// </value>
+        public int RateCount { get; set; }
         #endregion Properties
 
 
@@ -106,7 +146,7 @@ namespace GeoEvents.DAL
         /// <param name="Description">The description.</param>
         /// <param name="Category">The category.</param>
         public EventEntity(Guid Id, DateTime StartTime, DateTime EndTime, Decimal Lat,
-            Decimal Long, string Name, string Description, int Category)
+            Decimal Long, string Name, string Description, int Category, decimal Price, int Capacity, int Reserved, decimal Rating, int RateCount)
         {
             this.Id = Id;
             this.StartTime = StartTime;
@@ -116,6 +156,11 @@ namespace GeoEvents.DAL
             this.Name = Name;
             this.Description = Description;
             this.Category = Category;
+            this.Price = Price;
+            this.Capacity = Capacity;
+            this.Reserved = Reserved;
+            this.Rating = Rating;
+            this.RateCount = RateCount;
         }
         #endregion Constructors
 

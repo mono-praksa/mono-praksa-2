@@ -115,11 +115,22 @@ namespace GeoEvents.Service
             return Repository.CreateEventAsync(evt);
         }
 
+        /// <summary>
+        /// Updates the reservation asynchronous.
+        /// </summary>
+        /// <param name="eventId">The event identifier.</param>
+        /// <returns></returns>
         public Task<IEvent> UpdateReservationAsync(Guid eventId)
         {
             return Repository.UpdateReservationAsync(eventId);
         }
 
+        /// <summary>
+        /// Updates the rating asynchronous.
+        /// </summary>
+        /// <param name="eventId">The event identifier.</param>
+        /// <param name="rating"></param>
+        /// <returns></returns>
         public Task<IEvent> UpdateRatingAsync(Guid eventId, decimal rating)
         {
             return Repository.UpdateRatingAsync(eventId, rating);

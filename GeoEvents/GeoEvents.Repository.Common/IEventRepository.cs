@@ -37,6 +37,21 @@ namespace GeoEvents.Repository.Common
         /// </returns>
         Task<Int64> GetEventCountAsync(IFilter filter);
 
+        /// <summary>
+        /// Updates the reservation asynchronous.
+        /// </summary>
+        /// <param name="eventId">The event identifier.</param>
+        /// <returns></returns>
+        Task<IEvent> UpdateReservationAsync(Guid eventId);
+
+        /// <summary>
+        /// Updates the rating asynchronous.
+        /// </summary>
+        /// <param name="eventId">The event identifier.</param>
+        /// <param name="rating">The rating.</param>
+        /// <returns></returns>
+        Task<IEvent> UpdateRatingAsync(Guid eventId, decimal rating);
+
         #endregion Methods
     }
 }
