@@ -16,18 +16,14 @@
     <div *ngIf="!imagesLoading && images.length === 0">
         <h4>No images for this event...</h4>
     </div>
-    <div *ngIf="!imagesLoading && images.length !== 0" id="myCarousel" class="carousel slide" data-ride="carousel">
+    <div [hidden]="imagesLoading || images.length === 0" id="myCarousel" class="carousel slide" data-ride="carousel">
         <!-- Indicators -->
         <ol class="carousel-indicators">
             <li data-target="#myCarousel" *ngFor="let image of images; let i=index" [attr.data-slide-to]="i" [ngClass]="i === 0 ? 'active' : '' "></li>
         </ol>
 
         <!-- Wrapper for slides -->
-        <div class="carousel-inner" id="carousel-inner">
-            <!--<div *ngFor="let image of images; let i=index" [ngClass]="i === 0 ? 'item active' : 'item'">
-                <img [src]="'data:image/jpeg;base64,'+image.Content" alt="event.Name + '_image' + i"/>
-            </div>-->
-        </div>
+        <div class="carousel-inner" #carousel></div>
 
         <!-- Left and right controls -->
         <a class="left carousel-control" href="#myCarousel" data-slide="prev">

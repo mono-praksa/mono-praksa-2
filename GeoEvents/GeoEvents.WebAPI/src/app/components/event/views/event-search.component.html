@@ -86,6 +86,7 @@
 			</div>
 		</form>
 	</div>
+    <hr />
 	<div>
 		
 		<div *ngIf="!this.isMapMode">
@@ -101,7 +102,7 @@
 				<label for="ascendingCheckbox">Ascending Order?</label>
 				
 			</div>
-			<display-list (event)="eventDetails($event)" [events]="this.events"></display-list>
+			<display-list (event)="enterDetailMode($event)" [events]="this.events"></display-list>
 			<div *ngIf="this.events">
 				<p>pager</p>
 			</div>
@@ -110,4 +111,4 @@
 	</div>
 </div>
 
-<event-details [event]="this.event" *ngIf="this.isDetailsMode"></event-details>
+<event-details [event]="this.event" *ngIf="this.isDetailMode"></event-details>

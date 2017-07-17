@@ -1,4 +1,4 @@
-﻿import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
+﻿import { Component, Input, OnInit, Output, EventEmitter, ViewChild, ElementRef } from '@angular/core';
 import { Http, Response, Headers, RequestOptions } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 
@@ -16,7 +16,13 @@ import { IImage } from '../models/image.model';
         max-height: 480px;
 }
 
-    .carousel img {
+    :host /deep/ img {
+        width: 640px;
+        max-width: 640px;
+        height: 480px;
+        max-height: 480px;
+}
+    :host /deep/ svg {
         width: 640px;
         max-width: 640px;
         height: 480px;
@@ -36,6 +42,7 @@ import { IImage } from '../models/image.model';
 export class EventDetailComponent implements OnInit{
     @Input() event: IEvent
     @Output() cancel = new EventEmitter()
+    @ViewChild("carousel") carouselElement: ElementRef
     images: IImage[]
     CategoryEnum: any = CategoryEnum
     imagesLoading: boolean = true
@@ -66,7 +73,7 @@ export class EventDetailComponent implements OnInit{
                     item.appendChild(svg);
                 }
 
-                document.getElementById("carousel-inner").appendChild(item);
+                this.carouselElement.nativeElement.appendChild(item);
             }
         })
 
