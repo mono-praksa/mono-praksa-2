@@ -14,17 +14,19 @@ namespace GeoEvents.Service.Common
     {
         #region Methods
 
+
         /// <summary>
-        /// Gets images attached to an event.
+        /// Gets the images asynchronous.
         /// </summary>
-        /// <param name="eventId">The event's id.</param>
+        /// <param name="eventId">The event identifier.</param>
         /// <returns></returns>
         Task<IEnumerable<IImage>> GetImagesAsync(Guid eventId);
 
+
         /// <summary>
-        /// Adds an image to an event.
+        /// Creates the image asynchronous.
         /// </summary>
-        /// <param name="image">The list of images to add.</param>
+        /// <param name="image">The image.</param>
         /// <returns></returns>
         Task<IImage> CreateImageAsync(IImage image);
 

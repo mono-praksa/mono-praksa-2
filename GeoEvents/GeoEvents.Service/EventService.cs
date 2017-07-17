@@ -17,10 +17,13 @@ namespace GeoEvents.Service
     public class EventService : IEventService
     {
         #region Properties
+
         /// <summary>
         /// Gets the repository.
         /// </summary>
-        /// <value>The repository.</value>
+        /// <value>
+        /// The repository.
+        /// </value>
         protected IEventRepository Repository { get; private set; }
 
         #endregion Properties
@@ -28,8 +31,9 @@ namespace GeoEvents.Service
 
 
         #region Constructors
+
         /// <summary>
-        /// Initializes a new instance of the <see cref="EventService"/> class. 
+        /// Initializes a new instance of the <see cref="EventService"/> class.
         /// </summary>
         /// <param name="repository">The repository.</param>
         public EventService(IEventRepository repository)
@@ -44,11 +48,14 @@ namespace GeoEvents.Service
 
         #region Methods
 
+
         /// <summary>
         /// Gets events that satisfy a filter.
         /// </summary>
         /// <param name="filter">The filter.</param>
-        /// <returns>List of events.</returns>
+        /// <returns>
+        /// List of events.
+        /// </returns>
         public async Task<IEnumerable<IEvent>> GetEventsAsync(IFilter filter)
         {
             IEnumerable<IEvent> events = await Repository.GetEventsAsync(filter);
@@ -73,21 +80,27 @@ namespace GeoEvents.Service
             return events;
         }
 
+
         /// <summary>
         /// Gets the number of events that satisfy a filter.
         /// </summary>
         /// <param name="filter">The filter.</param>
-        /// <returns>The number.</returns>
+        /// <returns>
+        /// The number.
+        /// </returns>
         public Task<Int64> GetEventCountAsync(IFilter filter)
         {
             return Repository.GetEventCountAsync(filter);
         }
 
+
         /// <summary>
         /// Creates an event.
         /// </summary>
         /// <param name="evt">The event.</param>
-        /// <returns>The event that was created.</returns>
+        /// <returns>
+        /// The event that was created.
+        /// </returns>
         public Task<IEvent> CreateEventAsync(IEvent evt)
         {
             evt.Id = Guid.NewGuid();

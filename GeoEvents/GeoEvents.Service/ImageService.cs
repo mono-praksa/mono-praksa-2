@@ -17,10 +17,13 @@ namespace GeoEvents.Service
     public class ImageService : IImageService
     {
         #region Properties
+
         /// <summary>
         /// Gets the repository.
         /// </summary>
-        /// <value>The repository.</value>
+        /// <value>
+        /// The repository.
+        /// </value>
         protected IImageRepository Repository { get; private set; }
 
         #endregion Properties
@@ -28,8 +31,9 @@ namespace GeoEvents.Service
 
 
         #region Constructors
+
         /// <summary>
-        /// Initializes a new instance of the <see cref="ImageService"/> class. 
+        /// Initializes a new instance of the <see cref="ImageService"/> class.
         /// </summary>
         /// <param name="repository">The repository.</param>
         public ImageService(IImageRepository repository)
@@ -44,6 +48,7 @@ namespace GeoEvents.Service
 
         #region Methods
 
+
         /// <summary>
         /// Gets images attached to an event.
         /// </summary>
@@ -54,8 +59,9 @@ namespace GeoEvents.Service
             return Repository.GetImagesAsync(eventId);
         }
 
+
         /// <summary>
-        /// Adds image to an event.
+        /// Adds an image to an event.
         /// </summary>
         /// <param name="image">The list of images to add.</param>
         /// <returns></returns>
