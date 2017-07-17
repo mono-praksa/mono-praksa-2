@@ -13,6 +13,7 @@ import { EventModule } from './components/event/event.module';
 import { AppRoutingModule } from './app-routing.module';
 
 import { PreserveSearchQuerryService } from './shared/preserve-search-querry.service';
+import { LoaderService } from './shared/loader.service';
 
 @NgModule({
     imports: [
@@ -30,7 +31,10 @@ import { PreserveSearchQuerryService } from './shared/preserve-search-querry.ser
 		HomeComponent
     ],
     bootstrap: [ AppComponent ],
-	providers: [ PreserveSearchQuerryService ]
+    providers: [
+        PreserveSearchQuerryService,
+        LoaderService
+    ]
 	
 })
 export class AppModule { }

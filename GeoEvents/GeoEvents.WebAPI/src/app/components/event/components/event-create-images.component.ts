@@ -11,14 +11,46 @@ import { IEvent } from '../models/event.model'
 export class EventCreateImagesComponent {
     @Input() createdEvent: IEvent;
 
-    files: Array<file>;
-    indices: Array<number>;
+    private _files: Array<file>;
+    private _indices: Array<number>;
     private _formData: FormData;
-    fileList: FileList;
-    btnUploadClicked: boolean = false;
+    private _fileList: FileList;
+    private _btnUploadClicked: boolean = false;
     @Output() emittSkip = new EventEmitter();
 
     constructor(private http: Http) { }
+
+    get files(): Array<file> {
+        return this._files;
+    }
+
+    set files(theFiles: Array<file>) {
+        this._files = theFiles;
+    }
+
+    get indices(): Array<number> {
+        return this._indices;
+    }
+
+    set indices(theIndices: Array<number>) {
+        this._indices = theIndices;
+    }
+
+    get fileList(): FileList {
+        return this._fileList;
+    }
+
+    set fileList(theFileList: FileList) {
+        this._fileList = theFileList;
+    }
+
+    get btnUploadClicked(): boolean {
+        return this._btnUploadClicked;
+    }
+
+    set bntUploadClicked(isBtnUploadClicked: boolean) {
+        this._btnUploadClicked = isBtnUploadClicked;
+    }
 
     get formData() {
         if (this._formData === undefined) {

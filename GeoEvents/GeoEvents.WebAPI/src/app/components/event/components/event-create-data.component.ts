@@ -8,6 +8,7 @@ import { Router } from '@angular/router'
 import { endDateBeforeStartDate } from '../validators/validator'
 import { IEvent } from '../models/event.model'
 import { CategoryEnum } from '../../../shared/common/category-enum'
+import { LoaderService } from '../../../shared/loader.service'
 
 @Component({
     selector: "create-event",
@@ -24,6 +25,7 @@ export class EventCreateDataComponent implements OnInit {
     private _latitude: number;
     private _longitude: number;
     private _zoom: number;
+    createEventLoading: boolean = false;
 
     private _createdEvent: IEvent;
 
@@ -49,7 +51,14 @@ export class EventCreateDataComponent implements OnInit {
     end: FormControl
     category: FormControl
 
-    constructor(private http: Http, private formBuilder: FormBuilder, private mapsAPILoader: MapsAPILoader, private ngZone: NgZone, private router: Router) { }
+    constructor(
+        private http: Http,
+        private formBuilder: FormBuilder,
+        private mapsAPILoader: MapsAPILoader,
+        private ngZone: NgZone,
+        private router: Router,
+        private _loaderService: LoaderService
+    ) { }
 
     ngOnInit(): void {
         this.name = new FormControl('', Validators.required);
@@ -63,6 +72,10 @@ export class EventCreateDataComponent implements OnInit {
             start: this.start,
             end: this.end
         }, { validator: endDateBeforeStartDate('start', 'end') });
+
+        this._loaderService.loaderStatus.subscribe((value: boolean) => {
+            this.createEventLoading = value;
+        })
 
         //GOOGLE MAPS
         this.zoom = 4;
@@ -110,6 +123,7 @@ export class EventCreateDataComponent implements OnInit {
 
     createEvent(formValues: any) {
         this.creatingEvent = true;
+        this._loaderService.displayLoader(true);
         let chosenCategories: number[] = [];
         this.categories.filter(checkbox => {
             if (checkbox.checked) {
@@ -135,6 +149,7 @@ export class EventCreateDataComponent implements OnInit {
         }).catch(this.handleError).subscribe((response: Response) => {
             this.createdEvent = <IEvent>response.json();
             this.eventEmitter.emit(this.createdEvent);
+            this._loaderService.displayLoader(false);
         });
     }
 
@@ -170,40 +185,40 @@ export class EventCreateDataComponent implements OnInit {
         return this._latitude;
     }
 
-    set latitude(latitude: number) {
-        this._latitude = latitude;
+    set latitude(theLatitude: number) {
+        this._latitude = theLatitude;
     }
 
     get longitude(): number {
         return this._longitude;
     }
 
-    set longitude(longitude: number) {
-        this._longitude = longitude;
+    set longitude(theLongitude: number) {
+        this._longitude = theLongitude;
     }
 
     get zoom(): number {
         return this._zoom;
     }
 
-    set zoom(zoom: number) {
-        this._zoom = zoom;
+    set zoom(theZoom: number) {
+        this._zoom = theZoom;
     }
 
     get creatingEvent(): boolean {
         return this._creatingEvent;
     }
 
-    set creatingEvent(creatingEvent: boolean) {
-        this._creatingEvent = creatingEvent;
+    set creatingEvent(isCreatingEvent: boolean) {
+        this._creatingEvent = isCreatingEvent;
     }
 
     get createdEvent(): IEvent {
         return this._createdEvent;
     }
 
-    set createdEvent(createdEvent: IEvent) {
-        this._createdEvent = createdEvent;
+    set createdEvent(theCreatedEvent: IEvent) {
+        this._createdEvent = theCreatedEvent;
     }
 }
 

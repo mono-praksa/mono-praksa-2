@@ -29,9 +29,9 @@ export class EventMapComponent {
     @Input() radius: number
     @Input() latitude: number
     @Input() longitude: number
-    zoom: number;
-    lat: number;
-    lng: number;
+    private _zoom: number;
+    private _lat: number;
+    private _lng: number;
     @Output() event = new EventEmitter()
 
     constructor(private http: Http, private mapsAPILoader: MapsAPILoader, private ngZone: NgZone, private router: Router) {
@@ -45,4 +45,27 @@ export class EventMapComponent {
 
     }
 
+    get zoom(): number {
+        return this._zoom;
+    }
+
+    set zoom(theZoom: number) {
+        this._zoom = theZoom;
+    }
+
+    get lat(): number {
+        return this._lat;
+    }
+
+    set lat(theLatitude: number) {
+        this._lat = theLatitude;
+    }
+
+    get lng(): number {
+        return this._lng;
+    }
+
+    set lng(theLongitude: number) {
+        this._lng = theLongitude;
+    }
 }

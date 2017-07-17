@@ -52,5 +52,5 @@
         </agm-map>
     </div>
     <button type="submit" class="btn btn-default" [disabled]="eventForm.invalid || isAllUnchecked() || creatingEvent">Submit</button>
-    <i class="fa fa-spinner fa-spin" style="font-size:24px" *ngIf="creatingEvent"></i>
+    <i class="fa fa-spinner fa-spin" style="font-size:24px" *ngIf="createEventLoading"></i>
 </form>
