@@ -41,7 +41,7 @@
                     <input type="checkbox" value="{{CategoryEnum[category]}}" (change)="updateCategories(CategoryEnum[category])" *ngIf="category=='Miscellaneous'" checked/> {{category}}
                 </label>
             </div>
-            <span class="help-block" *ngIf="isAllUnchecked()">Required at least one category!</span>
+            <span class="help-block" *ngIf="isAllUnchecked()">Please check at least one category!</span>
         </fieldset>
     </div>
     <div class="form-group">
@@ -51,6 +51,6 @@
             <agm-marker [latitude]="latitude" [longitude]="longitude" [markerDraggable]="true"></agm-marker>
         </agm-map>
     </div>
-    <button type="submit" class="btn btn-default" [disabled]="eventForm.invalid || isAllUnchecked() || creatingEvent">Submit</button>
-    <i class="fa fa-spinner fa-spin" style="font-size:24px" *ngIf="creatingEvent"></i>
+    <button type="submit" class="btn btn-default" [disabled]="eventForm.invalid || isAllUnchecked() || getCreatingEvent()">Submit</button>
+    <i class="fa fa-spinner fa-spin" style="font-size:24px" *ngIf="getCreatingEvent()"></i>
 </form>

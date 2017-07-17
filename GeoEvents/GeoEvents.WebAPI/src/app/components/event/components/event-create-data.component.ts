@@ -25,12 +25,12 @@ export class EventCreateDataComponent implements OnInit {
     longitude: number;
     zoom: number;
 
-    createdEvent: IEvent
+    createdEvent: IEvent;
 
     @ViewChild("search")
     searchElementRef: ElementRef;
 
-    CategoryEnum: any = CategoryEnum
+    CategoryEnum: any = CategoryEnum;
 
     categories: Array<ICategoryElement> = [
         { id: CategoryEnum["Music"], checked: false },
@@ -65,9 +65,9 @@ export class EventCreateDataComponent implements OnInit {
         }, { validator: endDateBeforeStartDate('start', 'end') });
 
         //GOOGLE MAPS
-        this.zoom = 4;
-        this.latitude = 39.8282;
-        this.longitude = -98.5795;
+        this.setZoom(4);
+        this.setLatitude(39.8282);
+        this.setLongitude(-98.5795);
 
         this.setCurrentPosition();
 
@@ -86,9 +86,9 @@ export class EventCreateDataComponent implements OnInit {
                     }
 
                     //set latitude, longitude and zoom
-                    this.latitude = place.geometry.location.lat();
-                    this.longitude = place.geometry.location.lng();
-                    this.zoom = 12;
+                    this.setLatitude(place.geometry.location.lat());
+                    this.setLongitude(place.geometry.location.lng());
+                    this.setZoom(12);
                 });
             });
         });
@@ -97,9 +97,9 @@ export class EventCreateDataComponent implements OnInit {
     private setCurrentPosition(): void {
         if ("geolocation" in navigator) {
             navigator.geolocation.getCurrentPosition((position) => {
-                this.latitude = position.coords.latitude;
-                this.longitude = position.coords.longitude;
-                this.zoom = 12;
+                this.setLatitude(position.coords.latitude);
+                this.setLongitude(position.coords.longitude);
+                this.setZoom(12);
             });
         }
     }
@@ -109,7 +109,7 @@ export class EventCreateDataComponent implements OnInit {
     }
 
     createEvent(formValues: any) {
-        this.creatingEvent = true;
+        this.setCreatingEvent(true);
         let chosenCategories: number[] = [];
         this.categories.filter(checkbox => {
             if (checkbox.checked) {
@@ -133,8 +133,8 @@ export class EventCreateDataComponent implements OnInit {
         this.http.post('/api/events/create', JSON.stringify(newEvent), options).map(function (response: Response) {
             return response;
         }).catch(this.handleError).subscribe((response: Response) => {
-            this.createdEvent = <IEvent>response.json();
-            this.eventEmitter.emit(this.createdEvent)
+            this.setCreatedEvent(<IEvent>response.json());
+            this.eventEmitter.emit(this.getCreatedEvent());
         });
     }
 
@@ -147,8 +147,8 @@ export class EventCreateDataComponent implements OnInit {
     }
 
     mapClicked(event: any): void {
-        this.latitude = event.coords.lat;
-        this.longitude = event.coords.lng;
+        this.setLatitude(event.coords.lat);
+        this.setLongitude(event.coords.lng);
     }
 
     isAllUnchecked(): boolean {
@@ -164,6 +164,46 @@ export class EventCreateDataComponent implements OnInit {
     keys(): Array<string> {
         var keys = Object.keys(CategoryEnum);
         return keys.slice(keys.length / 2);
+    }
+
+    getLatitude(): number {
+        return this.latitude;
+    }
+
+    setLatitude(latitude: number): void {
+        this.latitude = latitude;
+    }
+
+    getLongitude(): number {
+        return this.longitude;
+    }
+
+    setLongitude(longitude: number): void {
+        this.longitude = longitude;
+    }
+
+    getZoom(): number {
+        return this.zoom;
+    }
+
+    setZoom(zoom: number): void {
+        this.zoom = zoom;
+    }
+
+    getCreatingEvent(): boolean {
+        return this.creatingEvent;
+    }
+
+    setCreatingEvent(creatingEvent: boolean): void {
+        this.creatingEvent = creatingEvent;
+    }
+
+    getCreatedEvent(): IEvent {
+        return this.createdEvent;
+    }
+
+    setCreatedEvent(createdEvent: IEvent): void {
+        this.createdEvent = createdEvent;
     }
 }
 
