@@ -109,7 +109,20 @@ namespace GeoEvents.Service
             {
                 evt.Category += evt.Categories[i];
             }
+            evt.Reserved = 0;
+            evt.Rating = 0;
+            evt.RateCount = 0;
             return Repository.CreateEventAsync(evt);
+        }
+
+        public Task<IEvent> UpdateReservationAsync(Guid eventId)
+        {
+            return Repository.UpdateReservationAsync(eventId);
+        }
+
+        public Task<IEvent> UpdateRatingAsync(Guid eventId, decimal rating)
+        {
+            return Repository.UpdateRatingAsync(eventId, rating);
         }
 
         #endregion Methods

@@ -38,6 +38,22 @@ namespace GeoEvents.Service.Common
         /// <returns></returns>
         Task<IEvent> CreateEventAsync(IEvent evt);
 
+
+        /// <summary>
+        /// Updates the reservation asynchronous.
+        /// </summary>
+        /// <param name="eventId">The event identifier.</param>
+        /// <returns></returns>
+        Task<IEvent> UpdateReservationAsync(Guid eventId);
+
+        /// <summary>
+        /// Updates the rating asynchronous.
+        /// </summary>
+        /// <param name="eventId">The event identifier.</param>
+        /// <param name="Rating">The rating.</param>
+        /// <returns></returns>
+        Task<IEvent> UpdateRatingAsync(Guid eventId, decimal rating);
+
         #endregion Methods
     }
 }
