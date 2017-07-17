@@ -51,6 +51,6 @@
             <agm-marker [latitude]="latitude" [longitude]="longitude" [markerDraggable]="true"></agm-marker>
         </agm-map>
     </div>
-    <button type="submit" class="btn btn-default" [disabled]="eventForm.invalid || isAllUnchecked() || getCreatingEvent()">Submit</button>
-    <i class="fa fa-spinner fa-spin" style="font-size:24px" *ngIf="getCreatingEvent()"></i>
+    <button type="submit" class="btn btn-default" [disabled]="eventForm.invalid || isAllUnchecked() || creatingEvent">Submit</button>
+    <i class="fa fa-spinner fa-spin" style="font-size:24px" *ngIf="creatingEvent"></i>
 </form>

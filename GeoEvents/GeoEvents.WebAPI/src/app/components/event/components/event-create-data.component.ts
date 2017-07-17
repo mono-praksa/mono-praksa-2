@@ -20,12 +20,12 @@ import { CategoryEnum } from '../../../shared/common/category-enum'
 })
 export class EventCreateDataComponent implements OnInit {
     @Output() eventEmitter = new EventEmitter();
-    creatingEvent: boolean = false;
-    latitude: number;
-    longitude: number;
-    zoom: number;
+    private _creatingEvent: boolean = false;
+    private _latitude: number;
+    private _longitude: number;
+    private _zoom: number;
 
-    createdEvent: IEvent;
+    private _createdEvent: IEvent;
 
     @ViewChild("search")
     searchElementRef: ElementRef;
@@ -65,9 +65,9 @@ export class EventCreateDataComponent implements OnInit {
         }, { validator: endDateBeforeStartDate('start', 'end') });
 
         //GOOGLE MAPS
-        this.setZoom(4);
-        this.setLatitude(39.8282);
-        this.setLongitude(-98.5795);
+        this.zoom = 4;
+        this.latitude = 39.8282;
+        this.longitude = -98.5795;
 
         this.setCurrentPosition();
 
@@ -86,9 +86,9 @@ export class EventCreateDataComponent implements OnInit {
                     }
 
                     //set latitude, longitude and zoom
-                    this.setLatitude(place.geometry.location.lat());
-                    this.setLongitude(place.geometry.location.lng());
-                    this.setZoom(12);
+                    this.latitude = place.geometry.location.lat();
+                    this.longitude = place.geometry.location.lng();
+                    this.zoom = 12;
                 });
             });
         });
@@ -97,9 +97,9 @@ export class EventCreateDataComponent implements OnInit {
     private setCurrentPosition(): void {
         if ("geolocation" in navigator) {
             navigator.geolocation.getCurrentPosition((position) => {
-                this.setLatitude(position.coords.latitude);
-                this.setLongitude(position.coords.longitude);
-                this.setZoom(12);
+                this.latitude = position.coords.latitude;
+                this.longitude = position.coords.longitude;
+                this.zoom = 2;
             });
         }
     }
@@ -109,7 +109,7 @@ export class EventCreateDataComponent implements OnInit {
     }
 
     createEvent(formValues: any) {
-        this.setCreatingEvent(true);
+        this.creatingEvent = true;
         let chosenCategories: number[] = [];
         this.categories.filter(checkbox => {
             if (checkbox.checked) {
@@ -133,8 +133,8 @@ export class EventCreateDataComponent implements OnInit {
         this.http.post('/api/events/create', JSON.stringify(newEvent), options).map(function (response: Response) {
             return response;
         }).catch(this.handleError).subscribe((response: Response) => {
-            this.setCreatedEvent(<IEvent>response.json());
-            this.eventEmitter.emit(this.getCreatedEvent());
+            this.createdEvent = <IEvent>response.json();
+            this.eventEmitter.emit(this.createdEvent);
         });
     }
 
@@ -147,8 +147,8 @@ export class EventCreateDataComponent implements OnInit {
     }
 
     mapClicked(event: any): void {
-        this.setLatitude(event.coords.lat);
-        this.setLongitude(event.coords.lng);
+        this.latitude = event.coords.lat;
+        this.longitude = event.coords.lng;
     }
 
     isAllUnchecked(): boolean {
@@ -166,44 +166,44 @@ export class EventCreateDataComponent implements OnInit {
         return keys.slice(keys.length / 2);
     }
 
-    getLatitude(): number {
-        return this.latitude;
+    get latitude(): number {
+        return this._latitude;
     }
 
-    setLatitude(latitude: number): void {
-        this.latitude = latitude;
+    set latitude(latitude: number) {
+        this._latitude = latitude;
     }
 
-    getLongitude(): number {
-        return this.longitude;
+    get longitude(): number {
+        return this._longitude;
     }
 
-    setLongitude(longitude: number): void {
-        this.longitude = longitude;
+    set longitude(longitude: number) {
+        this._longitude = longitude;
     }
 
-    getZoom(): number {
-        return this.zoom;
+    get zoom(): number {
+        return this._zoom;
     }
 
-    setZoom(zoom: number): void {
-        this.zoom = zoom;
+    set zoom(zoom: number) {
+        this._zoom = zoom;
     }
 
-    getCreatingEvent(): boolean {
-        return this.creatingEvent;
+    get creatingEvent(): boolean {
+        return this._creatingEvent;
     }
 
-    setCreatingEvent(creatingEvent: boolean): void {
-        this.creatingEvent = creatingEvent;
+    set creatingEvent(creatingEvent: boolean) {
+        this._creatingEvent = creatingEvent;
     }
 
-    getCreatedEvent(): IEvent {
-        return this.createdEvent;
+    get createdEvent(): IEvent {
+        return this._createdEvent;
     }
 
-    setCreatedEvent(createdEvent: IEvent): void {
-        this.createdEvent = createdEvent;
+    set createdEvent(createdEvent: IEvent) {
+        this._createdEvent = createdEvent;
     }
 }
 
