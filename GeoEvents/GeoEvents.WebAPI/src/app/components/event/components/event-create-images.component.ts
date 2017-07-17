@@ -48,7 +48,7 @@ export class EventCreateImagesComponent {
         return this._btnUploadClicked;
     }
 
-    set bntUploadClicked(isBtnUploadClicked: boolean) {
+    set btnUploadClicked(isBtnUploadClicked: boolean) {
         this._btnUploadClicked = isBtnUploadClicked;
     }
 
