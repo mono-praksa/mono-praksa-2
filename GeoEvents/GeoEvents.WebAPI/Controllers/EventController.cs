@@ -116,6 +116,13 @@ namespace GeoEvents.WebAPI.Controllers
 
             return await Service.GetEventCountAsync(filter);
         }
+
+        [HttpPut]
+        [Route("update/rating")]
+        public Task<IEvent> UpdateRatingAsync(Guid eventId, decimal rating)
+        {
+            return Service.UpdateRatingAsync(eventId, rating);
+        }
     }
     public class EventModel
     {

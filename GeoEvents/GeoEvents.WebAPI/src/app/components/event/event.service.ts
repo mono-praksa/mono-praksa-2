@@ -63,6 +63,20 @@ export class EventService {
             .map((response: Response) => response.json())
             .catch(this.handleError);
     }
+
+    getImages(id: string): Observable<IImage[]> {
+        return this._http.get('/api/images/get/' + id)
+            .map((response: Response) => {
+                return <IImage[]>response.json();
+            }).catch(this.handleError);
+    }
+
+    updateRating(eventId: string, rating: number) {
+        return this._http.put("/api/events/update/rating?eventId=" + eventId + "&rating=" + rating, {})
+            .map((response: Response) => {
+                return <IEvent>response.json();
+            }).catch(this.handleError);
+    }
 	
 	handleError(error: Response) {
 		console.error(error);

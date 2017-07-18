@@ -175,12 +175,12 @@ export class EventSearchComponent implements OnInit {
 	}
 	
     ngOnInit(): void {
-        this.geocodingService.getUserApproximateAddress()
-            .subscribe(response => {
-                if (response.status == "success") {
-                    this.userApproximateAddress = response.city + ", " + response.country;
-                }
-            });
+        //this.geocodingService.getUserApproximateAddress()
+        //    .subscribe(response => {
+        //        if (response.status == "success") {
+        //            this.userApproximateAddress = response.city + ", " + response.country;
+        //        }
+        //    });
 		if(this._preserveSearchQuerryService.searchQuerry != null && this._preserveSearchQuerryService.searchQuerry != ""){
 			let newFilter : IFilter = {
 				ULat: null,

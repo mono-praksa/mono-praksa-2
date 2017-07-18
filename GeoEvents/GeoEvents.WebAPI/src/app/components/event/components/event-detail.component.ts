@@ -6,6 +6,7 @@ import { IEvent } from '../models/event.model';
 import { IImage } from '../models/image.model';
 
 import { GeocodingService } from '../../../shared/geocoding.service';
+import { EventService } from '../event.service';
 
 @Component({
     templateUrl: 'app/components/event/views/event-detail.component.html',
@@ -24,17 +25,21 @@ export class EventDetailComponent implements OnInit{
     @Input() event: IEvent
     @Output() cancel = new EventEmitter()
     @ViewChild("carousel") carouselElement: ElementRef
+    @ViewChild("userRate") userRateElement: ElementRef
     private _images: IImage[]
     CategoryEnum: any = CategoryEnum
     private _imagesLoading: boolean = true
     private _address: string = ""
 
-    constructor(private http: Http, private geocodingService: GeocodingService) {
+    constructor(
+        private geocodingService: GeocodingService,
+        private eventService: EventService
+    ) {
 
     }
 
     ngOnInit() {
-        this.getImages(this.event.Id).subscribe(res => {
+        this.eventService.getImages(this.event.Id).subscribe((res: IImage[]) => {
             this.imagesLoading = false
             this.images = res
             for (var i = 0; i < this.images.length; i++) {
@@ -63,14 +68,15 @@ export class EventDetailComponent implements OnInit{
         });
     }
 
-    getImages(id : string): Observable<IImage[]> {
-        return this.http.get('/api/images/get/' + this.event.Id).map(function (response: Response) {
-            return <IImage[]>response.json();
-        }).catch(this.handleError);
+    rateChange(slider: any) {
+        console.log(slider.nativeElement);
+        this.userRateElement.nativeElement.innerHTML = slider.value;
     }
 
-    handleError(error: Response) {
-        return Observable.throw(error.statusText);
+    rate() {
+        let rating = this.userRateElement.nativeElement.innerHTML;
+        this.eventService.updateRating(this.event.Id, +rating)
+            .subscribe(response => console.log(response));
     }
 
     handleCancelClick() {
