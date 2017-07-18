@@ -51,9 +51,9 @@ namespace GeoEvents.WebAPI.Controllers
 
         [HttpGet]
         [Route("search")]
-        public async Task<IEnumerable<EventModel>> TestEvent(int pageNumber = 1, int pageSize = 25, string orderBy = "", bool orderAscending = false, int category = 0, decimal uLat = 1000M, decimal uLong = 1000M, decimal radius = 0, string startTime = "", string endTime = "", string searchString = "", bool? nameOnly = true)
+        public async Task<IEnumerable<EventModel>> TestEvent(int pageNumber = 1, int pageSize = 25, string orderBy = "", bool orderAscending = false, int category = 0, decimal uLat = 1000M, decimal uLong = 1000M, decimal radius = 0, string startTime = "", string endTime = "", string searchString = "")
         {
-            Filter filter = new Filter(uLat, uLong, radius, null, null, category, pageNumber, pageSize, searchString, orderBy, orderAscending, nameOnly);
+            Filter filter = new Filter(uLat, uLong, radius, null, null, category, pageNumber, pageSize, searchString, orderBy, orderAscending, null, null, null);
             DateTime dateValue;
             if (startTime != "")
             {
@@ -93,9 +93,9 @@ namespace GeoEvents.WebAPI.Controllers
 
         [HttpGet]
         [Route("search/count")]
-        public async Task<Int64> GetEventCountAsync(int pageNumber = 1, int pageSize = 25, string orderBy = "", bool orderAscending = false, int category = 0, decimal uLat = 1000M, decimal uLong = 1000M, decimal radius = 0, string startTime = "", string endTime = "", string searchString = "", bool? nameOnly = true)
+        public async Task<Int64> GetEventCountAsync(int pageNumber = 1, int pageSize = 25, string orderBy = "", bool orderAscending = false, int category = 0, decimal uLat = 1000M, decimal uLong = 1000M, decimal radius = 0, string startTime = "", string endTime = "", string searchString = "")
         {
-            Filter filter = new Filter(uLat, uLong, radius, null, null, category, pageNumber, pageSize, searchString, orderBy, orderAscending, nameOnly);
+            Filter filter = new Filter(uLat, uLong, radius, null, null, category, pageNumber, pageSize, searchString, orderBy, orderAscending, null, null, null);
             DateTime dateValue;
             if (startTime != "")
             {

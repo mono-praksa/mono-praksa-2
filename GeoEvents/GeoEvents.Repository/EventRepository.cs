@@ -7,6 +7,7 @@ using Npgsql;
 using System;
 using System.Collections.Generic;
 using System.Data.Common;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace GeoEvents.Repository
@@ -42,6 +43,7 @@ namespace GeoEvents.Repository
         /// </returns>
         public async Task<IEvent> CreateEventAsync(IEvent evt)
         {
+            EventEntity evtR = new EventEntity();
             using (Connection.CreateConnection())
             using (NpgsqlCommand commandInsert = new NpgsqlCommand(QueryHelper.GetInsertEventString(), Connection.CreateConnection()))
             using (NpgsqlCommand commandSelect = new NpgsqlCommand(QueryHelper.GetSelectEventStringById(), Connection.CreateConnection()))
@@ -69,7 +71,7 @@ namespace GeoEvents.Repository
                 DbDataReader dr = await commandSelect.ExecuteReaderAsync();
                 while (dr.Read())
                 {
-                    EventEntity evtR = new EventEntity
+                    evtR = new EventEntity
                     {
                         Id = new Guid(dr[0].ToString()),
                         StartTime = Convert.ToDateTime(dr[1]),
@@ -86,9 +88,10 @@ namespace GeoEvents.Repository
                         RateCount = Convert.ToInt32(dr[12])
                     };
                 }
+               
             };
+            return Mapper.Map<IEvent>(evtR);
 
-            return evt;
         }
 
         /// <summary>
@@ -176,8 +179,8 @@ namespace GeoEvents.Repository
             if (filter.EndTime != null) { command.Parameters.AddWithValue(QueryHelper.ParUserEndTime, NpgsqlTypes.NpgsqlDbType.Timestamp, filter.EndTime); }
             if (filter.Category != null) { command.Parameters.AddWithValue(QueryHelper.ParCategory, NpgsqlTypes.NpgsqlDbType.Integer, filter.Category); }
             if (filter.Price != null) { command.Parameters.AddWithValue(QueryHelper.ParPrice, NpgsqlTypes.NpgsqlDbType.Double, filter.Price); }
-            if (filter.RatingEvent != null) { command.Parameters.AddWithValue(QueryHelper.ParRatingEvent, NpgsqlTypes.NpgsqlDbType.Double, filter.RatingEvent); }
-            if (filter.RatingLocation != null) { command.Parameters.AddWithValue(QueryHelper.ParRatingLocation, NpgsqlTypes.NpgsqlDbType.Integer, filter.RatingLocation); }
+            //if (filter.RatingEvent != null) { command.Parameters.AddWithValue(QueryHelper.ParRatingEvent, NpgsqlTypes.NpgsqlDbType.Double, filter.RatingEvent); }
+            //if (filter.RatingLocation != null) { command.Parameters.AddWithValue(QueryHelper.ParRatingLocation, NpgsqlTypes.NpgsqlDbType.Integer, filter.RatingLocation); }
             if (!string.IsNullOrWhiteSpace(filter.SearchString)) { command.Parameters.AddWithValue(QueryHelper.ParSearchString, NpgsqlTypes.NpgsqlDbType.Varchar, "%" + filter.SearchString + "%"); }
         }
 
@@ -199,9 +202,59 @@ namespace GeoEvents.Repository
         /// <param name="eventId">The event identifier.</param>
         /// <returns></returns>
         /// <exception cref="System.NotImplementedException"></exception>
-        public Task<IEvent> UpdateReservationAsync(Guid eventId)
+        public async Task<IEvent> UpdateReservationAsync(Guid eventId)
         {
-            throw new NotImplementedException();
+            StringBuilder getCurrentReservation = new StringBuilder();
+            getCurrentReservation.AppendFormat("SELECT {0} FROM {1} WHERE {2}={3}", 
+                "\"Reserved\"", "\"Events\"", "\"Events\".\"Id\"", "@ParId");
+
+            StringBuilder updateReservationString = new StringBuilder();
+            updateReservationString.AppendFormat("UPDATE {0} SET {1}={2} WHERE {3}={4}",
+                "\"Events\"", "\"Reserved\"", "@ParReserved", "\"Events\".\"Id\"", "@ParId");
+
+            int parReserved = 0;
+            EventEntity evtR = new EventEntity(); 
+
+            using (Connection.CreateConnection())
+            using (NpgsqlCommand commandGetReserved = new NpgsqlCommand (getCurrentReservation.ToString(), Connection.CreateConnection()))
+            using (NpgsqlCommand commandUpdate = new NpgsqlCommand(updateReservationString.ToString(), Connection.CreateConnection()))
+                using (NpgsqlCommand commandSelect = new NpgsqlCommand(QueryHelper.GetSelectEventStringById(), Connection.CreateConnection()))
+            {
+                commandGetReserved.Parameters.AddWithValue(QueryHelper.ParEventId, NpgsqlTypes.NpgsqlDbType.Uuid, eventId);
+
+                await Connection.CreateConnection().OpenAsync();
+                object reserved = await commandGetReserved.ExecuteScalarAsync();
+
+                parReserved = Convert.ToInt32(parReserved);
+                commandUpdate.Parameters.AddWithValue(QueryHelper.ParEventId, NpgsqlTypes.NpgsqlDbType.Uuid, eventId);
+                commandUpdate.Parameters.AddWithValue("@ParReserved", NpgsqlTypes.NpgsqlDbType.Integer, parReserved);
+
+                commandSelect.Parameters.AddWithValue(QueryHelper.ParEventId, NpgsqlTypes.NpgsqlDbType.Uuid, eventId);
+                DbDataReader dr = await commandSelect.ExecuteReaderAsync();
+                while (dr.Read())
+                {
+                    evtR = new EventEntity
+                    {
+                        Id = new Guid(dr[0].ToString()),
+                        StartTime = Convert.ToDateTime(dr[1]),
+                        EndTime = Convert.ToDateTime(dr[2]),
+                        Lat = Convert.ToDecimal(dr[3]),
+                        Long = Convert.ToDecimal(dr[4]),
+                        Name = dr[5].ToString(),
+                        Description = dr[6].ToString(),
+                        Category = Convert.ToInt32(dr[7]),
+                        Price = Convert.ToDecimal(dr[8]),
+                        Capacity = Convert.ToInt32(dr[9]),
+                        Reserved = Convert.ToInt32(dr[10]),
+                        Rating = Convert.ToDecimal(dr[11]),
+                        RateCount = Convert.ToInt32(dr[12])
+                    };
+                }
+
+
+            }
+
+            return Mapper.Map<IEvent>(evtR);
         }
 
         #endregion Methods
