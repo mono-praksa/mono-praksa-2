@@ -199,8 +199,8 @@ namespace GeoEvents.Repository
                 "\"Rating\"", "\"RateCount\"", "\"Events\"","\"Events\".\"Id\"", "@ParId");
 
             StringBuilder updateRatingString = new StringBuilder();
-            updateRatingString.AppendFormat("UPDATE {0} SET {2}={3} , {4}={5} WHERE {6}={7}",
-                "\"Events\"","\"Rating\"","@ParRating", "\"RateCount\"","@ParRateCount", "\"Events\"", "\"Events\".\"Id\"", "@ParId");
+            updateRatingString.AppendFormat("UPDATE {0} SET {1}={2} , {3}={4} WHERE {5}={6}",
+                "\"Events\"","\"Rating\"","@ParRating", "\"RateCount\"","@ParRateCount", "\"Events\".\"Id\"", "@ParId");
 
             EventEntity evtR = new EventEntity();
             decimal CurrentRating=0;
