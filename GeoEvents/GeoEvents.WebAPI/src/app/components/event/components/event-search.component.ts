@@ -18,7 +18,7 @@ import { needBothOrNeitherOfAddressAndRadius } from '../validators/validator';
 })
 export class EventSearchComponent implements OnInit {
 	
-    private _userIp: string;
+    private _userApproximateAddress: string = null;
 
 	//variables for storing data
 	private _events: IEvent[];
@@ -62,12 +62,12 @@ export class EventSearchComponent implements OnInit {
 	private _isLocationSearch: boolean = false;
 	private _isCategoriesSearch: boolean = false;
 
-    get userIp(): string {
-        return this._userIp;
+    get userApproximateAddress(): string {
+        return this._userApproximateAddress;
     }
 
-    set userIp(theUserIp: string) {
-        this._userIp = theUserIp;
+    set userApproximateAddress(_userApproximateAddress: string) {
+        this._userApproximateAddress = _userApproximateAddress;
     }
 
     get events(): IEvent[] {
@@ -175,8 +175,12 @@ export class EventSearchComponent implements OnInit {
 	}
 	
     ngOnInit(): void {
-        this.geocodingService.getUserIpAddress()
-            .subscribe(respond => this.userIp = respond);
+        this.geocodingService.getUserApproximateAddress()
+            .subscribe(response => {
+                if (response.status == "success") {
+                    this.userApproximateAddress = response.city + ", " + response.country;
+                }
+            });
 		if(this._preserveSearchQuerryService.searchQuerry != null && this._preserveSearchQuerryService.searchQuerry != ""){
 			let newFilter : IFilter = {
 				ULat: null,

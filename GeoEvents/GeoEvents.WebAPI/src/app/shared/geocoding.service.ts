@@ -9,10 +9,10 @@ export class GeocodingService {
 
     }
 
-    getUserIpAddress(): Observable<string> {
-        return this.http.get("http://api.ipify.org/?format=json")
+    getUserApproximateAddress() {
+        return this.http.get("http://ip-api.com/json")
             .map((response: Response) => {
-                return <string>response.json()["ip"]
+                return response.json();
             }).catch(this.handleError);
     }
 
