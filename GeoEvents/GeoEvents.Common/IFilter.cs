@@ -59,13 +59,6 @@ namespace GeoEvents.Common
         string SearchString { get; set; }
 
         /// <summary>
-        /// Gets or sets the boolean value representing whether the filter should search by name only or
-        /// by both name and description.
-        /// </summary>
-        /// <value>The boolean.</value>
-        bool? NameOnly { get; set; }
-
-        /// <summary>
         /// Gets or sets the attribute by which the result should be sorted.
         /// </summary>
         /// <value>The attribute.</value>
@@ -76,5 +69,29 @@ namespace GeoEvents.Common
         /// </summary>
         /// <value>The boolean.</value>
         bool? OrderAscending { get; set; }
+
+        /// <summary>
+        /// Gets or sets the price.
+        /// </summary>
+        /// <value>
+        /// The price.
+        /// </value>
+        decimal? Price { get; set; }
+
+        /// <summary>
+        /// Gets or sets the rating event.
+        /// </summary>
+        /// <value>
+        /// The rating event.
+        /// </value>
+        decimal? RatingEvent { get; set; }
+
+        /// <summary>
+        /// Gets or sets the rating location.
+        /// </summary>
+        /// <value>
+        /// The rating location.
+        /// </value>
+        decimal? RatingLocation { get; set; }
     }
 }
