@@ -27,7 +27,7 @@ export class EventCreateDataComponent implements OnInit {
     //variables for google maps api
     private _latitude: number = 0;
     private _longitude: number = 0;
-    private _zoom: number = 2;
+    private _zoom: number = 12;
 
     CategoryEnum: any = CategoryEnum;
 
@@ -59,21 +59,7 @@ export class EventCreateDataComponent implements OnInit {
     ) { }
 
     ngOnInit(): void {
-        this.name = new FormControl('', Validators.required);
-        this.description = new FormControl('', Validators.required);
-        this.start = new FormControl('', Validators.required);
-        this.end = new FormControl('', Validators.required);
-        this.price = new FormControl('', Validators.required);
-        this.capacity = new FormControl('', Validators.required);
-
-        this.eventForm = this._formBuilder.group({
-            name: this.name,
-            description: this.description,
-            start: this.start,
-            end: this.end,
-            price: this.price,
-            capacity: this.capacity
-        }, { validator: endDateBeforeStartDate('start', 'end') });
+        this.buildForm();
 
         this._loaderService.loaderStatus.subscribe((value: boolean) => {
             this.createEventLoading = value;
@@ -104,12 +90,39 @@ export class EventCreateDataComponent implements OnInit {
         });
     }
 
+    private buildForm(): void {
+        this.name = new FormControl('', Validators.required);
+        this.description = new FormControl('', Validators.required);
+        this.start = new FormControl('', Validators.required);
+        this.end = new FormControl('', Validators.required);
+        this.price = new FormControl('', Validators.required);
+        this.capacity = new FormControl('', Validators.required);
+
+        //this.eventForm = new FormGroup({
+        //    name: this.name,
+        //    description: this.description,
+        //    start: this.start,
+        //    end: this.end,
+        //    price: this.price,
+        //    capacity: this.capacity
+        //}, (formGroup: FormGroup) => {
+        //    return endDateBeforeStartDate(formGroup.controls.start.value, formGroup.controls.end.value);
+        //});
+        this.eventForm = this._formBuilder.group({
+            name: this.name,
+            description: this.description,
+            start: this.start,
+            end: this.end,
+            price: this.price,
+            capacity: this.capacity
+        }, { validator: endDateBeforeStartDate('start', 'end') });
+    }
+
     private setCurrentPosition(): void {
         if ("geolocation" in navigator) {
             navigator.geolocation.getCurrentPosition((position) => {
                 this.latitude = position.coords.latitude;
                 this.longitude = position.coords.longitude;
-                this.zoom = 2;
             });
         }
     }
@@ -133,7 +146,10 @@ export class EventCreateDataComponent implements OnInit {
             Long: this.longitude,
             Categories: chosenCategories,
             Price: formValues.price,
-            Capacity: formValues.capacity
+            Capacity: formValues.capacity,
+            Reserved: 0,
+            Rating: 0,
+            RateCount: 0
         }
         console.log(newEvent);
 

@@ -8,5 +8,8 @@
     Long: number,
     Categories: number[],
     Price: number,
-    Capacity: number
+    Capacity: number,
+    Reserved: number,
+    Rating: number,
+    RateCount: number
 }
