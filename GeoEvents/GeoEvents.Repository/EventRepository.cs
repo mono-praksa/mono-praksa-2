@@ -175,6 +175,9 @@ namespace GeoEvents.Repository
             if (filter.StartTime != null) { command.Parameters.AddWithValue(QueryHelper.ParUserStartTime, NpgsqlTypes.NpgsqlDbType.Timestamp, filter.StartTime); }
             if (filter.EndTime != null) { command.Parameters.AddWithValue(QueryHelper.ParUserEndTime, NpgsqlTypes.NpgsqlDbType.Timestamp, filter.EndTime); }
             if (filter.Category != null) { command.Parameters.AddWithValue(QueryHelper.ParCategory, NpgsqlTypes.NpgsqlDbType.Integer, filter.Category); }
+            if (filter.Price != null) { command.Parameters.AddWithValue(QueryHelper.ParPrice, NpgsqlTypes.NpgsqlDbType.Double, filter.Price); }
+            if (filter.RatingEvent != null) { command.Parameters.AddWithValue(QueryHelper.ParRatingEvent, NpgsqlTypes.NpgsqlDbType.Double, filter.RatingEvent); }
+            if (filter.RatingLocation != null) { command.Parameters.AddWithValue(QueryHelper.ParRatingLocation, NpgsqlTypes.NpgsqlDbType.Integer, filter.RatingLocation); }
             if (!string.IsNullOrWhiteSpace(filter.SearchString)) { command.Parameters.AddWithValue(QueryHelper.ParSearchString, NpgsqlTypes.NpgsqlDbType.Varchar, "%" + filter.SearchString + "%"); }
         }
 
