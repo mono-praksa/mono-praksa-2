@@ -191,9 +191,75 @@ namespace GeoEvents.Repository
         /// <param name="rating">The rating.</param>
         /// <returns></returns>
         /// <exception cref="System.NotImplementedException"></exception>
-        public Task<IEvent> UpdateRatingAsync(Guid eventId, decimal rating)
+        public async Task<IEvent> UpdateRatingAsync(Guid eventId, decimal rating)
         {
-            throw new NotImplementedException();
+
+            StringBuilder getCurrentRating = new StringBuilder();
+            getCurrentRating.AppendFormat("SELECT {0},{1} FROM {2} WHERE {3}={4}",
+                "\"Rating\"", "\"RateCount\"", "\"Events\"","\"Events\".\"Id\"", "@ParId");
+
+            StringBuilder updateRatingString = new StringBuilder();
+            updateRatingString.AppendFormat("UPDATE {0} SET {2}={3} , {4}={5} WHERE {6}={7}",
+                "\"Events\"","\"Rating\"","@ParRating", "\"RateCount\"","@ParRateCount", "\"Events\"", "\"Events\".\"Id\"", "@ParId");
+
+            EventEntity evtR = new EventEntity();
+            decimal CurrentRating=0;
+            int CurrentRateCount=0;
+
+            using (Connection.CreateConnection())
+            using (NpgsqlCommand commandGetRating = new NpgsqlCommand(getCurrentRating.ToString(), Connection.CreateConnection()))
+            using (NpgsqlCommand commandUpdateRating = new NpgsqlCommand(updateRatingString.ToString(), Connection.CreateConnection()))
+            using (NpgsqlCommand commandSelect = new NpgsqlCommand(QueryHelper.GetSelectEventStringById(), Connection.CreateConnection()))
+            {
+                commandGetRating.Parameters.AddWithValue(QueryHelper.ParEventId, NpgsqlTypes.NpgsqlDbType.Uuid, eventId);
+
+                await Connection.CreateConnection().OpenAsync();
+                DbDataReader drGetRating = await commandGetRating.ExecuteReaderAsync();
+
+                if (drGetRating.Read()) {
+                    CurrentRating = Convert.ToInt32(drGetRating[0]);
+                    CurrentRateCount = Convert.ToInt32(drGetRating[1]);
+                }
+
+                int NewRateCount = CurrentRateCount + 1;
+                decimal NewRating = (CurrentRateCount * CurrentRating + rating)/NewRateCount;
+
+
+                commandUpdateRating.Parameters.AddWithValue(QueryHelper.ParEventId, NpgsqlTypes.NpgsqlDbType.Uuid, eventId);
+                commandUpdateRating.Parameters.AddWithValue("@ParRating", NpgsqlTypes.NpgsqlDbType.Integer,NewRating);
+                commandUpdateRating.Parameters.AddWithValue("@ParRateCount", NpgsqlTypes.NpgsqlDbType.Integer,NewRateCount);
+
+                await commandUpdateRating.ExecuteNonQueryAsync();
+
+
+
+
+                commandSelect.Parameters.AddWithValue(QueryHelper.ParEventId, NpgsqlTypes.NpgsqlDbType.Uuid, eventId);
+                DbDataReader drSelect = await commandSelect.ExecuteReaderAsync();
+                while (drSelect.Read())
+                {
+                    evtR = new EventEntity
+                    {
+                        Id = new Guid(drSelect[0].ToString()),
+                        StartTime = Convert.ToDateTime(drSelect[1]),
+                        EndTime = Convert.ToDateTime(drSelect[2]),
+                        Lat = Convert.ToDecimal(drSelect[3]),
+                        Long = Convert.ToDecimal(drSelect[4]),
+                        Name = drSelect[5].ToString(),
+                        Description = drSelect[6].ToString(),
+                        Category = Convert.ToInt32(drSelect[7]),
+                        Price = Convert.ToDecimal(drSelect[8]),
+                        Capacity = Convert.ToInt32(drSelect[9]),
+                        Reserved = Convert.ToInt32(drSelect[10]),
+                        Rating = Convert.ToDecimal(drSelect[11]),
+                        RateCount = Convert.ToInt32(drSelect[12])
+                    };
+                }
+            }
+
+            return Mapper.Map<IEvent>(evtR);
+
+
         }
 
         /// <summary>
@@ -218,7 +284,7 @@ namespace GeoEvents.Repository
             using (Connection.CreateConnection())
             using (NpgsqlCommand commandGetReserved = new NpgsqlCommand (getCurrentReservation.ToString(), Connection.CreateConnection()))
             using (NpgsqlCommand commandUpdate = new NpgsqlCommand(updateReservationString.ToString(), Connection.CreateConnection()))
-                using (NpgsqlCommand commandSelect = new NpgsqlCommand(QueryHelper.GetSelectEventStringById(), Connection.CreateConnection()))
+            using (NpgsqlCommand commandSelect = new NpgsqlCommand(QueryHelper.GetSelectEventStringById(), Connection.CreateConnection()))
             {
                 commandGetReserved.Parameters.AddWithValue(QueryHelper.ParEventId, NpgsqlTypes.NpgsqlDbType.Uuid, eventId);
 
