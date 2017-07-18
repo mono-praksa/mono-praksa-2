@@ -99,9 +99,9 @@ namespace GeoEvents.WebAPI.Controllers
 
     public class ImageModel
     {
-        public Guid Id { get; internal set; }
-        public Guid EventId { get; internal set; }
-        public byte[] Content { get; internal set; }
+        public Guid Id { get; set; }
+        public Guid EventId { get; set; }
+        public byte[] Content { get; set; }
     }
 }
 
