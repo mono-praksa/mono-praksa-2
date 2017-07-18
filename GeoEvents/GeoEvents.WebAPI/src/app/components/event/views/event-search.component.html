@@ -55,10 +55,10 @@
                                     <input type="number" formControlName="radius" class="form-control" id="radius" placeholder="Radius" />
                                     <span class="input-group-addon">km</span>
                                 </div>
+                                <span *ngIf="(address.touched || radius.touched ) && filterForm.hasError('needBothOrNeitherOfAddressAndRadius')" class="help-block">
+                                    *Either input both an address and a radius or neither!
+                                </span>
                             </div>
-                        </div>
-                        <div *ngIf="(address.touched || radius.touched ) && filterForm.hasError('needBothOrNeitherOfAddressAndRadius')" class="help-block">
-                            *Either input both an address and a radius or neither!
                         </div>
 					</div>
 					<div class="col-sm-3">

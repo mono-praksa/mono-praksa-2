@@ -8,19 +8,17 @@ import { IEvent } from '../models/event.model'
 import { CategoryEnum } from '../../../shared/common/category-enum'
 import { LoaderService } from '../../../shared/loader.service'
 import { EventService } from '../event.service'
+import { GeocodingService } from '../../../shared/geocoding.service';
 
-function lessThanZero(elementKey: string) {
-    return (formGroup: FormGroup): { [key: string]: any } => {
-        let element = formGroup.controls[elementKey];
-
-        if (element && element.value < 0) {
-            return {
-                lessThanZero: true
-            }
+function lessThanZero(control: FormControl) {
+    if (control && control.value < 0) {
+        return {
+            lessThanZero: true
         }
-
-        return null;
     }
+    else {
+            return null;
+   }
 }
 
 @Component({
@@ -39,9 +37,8 @@ export class EventCreateDataComponent implements OnInit {
     private _createdEvent: IEvent;
 
     //variables for google maps api
-    private _latitude: number = 0;
-    private _longitude: number = 0;
     private _zoom: number = 12;
+    private _isAddressValid: boolean = false;
 
     CategoryEnum: any = CategoryEnum;
 
@@ -63,16 +60,22 @@ export class EventCreateDataComponent implements OnInit {
     category: FormControl;
     price: FormControl;
     capacity: FormControl;
+    address: FormControl;
+    latitude: FormControl;
+    longitude: FormControl;
 
     constructor(
         private _mapsAPILoader: MapsAPILoader,
         private _ngZone: NgZone,
         private _loaderService: LoaderService,
         private _eventService: EventService,
-        private fb: FormBuilder
+        private fb: FormBuilder,
+        private geocodingService: GeocodingService
     ) { }
 
     ngOnInit(): void {
+        this.setCurrentPosition();
+
         this.buildForm();
 
         this._loaderService.loaderStatus.subscribe((value: boolean) => {
@@ -97,11 +100,22 @@ export class EventCreateDataComponent implements OnInit {
                     }
 
                     //set latitude, longitude and zoom
-                    this.latitude = place.geometry.location.lat();
-                    this.longitude = place.geometry.location.lng();
+                    this.eventForm.controls["latitude"].setValue(place.geometry.location.lat());
+                    this.eventForm.controls["longitude"].setValue(place.geometry.location.lng());
+                    this.geocodingService.getAddress(this.eventForm.controls["latitude"].value, this.eventForm.controls["longitude"].value).subscribe(response => {
+                        this.eventForm.controls["address"].setValue(response);
+                    });
+                    this.isAddressValid = true;
                 });
             });
         });
+    }
+
+    clearLocation(): void {
+        this.isAddressValid = false;
+        this.eventForm.controls["address"].setValue("");
+        this.eventForm.controls["latitude"].setValue(null);
+        this.eventForm.controls["longitude"].setValue(null);
     }
 
     private buildForm(): void {
@@ -109,9 +123,11 @@ export class EventCreateDataComponent implements OnInit {
         this.description = new FormControl('', Validators.required);
         this.start = new FormControl('', Validators.required);
         this.end = new FormControl('', Validators.required);
-        this.price = new FormControl('', Validators.required);
-        //this.price = new FormControl('', [Validators.required, lessThanZero('price')]);
-        this.capacity = new FormControl('', Validators.required);
+        this.price = new FormControl('', [Validators.required, lessThanZero]);
+        this.capacity = new FormControl('', [Validators.required, lessThanZero]);
+        this.address = new FormControl('', Validators.required);
+        this.latitude = new FormControl('', Validators.required);
+        this.longitude = new FormControl('', Validators.required);
 
         this.eventForm = new FormGroup({
             name: this.name,
@@ -119,15 +135,22 @@ export class EventCreateDataComponent implements OnInit {
             start: this.start,
             end: this.end,
             price: this.price,
-            capacity: this.capacity
+            capacity: this.capacity,
+            address: this.address,
+            latitude: this.latitude,
+            longitude: this.longitude
         }, endDateBeforeStartDate('start', 'end'));
     }
 
     private setCurrentPosition(): void {
         if ("geolocation" in navigator) {
             navigator.geolocation.getCurrentPosition((position) => {
-                this.latitude = position.coords.latitude;
-                this.longitude = position.coords.longitude;
+                this.eventForm.controls["latitude"].setValue(position.coords.latitude);
+                this.eventForm.controls["longitude"].setValue(position.coords.longitude);
+                this.geocodingService.getAddress(this.eventForm.controls["latitude"].value, this.eventForm.controls["longitude"].value).subscribe(response => {
+                    this.eventForm.controls["address"].setValue(response);
+                });
+                this.isAddressValid = true;
             });
         }
     }
@@ -147,8 +170,8 @@ export class EventCreateDataComponent implements OnInit {
             Description: formValues.description,
             StartTime: formValues.start,
             EndTime: formValues.end,
-            Lat: this.latitude,
-            Long: this.longitude,
+            Lat: formValues.latitude,
+            Long: formValues.longitude,
             Categories: chosenCategories,
             Price: formValues.price,
             Capacity: formValues.capacity,
@@ -173,9 +196,12 @@ export class EventCreateDataComponent implements OnInit {
         });
     }
 
-    mapClicked(event: any): void {
-        this.latitude = event.coords.lat;
-        this.longitude = event.coords.lng;
+    markerUpdated(event: any): void {
+        this.eventForm.controls["latitude"].setValue( event.coords.lat);
+        this.eventForm.controls["longitude"].setValue(event.coords.lng);
+        this.geocodingService.getAddress(this.eventForm.controls["latitude"].value, this.eventForm.controls["longitude"].value).subscribe(response => {
+            this.eventForm.controls["address"].setValue(response);
+        });
     }
 
     isAllUnchecked(): boolean {
@@ -191,22 +217,6 @@ export class EventCreateDataComponent implements OnInit {
     keys(): Array<string> {
         var keys = Object.keys(CategoryEnum);
         return keys.slice(keys.length / 2);
-    }
-
-    get latitude(): number {
-        return this._latitude;
-    }
-
-    set latitude(theLatitude: number) {
-        this._latitude = theLatitude;
-    }
-
-    get longitude(): number {
-        return this._longitude;
-    }
-
-    set longitude(theLongitude: number) {
-        this._longitude = theLongitude;
     }
 
     get zoom(): number {
@@ -231,6 +241,14 @@ export class EventCreateDataComponent implements OnInit {
 
     set createdEvent(theCreatedEvent: IEvent) {
         this._createdEvent = theCreatedEvent;
+    }
+
+    get isAddressValid(): boolean {
+        return this._isAddressValid;
+    }
+
+    set isAddressValid(isAddressValid: boolean) {
+        this._isAddressValid = isAddressValid;
     }
 }
 
