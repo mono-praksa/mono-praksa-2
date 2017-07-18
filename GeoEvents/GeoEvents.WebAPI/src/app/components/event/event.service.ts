@@ -6,6 +6,7 @@ import "rxjs/add/operator/catch";
 
 import { IEvent } from "./models/event.model";
 import { IFilter } from "./models/filter.model";
+import { IImage } from './models/image.model';
 
 @Injectable()
 export class EventService {
@@ -53,6 +54,13 @@ export class EventService {
         let options = new RequestOptions({ headers: headers });
         return this._http.post('/api/events/create', JSON.stringify(event), options)
             .map((response: Response) => <IEvent>response.json())
+            .catch(this.handleError);
+    }
+
+    createImage(image: IImage): Observable<IImage> {
+        let options = new RequestOptions();
+        return this._http.post('/api/images/create/' + image.EventId, image.Content, options)
+            .map((response: Response) => response.json())
             .catch(this.handleError);
     }
 	

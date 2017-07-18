@@ -2,7 +2,8 @@
 import { Http, RequestOptions, Headers, Response } from '@angular/http'
 import { Observable } from 'rxjs/Observable'
 import { IEvent } from '../models/event.model'
-
+import { IImage } from '../models/image.model'
+import { EventService } from '../event.service'
 
 @Component({
     selector: "create-images",
@@ -10,15 +11,15 @@ import { IEvent } from '../models/event.model'
 })
 export class EventCreateImagesComponent {
     @Input() createdEvent: IEvent;
+    @Output() emittSkip = new EventEmitter();
 
     private _files: Array<file>;
     private _indices: Array<number>;
     private _formData: FormData;
     private _fileList: FileList;
     private _btnUploadClicked: boolean = false;
-    @Output() emittSkip = new EventEmitter();
 
-    constructor(private http: Http) { }
+    constructor(private _eventService: EventService) { }
 
     get files(): Array<file> {
         return this._files;
@@ -89,16 +90,16 @@ export class EventCreateImagesComponent {
             this.files[i].uploading = true;
             this.formData.append("name" + i, this.fileList[i], this.fileList[i].name);
 
-            let options = new RequestOptions();
-            this.http.post('/api/images/create/' + this.createdEvent.Id, this.formData, options)
-                .map((res: Response) => res.json())
-                .catch((error:any) => Observable.throw(error))
-                .subscribe((data:any) => {
-                    this.files[i].uploading = false;
-                    this.files[i].finished = true;
-                }, (error:any) => {
-                    this.files[i].error = true;
-                });
+            this._eventService.createImage({
+                Id: undefined,
+                EventId: this.createdEvent.Id,
+                Content: this.formData
+            }).subscribe((data: any) => {
+                this.files[i].uploading = false;
+                this.files[i].finished = true;
+            }, (error: any) => {
+                this.files[i].error = true;
+            });
             this.formData = new FormData();
         })
     }

@@ -1,5 +1,5 @@
 ﻿export interface IImage {
-    Id: number
-    EventId: number
-    Content: string
+    Id: string
+    EventId: string
+    Content: FormData
 }
