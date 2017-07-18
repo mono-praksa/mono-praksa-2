@@ -93,7 +93,7 @@ export class EventCreateImagesComponent {
             this._eventService.createImage({
                 Id: undefined,
                 EventId: this.createdEvent.Id,
-                Content: this.formData
+                FormData: this.formData
             }).subscribe((data: any) => {
                 this.files[i].uploading = false;
                 this.files[i].finished = true;

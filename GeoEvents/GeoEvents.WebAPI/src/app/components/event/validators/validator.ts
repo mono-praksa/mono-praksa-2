@@ -44,32 +44,35 @@ function stringToTimeArray(_time: string, _format: string, _delimiter: string) {
     return formatedTime.filter(function (n) { return n != undefined });
 }
 
-export function endDateBeforeStartDate(formGroup: FormGroup) {
-    let start = formGroup.controls['start'];
-    let end = formGroup.controls['end'];
+export function endDateBeforeStartDate(startKey: string, endKey: string) {
+    return (formGroup: FormGroup): { [key: string]: any } => {
+        let start = formGroup.controls[startKey];
+        let end = formGroup.controls[endKey];
 
-    if (start.value != "" && end.value != "") {
-        var startTimeDate = start.value.split(" ");
-        var startDate = startTimeDate[0];
-        var startTime = startTimeDate[1];
+        if (start.value != "" && end.value != "") {
+            var startTimeDate = start.value.split(" ");
+            var startDate = startTimeDate[0];
+            var startTime = startTimeDate[1];
 
-        var endTimeDate = end.value.split(" ");
-        var endDate = endTimeDate[0];
-        var endTime = endTimeDate[1];
+            var endTimeDate = end.value.split(" ");
+            var endDate = endTimeDate[0];
+            var endTime = endTimeDate[1];
 
-        var startDateComponents = stringToDateArray(startDate, "yyyy-mm-dd", '-');
-        var startTimeComponents = stringToTimeArray(startTime, "hh:mm", ':');
-        var endDateComponents = stringToDateArray(endDate, "yyyy-mm-dd", '-');
-        var endTimeComponents = stringToTimeArray(endTime, "hh:mm", ':');
+            var startDateComponents = stringToDateArray(startDate, "yyyy-mm-dd", '-');
+            var startTimeComponents = stringToTimeArray(startTime, "hh:mm", ':');
+            var endDateComponents = stringToDateArray(endDate, "yyyy-mm-dd", '-');
+            var endTimeComponents = stringToTimeArray(endTime, "hh:mm", ':');
 
-        var startDateTime = new Date(startDateComponents[0], startDateComponents[1] - 1, startDateComponents[2], startTimeComponents[0], startTimeComponents[1]);
-        var endDateTime = new Date(endDateComponents[0], endDateComponents[1] - 1, endDateComponents[2], endTimeComponents[0], endTimeComponents[1]);
+            var startDateTime = new Date(startDateComponents[0], startDateComponents[1] - 1, startDateComponents[2], startTimeComponents[0], startTimeComponents[1]);
+            var endDateTime = new Date(endDateComponents[0], endDateComponents[1] - 1, endDateComponents[2], endTimeComponents[0], endTimeComponents[1]);
 
-        if (startDateTime >= endDateTime) {
-            return {
-                endDateBeforeStartDate: true
+            if (startDateTime >= endDateTime) {
+                return {
+                    endDateBeforeStartDate: true
+                }
             }
         }
+        return null;
     }
 }
 

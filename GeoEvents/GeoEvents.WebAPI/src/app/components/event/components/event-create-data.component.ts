@@ -1,5 +1,5 @@
 ﻿import { Component, OnInit, ElementRef, NgZone, ViewChild, Output, EventEmitter } from '@angular/core'
-import { FormControl, FormGroup, Validators } from '@angular/forms'
+import { FormControl, FormGroup, Validators, ValidatorFn, FormBuilder } from '@angular/forms'
 import { Observable } from 'rxjs/Rx'
 import { MapsAPILoader } from '@agm/core'
 
@@ -8,6 +8,20 @@ import { IEvent } from '../models/event.model'
 import { CategoryEnum } from '../../../shared/common/category-enum'
 import { LoaderService } from '../../../shared/loader.service'
 import { EventService } from '../event.service'
+
+function lessThanZero(elementKey: string) {
+    return (formGroup: FormGroup): { [key: string]: any } => {
+        let element = formGroup.controls[elementKey];
+
+        if (element && element.value < 0) {
+            return {
+                lessThanZero: true
+            }
+        }
+
+        return null;
+    }
+}
 
 @Component({
     selector: "create-event",
@@ -54,7 +68,8 @@ export class EventCreateDataComponent implements OnInit {
         private _mapsAPILoader: MapsAPILoader,
         private _ngZone: NgZone,
         private _loaderService: LoaderService,
-        private _eventService: EventService
+        private _eventService: EventService,
+        private fb: FormBuilder
     ) { }
 
     ngOnInit(): void {
@@ -95,6 +110,7 @@ export class EventCreateDataComponent implements OnInit {
         this.start = new FormControl('', Validators.required);
         this.end = new FormControl('', Validators.required);
         this.price = new FormControl('', Validators.required);
+        //this.price = new FormControl('', [Validators.required, lessThanZero('price')]);
         this.capacity = new FormControl('', Validators.required);
 
         this.eventForm = new FormGroup({
@@ -104,9 +120,7 @@ export class EventCreateDataComponent implements OnInit {
             end: this.end,
             price: this.price,
             capacity: this.capacity
-        }, (formGroup: FormGroup) => {
-            return endDateBeforeStartDate(formGroup);
-        });
+        }, endDateBeforeStartDate('start', 'end'));
     }
 
     private setCurrentPosition(): void {
@@ -138,9 +152,9 @@ export class EventCreateDataComponent implements OnInit {
             Categories: chosenCategories,
             Price: formValues.price,
             Capacity: formValues.capacity,
-            Reserved: 0,
-            Rating: 0,
-            RateCount: 0
+            Reserved: undefined,
+            Rating: undefined,
+            RateCount: undefined
         }
         console.log(newEvent);
 
