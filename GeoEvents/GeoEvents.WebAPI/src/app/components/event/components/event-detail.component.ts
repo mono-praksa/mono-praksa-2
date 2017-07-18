@@ -5,6 +5,8 @@ import { Observable } from 'rxjs/Observable';
 import { IEvent } from '../models/event.model';
 import { IImage } from '../models/image.model';
 
+import { GeocodingService } from '../../../shared/geocoding.service';
+
 @Component({
     templateUrl: 'app/components/event/views/event-detail.component.html',
     selector: 'event-details',
@@ -27,7 +29,7 @@ export class EventDetailComponent implements OnInit{
     private _imagesLoading: boolean = true
     private _address: string = ""
 
-    constructor(private http: Http) {
+    constructor(private http: Http, private geocodingService: GeocodingService) {
 
     }
 
@@ -54,16 +56,11 @@ export class EventDetailComponent implements OnInit{
 
                 this.carouselElement.nativeElement.appendChild(item);
             }
-        })
+        });
 
-        this.http.get('https://maps.googleapis.com/maps/api/geocode/json?latlng=' + this.event.Lat + ',' + this.event.Long + '&key=AIzaSyDHKcbmM0jpW7BOet42_S92KJSr5PYKc5w')
-            .map((response: Response) => {
-                return response;
-            }).catch(this.handleError).subscribe(response => {
-                console.log(response.json())
-                this.address = response.json()["results"][0]["formatted_address"];
-                console.log(this.address)
-            })
+        this.geocodingService.getAddress(this.event.Lat, this.event.Long).subscribe(response => {
+            this.address = response;
+        });
     }
 
     getImages(id : string): Observable<IImage[]> {

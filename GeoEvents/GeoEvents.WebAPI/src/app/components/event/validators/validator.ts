@@ -44,10 +44,6 @@ function stringToTimeArray(_time: string, _format: string, _delimiter: string) {
     return formatedTime.filter(function (n) { return n != undefined });
 }
 
-//export function endDateBeforeStartDate(startKey: string, endKey: string) {
-    //return (group: FormGroup): { [key: string]: any } => {
-        
-    //}
 export function endDateBeforeStartDate(formGroup: FormGroup) {
     let start = formGroup.controls['start'];
     let end = formGroup.controls['end'];
@@ -73,6 +69,22 @@ export function endDateBeforeStartDate(formGroup: FormGroup) {
             return {
                 endDateBeforeStartDate: true
             }
+        }
+    }
+}
+
+export function needBothOrNeitherOfAddressAndRadius(addressKey: string, radiusKey: string) {
+    return (group: FormGroup): { [key: string]: any } => {
+        let address = group.controls[addressKey];
+        let radius = group.controls[radiusKey];
+
+        if ((address.value != null) != (radius.value != null && radius.value > 0)) {
+            return {
+                needBothOrNeitherOfAddressAndRadius: true
+            }
+        }
+        else {
+            return null;
         }
     }
 }

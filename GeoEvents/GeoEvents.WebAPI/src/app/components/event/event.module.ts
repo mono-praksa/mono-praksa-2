@@ -17,7 +17,7 @@ import { EventDetailComponent } from "./components/event-detail.component";
 
 import { EventService } from "./event.service";
 import { PreserveSearchQuerryService } from "../../shared/preserve-search-querry.service";
-
+import { GeocodingService } from '../../shared/geocoding.service';
 
 @NgModule({
     imports: [
@@ -44,7 +44,8 @@ import { PreserveSearchQuerryService } from "../../shared/preserve-search-querry
 	
 	providers: [ 
 		EventService,
-		PreserveSearchQuerryService	
+        PreserveSearchQuerryService,
+        GeocodingService
 	]
 })
 export class EventModule { }

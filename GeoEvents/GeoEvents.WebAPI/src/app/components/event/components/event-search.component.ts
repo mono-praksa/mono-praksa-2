@@ -8,6 +8,9 @@ import { IFilter } from '../models/filter.model';
 
 import { PreserveSearchQuerryService } from '../../../shared/preserve-search-querry.service';
 import { EventService } from '../event.service';
+import { GeocodingService } from '../../../shared/geocoding.service';
+
+import { needBothOrNeitherOfAddressAndRadius } from '../validators/validator';
 
 @Component({
 	templateUrl: 'app/components/event/views/event-search.component.html', 
@@ -29,8 +32,6 @@ export class EventSearchComponent implements OnInit {
 	private dataServiceSubscription: Subscription;
 	
 	//variables for the location services
-	private _latitude: number;
-	private _longitude: number;
 	private _isMapZoomListenerStarted: boolean = false;
 	
 	@ViewChild("search") searchElementRef: ElementRef;
@@ -83,22 +84,6 @@ export class EventSearchComponent implements OnInit {
 
     set filter(theFilter: IFilter) {
         this._filter = theFilter;
-    }
-
-    get latitude(): number {
-        return this._latitude;
-    }
-
-    set latitude(theLatitude: number) {
-        this._latitude = theLatitude;
-    }
-
-    get longitude(): number {
-        return this._longitude;
-    }
-
-    set longitude(theLongitude: number) {
-        this._longitude = theLongitude;
     }
 
     get isMapZoomListenerStarted(): boolean {
@@ -158,8 +143,8 @@ export class EventSearchComponent implements OnInit {
     }
 
 
-	//constructor
-	constructor(private _eventService: EventService, private _preserveSearchQuerryService: PreserveSearchQuerryService, private _mapsAPILoader: MapsAPILoader, private _ngZone: NgZone) {
+    //constructor
+    constructor(private _eventService: EventService, private _preserveSearchQuerryService: PreserveSearchQuerryService, private _mapsAPILoader: MapsAPILoader, private _ngZone: NgZone, private geocodingService: GeocodingService) {
 		this.createForm();
 				
 		//checking if this service has any params inside, used when redirected from searching in home component
@@ -167,9 +152,7 @@ export class EventSearchComponent implements OnInit {
 		//if there are not any params, user likely clicked on the advanced search button, or redirected from somewhere else.
 	}
 	
-	ngOnInit(): void {
-		this.setCurrentPosition();
-		
+	ngOnInit(): void {		
 		if(this._preserveSearchQuerryService.searchQuerry != null && this._preserveSearchQuerryService.searchQuerry != ""){
 			let newFilter : IFilter = {
 				ULat: null,
@@ -197,7 +180,7 @@ export class EventSearchComponent implements OnInit {
 		this.isLocationSearch = !this.isLocationSearch;
 		if(!this.isMapZoomListenerStarted) {
 			this.isMapZoomListenerStarted = true;
-			setTimeout(()=>{this.startMapZoomListener()}, 1000);				
+			this.startMapZoomListener();				
 		}	
 	}
 	
@@ -206,8 +189,8 @@ export class EventSearchComponent implements OnInit {
 		let selectedCategories = this.getSelectedCategories();
 		
 		let newFilter : IFilter = {
-            ULat: this.latitude,
-            ULong: this.longitude,
+            ULat: formValues.latitude,
+            ULong: formValues.longitude,
             Radius: formValues.radius,
             StartTime: formValues.start,
             EndTime: formValues.end,
@@ -264,8 +247,11 @@ export class EventSearchComponent implements OnInit {
 		//todo: extend this with other location services in case geolocation is blocked by user
 		if ("geolocation" in navigator) {
 			navigator.geolocation.getCurrentPosition((position) => {
-				this.latitude = position.coords.latitude;
-				this.longitude = position.coords.longitude;
+				this.filterForm.controls["latitude"].setValue(position.coords.latitude);
+                this.filterForm.controls["longitude"].setValue(position.coords.longitude);
+                this.geocodingService.getAddress(this.filterForm.controls["latitude"].value, this.filterForm.controls["longitude"].value).subscribe(response => {
+                    this.filterForm.controls["address"].setValue(response);
+                });
 			});
 		}
 	}	
@@ -283,12 +269,17 @@ export class EventSearchComponent implements OnInit {
 					//get the place result
 					let place: google.maps.places.PlaceResult = autocomplete.getPlace();
 					//verify result
-					if (place.geometry === undefined || place.geometry === null) {
+                    if (place.geometry === undefined || place.geometry === null) {
+                        this.filterForm.controls["latitude"].setValue(null);
+                        this.filterForm.controls["longitude"].setValue(null);
 						return;
 					}
 					//set latitude, longitude and zoom
-					this.latitude = place.geometry.location.lat();
-					this.longitude = place.geometry.location.lng();
+					this.filterForm.controls["latitude"].setValue(place.geometry.location.lat());
+                    this.filterForm.controls["longitude"].setValue(place.geometry.location.lng());
+                    this.geocodingService.getAddress(this.filterForm.controls["latitude"].value, this.filterForm.controls["longitude"].value).subscribe(response => {
+                        this.filterForm.controls["address"].setValue(response);
+                    });
 				});
 			});
 		});	
@@ -344,11 +335,13 @@ export class EventSearchComponent implements OnInit {
 	private createForm(): void {
 		let form = {
 			start: new FormControl(null),
-			end: new FormControl(null),
-			address: new FormControl(null),
+            end: new FormControl(null),
+            address: new FormControl(null),
 			radius: new FormControl(null),
-			searchString: new FormControl(null)
-		};
-		this.filterForm = new FormGroup(form);
+            searchString: new FormControl(null),
+            latitude: new FormControl(null),
+            longitude: new FormControl(null)
+        };
+        this.filterForm = new FormGroup(form, needBothOrNeitherOfAddressAndRadius('latitude', 'radius'));
 	}
 }

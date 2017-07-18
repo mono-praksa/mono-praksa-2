@@ -43,6 +43,7 @@
 						<div [hidden]="!this.isLocationSearch">
 							<input type="text" formControlName="address" class="form-control" id="address" placeholder="Address..." #search />
 							<p>Location</p>
+                            <a href="#" (click)="setCurrentPosition()">Set to current location</a>
 							
 							<input type="text" formControlName="radius" class="form-control" id="radius" placeholder="Radius (km)" />	
 							<p>Radius</p>
