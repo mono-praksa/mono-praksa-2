@@ -120,7 +120,7 @@
 				<p>pager</p>
 			</div>
 		</div>
-		<display-map [radius]="radius" [latitude]="latitude" [longitude]="longitude" *ngIf="this.isMapMode" (event)="eventDetails($event)" [events]="this.events"></display-map>
+		<display-map [radius]="radius" [latitude]="latitude.value" [longitude]="longitude.value" *ngIf="this.isMapMode" (event)="enterDetailMode($event)" [events]="this.events"></display-map>
 	</div>
 </div>
 <event-details [event]="this.event" *ngIf="this.isDetailMode"></event-details>

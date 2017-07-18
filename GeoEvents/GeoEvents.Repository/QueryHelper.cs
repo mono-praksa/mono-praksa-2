@@ -460,8 +460,8 @@ namespace GeoEvents.Repository
         public static string GetSelectImagesString()
         {
             StringBuilder selectString = new StringBuilder();
-            selectString.AppendFormat(" SELECT * FROM {0} WHERE ({1}={2}",
-                TableNameImagesQ, ParEventId, TableNameImagesQ);
+            selectString.AppendFormat(" SELECT * FROM {0} WHERE ({1}={2}.{3})",
+                TableNameImagesQ, ParEventId, TableNameImagesQ, EventIdQ);
 
             return selectString.ToString();
         }
