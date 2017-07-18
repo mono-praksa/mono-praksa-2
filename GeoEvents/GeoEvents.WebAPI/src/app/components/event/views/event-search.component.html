@@ -42,13 +42,25 @@
 					</div>
 					<div class="col-sm-3">
 						<div [hidden]="!this.isLocationSearch">
-							<input type="text" formControlName="address" class="form-control" id="address" placeholder="Address..." #search />
-							<p>Location</p>
-                            <a href="#" (click)="setCurrentPosition()">Set to current location</a>
-							
-							<input type="text" formControlName="radius" class="form-control" id="radius" placeholder="Radius (km)" />	
-							<p>Radius</p>
-						</div>
+                                <div class="form-group" [ngClass]="{'has-error': (address.touched || radius.touched) && filterForm.hasError('needBothOrNeitherOfAddressAndRadius')}">
+                                    <label for="address">Address</label>
+                                    <div [ngClass]="{'input-group': isAddressValid}">
+						                <input type="text" formControlName="address" class="form-control" id="address" placeholder="Address..." #search [readonly]="isAddressValid"/>
+                                        <span *ngIf="isAddressValid" class="input-group-addon" (click)="clearLocation()">X</span>
+                                    </div>
+                                    <a routerlink="" (click)="setCurrentPosition()">Set to current location</a>
+                                </div>
+                            <div class="form-group" [ngClass]="{'has-error': (address.touched || radius.touched) && filterForm.hasError('needBothOrNeitherOfAddressAndRadius')}">
+                                <label for="radius">Radius</label>                                
+                                <div class="input-group">
+                                    <input type="number" formControlName="radius" class="form-control" id="radius" placeholder="Radius" />
+                                    <span class="input-group-addon">km</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div *ngIf="(address.touched || radius.touched ) && filterForm.hasError('needBothOrNeitherOfAddressAndRadius')" class="help-block">
+                            *Either input both an address and a radius or neither!
+                        </div>
 					</div>
 					<div class="col-sm-3">
 						<div *ngIf="this.isCategoriesSearch">

@@ -27,11 +27,19 @@ export class EventSearchComponent implements OnInit {
 	//isLoadingData: boolean = false;
 	
 	//variables for the filter and retrieving data
-	filterForm: FormGroup;
+    filterForm: FormGroup;
+    start: FormControl;
+    end: FormControl;
+    address: FormControl;
+    radius: FormControl;
+    searchString: FormControl;
+    latitude: FormControl;
+    longitude: FormControl;
 	private _filter: IFilter;
 	private dataServiceSubscription: Subscription;
 	
 	//variables for the location services
+    isAddressValid: boolean = false;
 	private _isMapZoomListenerStarted: boolean = false;
 	
 	@ViewChild("search") searchElementRef: ElementRef;
@@ -268,6 +276,7 @@ export class EventSearchComponent implements OnInit {
                 this.geocodingService.getAddress(this.filterForm.controls["latitude"].value, this.filterForm.controls["longitude"].value).subscribe(response => {
                     this.filterForm.controls["address"].setValue(response);
                 });
+                this.isAddressValid = true;
 			});
 		}
 	}	
@@ -283,7 +292,9 @@ export class EventSearchComponent implements OnInit {
 			autocomplete.addListener("place_changed", () => {
 				this._ngZone.run(() => {
 					//get the place result
-					let place: google.maps.places.PlaceResult = autocomplete.getPlace();
+                    let place: google.maps.places.PlaceResult = autocomplete.getPlace();
+                    console.log(place);
+                    console.log(this.filterForm.controls);
 					//verify result
                     if (place.geometry === undefined || place.geometry === null) {
                         this.filterForm.controls["latitude"].setValue(null);
@@ -296,6 +307,7 @@ export class EventSearchComponent implements OnInit {
                     this.geocodingService.getAddress(this.filterForm.controls["latitude"].value, this.filterForm.controls["longitude"].value).subscribe(response => {
                         this.filterForm.controls["address"].setValue(response);
                     });
+                    this.isAddressValid = true;
 				});
 			});
 		});	
@@ -349,15 +361,29 @@ export class EventSearchComponent implements OnInit {
 	
 	//creates the form for advanced search
 	private createForm(): void {
-		let form = {
-			start: new FormControl(null),
-            end: new FormControl(null),
-            address: new FormControl(null),
-			radius: new FormControl(null),
-            searchString: new FormControl(null),
-            latitude: new FormControl(null),
-            longitude: new FormControl(null)
-        };
-        this.filterForm = new FormGroup(form, needBothOrNeitherOfAddressAndRadius('latitude', 'radius'));
-	}
+        this.start = new FormControl(null);
+        this.end = new FormControl(null);
+        this.address = new FormControl(null);
+        this.radius = new FormControl(null);
+        this.searchString = new FormControl(null);
+        this.latitude = new FormControl(null);
+        this.longitude = new FormControl(null);
+
+        this.filterForm = new FormGroup({
+            start: this.start,
+            end: this.end,
+            address: this.address,
+            radius: this.radius,
+            searchString: this.searchString,
+            latitude: this.latitude,
+            longitude: this.longitude
+        }, needBothOrNeitherOfAddressAndRadius('latitude', 'radius'));
+    }
+
+    clearLocation(): void {
+        this.isAddressValid = false;
+        this.filterForm.controls["address"].setValue("");
+        this.filterForm.controls["latitude"].setValue(null);
+        this.filterForm.controls["longitude"].setValue(null);
+    }
 }
