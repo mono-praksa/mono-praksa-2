@@ -55,12 +55,13 @@ namespace GeoEvents.Repository
                 commandInsert.Parameters.AddWithValue(QueryHelper.ParLat, NpgsqlTypes.NpgsqlDbType.Double, evt.Lat);
                 commandInsert.Parameters.AddWithValue(QueryHelper.ParLong, NpgsqlTypes.NpgsqlDbType.Double, evt.Long);
                 commandInsert.Parameters.AddWithValue(QueryHelper.ParName, NpgsqlTypes.NpgsqlDbType.Text, evt.Name);
+                commandInsert.Parameters.AddWithValue(QueryHelper.ParPrice, NpgsqlTypes.NpgsqlDbType.Double, evt.Price);
+                commandInsert.Parameters.AddWithValue(QueryHelper.ParCapacity, NpgsqlTypes.NpgsqlDbType.Integer, evt.Capacity);
+                commandInsert.Parameters.AddWithValue(QueryHelper.ParReserved, NpgsqlTypes.NpgsqlDbType.Integer, evt.Reserved);
+                commandInsert.Parameters.AddWithValue(QueryHelper.ParRating, NpgsqlTypes.NpgsqlDbType.Double, evt.Rating);
+                commandInsert.Parameters.AddWithValue(QueryHelper.ParRateCount, NpgsqlTypes.NpgsqlDbType.Integer, evt.RateCount);
+
                 commandSelect.Parameters.AddWithValue(QueryHelper.ParEventId, NpgsqlTypes.NpgsqlDbType.Uuid, evt.Id);
-                commandSelect.Parameters.AddWithValue(QueryHelper.ParPrice, NpgsqlTypes.NpgsqlDbType.Double, evt.Price);
-                commandSelect.Parameters.AddWithValue(QueryHelper.ParCapacity, NpgsqlTypes.NpgsqlDbType.Integer, evt.Capacity);
-                commandSelect.Parameters.AddWithValue(QueryHelper.ParReserved, NpgsqlTypes.NpgsqlDbType.Integer, evt.Reserved);
-                commandSelect.Parameters.AddWithValue(QueryHelper.ParRating, NpgsqlTypes.NpgsqlDbType.Double, evt.Rating);
-                commandSelect.Parameters.AddWithValue(QueryHelper.ParRateCount, NpgsqlTypes.NpgsqlDbType.Integer, evt.RateCount);
 
                 await Connection.CreateConnection().OpenAsync();
                 await commandInsert.ExecuteNonQueryAsync();

@@ -28,13 +28,13 @@ namespace GeoEvents.Repository
         private static string CapacityQ = "\"Capacity\"";
         private static string ReservedQ = "\"Reserved\"";
         private static string RatingQ = "\"Rating\"";
-        private static string RateCount = "\"RatingCount\"";
-
+        private static string RateCountQ = "\"RateCount\"";
 
         /// <summary>
         /// Parametar Constant strings
         /// </summary>
         public static string ParLat = "@Lat";
+
         public static string ParLong = "@Long";
         public static string ParName = "@Name";
         public static string ParEndTime = "@EndTime";
@@ -53,7 +53,7 @@ namespace GeoEvents.Repository
         public static string ParCapacity = "@Capacity";
         public static string ParReserved = "@Reserved";
         public static string ParRating = "@Rating";
-        public static string ParRateCount = "@RateCount";  
+        public static string ParRateCount = "@RateCount";
 
         /// <summary>
         /// Added Qouted strings
@@ -174,9 +174,11 @@ namespace GeoEvents.Repository
 
         public static string GetSelectEventStringById()
         {
-            string selectString = "Select * from " + TableNameEventQ + " where " + TableNameEventIdQ + "=" + ParEventId + " Limit (1)";
+            StringBuilder selectString = new StringBuilder();
+            selectString.AppendFormat("SELECT * FROM {0} WHERE {1}={2}", TableNameEventQ, TableNameEventIdQ, ParEventId);
+            //string selectString = "Select * from " + TableNameEventQ + " where " + TableNameEventIdQ + "=" + ParEventId + " Limit (1)";
 
-            return selectString;
+            return selectString.ToString();
         }
 
         /// <summary>
@@ -278,11 +280,19 @@ namespace GeoEvents.Repository
         /// <returns>Query string</returns>
         public static string GetInsertEventString()
         {
-            string insertString = " INSERT INTO " + TableNameEventQ + "values(" + ParId + "," + ParStartTime + "," + ParEndTime +
-                "," + ParLat + "," + ParLong + "," + ParName + "," + ParDescription + "," + ParCategory + "," + ParPrice + "," + 
-                ParCapacity+ "," + ParReserved + "," + ParRating + "," + ParRateCount  + ") ";
+            StringBuilder insertString = new StringBuilder();
+            insertString.AppendFormat("INSERT INTO {0} ({1}, {2}, {3}, {4}, {5}, {6}, {7}, {8}, {9}, {10}, {11}, {12}, {13})",
+                TableNameEventQ, IdQ, StartTimeQ, EndTimeQ, LatQ, LongQ, NameQ, DescriptionQ, CategoryQ, PriceQ, CapacityQ, ReservedQ,
+                RatingQ, RateCountQ);
+            insertString.AppendFormat(" VALUES ({1}, {2}, {3}, {4}, {5}, {6}, {7}, {8}, {9}, {10}, {11}, {12}, {13})",
+                TableNameEventQ, ParId, ParStartTime, ParEndTime, ParLat, ParLong, ParName, ParDescription, ParCategory, ParPrice,
+                ParCapacity, ParReserved, ParRating, ParRateCount);
 
-            return insertString;
+            //string insertString = " INSERT INTO " + TableNameEventQ + "values(" + ParId + "," + ParStartTime + "," + ParEndTime +
+            //    "," + ParLat + "," + ParLong + "," + ParName + "," + ParDescription + "," + ParCategory + "," + ParPrice + "," +
+            //    ParCapacity+ "," + ParReserved + "," + ParRating + "," + ParRateCount  + ") ";
+
+            return insertString.ToString();
         }
 
         /// <summary>
