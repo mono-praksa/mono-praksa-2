@@ -227,9 +227,10 @@ namespace GeoEvents.Repository
                 parReserved=Convert.ToInt32(reservedObj);
                 parReserved++;
 
-                parReserved = Convert.ToInt32(parReserved);
                 commandUpdate.Parameters.AddWithValue(QueryHelper.ParEventId, NpgsqlTypes.NpgsqlDbType.Uuid, eventId);
                 commandUpdate.Parameters.AddWithValue("@ParReserved", NpgsqlTypes.NpgsqlDbType.Integer, parReserved);
+
+                await commandUpdate.ExecuteNonQueryAsync();
 
                 commandSelect.Parameters.AddWithValue(QueryHelper.ParEventId, NpgsqlTypes.NpgsqlDbType.Uuid, eventId);
                 DbDataReader dr = await commandSelect.ExecuteReaderAsync();
@@ -252,8 +253,6 @@ namespace GeoEvents.Repository
                         RateCount = Convert.ToInt32(dr[12])
                     };
                 }
-
-
             }
 
             return Mapper.Map<IEvent>(evtR);
