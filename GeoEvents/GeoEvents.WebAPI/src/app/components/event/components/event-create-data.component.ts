@@ -1,5 +1,5 @@
 ﻿import { Component, OnInit, ElementRef, NgZone, ViewChild, Output, EventEmitter } from '@angular/core'
-import { FormControl, FormGroup, FormBuilder, Validators } from '@angular/forms'
+import { FormControl, FormGroup, Validators } from '@angular/forms'
 import { Observable } from 'rxjs/Rx'
 import { MapsAPILoader } from '@agm/core'
 
@@ -51,7 +51,6 @@ export class EventCreateDataComponent implements OnInit {
     capacity: FormControl;
 
     constructor(
-        private _formBuilder: FormBuilder,
         private _mapsAPILoader: MapsAPILoader,
         private _ngZone: NgZone,
         private _loaderService: LoaderService,
@@ -98,24 +97,16 @@ export class EventCreateDataComponent implements OnInit {
         this.price = new FormControl('', Validators.required);
         this.capacity = new FormControl('', Validators.required);
 
-        //this.eventForm = new FormGroup({
-        //    name: this.name,
-        //    description: this.description,
-        //    start: this.start,
-        //    end: this.end,
-        //    price: this.price,
-        //    capacity: this.capacity
-        //}, (formGroup: FormGroup) => {
-        //    return endDateBeforeStartDate(formGroup.controls.start.value, formGroup.controls.end.value);
-        //});
-        this.eventForm = this._formBuilder.group({
+        this.eventForm = new FormGroup({
             name: this.name,
             description: this.description,
             start: this.start,
             end: this.end,
             price: this.price,
             capacity: this.capacity
-        }, { validator: endDateBeforeStartDate('start', 'end') });
+        }, (formGroup: FormGroup) => {
+            return endDateBeforeStartDate(formGroup);
+        });
     }
 
     private setCurrentPosition(): void {
