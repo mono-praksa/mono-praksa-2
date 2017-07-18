@@ -384,6 +384,7 @@
     <TypeScriptCompile Include="src\app\components\event\validators\validator.ts" />
     <TypeScriptCompile Include="src\app\components\home\home.component.ts" />
     <TypeScriptCompile Include="src\app\shared\common\category-enum.ts" />
+    <TypeScriptCompile Include="src\app\shared\geocoding.service.ts" />
     <TypeScriptCompile Include="src\app\shared\loader.service.ts" />
     <TypeScriptCompile Include="src\app\shared\navbar\navbar.component.ts" />
     <TypeScriptCompile Include="src\app\shared\preserve-search-querry.service.ts" />

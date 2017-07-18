@@ -1,5 +1,6 @@
 <div [hidden]="this.isDetailMode">
 	<div>
+        Your ip: <span *ngIf="userIp">{{userIp}}</span>
 		<form [formGroup]="filterForm" (ngSubmit)="onSubmit(filterForm.value)" autocomplete="off" novalidate>
 			<div class="row">
 				<div class="col-sm-4">

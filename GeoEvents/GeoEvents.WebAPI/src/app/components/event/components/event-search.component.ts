@@ -18,7 +18,7 @@ import { needBothOrNeitherOfAddressAndRadius } from '../validators/validator';
 })
 export class EventSearchComponent implements OnInit {
 	
-
+    private _userIp: string;
 
 	//variables for storing data
 	private _events: IEvent[];
@@ -53,6 +53,14 @@ export class EventSearchComponent implements OnInit {
 	private _isDateSearch: boolean = false;
 	private _isLocationSearch: boolean = false;
 	private _isCategoriesSearch: boolean = false;
+
+    get userIp(): string {
+        return this._userIp;
+    }
+
+    set userIp(theUserIp: string) {
+        this._userIp = theUserIp;
+    }
 
     get events(): IEvent[] {
         return this._events;
@@ -144,7 +152,13 @@ export class EventSearchComponent implements OnInit {
 
 
     //constructor
-    constructor(private _eventService: EventService, private _preserveSearchQuerryService: PreserveSearchQuerryService, private _mapsAPILoader: MapsAPILoader, private _ngZone: NgZone, private geocodingService: GeocodingService) {
+    constructor(
+        private _eventService: EventService,
+        private _preserveSearchQuerryService: PreserveSearchQuerryService,
+        private _mapsAPILoader: MapsAPILoader,
+        private _ngZone: NgZone,
+        private geocodingService: GeocodingService
+    ) {
 		this.createForm();
 				
 		//checking if this service has any params inside, used when redirected from searching in home component
@@ -152,7 +166,9 @@ export class EventSearchComponent implements OnInit {
 		//if there are not any params, user likely clicked on the advanced search button, or redirected from somewhere else.
 	}
 	
-	ngOnInit(): void {		
+    ngOnInit(): void {
+        this.geocodingService.getUserIpAddress()
+            .subscribe(respond => this.userIp = respond);
 		if(this._preserveSearchQuerryService.searchQuerry != null && this._preserveSearchQuerryService.searchQuerry != ""){
 			let newFilter : IFilter = {
 				ULat: null,

@@ -9,6 +9,13 @@ export class GeocodingService {
 
     }
 
+    getUserIpAddress(): Observable<string> {
+        return this.http.get("http://api.ipify.org/?format=json")
+            .map((response: Response) => {
+                return <string>response.json()["ip"]
+            }).catch(this.handleError);
+    }
+
     getAddress(latitude: number, longitude: number) : Observable<string>{
         return this.http.get('https://maps.googleapis.com/maps/api/geocode/json?latlng=' + latitude.toString() + ',' + longitude.toString() + '&key=AIzaSyDHKcbmM0jpW7BOet42_S92KJSr5PYKc5w')
             .map((response: Response) => {
