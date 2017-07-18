@@ -223,7 +223,9 @@ namespace GeoEvents.Repository
                 commandGetReserved.Parameters.AddWithValue(QueryHelper.ParEventId, NpgsqlTypes.NpgsqlDbType.Uuid, eventId);
 
                 await Connection.CreateConnection().OpenAsync();
-                object reserved = await commandGetReserved.ExecuteScalarAsync();
+                object reservedObj = await commandGetReserved.ExecuteScalarAsync();
+                parReserved=Convert.ToInt32(reservedObj);
+                parReserved++;
 
                 parReserved = Convert.ToInt32(parReserved);
                 commandUpdate.Parameters.AddWithValue(QueryHelper.ParEventId, NpgsqlTypes.NpgsqlDbType.Uuid, eventId);
