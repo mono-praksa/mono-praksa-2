@@ -1,14 +1,13 @@
 ﻿import { Component, OnInit, ElementRef, NgZone, ViewChild, Output, EventEmitter } from '@angular/core'
 import { FormControl, FormGroup, FormBuilder, Validators } from '@angular/forms'
-import { Http, Response, Headers, RequestOptions } from '@angular/http'
 import { Observable } from 'rxjs/Rx'
 import { MapsAPILoader } from '@agm/core'
-import { Router } from '@angular/router'
 
 import { endDateBeforeStartDate } from '../validators/validator'
 import { IEvent } from '../models/event.model'
 import { CategoryEnum } from '../../../shared/common/category-enum'
 import { LoaderService } from '../../../shared/loader.service'
+import { EventService } from '../event.service'
 
 @Component({
     selector: "create-event",
@@ -21,16 +20,14 @@ import { LoaderService } from '../../../shared/loader.service'
 })
 export class EventCreateDataComponent implements OnInit {
     @Output() eventEmitter = new EventEmitter();
-    private _creatingEvent: boolean = false;
-    private _latitude: number;
-    private _longitude: number;
-    private _zoom: number;
-    createEventLoading: boolean = false;
-
+    @ViewChild("search") searchElementRef: ElementRef;
+    private _createEventLoading: boolean = false;
     private _createdEvent: IEvent;
 
-    @ViewChild("search")
-    searchElementRef: ElementRef;
+    //variables for google maps api
+    private _latitude: number = 0;
+    private _longitude: number = 0;
+    private _zoom: number = 2;
 
     CategoryEnum: any = CategoryEnum;
 
@@ -43,21 +40,22 @@ export class EventCreateDataComponent implements OnInit {
         { id: CategoryEnum["Business"], checked: false },
         { id: CategoryEnum["Miscellaneous"], checked: true }
     ]
-    eventForm: FormGroup
 
-    name: FormControl
-    description: FormControl
-    start: FormControl
-    end: FormControl
-    category: FormControl
+    eventForm: FormGroup;
+    name: FormControl;
+    description: FormControl;
+    start: FormControl;
+    end: FormControl;
+    category: FormControl;
+    price: FormControl;
+    capacity: FormControl;
 
     constructor(
-        private http: Http,
-        private formBuilder: FormBuilder,
-        private mapsAPILoader: MapsAPILoader,
-        private ngZone: NgZone,
-        private router: Router,
-        private _loaderService: LoaderService
+        private _formBuilder: FormBuilder,
+        private _mapsAPILoader: MapsAPILoader,
+        private _ngZone: NgZone,
+        private _loaderService: LoaderService,
+        private _eventService: EventService
     ) { }
 
     ngOnInit(): void {
@@ -65,31 +63,31 @@ export class EventCreateDataComponent implements OnInit {
         this.description = new FormControl('', Validators.required);
         this.start = new FormControl('', Validators.required);
         this.end = new FormControl('', Validators.required);
+        this.price = new FormControl('', Validators.required);
+        this.capacity = new FormControl('', Validators.required);
 
-        this.eventForm = this.formBuilder.group({
+        this.eventForm = this._formBuilder.group({
             name: this.name,
             description: this.description,
             start: this.start,
-            end: this.end
+            end: this.end,
+            price: this.price,
+            capacity: this.capacity
         }, { validator: endDateBeforeStartDate('start', 'end') });
 
         this._loaderService.loaderStatus.subscribe((value: boolean) => {
             this.createEventLoading = value;
-        })
+        });
 
         //GOOGLE MAPS
-        this.zoom = 4;
-        this.latitude = 39.8282;
-        this.longitude = -98.5795;
-
         this.setCurrentPosition();
 
-        this.mapsAPILoader.load().then(() => {
+        this._mapsAPILoader.load().then(() => {
             let autocomplete = new google.maps.places.Autocomplete(this.searchElementRef.nativeElement, {
                 types: ["address"]
             });
             autocomplete.addListener("place_changed", () => {
-                this.ngZone.run(() => {
+                this._ngZone.run(() => {
                     //get the place result
                     let place: google.maps.places.PlaceResult = autocomplete.getPlace();
 
@@ -101,7 +99,6 @@ export class EventCreateDataComponent implements OnInit {
                     //set latitude, longitude and zoom
                     this.latitude = place.geometry.location.lat();
                     this.longitude = place.geometry.location.lng();
-                    this.zoom = 12;
                 });
             });
         });
@@ -117,12 +114,7 @@ export class EventCreateDataComponent implements OnInit {
         }
     }
 
-    handleError(error: Response) {
-        return Observable.throw(error.statusText);
-    }
-
     createEvent(formValues: any) {
-        this.creatingEvent = true;
         this._loaderService.displayLoader(true);
         let chosenCategories: number[] = [];
         this.categories.filter(checkbox => {
@@ -139,15 +131,14 @@ export class EventCreateDataComponent implements OnInit {
             EndTime: formValues.end,
             Lat: this.latitude,
             Long: this.longitude,
-            Categories: chosenCategories
+            Categories: chosenCategories,
+            Price: formValues.price,
+            Capacity: formValues.capacity
         }
-        
-        let headers = new Headers({ 'Content-Type': 'application/json' });
-        let options = new RequestOptions({ headers: headers });
-        this.http.post('/api/events/create', JSON.stringify(newEvent), options).map(function (response: Response) {
-            return response;
-        }).catch(this.handleError).subscribe((response: Response) => {
-            this.createdEvent = <IEvent>response.json();
+        console.log(newEvent);
+
+        this._eventService.createEvent(newEvent).subscribe((response: IEvent) => {
+            this.createdEvent = response;
             this.eventEmitter.emit(this.createdEvent);
             this._loaderService.displayLoader(false);
         });
@@ -205,12 +196,12 @@ export class EventCreateDataComponent implements OnInit {
         this._zoom = theZoom;
     }
 
-    get creatingEvent(): boolean {
-        return this._creatingEvent;
+    get createEventLoading(): boolean {
+        return this._createEventLoading;
     }
 
-    set creatingEvent(isCreatingEvent: boolean) {
-        this._creatingEvent = isCreatingEvent;
+    set createEventLoading(isCreatingEvent: boolean) {
+        this._createEventLoading = isCreatingEvent;
     }
 
     get createdEvent(): IEvent {

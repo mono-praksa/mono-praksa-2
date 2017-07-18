@@ -6,5 +6,7 @@
     EndTime: Date,
     Lat: number,
     Long: number,
-    Categories: number[]
+    Categories: number[],
+    Price: number,
+    Capacity: number
 }
