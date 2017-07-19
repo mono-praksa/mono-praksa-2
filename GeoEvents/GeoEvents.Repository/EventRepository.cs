@@ -63,7 +63,7 @@ namespace GeoEvents.Repository
                 commandInsert.Parameters.AddWithValue(QueryHelper.ParRating, NpgsqlTypes.NpgsqlDbType.Double, evt.Rating);
                 commandInsert.Parameters.AddWithValue(QueryHelper.ParRateCount, NpgsqlTypes.NpgsqlDbType.Integer, evt.RateCount);
                 commandInsert.Parameters.AddWithValue(QueryHelper.ParRatingLocation, NpgsqlTypes.NpgsqlDbType.Double, evt.RatingLocation);
-            //    commandInsert.Parameters.AddWithValue(QueryHelper.ParRatingLocation, NpgsqlTypes.NpgsqlDbType.Double,)
+         
 
                 commandSelect.Parameters.AddWithValue(QueryHelper.ParEventId, NpgsqlTypes.NpgsqlDbType.Uuid, evt.Id);
 
@@ -134,7 +134,7 @@ namespace GeoEvents.Repository
                         Reserved = Convert.ToInt32(dr[10]),
                         Rating = Convert.ToDecimal(dr[11]),
                         RateCount = Convert.ToInt32(dr[12]),
-                        RatingLocation=Convert.ToDecimal(dr[13])
+                        RatingLocation=Convert.ToDecimal(dr[14])
                     };
 
                     SelectEvents.Add(Mapper.Map<IEvent>(tmp));
@@ -219,7 +219,6 @@ namespace GeoEvents.Repository
             {
                 command.Parameters.AddWithValue(QueryHelper.ParSearchString, NpgsqlTypes.NpgsqlDbType.Varchar, "%" + filter.SearchString + "%");
             }
-
         }
 
         /// <summary>
@@ -235,38 +234,92 @@ namespace GeoEvents.Repository
             EventEntity evtR = new EventEntity();
             decimal CurrentRating=0;
             int CurrentRateCount=0;
+            decimal LatToUpdate = 0;
+            decimal LongToUpdate = 0;
+            StringBuilder RatingLocationString = new StringBuilder();
+            RatingLocationString.AppendFormat("SELECT {0},{1} FROM {2} WHERE ll_to_earth({3},{4}) = ll_to_earth({5}, {6}) ",
+                "\"Rating\"","\"RateCount\"","\"Events\"","\"Events\".\"Lat\"",
+                "\"Events\".\"Long\"","@Lat","@Long");
+
+            StringBuilder UpdateAllLocationRating = new StringBuilder();
+            UpdateAllLocationRating.AppendFormat("UPDATE {0} SET {1}={2} WHERE ll_to_earth({3},{4}) = ll_to_earth({5}, {6}) ",
+                "\"Events\"","\"RatinLocation\"","@RatingLocation", "\"Events\".\"Lat\"",
+                "\"Events\".\"Long\"", "@Lat", "@Long");
+
 
             using (Connection.CreateConnection())
-            using (NpgsqlCommand commandGetRating = new NpgsqlCommand( QueryHelper.GetSelectUpdateRatingString(), Connection.CreateConnection()) )
-            using (NpgsqlCommand commandUpdateRating = new NpgsqlCommand( QueryHelper.GetsInsertUpdateRatingString(), Connection.CreateConnection()) )
-            using (NpgsqlCommand commandSelect = new NpgsqlCommand( QueryHelper.GetSelectEventStringById(), Connection.CreateConnection()) )
+            using (NpgsqlCommand commandGetRating = new NpgsqlCommand(QueryHelper.GetSelectUpdateRatingString(), Connection.CreateConnection()))
+            using (NpgsqlCommand commandUpdateRating = new NpgsqlCommand(QueryHelper.GetsInsertUpdateRatingString(), Connection.CreateConnection()))
+            using (NpgsqlCommand commandSelect = new NpgsqlCommand(QueryHelper.GetSelectEventStringById(), Connection.CreateConnection()))
+            using (NpgsqlCommand commandRatingLocation = new NpgsqlCommand(RatingLocationString.ToString(), Connection.CreateConnection()))
+            using (NpgsqlCommand commandUpdateAllRatingLocation = new NpgsqlCommand(UpdateAllLocationRating.ToString(),Connection.CreateConnection()))
             {
-                commandGetRating.Parameters.AddWithValue( QueryHelper.ParEventId, NpgsqlTypes.NpgsqlDbType.Uuid, eventId);
 
                 await Connection.CreateConnection().OpenAsync();
-                DbDataReader drGetRating = await commandGetRating.ExecuteReaderAsync();
 
-                if (drGetRating.Read()) {
-                    CurrentRating = Convert.ToInt32(drGetRating[0]);
-                    CurrentRateCount = Convert.ToInt32(drGetRating[1]);
+                #region Update rsting for event
+
+                commandGetRating.Parameters.AddWithValue(QueryHelper.ParEventId, NpgsqlTypes.NpgsqlDbType.Uuid, eventId);
+
+                DbDataReader drGetEventToRateInfo = await commandGetRating.ExecuteReaderAsync();
+
+                if (drGetEventToRateInfo.Read())
+                {
+                    CurrentRating = Convert.ToInt32(drGetEventToRateInfo[0]);///// promjeni query helper da dohvatis lat i long
+                    CurrentRateCount = Convert.ToInt32(drGetEventToRateInfo[1]);
+                    LatToUpdate = Convert.ToDecimal(drGetEventToRateInfo[2]);
+                    LongToUpdate = Convert.ToDecimal(drGetEventToRateInfo[3]);
                 }
 
                 int NewRateCount = CurrentRateCount + 1;
                 decimal NewRating = (CurrentRateCount * CurrentRating + rating) / Convert.ToDecimal(NewRateCount);
 
 
-                commandUpdateRating.Parameters.AddWithValue( QueryHelper.ParEventId, NpgsqlTypes.NpgsqlDbType.Uuid, eventId );
-                commandUpdateRating.Parameters.AddWithValue( QueryHelper.ParRating, NpgsqlTypes.NpgsqlDbType.Double,NewRating );
-                commandUpdateRating.Parameters.AddWithValue( QueryHelper.ParRateCount, NpgsqlTypes.NpgsqlDbType.Integer,NewRateCount );
+                commandUpdateRating.Parameters.AddWithValue(QueryHelper.ParEventId, NpgsqlTypes.NpgsqlDbType.Uuid, eventId);
+                commandUpdateRating.Parameters.AddWithValue(QueryHelper.ParRating, NpgsqlTypes.NpgsqlDbType.Double, NewRating);
+                commandUpdateRating.Parameters.AddWithValue(QueryHelper.ParRateCount, NpgsqlTypes.NpgsqlDbType.Integer, NewRateCount);
 
                 Connection.CreateConnection().Close();
                 await Connection.CreateConnection().OpenAsync();
-
-
                 await commandUpdateRating.ExecuteNonQueryAsync();
+                #endregion
+
+                #region Update Location Rating
+
+                commandRatingLocation.Parameters.AddWithValue("@Lat", NpgsqlTypes.NpgsqlDbType.Double, LatToUpdate);
+                commandRatingLocation.Parameters.AddWithValue("@Long", NpgsqlTypes.NpgsqlDbType.Double, LongToUpdate);
+
+                DbDataReader drUpdateLocationRating = await commandRatingLocation.ExecuteReaderAsync();
+                decimal SumOfCount = 0;
+                decimal SumOfMultiplication = 0;
+                decimal RatingLocation = 0;
+
+                while (drUpdateLocationRating.Read())
+                {
+                    SumOfMultiplication += Convert.ToDecimal(drUpdateLocationRating[0]) * Convert.ToDecimal(drUpdateLocationRating[1]);
+                    SumOfCount += Convert.ToDecimal(drUpdateLocationRating[1]);
+
+                }
+                if (SumOfCount > 0)
+                {
+                    RatingLocation = SumOfMultiplication / SumOfCount;
+                }
+                #endregion
+
+                #region Update all events
+
+                commandUpdateAllRatingLocation.Parameters.AddWithValue("@RatingLocation", NpgsqlTypes.NpgsqlDbType.Double,RatingLocation);
+                commandUpdateAllRatingLocation.Parameters.AddWithValue("@Lat", NpgsqlTypes.NpgsqlDbType.Double, LatToUpdate);
+                commandUpdateAllRatingLocation.Parameters.AddWithValue("@Long", NpgsqlTypes.NpgsqlDbType.Double, LongToUpdate);
+
+                 await commandUpdateAllRatingLocation.ExecuteNonQueryAsync();
 
 
-                commandSelect.Parameters.AddWithValue( QueryHelper.ParEventId, NpgsqlTypes.NpgsqlDbType.Uuid, eventId );
+
+                #endregion
+
+                #region return updated event
+                commandSelect.Parameters.AddWithValue(QueryHelper.ParEventId, NpgsqlTypes.NpgsqlDbType.Uuid, eventId);
                 DbDataReader drSelect = await commandSelect.ExecuteReaderAsync();
                 while (drSelect.Read())
                 {
@@ -288,9 +341,9 @@ namespace GeoEvents.Repository
                     };
                 }
             }
-
+     
             return Mapper.Map<IEvent>(evtR);
-
+            #endregion
         }
 
         /// <summary>
@@ -347,6 +400,7 @@ namespace GeoEvents.Repository
 
             return Mapper.Map<IEvent>(evtR);
         }
+
 
         #endregion Methods
     }
