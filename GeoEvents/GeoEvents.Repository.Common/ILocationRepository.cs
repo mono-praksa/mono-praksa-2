@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace GeoEvents.Repository.Common
 {
-    class ILocationRepository
+    public interface ILocationRepository
     {
     }
 }
