@@ -11,6 +11,13 @@ namespace GeoEvents.Repository.Common
         #region Methods
 
         /// <summary>
+        /// Gets an event by its id asynchronously.
+        /// </summary>
+        /// <param name="eventId">The event's id.</param>
+        /// <returns>The event.</returns>
+        Task<IEvent> GetEventByIdAsync(Guid eventId);
+
+        /// <summary>
         /// Creates Event asynchronously.
         /// </summary>
         /// <param name="evt"></param>

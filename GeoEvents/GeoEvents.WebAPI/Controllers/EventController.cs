@@ -75,11 +75,11 @@ namespace GeoEvents.WebAPI.Controllers
             return Mapper.Map<IEnumerable<EventModel>>(await Service.GetEventsAsync(filter));
         }
 
-        //[HttpGet]
-        //[Route("get")]
-        //public async Task<IEnumerable<EventModel>> GetEventByIdAsync(Guid eventId) {
-        //    return Mapper.Map<IEnumerable<EventModel>>(await Service.GetEventByIdAsync(eventId));
-        //}
+        [HttpGet]
+        [Route("get")]
+        public async Task<IEnumerable<EventModel>> GetEventByIdAsync(Guid eventId) {
+            return Mapper.Map<IEnumerable<EventModel>>(await Service.GetEventByIdAsync(eventId));
+        }
 
         //[HttpGet]
         //[Route(@"search/{pageNumber:int}/{pageSize:int}/{orderBy}/{orderAscending:bool}/{category:int}/{uLat:decimal}/{uLong:decimal}/{radius:decimal}/{startTime:regex(^s\d{4}-\d{2}-\d{2} \d{2}h\d{2}$)?}/{endTime:regex(^e\d{4}-\d{2}-\d{2} \d{2}h\d{2}$)?}/{searchString?}/{nameOnly:bool?}")]
