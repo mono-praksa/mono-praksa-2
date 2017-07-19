@@ -11,7 +11,7 @@
                 {{CategoryEnum[category]}}
             </li>
         </ul>
-        <h4>Rating: {{event.Rating}}</h4> <div><input type="range" min="0" max="5" step="0.1" #slider (change)="rateChange(slider)" value="3" /><span #userRate>3</span><input type="button" (click)="rate()" value="Rate"/></div>
+        <h4>Rating: {{event.Rating}}</h4> <div style="position: absolute; left:200px;">0<input type="range" min="0" max="5" step="0.1" #slider (input)="rateChange(slider)" value="3" />5<div #userRate style="padding-left: 30px; display: inline-block; width:50px;">3</div><input type="button" (click)="rate()" value="Rate"/></div>
         <h4>RateCount: {{event.RateCount}}</h4>
         <h4>Reserved/Capacity: {{event.Reserved}}/{{event.Capacity}}</h4>
     </div>

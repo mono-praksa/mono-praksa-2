@@ -77,7 +77,6 @@ export class EventDetailComponent implements OnInit{
     }
 
     rateChange(slider: any) {
-        console.log(slider.nativeElement);
         this.userRateElement.nativeElement.innerHTML = slider.value;
     }
 
