@@ -7,6 +7,7 @@ import { IImage } from '../models/image.model';
 
 import { GeocodingService } from '../../../shared/geocoding.service';
 import { EventService } from '../event.service';
+import { LoaderService } from '../../../shared/loader.service';
 
 @Component({
     templateUrl: 'app/components/event/views/event-detail.component.html',
@@ -22,25 +23,31 @@ import { EventService } from '../event.service';
 })
 
 export class EventDetailComponent implements OnInit{
-    @Input() event: IEvent
-    @Output() cancel = new EventEmitter()
-    @ViewChild("carousel") carouselElement: ElementRef
-    @ViewChild("userRate") userRateElement: ElementRef
-    private _images: IImage[]
-    CategoryEnum: any = CategoryEnum
-    private _imagesLoading: boolean = true
-    private _address: string = ""
+    @Input() event: IEvent;
+    @Output() cancel = new EventEmitter();
+    @ViewChild("carousel") carouselElement: ElementRef;
+    @ViewChild("userRate") userRateElement: ElementRef;
+    private _images: IImage[];
+    CategoryEnum: any = CategoryEnum;
+    private _address: string = "";
+    private _getImagesLoading: boolean = false;
 
     constructor(
         private geocodingService: GeocodingService,
-        private eventService: EventService
+        private eventService: EventService,
+        private _loaderService: LoaderService
     ) {
 
     }
 
     ngOnInit() {
+        this._loaderService.loaderStatus.subscribe((value: boolean) => {
+            this.getImagesLoading = value;
+        });
+
+        this._loaderService.displayLoader(true);
+
         this.eventService.getImages(this.event.Id).subscribe((res: IImage[]) => {
-            this.imagesLoading = false
             this.images = res
             for (var i = 0; i < this.images.length; i++) {
                 var item = document.createElement("div");
@@ -61,6 +68,7 @@ export class EventDetailComponent implements OnInit{
 
                 this.carouselElement.nativeElement.appendChild(item);
             }
+            this._loaderService.displayLoader(false);
         });
 
         this.geocodingService.getAddress(this.event.Lat, this.event.Long).subscribe(response => {
@@ -101,20 +109,20 @@ export class EventDetailComponent implements OnInit{
         //document.getElementById("carousel-inner").appendChild(doc.documentElement);
     }
 
+    get getImagesLoading(): boolean {
+        return this._getImagesLoading;
+    }
+
+    set getImagesLoading(thisGetImagesLoading: boolean) {
+        this._getImagesLoading = thisGetImagesLoading;
+    }
+
     get images() : IImage[] {
         return this._images;
     }
 
     set images(theImages: IImage[]) {
         this._images = theImages;
-    }
-
-    get imagesLoading(): boolean {
-        return this._imagesLoading;
-    }
-
-    set imagesLoading(areImagesLoading: boolean) {
-        this._imagesLoading = areImagesLoading;
     }
 
     get address(): string {

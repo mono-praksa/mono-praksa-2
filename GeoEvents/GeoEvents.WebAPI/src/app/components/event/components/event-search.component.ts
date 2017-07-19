@@ -9,6 +9,7 @@ import { IFilter } from '../models/filter.model';
 import { PreserveSearchQuerryService } from '../../../shared/preserve-search-querry.service';
 import { EventService } from '../event.service';
 import { GeocodingService } from '../../../shared/geocoding.service';
+import { LoaderService } from '../../../shared/loader.service';
 
 import { needBothOrNeitherOfAddressAndRadius } from '../validators/validator';
 
@@ -17,7 +18,7 @@ import { needBothOrNeitherOfAddressAndRadius } from '../validators/validator';
 //	providers: [ PreserveSearchQuerryService ]
 })
 export class EventSearchComponent implements OnInit {
-	
+    private _searchEventLoading: boolean = false;
     private _userApproximateAddress: string = null;
 
 	//variables for storing data
@@ -62,12 +63,20 @@ export class EventSearchComponent implements OnInit {
 	private _isLocationSearch: boolean = false;
 	private _isCategoriesSearch: boolean = false;
 
+    get searchEventLoading(): boolean {
+        return this._searchEventLoading;
+    }
+
+    set searchEventLoading(thesearchEventLoading: boolean) {
+        this._searchEventLoading = thesearchEventLoading;
+    }
+
     get userApproximateAddress(): string {
         return this._userApproximateAddress;
     }
 
-    set userApproximateAddress(_userApproximateAddress: string) {
-        this._userApproximateAddress = _userApproximateAddress;
+    set userApproximateAddress(theUserApproximateAddress: string) {
+        this._userApproximateAddress = theUserApproximateAddress;
     }
 
     get events(): IEvent[] {
@@ -165,7 +174,8 @@ export class EventSearchComponent implements OnInit {
         private _preserveSearchQuerryService: PreserveSearchQuerryService,
         private _mapsAPILoader: MapsAPILoader,
         private _ngZone: NgZone,
-        private geocodingService: GeocodingService
+        private geocodingService: GeocodingService,
+        private _loaderService: LoaderService
     ) {
 		this.createForm();
 				
@@ -181,6 +191,10 @@ export class EventSearchComponent implements OnInit {
         //            this.userApproximateAddress = response.city + ", " + response.country;
         //        }
         //    });
+        this._loaderService.loaderStatus.subscribe((value: boolean) => {
+            this.searchEventLoading = value;
+        });
+
 		if(this._preserveSearchQuerryService.searchQuerry != null && this._preserveSearchQuerryService.searchQuerry != ""){
 			let newFilter : IFilter = {
 				ULat: null,
@@ -213,7 +227,8 @@ export class EventSearchComponent implements OnInit {
 	}
 	
 	//submits
-	onSubmit(formValues: any): void {
+    onSubmit(formValues: any): void {
+        this._loaderService.displayLoader(true);
 		let selectedCategories = this.getSelectedCategories();
 		
 		let newFilter : IFilter = {
@@ -339,8 +354,10 @@ export class EventSearchComponent implements OnInit {
 		this.events = null;
 //		this.isLoadingData = true;
 		this.dataServiceSubscription = this._eventService.getEvents(filter)
-			.subscribe(result  => this.events = result,
-				error => this.errorMessage = <any>error);
+            .subscribe(result => {
+                this.events = result;
+                this._loaderService.displayLoader(false);
+            }, error => this.errorMessage = <any>error);
 	}
 	
 	//gets the events when user checks the ascending order checkbox
