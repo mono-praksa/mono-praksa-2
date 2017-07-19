@@ -116,6 +116,37 @@ namespace GeoEvents.Repository
                 isNotFirst = true;
             }
 
+
+            //Adding Price filter query if there is price
+            if (filter.Price != null)
+            {
+                if (isNotFirst)
+                {
+                    selectString.Append(" AND ");
+                }
+                else
+                {
+                    isNotFirst = true;
+                }
+                selectString.AppendFormat("({0} <= {1}) ",
+                    TableNameEventPriceQ, ParPrice);
+            }
+
+            //Adding Rating Event filter query if there is rating event
+            if (filter.RatingEvent != null)
+            {
+                if (isNotFirst)
+                {
+                    selectString.Append(" AND ");
+                }
+                else
+                {
+                    isNotFirst = true;
+                }
+                selectString.AppendFormat("({0} >= {1}) ",
+                    TableNameEventRatingQ, ParRating);
+            }
+
             /// Adding Time filter query if there is time in filter
             if (filter.EndTime > DefaulTime && filter.StartTime > DefaulTime)
             {
