@@ -15,6 +15,7 @@ namespace GeoEvents.Service
         {
             Bind<IEventService>().To<EventService>();
             Bind<IImageService>().To<ImageService>();
+            Bind<ILocationService>().To<LocationService>();
         }
     }
 

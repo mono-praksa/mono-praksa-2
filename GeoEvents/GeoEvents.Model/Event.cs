@@ -144,6 +144,14 @@ namespace GeoEvents.Model
         /// The rating event.
         /// </value>
         public decimal RatingLocation { get; set; }
+
+        /// <summary>
+        /// Gets or sets the location identifier.
+        /// </summary>
+        /// <value>
+        /// The location identifier.
+        /// </value>
+        public Guid LocationId { get; set; }
         #endregion Properties
     }
 }
