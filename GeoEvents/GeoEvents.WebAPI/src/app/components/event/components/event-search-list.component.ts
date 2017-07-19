@@ -1,5 +1,7 @@
-﻿import { Component, Output, EventEmitter, Input } from '@angular/core'
-import { IEvent } from '../models/event.model'
+﻿import { Component, Output, EventEmitter, Input } from '@angular/core';
+import { DatePipe } from '@angular/common';
+
+import { IEvent } from '../models/event.model';
 
 @Component({
     templateUrl:'app/components/event/views/event-search-list.component.html',

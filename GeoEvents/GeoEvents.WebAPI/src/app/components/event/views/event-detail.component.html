@@ -1,5 +1,5 @@
 ﻿<div class="col-md-7">
-    <h2 class="event-name">{{event.Name}}</h2> <p class="event-time">Time: {{event.StartTime | date:'fullDate'}} {{event.StartTime | date:'shortTime'}} - {{event.EndTime | date:'fullDate'}} {{event.EndTime | date:'shortTime'}}</p>
+    <h2 class="event-name">{{event.Name}}</h2> <p class="event-time">{{event.StartTime | date: 'MMMM d, y, HH:mm'}} - {{event.EndTime | date: 'MMMM d, y, HH:mm'}}</p>
     <h3>Details</h3> 
     <div class="well">
         <p>{{event.Description}}</p>
@@ -14,19 +14,19 @@
         <div style="float:left; padding-right: 10px;">
             <h4>Rating: {{event.Rating}}</h4>
         </div>
-        <div style="clear: left;">
+        <div>
             1<input type="range" min="1" max="5" step="1" #slider (input)="rateChange(slider)" value="3" />5
             <div #userRate style="padding-left: 30px; display: inline-block; width:50px;">
                 3
             </div>
-            <input type="button" (click)="rate()" value="Rate"/>
+            <input type="button" class="btn btn-default" (click)="rate()" value="Rate"/>
         </div>
         <h4>RateCount: {{event.RateCount}}</h4>
         <div style="float: left; padding-right: 10px;">
             <h4>Reserved/Capacity: {{event.Reserved}}/{{event.Capacity}}</h4>
         </div>
         <div>
-            <input type="button" value="Reserve" (click)="reserve()" />
+            <input type="button" class="btn btn-default" value="Reserve" (click)="reserve()" />
         </div>
     </div>
     <h3>Images</h3>
