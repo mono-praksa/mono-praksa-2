@@ -4,10 +4,9 @@
 			<div class="row">
 				<div class="col-sm-4" align="right">
 					<input type="text" formControlName="searchString" class="form-control" id="searchString" placeholder="Search..." />
-                    <button type="button" class="btn btn-default" (click)="toggleAdvancedSearch()">Show/Hide filters</button>
 				</div>
 				<div class="col-sm-6">
-					<button type="submit" class="btn btn-default" [disabled]="filterForm.invalid">Search</button>
+                    <button type="button" class="btn btn-default" (click)="toggleAdvancedSearch()">Show/Hide filters</button>
                     <i class="fa fa-spinner fa-spin" style="font-size:24px" *ngIf="searchEventLoading"></i>
 				</div>
 				<div class="col-sm-2">
@@ -95,8 +94,9 @@
 								</label>
 							</div>
 						</div>
-					</div>				
+					</div>			
 			</div>
+            <button type="submit" class="btn btn-default" [disabled]="filterForm.invalid">Search</button>
 		</form>
 	</div>
     <hr />
