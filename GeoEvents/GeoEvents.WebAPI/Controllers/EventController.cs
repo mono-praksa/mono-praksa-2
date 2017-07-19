@@ -123,6 +123,13 @@ namespace GeoEvents.WebAPI.Controllers
         {
             return Service.UpdateRatingAsync(eventId, rating);
         }
+
+        [HttpPut]
+        [Route("update/reservation")]
+        public Task<IEvent> UpdateReservationAsync(Guid eventId)
+        {
+            return Service.UpdateReservationAsync(eventId);
+        }
     }
     public class EventModel
     {

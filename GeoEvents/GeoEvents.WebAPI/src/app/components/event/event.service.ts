@@ -77,6 +77,13 @@ export class EventService {
                 return <IEvent>response.json();
             }).catch(this.handleError);
     }
+
+    updateReservation(eventId: string) {
+        return this._http.put("/api/events/update/reservation?eventId=" + eventId, {})
+            .map((response: Response) => {
+                return <IEvent>response.json();
+            }).catch(this.handleError);
+    }
 	
 	handleError(error: Response) {
 		console.error(error);

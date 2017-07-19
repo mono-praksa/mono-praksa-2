@@ -1,4 +1,4 @@
-﻿import { Component, Input, OnInit, Output, EventEmitter, ViewChild, ElementRef } from '@angular/core';
+﻿import { Component, Input, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { Http, Response, Headers, RequestOptions } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 
@@ -24,7 +24,6 @@ import { LoaderService } from '../../../shared/loader.service';
 
 export class EventDetailComponent implements OnInit{
     @Input() event: IEvent;
-    @Output() cancel = new EventEmitter();
     @ViewChild("carousel") carouselElement: ElementRef;
     @ViewChild("userRate") userRateElement: ElementRef;
     private _images: IImage[];
@@ -83,11 +82,17 @@ export class EventDetailComponent implements OnInit{
     rate() {
         let rating = this.userRateElement.nativeElement.innerHTML;
         this.eventService.updateRating(this.event.Id, +rating)
-            .subscribe(response => console.log(response));
+            .subscribe((response: IEvent) => {
+                this.event.Rating = response.Rating;
+                this.event.RateCount = response.RateCount;
+            });
     }
 
-    handleCancelClick() {
-        this.cancel.emit()
+    reserve() {
+        this.eventService.updateReservation(this.event.Id)
+            .subscribe((response: IEvent) => {
+                this.event.Reserved = response.Reserved;
+            });
     }
 
     decodeBase64(s: string) {
