@@ -2,10 +2,9 @@
 import { IEvent } from '../models/event.model'
 
 @Component({
-    template: `
-        <create-event (eventEmitter)="eventEmitted($event)" *ngIf="!createdEvent || _skip"></create-event>
-        <create-images *ngIf="createdEvent && !_skip" (emittSkip)="skip($event)" [createdEvent]="createdEvent"></create-images>
-    `
+    templateUrl: "app/components/event/views/event-create.component.html",
+    styles: [`.oneThird {width: 50%;}
+              .twoThirds {width: 75%;}`]
 })
 export class EventCreateComponent {
     createdEvent: IEvent;

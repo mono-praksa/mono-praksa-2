@@ -3,7 +3,7 @@ import { FormControl, FormGroup, Validators, ValidatorFn, FormBuilder } from '@a
 import { Observable } from 'rxjs/Rx'
 import { MapsAPILoader } from '@agm/core'
 
-import { endDateBeforeStartDate } from '../validators/validator'
+import { endDateBeforeStartDate, uniqueName } from '../validators/validator'
 import { IEvent } from '../models/event.model'
 import { CategoryEnum } from '../../../shared/common/category-enum'
 import { LoaderService } from '../../../shared/loader.service'
@@ -52,6 +52,9 @@ export class EventCreateDataComponent implements OnInit {
     address: FormControl;
     latitude: FormControl;
     longitude: FormControl;
+    customAttributeKey: FormControl;
+    customAttributeKeyPicker: FormControl;
+    customAttributeValue: FormControl;
 
     constructor(
         private _mapsAPILoader: MapsAPILoader,
@@ -105,6 +108,18 @@ export class EventCreateDataComponent implements OnInit {
         this.eventForm.controls["address"].setValue("");
         this.eventForm.controls["latitude"].setValue(null);
         this.eventForm.controls["longitude"].setValue(null);
+    }
+
+    private buildCustomAttributeForm(attributes: any): void {
+        this.customAttributeKey = new FormControl('');
+    }
+
+    private buildCustomAttributePickerForm(): void {
+        this.customAttributeKeyPicker = new FormControl('');
+    }
+
+    private buildCustomAttributeValueForm(): void {
+        this.customAttributeValue = new FormControl('');
     }
 
     private buildForm(): void {

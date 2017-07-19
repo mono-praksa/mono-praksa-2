@@ -1,0 +1,23 @@
+﻿<div class="progress progress-striped active">
+    <div class="progress-bar" role="progressbar" [ngClass]="{'oneThird': !createdEvent, 'twoThirds': createdEvent}">
+        <span>Basic Information</span>
+        <span *ngIf="createdEvent">Customize</span>
+        <span *ngIf="false">Add Images</span>
+    </div>
+    <!--<div *ngIf="!createdEvent" style="float:left; text-align:center; width:25%">
+        Customize
+    </div>-->
+    <div *ngIf="!createdEvent" class="progress-bar progress-bar-danger" role="progressbar" style="width:25%">
+        Customize
+    </div>
+    <!--<div *ngIf="true" style="float:left; text-align:center; width:25%">
+        Add Images
+    </div>-->
+    <div *ngIf="true" class="progress-bar progress-bar-danger" role="progressbar" style="width:25%">
+        Add Images
+    </div>
+</div>
+<button (click)="createdEvent=true">AAA</button>
+
+<create-event (eventEmitter)="eventEmitted($event)" *ngIf="!createdEvent || _skip"></create-event>
+<create-images *ngIf="createdEvent && !_skip" (emittSkip)="skip($event)" [createdEvent]="createdEvent"></create-images>
