@@ -284,7 +284,8 @@ namespace GeoEvents.Repository
                         Capacity = Convert.ToInt32(drSelect[9]),
                         Reserved = Convert.ToInt32(drSelect[10]),
                         Rating = Convert.ToDecimal(drSelect[11]),
-                        RateCount = Convert.ToInt32(drSelect[12])
+                        RateCount = Convert.ToInt32(drSelect[12]),
+                        RatingLocation = Convert.ToDecimal(drSelect[13])
                     };
                 }
             }
@@ -340,7 +341,8 @@ namespace GeoEvents.Repository
                         Capacity = Convert.ToInt32(dr[9]),
                         Reserved = Convert.ToInt32(dr[10]),
                         Rating = Convert.ToDecimal(dr[11]),
-                        RateCount = Convert.ToInt32(dr[12])
+                        RateCount = Convert.ToInt32(dr[12]),
+                        RatingLocation=Convert.ToDecimal(dr[13])
                     };
                 }
             }
