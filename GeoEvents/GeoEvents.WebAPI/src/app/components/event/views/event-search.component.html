@@ -126,6 +126,6 @@
 </div>
 <event-details [event]="this.event" *ngIf="this.isDetailMode"></event-details>
 
-<div *ngIf="geocodingService.userApproximateAddress!=''">
-    <span class="text-info">Your address: {{geocodingService.userApproximateAddress}}</span> <span class="text-muted">(Reported by this computer)</span>
+<div *ngIf="userApproximateAddress!=''">
+    <span class="text-info">Your address: {{userApproximateAddress}}</span> <span class="text-muted">(Reported by this computer)</span>
 </div>

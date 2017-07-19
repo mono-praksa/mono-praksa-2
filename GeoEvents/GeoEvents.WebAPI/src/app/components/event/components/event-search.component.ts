@@ -19,7 +19,7 @@ import { needBothOrNeitherOfAddressAndRadius } from '../validators/validator';
 })
 export class EventSearchComponent implements OnInit {
     private _searchEventLoading: boolean = false;
-    private _userApproximateAddress: string = null;
+    private _userApproximateAddress: string = "";
 
 	//variables for storing data
 	private _events: IEvent[];
@@ -185,12 +185,12 @@ export class EventSearchComponent implements OnInit {
 	}
 	
     ngOnInit(): void {
-        //this.geocodingService.getUserApproximateAddress()
-        //    .subscribe(response => {
-        //        if (response.status == "success") {
-        //            this.userApproximateAddress = response.city + ", " + response.country;
-        //        }
-        //    });
+        this.geocodingService.getUserApproximateAddress()
+            .subscribe(response => {
+                if (response.status == "success") {
+                    this.userApproximateAddress = response.city + ", " + response.country;
+                }
+            });
         this._loaderService.loaderStatus.subscribe((value: boolean) => {
             this.searchEventLoading = value;
         });

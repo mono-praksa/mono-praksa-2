@@ -1,10 +1,10 @@
-﻿import { Injectable, OnInit } from '@angular/core';
+﻿import { Injectable } from '@angular/core';
 import { Http, Response, Headers, RequestOptions } from '@angular/http';
 import { Observable } from 'rxjs/observable';
 import { IEvent } from '../components/event/models/event.model';
 
 @Injectable()
-export class GeocodingService implements OnInit {
+export class GeocodingService {
     _userApproximateAddress: string = "";
 
     constructor(private http: Http) {}
@@ -17,11 +17,7 @@ export class GeocodingService implements OnInit {
         this._userApproximateAddress = thisUserApproximateAddress;
     }
 
-    ngOnInit() {
-        this.getUserApproximateAddress().subscribe((response: any) => this.userApproximateAddress = response);
-    }
-
-    private getUserApproximateAddress() {
+    getUserApproximateAddress() {
         return this.http.get("http://ip-api.com/json")
             .map((response: Response) => {
                 return response.json();
