@@ -297,7 +297,7 @@ namespace GeoEvents.Repository
 
                 if (drGetEventToRateInfo.Read())
                 {
-                    CurrentRating = Convert.ToInt32(drGetEventToRateInfo[0]);///// promjeni query helper da dohvatis lat i long
+                    CurrentRating = Convert.ToDecimal(drGetEventToRateInfo[0]);
                     CurrentRateCount = Convert.ToInt32(drGetEventToRateInfo[1]);
                     LatToUpdate = Convert.ToDecimal(drGetEventToRateInfo[2]);
                     LongToUpdate = Convert.ToDecimal(drGetEventToRateInfo[3]);
