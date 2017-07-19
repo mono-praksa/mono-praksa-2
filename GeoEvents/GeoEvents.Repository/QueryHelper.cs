@@ -57,7 +57,6 @@ namespace GeoEvents.Repository
         public static string ParRateCount = "@RateCount";
         public static string ParRatingLocation = "@RatingLocation";
 
-        public static string ParRatingEvent = "@RatingEvent";
 
         /// <summary>
         /// Added Qouted strings
@@ -507,8 +506,8 @@ namespace GeoEvents.Repository
         {
 
             StringBuilder getCurrentRating = new StringBuilder();
-            getCurrentRating.AppendFormat("SELECT {0},{1} FROM {2} WHERE {3}={4}",
-                RatingQ, RateCountQ, TableNameEventQ, TableNameEventIdQ, ParEventId);
+            getCurrentRating.AppendFormat("SELECT {0},{1},{2},{3} FROM {4} WHERE {5}={6}",
+                RatingQ, RateCountQ,LatQ,LongQ, TableNameEventQ, TableNameEventIdQ, ParEventId);
 
             return getCurrentRating.ToString();
         }

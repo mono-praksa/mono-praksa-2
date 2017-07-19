@@ -212,13 +212,14 @@ namespace GeoEvents.Repository
 
             if (filter.RatingEvent != null)
             {
-                command.Parameters.AddWithValue(QueryHelper.ParRatingEvent, NpgsqlTypes.NpgsqlDbType.Double, filter.RatingEvent);
+                command.Parameters.AddWithValue(QueryHelper.ParRating, NpgsqlTypes.NpgsqlDbType.Double, filter.RatingEvent);
             }
 
             if (!string.IsNullOrWhiteSpace(filter.SearchString))
             {
                 command.Parameters.AddWithValue(QueryHelper.ParSearchString, NpgsqlTypes.NpgsqlDbType.Varchar, "%" + filter.SearchString + "%");
             }
+        
         }
 
         /// <summary>
@@ -243,7 +244,7 @@ namespace GeoEvents.Repository
 
             StringBuilder UpdateAllLocationRating = new StringBuilder();
             UpdateAllLocationRating.AppendFormat("UPDATE {0} SET {1}={2} WHERE ll_to_earth({3},{4}) = ll_to_earth({5}, {6}) ",
-                "\"Events\"","\"RatinLocation\"","@RatingLocation", "\"Events\".\"Lat\"",
+                "\"Events\"","\"RatingLocation\"","@RatingLocation", "\"Events\".\"Lat\"",
                 "\"Events\".\"Long\"", "@Lat", "@Long");
 
 
@@ -284,6 +285,9 @@ namespace GeoEvents.Repository
                 await commandUpdateRating.ExecuteNonQueryAsync();
                 #endregion
 
+                Connection.CreateConnection().Close();
+                await Connection.CreateConnection().OpenAsync();
+
                 #region Update Location Rating
 
                 commandRatingLocation.Parameters.AddWithValue("@Lat", NpgsqlTypes.NpgsqlDbType.Double, LatToUpdate);
@@ -306,6 +310,9 @@ namespace GeoEvents.Repository
                 }
                 #endregion
 
+                Connection.CreateConnection().Close();
+                await Connection.CreateConnection().OpenAsync();
+
                 #region Update all events
 
                 commandUpdateAllRatingLocation.Parameters.AddWithValue("@RatingLocation", NpgsqlTypes.NpgsqlDbType.Double,RatingLocation);
@@ -314,9 +321,12 @@ namespace GeoEvents.Repository
 
                  await commandUpdateAllRatingLocation.ExecuteNonQueryAsync();
 
-
-
                 #endregion
+
+
+                Connection.CreateConnection().Close();
+                await Connection.CreateConnection().OpenAsync();
+
 
                 #region return updated event
                 commandSelect.Parameters.AddWithValue(QueryHelper.ParEventId, NpgsqlTypes.NpgsqlDbType.Uuid, eventId);
