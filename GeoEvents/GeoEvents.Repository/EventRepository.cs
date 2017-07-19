@@ -4,6 +4,7 @@ using GeoEvents.DAL;
 using GeoEvents.Model.Common;
 using GeoEvents.Repository.Common;
 using Npgsql;
+using NpgsqlTypes;
 using System;
 using System.Collections.Generic;
 using System.Data.Common;
@@ -47,7 +48,8 @@ namespace GeoEvents.Repository
             using (Connection.CreateConnection())
             using (NpgsqlCommand commandInsert = new NpgsqlCommand(QueryHelper.GetInsertEventString(), Connection.CreateConnection()))
             using (NpgsqlCommand commandSelect = new NpgsqlCommand(QueryHelper.GetSelectEventStringById(), Connection.CreateConnection()))
-
+            using (NpgsqlCommand commandGetRatingLocation = new NpgsqlCommand(QueryHelper.GetRatingLocation(), Connection.CreateConnection()))
+            using (NpgsqlCommand commandGetRateCount = new NpgsqlCommand(QueryHelper.GetRateCountLocation(), Connection.CreateConnection()))
             {
                 commandInsert.Parameters.AddWithValue(QueryHelper.ParId, NpgsqlTypes.NpgsqlDbType.Uuid, evt.Id);
                 commandInsert.Parameters.AddWithValue(QueryHelper.ParCategory, NpgsqlTypes.NpgsqlDbType.Integer, evt.Category);
@@ -63,11 +65,40 @@ namespace GeoEvents.Repository
                 commandInsert.Parameters.AddWithValue(QueryHelper.ParRating, NpgsqlTypes.NpgsqlDbType.Double, evt.Rating);
                 commandInsert.Parameters.AddWithValue(QueryHelper.ParRateCount, NpgsqlTypes.NpgsqlDbType.Integer, evt.RateCount);
                 commandInsert.Parameters.AddWithValue(QueryHelper.ParRatingLocation, NpgsqlTypes.NpgsqlDbType.Double, evt.RatingLocation);
-         
 
                 commandSelect.Parameters.AddWithValue(QueryHelper.ParEventId, NpgsqlTypes.NpgsqlDbType.Uuid, evt.Id);
 
+                commandGetRateCount.Parameters.AddWithValue(QueryHelper.ParLat, NpgsqlDbType.Double, evt.Lat);
+                commandGetRateCount.Parameters.AddWithValue(QueryHelper.ParLong, NpgsqlDbType.Double, evt.Long);
+
+
+                commandGetRatingLocation.Parameters.AddWithValue(QueryHelper.ParLat, NpgsqlDbType.Double, evt.Lat);
+                commandGetRatingLocation.Parameters.AddWithValue(QueryHelper.ParLong, NpgsqlDbType.Double, evt.Long);
+
                 await Connection.CreateConnection().OpenAsync();
+
+                object rateC = await commandGetRateCount.ExecuteScalarAsync();
+                int rateCount = 0;
+                if (rateC != DBNull.Value)
+                {
+                    rateCount = Convert.ToInt32(rateC);
+                }
+
+                object ratingL = await commandGetRatingLocation.ExecuteScalarAsync();
+                decimal ratingLocation = 0;
+                if (ratingL != DBNull.Value)
+                {
+                    ratingLocation = Convert.ToDecimal(ratingL);
+                }
+
+                if (rateCount == 0)
+                    evt.RatingLocation = 0;
+                else
+                {
+                    evt.RatingLocation = Convert.ToDecimal(ratingLocation / rateCount);
+                }
+
+
                 await commandInsert.ExecuteNonQueryAsync();
 
                 DbDataReader dr = await commandSelect.ExecuteReaderAsync();
@@ -88,7 +119,7 @@ namespace GeoEvents.Repository
                         Reserved = Convert.ToInt32(dr[10]),
                         Rating = Convert.ToDecimal(dr[11]),
                         RateCount = Convert.ToInt32(dr[12]),
-                        RatingLocation=Convert.ToDecimal(dr[13])
+                        RatingLocation=Convert.ToDecimal(dr[14])
                     };
                 }
                
@@ -347,7 +378,8 @@ namespace GeoEvents.Repository
                         Capacity = Convert.ToInt32(drSelect[9]),
                         Reserved = Convert.ToInt32(drSelect[10]),
                         Rating = Convert.ToDecimal(drSelect[11]),
-                        RateCount = Convert.ToInt32(drSelect[12])
+                        RateCount = Convert.ToInt32(drSelect[12]),
+                        RatingLocation=Convert.ToDecimal(drSelect[14])
                     };
                 }
             }
@@ -403,12 +435,18 @@ namespace GeoEvents.Repository
                         Capacity = Convert.ToInt32(dr[9]),
                         Reserved = Convert.ToInt32(dr[10]),
                         Rating = Convert.ToDecimal(dr[11]),
-                        RateCount = Convert.ToInt32(dr[12])
+                        RateCount = Convert.ToInt32(dr[12]),
+                        RatingLocation=Convert.ToDecimal(dr[14])
                     };
                 }
             }
 
             return Mapper.Map<IEvent>(evtR);
+        }
+
+        public Task<IEvent> GetEventByIdAsync(Guid eventId)
+        {
+            throw new NotImplementedException();
         }
 
 
