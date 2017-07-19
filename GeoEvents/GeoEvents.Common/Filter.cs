@@ -112,7 +112,7 @@ namespace GeoEvents.Common
         /// <param name="orderAscending">The order ascending.</param>
         /// <param name="price">The price.</param>
         /// <param name="ratingEvent">The rating event.</param>
-        public Filter(decimal? uLat, decimal? uLong, decimal? radius, DateTime? startTime, DateTime? endTime, int? category, int? pageNumber, int? pageSize, string searchString, string orderBy, bool? orderAscending, decimal? price, decimal? ratingEvent, decimal? ratingLocation)
+        public Filter(decimal? uLat, decimal? uLong, decimal? radius, DateTime? startTime, DateTime? endTime, int? category, int? pageNumber, int? pageSize, string searchString, string orderBy, bool? orderAscending, decimal? price, decimal? ratingEvent)
         {
             ULat = uLat;
             ULong = uLong;

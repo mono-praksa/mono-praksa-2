@@ -167,7 +167,9 @@ export class EventSearchComponent implements OnInit {
 				Radius: 0,
 				StartTime: null,
 				EndTime: null,
-				Category: 127,
+                Category: 127,
+                Price: null,
+                RatingEvent: null,
 				SearchString: this._preserveSearchQuerryService.searchQuerry,
 				
 				PageNumber: 1,
@@ -195,7 +197,9 @@ export class EventSearchComponent implements OnInit {
             StartTime: formValues.start,
             EndTime: formValues.end,
             Category: selectedCategories,
-			SearchString: formValues.searchString,
+            SearchString: formValues.searchString,
+            Price: formValues.price,
+            RatingEvent: formValues.rating,
 			
 			PageNumber: 1,
 			PageSize: 10,

@@ -32,6 +32,14 @@ export class EventService {
             querry += '&endTime=' + filter.EndTime.toString().replace(':', 'h');
         }
 
+        if (filter.Price != null && filter.Price >= 0) {
+            querry += '&price=' + filter.Price.toString();
+        }
+
+        if (filter.RatingEvent != null && filter.RatingEvent >= 1 && filter.RatingEvent <= 5) {
+            querry += '&ratingEvent=' + filter.RatingEvent.toString();
+        }
+
         if (filter.SearchString != null) {
             if (filter.SearchString.toString() != "") {
                 querry += '&searchString=' + filter.SearchString.toString();
