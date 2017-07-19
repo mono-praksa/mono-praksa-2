@@ -104,6 +104,7 @@ namespace GeoEvents.Repository
                      PostgresConn.CreateConnection()))
                 {
                     command.Parameters.AddWithValue(QueryHelper.ParEventId, NpgsqlTypes.NpgsqlDbType.Uuid, eventID);
+
                     await PostgresConn.CreateConnection().OpenAsync();
                     DbDataReader dr = await command.ExecuteReaderAsync();
 

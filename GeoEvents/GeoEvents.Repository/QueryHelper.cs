@@ -89,7 +89,6 @@ namespace GeoEvents.Repository
         /// <param name="filter"></param>
         /// <returns>Query string</returns>
         ///
-
         public static string GetSelectCountEventString(IFilter filter)
         {
             StringBuilder selectString = new StringBuilder();
@@ -241,6 +240,12 @@ namespace GeoEvents.Repository
             return selectString.ToString();
         }
 
+        /// <summary>
+        /// Gets query filter select string for event by Id
+        /// </summary>
+        /// <returns>
+        /// query string
+        /// </returns>
         public static string GetSelectEventStringById()
         {
             StringBuilder selectString = new StringBuilder();
@@ -489,6 +494,71 @@ namespace GeoEvents.Repository
             selectString.AppendFormat(" SELECT * FROM {0} WHERE {1}.{2}={3} ",
                 TableNameImagesQ, TableNameImagesQ, IdQ, ParId);
             return selectString.ToString();
+        }
+
+        /// <summary>
+        /// Get select query for Update Rating 
+        /// </summary>
+        /// <returns>
+        /// query string
+        /// </returns>
+        public static string GetSelectUpdateRatingString()
+        {
+
+            StringBuilder getCurrentRating = new StringBuilder();
+            getCurrentRating.AppendFormat("SELECT {0},{1} FROM {2} WHERE {3}={4}",
+                RatingQ, RateCountQ, TableNameEventQ, TableNameEventIdQ, ParEventId);
+
+            return getCurrentRating.ToString();
+        }
+
+        /// <summary>
+        /// Get insert query for Rating 
+        /// </summary>
+        /// <returns>
+        /// query string
+        /// </returns>
+        public static string GetsInsertUpdateRatingString()
+        {
+
+            StringBuilder updateRatingString = new StringBuilder();
+            updateRatingString.AppendFormat("UPDATE {0} SET {1}={2} , {3}={4} WHERE {5}={6}",
+                TableNameEventQ, RatingQ, ParRating, RateCountQ, ParRateCount, TableNameEventIdQ, ParEventId);
+
+            return updateRatingString.ToString();
+        }
+
+        /// <summary>
+        /// Get select string for current reservation
+        /// </summary>
+        /// <returns>
+        /// query string
+        /// </returns>
+        public static string GetSelectCurrentReservationString()
+        {
+
+
+            StringBuilder getCurrentReservation = new StringBuilder();
+            getCurrentReservation.AppendFormat("SELECT {0} FROM {1} WHERE {2}={3}",
+                ReservedQ, TableNameEventQ, TableNameEventIdQ, ParEventId);
+
+            return getCurrentReservation.ToString();
+        }
+
+        /// <summary>
+        /// Get insert query for Update reservation
+        /// </summary>
+        /// <returns>
+        /// query string
+        /// </returns>
+        public static string GetInsertUpdateReservationString()
+        {
+
+            StringBuilder updateReservationString = new StringBuilder();
+            updateReservationString.AppendFormat("UPDATE {0} SET {1}={2} WHERE {3}={4}",
+                TableNameEventQ, ReservedQ, ParReserved, TableNameEventIdQ, ParEventId);
+
+            return updateReservationString.ToString();
         }
 
         #endregion Metods

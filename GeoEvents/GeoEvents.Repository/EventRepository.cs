@@ -172,16 +172,56 @@ namespace GeoEvents.Repository
         /// <param name="command"></param>
         private void SetParametersSearchEvents(IFilter filter, NpgsqlCommand command)
         {
-            if (filter.ULat != null) { command.Parameters.AddWithValue(QueryHelper.ParLat, NpgsqlTypes.NpgsqlDbType.Double, filter.ULat); }
-            if (filter.ULong != null) { command.Parameters.AddWithValue(QueryHelper.ParLong, NpgsqlTypes.NpgsqlDbType.Double, filter.ULong); }
-            if (filter.Radius != null) { command.Parameters.AddWithValue(QueryHelper.ParRadius, NpgsqlTypes.NpgsqlDbType.Double, filter.Radius * 1000); }
-            if (filter.StartTime != null) { command.Parameters.AddWithValue(QueryHelper.ParUserStartTime, NpgsqlTypes.NpgsqlDbType.Timestamp, filter.StartTime); }
-            if (filter.EndTime != null) { command.Parameters.AddWithValue(QueryHelper.ParUserEndTime, NpgsqlTypes.NpgsqlDbType.Timestamp, filter.EndTime); }
-            if (filter.Category != null) { command.Parameters.AddWithValue(QueryHelper.ParCategory, NpgsqlTypes.NpgsqlDbType.Integer, filter.Category); }
-            if (filter.Price != null) { command.Parameters.AddWithValue(QueryHelper.ParPrice, NpgsqlTypes.NpgsqlDbType.Double, filter.Price); }
-            //if (filter.RatingEvent != null) { command.Parameters.AddWithValue(QueryHelper.ParRatingEvent, NpgsqlTypes.NpgsqlDbType.Double, filter.RatingEvent); }
-            //if (filter.RatingLocation != null) { command.Parameters.AddWithValue(QueryHelper.ParRatingLocation, NpgsqlTypes.NpgsqlDbType.Integer, filter.RatingLocation); }
-            if (!string.IsNullOrWhiteSpace(filter.SearchString)) { command.Parameters.AddWithValue(QueryHelper.ParSearchString, NpgsqlTypes.NpgsqlDbType.Varchar, "%" + filter.SearchString + "%"); }
+            if (filter.ULat != null)
+            {
+                command.Parameters.AddWithValue(QueryHelper.ParLat, NpgsqlTypes.NpgsqlDbType.Double, filter.ULat);
+
+            }
+            if (filter.ULong != null)
+            {
+                command.Parameters.AddWithValue(QueryHelper.ParLong, NpgsqlTypes.NpgsqlDbType.Double, filter.ULong);
+            }
+
+            if (filter.Radius != null)
+            {
+                command.Parameters.AddWithValue(QueryHelper.ParRadius, NpgsqlTypes.NpgsqlDbType.Double, filter.Radius * 1000);
+            }
+
+            if (filter.StartTime != null)
+            {
+                command.Parameters.AddWithValue(QueryHelper.ParUserStartTime, NpgsqlTypes.NpgsqlDbType.Timestamp, filter.StartTime);
+            }
+
+            if (filter.EndTime != null)
+            {
+                command.Parameters.AddWithValue(QueryHelper.ParUserEndTime, NpgsqlTypes.NpgsqlDbType.Timestamp, filter.EndTime);
+            }
+
+            if (filter.Category != null)
+            {
+                command.Parameters.AddWithValue(QueryHelper.ParCategory, NpgsqlTypes.NpgsqlDbType.Integer, filter.Category);
+            }
+
+            if (filter.Price != null)
+            {
+                command.Parameters.AddWithValue(QueryHelper.ParPrice, NpgsqlTypes.NpgsqlDbType.Double, filter.Price);
+            }
+
+            if (filter.RatingEvent != null)
+            {
+                command.Parameters.AddWithValue(QueryHelper.ParRatingEvent, NpgsqlTypes.NpgsqlDbType.Double, filter.RatingEvent);
+            }
+
+            if (filter.RatingLocation != null)
+            {
+                command.Parameters.AddWithValue(QueryHelper.ParRatingLocation, NpgsqlTypes.NpgsqlDbType.Integer, filter.RatingLocation);
+            }
+
+            if (!string.IsNullOrWhiteSpace(filter.SearchString))
+            {
+                command.Parameters.AddWithValue(QueryHelper.ParSearchString, NpgsqlTypes.NpgsqlDbType.Varchar, "%" + filter.SearchString + "%");
+            }
+
         }
 
         /// <summary>
@@ -194,24 +234,16 @@ namespace GeoEvents.Repository
         public async Task<IEvent> UpdateRatingAsync(Guid eventId, decimal rating)
         {
 
-            StringBuilder getCurrentRating = new StringBuilder();
-            getCurrentRating.AppendFormat("SELECT {0},{1} FROM {2} WHERE {3}={4}",
-                "\"Rating\"", "\"RateCount\"", "\"Events\"","\"Events\".\"Id\"", "@ParId");
-
-            StringBuilder updateRatingString = new StringBuilder();
-            updateRatingString.AppendFormat("UPDATE {0} SET {1}={2} , {3}={4} WHERE {5}={6}",
-                "\"Events\"","\"Rating\"","@ParRating", "\"RateCount\"","@ParRateCount", "\"Events\".\"Id\"", "@ParId");
-
             EventEntity evtR = new EventEntity();
             decimal CurrentRating=0;
             int CurrentRateCount=0;
 
             using (Connection.CreateConnection())
-            using (NpgsqlCommand commandGetRating = new NpgsqlCommand(getCurrentRating.ToString(), Connection.CreateConnection()))
-            using (NpgsqlCommand commandUpdateRating = new NpgsqlCommand(updateRatingString.ToString(), Connection.CreateConnection()))
-            using (NpgsqlCommand commandSelect = new NpgsqlCommand(QueryHelper.GetSelectEventStringById(), Connection.CreateConnection()))
+            using (NpgsqlCommand commandGetRating = new NpgsqlCommand( QueryHelper.GetSelectUpdateRatingString(), Connection.CreateConnection()) )
+            using (NpgsqlCommand commandUpdateRating = new NpgsqlCommand( QueryHelper.GetsInsertUpdateRatingString(), Connection.CreateConnection()) )
+            using (NpgsqlCommand commandSelect = new NpgsqlCommand( QueryHelper.GetSelectEventStringById(), Connection.CreateConnection()) )
             {
-                commandGetRating.Parameters.AddWithValue(QueryHelper.ParEventId, NpgsqlTypes.NpgsqlDbType.Uuid, eventId);
+                commandGetRating.Parameters.AddWithValue( QueryHelper.ParEventId, NpgsqlTypes.NpgsqlDbType.Uuid, eventId);
 
                 await Connection.CreateConnection().OpenAsync();
                 DbDataReader drGetRating = await commandGetRating.ExecuteReaderAsync();
@@ -225,16 +257,14 @@ namespace GeoEvents.Repository
                 decimal NewRating = (CurrentRateCount * CurrentRating + rating)/NewRateCount;
 
 
-                commandUpdateRating.Parameters.AddWithValue(QueryHelper.ParEventId, NpgsqlTypes.NpgsqlDbType.Uuid, eventId);
-                commandUpdateRating.Parameters.AddWithValue("@ParRating", NpgsqlTypes.NpgsqlDbType.Integer,NewRating);
-                commandUpdateRating.Parameters.AddWithValue("@ParRateCount", NpgsqlTypes.NpgsqlDbType.Integer,NewRateCount);
+                commandUpdateRating.Parameters.AddWithValue( QueryHelper.ParEventId, NpgsqlTypes.NpgsqlDbType.Uuid, eventId );
+                commandUpdateRating.Parameters.AddWithValue( QueryHelper.ParRating, NpgsqlTypes.NpgsqlDbType.Integer,NewRating );
+                commandUpdateRating.Parameters.AddWithValue( QueryHelper.ParRateCount, NpgsqlTypes.NpgsqlDbType.Integer,NewRateCount );
 
                 await commandUpdateRating.ExecuteNonQueryAsync();
 
 
-
-
-                commandSelect.Parameters.AddWithValue(QueryHelper.ParEventId, NpgsqlTypes.NpgsqlDbType.Uuid, eventId);
+                commandSelect.Parameters.AddWithValue( QueryHelper.ParEventId, NpgsqlTypes.NpgsqlDbType.Uuid, eventId );
                 DbDataReader drSelect = await commandSelect.ExecuteReaderAsync();
                 while (drSelect.Read())
                 {
@@ -259,7 +289,6 @@ namespace GeoEvents.Repository
 
             return Mapper.Map<IEvent>(evtR);
 
-
         }
 
         /// <summary>
@@ -270,20 +299,13 @@ namespace GeoEvents.Repository
         /// <exception cref="System.NotImplementedException"></exception>
         public async Task<IEvent> UpdateReservationAsync(Guid eventId)
         {
-            StringBuilder getCurrentReservation = new StringBuilder();
-            getCurrentReservation.AppendFormat("SELECT {0} FROM {1} WHERE {2}={3}", 
-                "\"Reserved\"", "\"Events\"", "\"Events\".\"Id\"", "@ParId");
-
-            StringBuilder updateReservationString = new StringBuilder();
-            updateReservationString.AppendFormat("UPDATE {0} SET {1}={2} WHERE {3}={4}",
-                "\"Events\"", "\"Reserved\"", "@ParReserved", "\"Events\".\"Id\"", "@ParId");
 
             int parReserved = 0;
             EventEntity evtR = new EventEntity(); 
 
             using (Connection.CreateConnection())
-            using (NpgsqlCommand commandGetReserved = new NpgsqlCommand (getCurrentReservation.ToString(), Connection.CreateConnection()))
-            using (NpgsqlCommand commandUpdate = new NpgsqlCommand(updateReservationString.ToString(), Connection.CreateConnection()))
+            using (NpgsqlCommand commandGetReserved = new NpgsqlCommand (QueryHelper.GetSelectCurrentReservationString(), Connection.CreateConnection()))
+            using (NpgsqlCommand commandUpdate = new NpgsqlCommand( QueryHelper.GetInsertUpdateReservationString(), Connection.CreateConnection()))
             using (NpgsqlCommand commandSelect = new NpgsqlCommand(QueryHelper.GetSelectEventStringById(), Connection.CreateConnection()))
             {
                 commandGetReserved.Parameters.AddWithValue(QueryHelper.ParEventId, NpgsqlTypes.NpgsqlDbType.Uuid, eventId);
@@ -294,7 +316,7 @@ namespace GeoEvents.Repository
                 parReserved++;
 
                 commandUpdate.Parameters.AddWithValue(QueryHelper.ParEventId, NpgsqlTypes.NpgsqlDbType.Uuid, eventId);
-                commandUpdate.Parameters.AddWithValue("@ParReserved", NpgsqlTypes.NpgsqlDbType.Integer, parReserved);
+                commandUpdate.Parameters.AddWithValue(QueryHelper.ParReserved, NpgsqlTypes.NpgsqlDbType.Integer, parReserved);
 
                 await commandUpdate.ExecuteNonQueryAsync();
 
