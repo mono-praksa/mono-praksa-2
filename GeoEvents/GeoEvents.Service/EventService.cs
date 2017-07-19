@@ -48,9 +48,18 @@ namespace GeoEvents.Service
 
         #region Methods
 
+        /// <summary>
+        /// Gets an event with an id.
+        /// </summary>
+        /// <param name="id">The id of the event.</param>
+        /// <returns>The event.</returns>
+        public async Task<IEvent> GetEventByIdAsync(Guid id)
+        {
+            return await Repository.GetEventByIdAsync(id);
+        }
 
         /// <summary>
-        /// Gets events that satisfy a filter.
+        /// Gets events that satisfy a filter asynchronously.
         /// </summary>
         /// <param name="filter">The filter.</param>
         /// <returns>
@@ -82,7 +91,7 @@ namespace GeoEvents.Service
 
 
         /// <summary>
-        /// Gets the number of events that satisfy a filter.
+        /// Gets the number of events that satisfy a filter asynchronously.
         /// </summary>
         /// <param name="filter">The filter.</param>
         /// <returns>
@@ -95,7 +104,7 @@ namespace GeoEvents.Service
 
 
         /// <summary>
-        /// Creates an event.
+        /// Creates an event asynchronously.
         /// </summary>
         /// <param name="evt">The event.</param>
         /// <returns>
@@ -117,7 +126,7 @@ namespace GeoEvents.Service
         }
 
         /// <summary>
-        /// Updates the reservation asynchronous.
+        /// Updates the reservation asynchronously.
         /// </summary>
         /// <param name="eventId">The event identifier.</param>
         /// <returns></returns>
@@ -127,7 +136,7 @@ namespace GeoEvents.Service
         }
 
         /// <summary>
-        /// Updates the rating asynchronous.
+        /// Updates the rating asynchronously.
         /// </summary>
         /// <param name="eventId">The event identifier.</param>
         /// <param name="rating"></param>
