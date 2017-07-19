@@ -6,6 +6,7 @@ import { NguiDatetimePickerModule } from '@ngui/datetime-picker';
 import { AgmCoreModule } from '@agm/core';
 import { CommonModule } from '@angular/common';
 import { BrowserModule } from '@angular/platform-browser';
+import { PaginatorModule } from 'primeng/primeng';
 
 import { EventSearchComponent } from "./components/event-search.component";
 import { EventListComponent } from "./components/event-search-list.component";
@@ -29,7 +30,8 @@ import { GeocodingService } from '../../shared/geocoding.service';
 		AgmCoreModule.forRoot({
 			apiKey: 'AIzaSyDHKcbmM0jpW7BOet42_S92KJSr5PYKc5w',
 			libraries: ['places']
-		})
+        }),
+        PaginatorModule
     ],
 
     declarations: [

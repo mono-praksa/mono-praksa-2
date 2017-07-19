@@ -14,6 +14,7 @@
             'app': 'app',
 
             // angular bundles
+            '@angular/animations': 'npm:@angular/animations/bundles/animations.umd.js',
             '@angular/core': 'npm:@angular/core/bundles/core.umd.js',
             '@angular/common': 'npm:@angular/common/bundles/common.umd.js',
             '@angular/compiler': 'npm:@angular/compiler/bundles/compiler.umd.js',
@@ -27,10 +28,15 @@
             'rxjs': 'npm:rxjs',
             'angular-in-memory-web-api': 'npm:angular-in-memory-web-api/bundles/in-memory-web-api.umd.js',
             '@ngui/datetime-picker': 'npm:@ngui/datetime-picker/dist',
-            '@agm/core': 'npm:@agm/core/core.umd.js'
+            '@agm/core': 'npm:@agm/core/core.umd.js',
+            'primeng/primeng': 'npm:primeng'
         },
         // packages tells the System loader how to load when no filename and/or no extension
         packages: {
+            'primeng/primeng': {
+                main: 'primeng.js',
+                defaultExtension: 'js'
+            },
             '@ngui/datetime-picker': {
                 main: 'datetime-picker.umd.js',
                 defaultExtension: 'js'

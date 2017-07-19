@@ -14,12 +14,12 @@ import { LoaderService } from '../../../shared/loader.service';
 import { needBothOrNeitherOfAddressAndRadius, endDateBeforeStartDate } from '../validators/validator';
 
 @Component({
-	templateUrl: 'app/components/event/views/event-search.component.html', 
-//	providers: [ PreserveSearchQuerryService ]
+	templateUrl: 'app/components/event/views/event-search.component.html'
 })
 export class EventSearchComponent implements OnInit {
     private _searchEventLoading: boolean = false;
     private _userApproximateAddress: string = "";
+    private _eventCount: number;
 
 	//variables for storing data
 	private _events: IEvent[];
@@ -60,6 +60,14 @@ export class EventSearchComponent implements OnInit {
     private _isMapMode: boolean = false;
     private _isDetailMode: boolean = false;
 	private _isAdvancedSearch: boolean = false;
+
+    get eventCount(): number {
+        return this._eventCount;
+    }
+
+    set eventCount(theEventCount: number) {
+        this._eventCount = theEventCount;
+    }
 
     get searchEventLoading(): boolean {
         return this._searchEventLoading;
@@ -211,7 +219,8 @@ export class EventSearchComponent implements OnInit {
 			newFilter.SearchString == "";
 		}
 		
-		this.getEvents(newFilter);
+        this.getEvents(newFilter);
+        this.getEventCount(newFilter);
 	}
 	
 	//return a number that represents the chosen categories
@@ -308,7 +317,15 @@ export class EventSearchComponent implements OnInit {
 	toggleAdvancedSearch(): void {
 		this.isAdvancedSearch = !this.isAdvancedSearch;
 	}
-	
+
+    private getEventCount(filter: IFilter): void {
+        this._eventService.getEventCount(filter)
+            .subscribe(result => {
+                console.log(result);
+                this.eventCount = result;
+            });
+    }
+
 	//calls the http service and gets the events
 	private getEvents(filter: IFilter): void {
 		this.filter = filter;

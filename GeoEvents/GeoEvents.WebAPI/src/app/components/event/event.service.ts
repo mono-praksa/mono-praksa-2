@@ -13,48 +13,60 @@ export class EventService {
     constructor(private _http: Http) { }
 
     getEvents(filter: IFilter): Observable<IEvent[]> {
-        let querry = "/api/events/search";
+        let query = "/api/events/search" + this._makeQueryString(filter);
+        //execute http call
+        return this._http.get(query)
+            .map((response: Response) => <IEvent[]>response.json())
+            .catch(this.handleError);
+    }
 
-        querry += "?category=";
-        querry += filter.Category.toString();
+    getEventCount(filter: IFilter): Observable<number> {
+        let query = "/api/events/search/count" + this._makeQueryString(filter);
+        return this._http.get(query)
+            .map((response: Response) => <number>response.json())
+            .catch(this.handleError); 
+    }
+
+    private _makeQueryString(filter: IFilter): string {
+        let query = "";
+
+        query += "?category=";
+        query += filter.Category.toString();
 
         if (filter.ULat != null && filter.ULong != null && filter.Radius != null && filter.Radius != 0) {
-            querry += '&uLat=' + filter.ULat.toString();
-            querry += '&uLong=' + filter.ULong.toString();
-            querry += '&radius=' + filter.Radius.toString();
+            query += '&uLat=' + filter.ULat.toString();
+            query += '&uLong=' + filter.ULong.toString();
+            query += '&radius=' + filter.Radius.toString();
         }
 
         if (filter.StartTime != null && filter.StartTime.toString() != "") {
-            querry += '&startTime=' + filter.StartTime.toString().replace(':', 'h');
+            query += '&startTime=' + filter.StartTime.toString().replace(':', 'h');
         }
 
         if (filter.EndTime != null && filter.EndTime.toString() != "") {
-            querry += '&endTime=' + filter.EndTime.toString().replace(':', 'h');
+            query += '&endTime=' + filter.EndTime.toString().replace(':', 'h');
         }
 
         if (filter.Price != null && filter.Price >= 0) {
-            querry += '&price=' + filter.Price.toString();
+            query += '&price=' + filter.Price.toString();
         }
 
         if (filter.RatingEvent != null && filter.RatingEvent >= 1 && filter.RatingEvent <= 5) {
-            querry += '&ratingEvent=' + filter.RatingEvent.toString();
+            query += '&ratingEvent=' + filter.RatingEvent.toString();
         }
 
         if (filter.SearchString != null) {
             if (filter.SearchString.toString() != "") {
-                querry += '&searchString=' + filter.SearchString.toString();
+                query += '&searchString=' + filter.SearchString.toString();
             }
         }
 
-        querry += '&pageNumber=' + filter.PageNumber.toString();
-        querry += '&pageSize=' + filter.PageSize.toString();
-        querry += '&orderAscending=' + filter.OrderIsAscending.toString();
-        querry += '&orderBy=' + filter.OrderByString.toString();
+        query += '&pageNumber=' + filter.PageNumber.toString();
+        query += '&pageSize=' + filter.PageSize.toString();
+        query += '&orderAscending=' + filter.OrderIsAscending.toString();
+        query += '&orderBy=' + filter.OrderByString.toString();
 
-        //execute http call
-        return this._http.get(querry)
-            .map((response: Response) => <IEvent[]>response.json())
-            .catch(this.handleError);
+        return query;
     }
 
     createEvent(event: IEvent): Observable<IEvent> {
