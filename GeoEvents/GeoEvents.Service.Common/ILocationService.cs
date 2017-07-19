@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace GeoEvents.Service.Common
 {
-    class ILocationService
+    public interface ILocationService
     {
     }
 }

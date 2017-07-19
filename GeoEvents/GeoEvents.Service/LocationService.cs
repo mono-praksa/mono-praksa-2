@@ -1,4 +1,5 @@
 ﻿using GeoEvents.Repository.Common;
+using GeoEvents.Service.Common;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace GeoEvents.Service
 {
-    class LocationService
+    public class LocationService : ILocationService
     {
         #region Properties
 
