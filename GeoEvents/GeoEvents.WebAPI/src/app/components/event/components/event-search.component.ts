@@ -11,7 +11,7 @@ import { EventService } from '../event.service';
 import { GeocodingService } from '../../../shared/geocoding.service';
 import { LoaderService } from '../../../shared/loader.service';
 
-import { needBothOrNeitherOfAddressAndRadius } from '../validators/validator';
+import { needBothOrNeitherOfAddressAndRadius, endDateBeforeStartDate } from '../validators/validator';
 
 @Component({
 	templateUrl: 'app/components/event/views/event-search.component.html', 
@@ -36,12 +36,13 @@ export class EventSearchComponent implements OnInit {
     searchString: FormControl;
     latitude: FormControl;
     longitude: FormControl;
+    price: FormControl;
+    rating: FormControl;
 	private _filter: IFilter;
 	private dataServiceSubscription: Subscription;
 	
 	//variables for the location services
     isAddressValid: boolean = false;
-	private _isMapZoomListenerStarted: boolean = false;
 	
 	@ViewChild("search") searchElementRef: ElementRef;
 	
@@ -59,9 +60,6 @@ export class EventSearchComponent implements OnInit {
     private _isMapMode: boolean = false;
     private _isDetailMode: boolean = false;
 	private _isAdvancedSearch: boolean = false;
-	private _isDateSearch: boolean = false;
-	private _isLocationSearch: boolean = false;
-	private _isCategoriesSearch: boolean = false;
 
     get searchEventLoading(): boolean {
         return this._searchEventLoading;
@@ -111,14 +109,6 @@ export class EventSearchComponent implements OnInit {
         this._filter = theFilter;
     }
 
-    get isMapZoomListenerStarted(): boolean {
-        return this._isMapZoomListenerStarted;
-    }
-
-    set isMapZoomListenerStarted(isMapZoomListenerStarted: boolean) {
-        this._isMapZoomListenerStarted = isMapZoomListenerStarted;
-    }
-
     get isMapMode(): boolean {
         return this._isMapMode;
     }
@@ -142,31 +132,6 @@ export class EventSearchComponent implements OnInit {
     set isAdvancedSearch(isAdvancedSearch: boolean) {
         this._isAdvancedSearch = isAdvancedSearch;
     }
-
-    get isLocationSearch(): boolean {
-        return this._isLocationSearch;
-    }
-
-    set isLocationSearch(isLocationSearch: boolean) {
-        this._isLocationSearch = isLocationSearch;
-    }
-
-    get isDateSearch(): boolean {
-        return this._isDateSearch;
-    }
-
-    set isDateSearch(isDateSearch: boolean) {
-        this._isDateSearch = isDateSearch;
-    }
-
-    get isCategoriesSearch(): boolean {
-        return this._isCategoriesSearch;
-    }
-
-    set isCategoriesSearch(isCategoriesSearch: boolean) {
-        this._isCategoriesSearch = isCategoriesSearch;
-    }
-
 
     //constructor
     constructor(
@@ -214,16 +179,8 @@ export class EventSearchComponent implements OnInit {
 		}
 		else{
 			this.isAdvancedSearch = true;
-		}
-	}
-
-	//toggles location moda and starts map location service for auto complete adress
-	toggleLocationMode(): void {
-		this.isLocationSearch = !this.isLocationSearch;
-		if(!this.isMapZoomListenerStarted) {
-			this.isMapZoomListenerStarted = true;
-			this.startMapZoomListener();				
-		}	
+        }
+        this.startMapZoomListener();
 	}
 	
 	//submits
@@ -385,10 +342,12 @@ export class EventSearchComponent implements OnInit {
         this.start = new FormControl(null);
         this.end = new FormControl(null);
         this.address = new FormControl(null);
-        this.radius = new FormControl(null);
+        this.radius = new FormControl(null, Validators.pattern(/^[0-9]+(\.\d+)?$/));
         this.searchString = new FormControl(null);
         this.latitude = new FormControl(null);
         this.longitude = new FormControl(null);
+        this.price = new FormControl(null, Validators.pattern(/^[0-9]+(\.\d{1,2})?$/));
+        this.rating = new FormControl(null, Validators.pattern(/(^[1-4](\.\d+)?|5)$/));
 
         this.filterForm = new FormGroup({
             start: this.start,
@@ -397,8 +356,11 @@ export class EventSearchComponent implements OnInit {
             radius: this.radius,
             searchString: this.searchString,
             latitude: this.latitude,
-            longitude: this.longitude
-        }, needBothOrNeitherOfAddressAndRadius('latitude', 'radius'));
+            longitude: this.longitude,
+            price: this.price,
+            rating: this.rating
+        });
+        this.filterForm.setValidators([needBothOrNeitherOfAddressAndRadius('latitude', 'radius'), endDateBeforeStartDate('start', 'end')]);
     }
 
     clearLocation(): void {

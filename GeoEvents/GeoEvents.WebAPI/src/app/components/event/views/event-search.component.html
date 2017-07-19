@@ -4,7 +4,7 @@
 			<div class="row">
 				<div class="col-sm-4" align="right">
 					<input type="text" formControlName="searchString" class="form-control" id="searchString" placeholder="Search..." />
-                    <button type="button" class="btn btn-link btn-xs" (click)="toggleAdvancedSearch()">Advanced search?</button>
+                    <button type="button" class="btn btn-default" (click)="toggleAdvancedSearch()">Show/Hide filters</button>
 				</div>
 				<div class="col-sm-6">
 					<button type="submit" class="btn btn-default" [disabled]="filterForm.invalid">Search</button>
@@ -14,34 +14,21 @@
 					<button type="button" class="btn btn-primary" (click)="this.toggleMapMode()" >Map / List Display Mode</button>
 				</div>	
 			</div>
-			<div [hidden]="this.isAdvancedSearch">
-				<div class="row">
-					<div class="col-sm-3">
-						<button type="button" class="btn btn-default btn-block" (click)="this.isDateSearch = !this.isDateSearch;">Search By Date</button>
-					</div>
-					<div class="col-sm-3">
-						<button type="button" class="btn btn-default btn-block" (click)="this.toggleLocationMode()">Search By Location</button>
-					</div>				
-					<div class="col-sm-3">
-						<button type="button" class="btn btn-default btn-block" (click)="this.isCategoriesSearch = !this.isCategoriesSearch">Search By Category</button>
-					</div>
-					<div class="col-sm-3">
-						<!--placeholder for custom search-->
-					</div>
-				</div>
-				<div class="row">
+			<div [hidden]="!this.isAdvancedSearch">
 					<br/>
-					<div class="col-sm-3">
-						<div *ngIf="this.isDateSearch">
-							<input formControlName="start" ngui-datetime-picker [close-on-select]="false" class="form-control" id="start" placeholder="Click to enter date and time" readonly style="cursor: pointer;" />						
-							<p>Start Time</p>
-						
-							<input formControlName="end" ngui-datetime-picker [close-on-select]="false" class="form-control" id="end" placeholder="Click to enter date and time" readonly style="cursor: pointer;" />						
-							<p>End Time</p>
-						</div>
+					<div class="row">
+						<div class="form-group" [ngClass]="{'has-error': start.touched && filterForm.hasError('endDateBeforeStartDate')}">
+                            <label for="start">Start Time</label>
+							<input formControlName="start" ngui-datetime-picker [close-on-select]="false" class="form-control" id="start" placeholder="Click to enter date and time" readonly style="cursor: pointer;" />
+                        </div>
+                        <div class="form-group" [ngClass]="{'has-error': end.touched && filterForm.hasError('endDateBeforeStartDate')}">
+                            <label for="end">End Time</label>
+							<input formControlName="end" ngui-datetime-picker [close-on-select]="false" class="form-control" id="end" placeholder="Click to enter date and time" readonly style="cursor: pointer;" />
+                        </div>
+                        <span class="help-block" *ngIf="end.touched && eventForm.hasError('endDateBeforeStartDate')">End date must be after start date!</span>
 					</div>
-					<div class="col-sm-3">
-						<div [hidden]="!this.isLocationSearch">
+					<div class="row">
+						<div>
                                 <div class="form-group" [ngClass]="{'has-error': (address.touched || radius.touched) && filterForm.hasError('needBothOrNeitherOfAddressAndRadius')}">
                                     <label for="address">Address</label>
                                     <div [ngClass]="{'input-group': isAddressValid}">
@@ -50,20 +37,36 @@
                                     </div>
                                     <a routerlink="" (click)="setCurrentPosition()">Set to current location</a>
                                 </div>
-                            <div class="form-group" [ngClass]="{'has-error': (address.touched || radius.touched) && filterForm.hasError('needBothOrNeitherOfAddressAndRadius')}">
+                            <div class="form-group" [ngClass]="{'has-error': radius.touched && radius.invalid || (address.touched || radius.touched) && filterForm.hasError('needBothOrNeitherOfAddressAndRadius')}">
                                 <label for="radius">Radius</label>                                
                                 <div class="input-group">
-                                    <input type="number" formControlName="radius" class="form-control" id="radius" placeholder="Radius" />
+                                    <input type="text" formControlName="radius" class="form-control" id="radius" placeholder="Radius" />
                                     <span class="input-group-addon">km</span>
                                 </div>
                                 <span *ngIf="(address.touched || radius.touched ) && filterForm.hasError('needBothOrNeitherOfAddressAndRadius')" class="help-block">
-                                    *Either input both an address and a radius or neither!
+                                    *Please enter both an address and a radius or neither!
                                 </span>
+                                <span *ngIf="radius.touched && radius.invalid" class="help-block">*Please enter a valid radius!</span>
                             </div>
                         </div>
 					</div>
-					<div class="col-sm-3">
-						<div *ngIf="this.isCategoriesSearch">
+                    <div class="row">
+                        <div class="form-group" [ngClass]="{'has-error': price.touched && price.invalid}">
+                            <label for="price">Max. Price</label>
+                            <div class="input-group">
+                                <span class="input-group-addon">$</span>
+                                <input type="text" formControlName="price" class="form-control" id="price" placeholder="0" />
+                            </div>
+                            <span *ngIf="price.touched && price.invalid" class="help-block">*Please enter a valid ammount!</span>
+                        </div>
+                        <div class="form-group" [ngClass]="{'has-error': rating.touched && rating.invalid}">
+                            <label for="rating">Min. Rating</label>
+                            <input type="text" formControlName="rating" class="form-control" id="rating" placeholder="(1-5)" />
+                            <span class="help-block" *ngIf="rating.touched && rating.invalid">*Enter a decimal number between 1 and 5!</span>
+                        </div>
+                    </div>
+					<div class="row">
+						<div>
 							<div class="row">
 								<label class="col-xs-4">
 									<input type="checkbox" value="1" (change)="updateCategories(1)" /> Music
@@ -92,11 +95,7 @@
 								</label>
 							</div>
 						</div>
-					</div>
-					<div class="col-sm-3">
-						<!-- placeholder for custom search-->
 					</div>				
-				</div>
 			</div>
 		</form>
 	</div>

@@ -49,7 +49,7 @@ export function endDateBeforeStartDate(startKey: string, endKey: string) {
         let start = formGroup.controls[startKey];
         let end = formGroup.controls[endKey];
 
-        if (start.value != "" && end.value != "") {
+        if ((start.value != "" && start.value != null) && (end.value != "" && end.value != null)) {
             var startTimeDate = start.value.split(" ");
             var startDate = startTimeDate[0];
             var startTime = startTimeDate[1];
