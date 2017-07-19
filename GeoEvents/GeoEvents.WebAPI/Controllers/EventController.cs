@@ -51,7 +51,7 @@ namespace GeoEvents.WebAPI.Controllers
 
         [HttpGet]
         [Route("search")]
-        public async Task<IEnumerable<EventModel>> TestEvent(int pageNumber = 1, int pageSize = 25, string orderBy = "", bool orderAscending = false, int category = 0, decimal uLat = 1000M, decimal uLong = 1000M, decimal radius = 0, string startTime = "", string endTime = "", string searchString = "", decimal? price = null, decimal ratingEvent = 1)
+        public async Task<IEnumerable<EventModel>> GetEventsAsync(int pageNumber = 1, int pageSize = 25, string orderBy = "", bool orderAscending = false, int category = 0, decimal uLat = 1000M, decimal uLong = 1000M, decimal radius = 0, string startTime = "", string endTime = "", string searchString = "", decimal? price = null, decimal ratingEvent = 1)
         {
             Filter filter = new Filter(uLat, uLong, radius, null, null, category, pageNumber, pageSize, searchString, orderBy, orderAscending, price, ratingEvent);
             DateTime dateValue;
@@ -76,6 +76,12 @@ namespace GeoEvents.WebAPI.Controllers
         }
 
         //[HttpGet]
+        //[Route("get")]
+        //public async Task<IEnumerable<EventModel>> GetEventByIdAsync(Guid eventId) {
+        //    return Mapper.Map<IEnumerable<EventModel>>(await Service.GetEventByIdAsync(eventId));
+        //}
+
+        //[HttpGet]
         //[Route(@"search/{pageNumber:int}/{pageSize:int}/{orderBy}/{orderAscending:bool}/{category:int}/{uLat:decimal}/{uLong:decimal}/{radius:decimal}/{startTime:regex(^s\d{4}-\d{2}-\d{2} \d{2}h\d{2}$)?}/{endTime:regex(^e\d{4}-\d{2}-\d{2} \d{2}h\d{2}$)?}/{searchString?}/{nameOnly:bool?}")]
         //public async Task<IEnumerable<EventModel>> GetEventsAsync(int pageNumber, int pageSize, string orderBy, bool orderAscending, int category, decimal uLat, decimal uLong, decimal radius, string startTime = "", string endTime = "", string searchString = "", bool? nameOnly = true )
         //{
@@ -95,7 +101,7 @@ namespace GeoEvents.WebAPI.Controllers
         [Route("search/count")]
         public async Task<Int64> GetEventCountAsync(int pageNumber = 1, int pageSize = 25, string orderBy = "", bool orderAscending = false, int category = 0, decimal uLat = 1000M, decimal uLong = 1000M, decimal radius = 0, string startTime = "", string endTime = "", string searchString = "")
         {
-            Filter filter = new Filter(uLat, uLong, radius, null, null, category, pageNumber, pageSize, searchString, orderBy, orderAscending, null, null, null);
+            Filter filter = new Filter(uLat, uLong, radius, null, null, category, pageNumber, pageSize, searchString, orderBy, orderAscending, null, null);
             DateTime dateValue;
             if (startTime != "")
             {
