@@ -29,6 +29,7 @@ namespace GeoEvents.Repository
         private static string ReservedQ = "\"Reserved\"";
         private static string RatingQ = "\"Rating\"";
         private static string RateCountQ = "\"RateCount\"";
+        private static string RatingLocationQ = "\"RatingLocation\"";
 
         /// <summary>
         /// Parametar Constant strings
@@ -54,8 +55,8 @@ namespace GeoEvents.Repository
         public static string ParReserved = "@Reserved";
         public static string ParRating = "@Rating";
         public static string ParRateCount = "@RateCount";
-
         public static string ParRatingLocation = "@RatingLocation";
+
         public static string ParRatingEvent = "@RatingEvent";
 
         /// <summary>
@@ -427,7 +428,6 @@ namespace GeoEvents.Repository
                     selectString.AppendFormat(" order by {0} ",
                         TableNameEventRatingQ);
                     break;
-                    // case "RatingLocation": selectString.Append(" order by ")
             }
 
             if (filter.OrderAscending == true && String.IsNullOrEmpty(filter.OrderBy) == false)

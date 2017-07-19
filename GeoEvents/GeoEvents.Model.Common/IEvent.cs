@@ -130,6 +130,14 @@ namespace GeoEvents.Model.Common
         /// The rate count.
         /// </value>
         int RateCount { get; set; }
+
+        /// <summary>
+        /// Gets or sets the rating event.
+        /// </summary>
+        /// <value>
+        /// The rating event.
+        /// </value>
+        decimal RatingLocation { get; set; }
         #endregion Properties
     }
 }

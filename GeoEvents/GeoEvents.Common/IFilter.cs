@@ -85,13 +85,5 @@ namespace GeoEvents.Common
         /// The rating event.
         /// </value>
         decimal? RatingEvent { get; set; }
-
-        /// <summary>
-        /// Gets or sets the rating location.
-        /// </summary>
-        /// <value>
-        /// The rating location.
-        /// </value>
-        decimal? RatingLocation { get; set; }
     }
 }

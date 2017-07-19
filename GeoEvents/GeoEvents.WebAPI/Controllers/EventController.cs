@@ -146,8 +146,9 @@ namespace GeoEvents.WebAPI.Controllers
         public int Reserved { get; set; }
         public decimal Rating { get; set; }
         public int RateCount { get; set; }
+        public decimal RatingLocation { get; set; }
 
-        public EventModel(Guid id, string name, string description, DateTime starttime, DateTime endtime, decimal uLat, decimal uLong, List<int> categories, decimal price, int capacity, int reserved, decimal rating, int rateCount)
+        public EventModel(Guid id, string name, string description, DateTime starttime, DateTime endtime, decimal uLat, decimal uLong, List<int> categories, decimal price, int capacity, int reserved, decimal rating, int rateCount, decimal ratingLocation)
         {
             this.Id = id;
             this.Name = name;
@@ -162,6 +163,7 @@ namespace GeoEvents.WebAPI.Controllers
             this.Reserved = reserved;
             this.Rating = rating;
             this.RateCount = rateCount;
+            this.RatingLocation = ratingLocation;
         }
 
         public EventModel()

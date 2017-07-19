@@ -62,6 +62,7 @@ namespace GeoEvents.Repository
                 commandInsert.Parameters.AddWithValue(QueryHelper.ParReserved, NpgsqlTypes.NpgsqlDbType.Integer, evt.Reserved);
                 commandInsert.Parameters.AddWithValue(QueryHelper.ParRating, NpgsqlTypes.NpgsqlDbType.Double, evt.Rating);
                 commandInsert.Parameters.AddWithValue(QueryHelper.ParRateCount, NpgsqlTypes.NpgsqlDbType.Integer, evt.RateCount);
+                commandInsert.Parameters.AddWithValue(QueryHelper.ParRatingLocation, NpgsqlTypes.NpgsqlDbType.Double, evt.RatingLocation);
             //    commandInsert.Parameters.AddWithValue(QueryHelper.ParRatingLocation, NpgsqlTypes.NpgsqlDbType.Double,)
 
                 commandSelect.Parameters.AddWithValue(QueryHelper.ParEventId, NpgsqlTypes.NpgsqlDbType.Uuid, evt.Id);
@@ -86,7 +87,8 @@ namespace GeoEvents.Repository
                         Capacity = Convert.ToInt32(dr[9]),
                         Reserved = Convert.ToInt32(dr[10]),
                         Rating = Convert.ToDecimal(dr[11]),
-                        RateCount = Convert.ToInt32(dr[12])
+                        RateCount = Convert.ToInt32(dr[12]),
+                        RatingLocation=Convert.ToDecimal(dr[13])
                     };
                 }
                
@@ -131,7 +133,8 @@ namespace GeoEvents.Repository
                         Capacity = Convert.ToInt32(dr[9]),
                         Reserved = Convert.ToInt32(dr[10]),
                         Rating = Convert.ToDecimal(dr[11]),
-                        RateCount = Convert.ToInt32(dr[12])
+                        RateCount = Convert.ToInt32(dr[12]),
+                        RatingLocation=Convert.ToDecimal(dr[13])
                     };
 
                     SelectEvents.Add(Mapper.Map<IEvent>(tmp));

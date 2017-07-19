@@ -92,14 +92,6 @@ namespace GeoEvents.Common
         /// </value>
         public decimal? RatingEvent { get; set; }
 
-        /// <summary>
-        /// Gets or sets the rating location.
-        /// </summary>
-        /// <value>
-        /// The rating location.
-        /// </value>
-        public decimal? RatingLocation { get; set; }
-
         #endregion Properties
 
         #region Constructors
@@ -120,7 +112,6 @@ namespace GeoEvents.Common
         /// <param name="orderAscending">The order ascending.</param>
         /// <param name="price">The price.</param>
         /// <param name="ratingEvent">The rating event.</param>
-        /// <param name="ratingLocation">The rating location.</param>
         public Filter(decimal? uLat, decimal? uLong, decimal? radius, DateTime? startTime, DateTime? endTime, int? category, int? pageNumber, int? pageSize, string searchString, string orderBy, bool? orderAscending, decimal? price, decimal? ratingEvent, decimal? ratingLocation)
         {
             ULat = uLat;
@@ -136,7 +127,6 @@ namespace GeoEvents.Common
             OrderAscending = orderAscending;
             Price = price;
             RatingEvent = ratingEvent;
-            RatingLocation = ratingLocation;
         }
 
         #endregion Constructors

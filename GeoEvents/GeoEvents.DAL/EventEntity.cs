@@ -124,6 +124,14 @@ namespace GeoEvents.DAL
         /// The rate count.
         /// </value>
         public int RateCount { get; set; }
+
+        /// <summary>
+        /// Gets or sets the rating location.
+        /// </summary>
+        /// <value>
+        /// The rating location.
+        /// </value>
+        public decimal RatingLocation { get; set; }
         #endregion Properties
 
 
@@ -132,6 +140,7 @@ namespace GeoEvents.DAL
         /// Initializes a new instance of the <see cref="EventEntity"/> class.
         /// </summary>
         public EventEntity() { }
+
 
 
         /// <summary>
@@ -145,8 +154,14 @@ namespace GeoEvents.DAL
         /// <param name="Name">The name.</param>
         /// <param name="Description">The description.</param>
         /// <param name="Category">The category.</param>
+        /// <param name="Price">The price.</param>
+        /// <param name="Capacity">The capacity.</param>
+        /// <param name="Reserved">The reserved.</param>
+        /// <param name="Rating">The rating.</param>
+        /// <param name="RateCount">The rate count.</param>
+        /// <param name="RatingLocation">The rating location.</param>
         public EventEntity(Guid Id, DateTime StartTime, DateTime EndTime, Decimal Lat,
-            Decimal Long, string Name, string Description, int Category, decimal Price, int Capacity, int Reserved, decimal Rating, int RateCount)
+            Decimal Long, string Name, string Description, int Category, decimal Price, int Capacity, int Reserved, decimal Rating, int RateCount, decimal RatingLocation)
         {
             this.Id = Id;
             this.StartTime = StartTime;
@@ -161,6 +176,7 @@ namespace GeoEvents.DAL
             this.Reserved = Reserved;
             this.Rating = Rating;
             this.RateCount = RateCount;
+            this.RatingLocation = RatingLocation;
         }
         #endregion Constructors
 
