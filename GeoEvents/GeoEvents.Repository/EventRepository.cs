@@ -62,6 +62,7 @@ namespace GeoEvents.Repository
                 commandInsert.Parameters.AddWithValue(QueryHelper.ParReserved, NpgsqlTypes.NpgsqlDbType.Integer, evt.Reserved);
                 commandInsert.Parameters.AddWithValue(QueryHelper.ParRating, NpgsqlTypes.NpgsqlDbType.Double, evt.Rating);
                 commandInsert.Parameters.AddWithValue(QueryHelper.ParRateCount, NpgsqlTypes.NpgsqlDbType.Integer, evt.RateCount);
+            //    commandInsert.Parameters.AddWithValue(QueryHelper.ParRatingLocation, NpgsqlTypes.NpgsqlDbType.Double,)
 
                 commandSelect.Parameters.AddWithValue(QueryHelper.ParEventId, NpgsqlTypes.NpgsqlDbType.Uuid, evt.Id);
 
@@ -175,7 +176,6 @@ namespace GeoEvents.Repository
             if (filter.ULat != null)
             {
                 command.Parameters.AddWithValue(QueryHelper.ParLat, NpgsqlTypes.NpgsqlDbType.Double, filter.ULat);
-
             }
             if (filter.ULong != null)
             {
@@ -210,11 +210,6 @@ namespace GeoEvents.Repository
             if (filter.RatingEvent != null)
             {
                 command.Parameters.AddWithValue(QueryHelper.ParRatingEvent, NpgsqlTypes.NpgsqlDbType.Double, filter.RatingEvent);
-            }
-
-            if (filter.RatingLocation != null)
-            {
-                command.Parameters.AddWithValue(QueryHelper.ParRatingLocation, NpgsqlTypes.NpgsqlDbType.Integer, filter.RatingLocation);
             }
 
             if (!string.IsNullOrWhiteSpace(filter.SearchString))
@@ -254,12 +249,16 @@ namespace GeoEvents.Repository
                 }
 
                 int NewRateCount = CurrentRateCount + 1;
-                decimal NewRating = (CurrentRateCount * CurrentRating + rating)/NewRateCount;
+                decimal NewRating = (CurrentRateCount * CurrentRating + rating) / Convert.ToDecimal(NewRateCount);
 
 
                 commandUpdateRating.Parameters.AddWithValue( QueryHelper.ParEventId, NpgsqlTypes.NpgsqlDbType.Uuid, eventId );
-                commandUpdateRating.Parameters.AddWithValue( QueryHelper.ParRating, NpgsqlTypes.NpgsqlDbType.Integer,NewRating );
+                commandUpdateRating.Parameters.AddWithValue( QueryHelper.ParRating, NpgsqlTypes.NpgsqlDbType.Double,NewRating );
                 commandUpdateRating.Parameters.AddWithValue( QueryHelper.ParRateCount, NpgsqlTypes.NpgsqlDbType.Integer,NewRateCount );
+
+                Connection.CreateConnection().Close();
+                await Connection.CreateConnection().OpenAsync();
+
 
                 await commandUpdateRating.ExecuteNonQueryAsync();
 
