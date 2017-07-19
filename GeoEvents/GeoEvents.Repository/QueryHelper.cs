@@ -74,6 +74,7 @@ namespace GeoEvents.Repository
         private static string TableNameEventPriceQ = TableNameEventQ + "." + PriceQ;
         private static string TableNameEventRatingQ = TableNameEventQ + "." + RatingQ;
         private static string TableNameEventRateCountQ = TableNameEventQ + "." + RateCountQ;
+        private static string TableNameEventRatingLocationQ = TableNameEventQ + "." + RatingLocationQ;
 
         /// <summary>
         /// Default DateTime
@@ -298,7 +299,7 @@ namespace GeoEvents.Repository
                 {
                     isNotFirst = true;
                 }
-                selectString.AppendFormat("({0} < {1}) ",
+                selectString.AppendFormat("({0} <= {1}) ",
                     TableNameEventPriceQ, ParPrice);
             }
 
@@ -313,7 +314,7 @@ namespace GeoEvents.Repository
                 {
                     isNotFirst = true;
                 }
-                selectString.AppendFormat("({0} > {1}) ",
+                selectString.AppendFormat("({0} >= {1}) ",
                     TableNameEventRatingQ, ParRating);
             }
 
@@ -559,6 +560,23 @@ namespace GeoEvents.Repository
                 TableNameEventQ, ReservedQ, ParReserved, TableNameEventIdQ, ParEventId);
 
             return updateReservationString.ToString();
+        }
+
+        public static string GetRatingLocation()
+        {
+            StringBuilder getRatingLocation = new StringBuilder();
+            getRatingLocation.AppendFormat("SELECT SUM({0}*{1}) FROM {2} WHERE (({3}={4}) AND ({5}={6}) AND ({7}>0))",
+                TableNameEventRatingQ, TableNameEventRateCountQ, TableNameEventQ, ParLat, TableNameEventLatQ, ParLong, TableNameEventLongQ, RateCountQ);
+
+                return getRatingLocation.ToString();
+        }
+
+        public static string GetRateCountLocation()
+        {
+            StringBuilder getRateCountLocation = new StringBuilder();
+            getRateCountLocation.AppendFormat("SELECT SUM({0}) FROM {1} WHERE (({2}={3}) AND ({4}={5}) AND ({6}>0))",
+                TableNameEventRateCountQ, TableNameEventQ, ParLat, TableNameEventLatQ, ParLong, TableNameEventLongQ, RateCountQ);
+            return getRateCountLocation.ToString();
         }
 
         #endregion Metods

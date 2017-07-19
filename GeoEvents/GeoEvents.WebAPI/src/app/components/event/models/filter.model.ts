@@ -5,6 +5,8 @@
     StartTime?: Date,
     EndTime?: Date,
     Category: number,
+    Price: number,
+    RatingEvent: number,
 	
 	SearchString: string,
 	

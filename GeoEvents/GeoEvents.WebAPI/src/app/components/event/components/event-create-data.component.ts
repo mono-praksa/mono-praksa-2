@@ -10,17 +10,6 @@ import { LoaderService } from '../../../shared/loader.service'
 import { EventService } from '../event.service'
 import { GeocodingService } from '../../../shared/geocoding.service';
 
-function lessThanZero(control: FormControl) {
-    if (control && control.value < 0) {
-        return {
-            lessThanZero: true
-        }
-    }
-    else {
-            return null;
-   }
-}
-
 @Component({
     selector: "create-event",
     templateUrl: "app/components/event/views/event-create-data.component.html",
@@ -123,8 +112,8 @@ export class EventCreateDataComponent implements OnInit {
         this.description = new FormControl('', Validators.required);
         this.start = new FormControl('', Validators.required);
         this.end = new FormControl('', Validators.required);
-        this.price = new FormControl('', [Validators.required, lessThanZero]);
-        this.capacity = new FormControl('', [Validators.required, lessThanZero]);
+        this.price = new FormControl('', [Validators.required, Validators.pattern(/^[0-9]+(\.\d{1,2})?$/)]);
+        this.capacity = new FormControl('', [Validators.required, Validators.pattern(/^[1-9][0-9]*$/)]);
         this.address = new FormControl('', Validators.required);
         this.latitude = new FormControl('', Validators.required);
         this.longitude = new FormControl('', Validators.required);
