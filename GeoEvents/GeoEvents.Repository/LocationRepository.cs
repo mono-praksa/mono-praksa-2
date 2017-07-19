@@ -27,5 +27,19 @@ namespace GeoEvents.Repository
         }
 
         #endregion Constructors
+
+        #region Methods
+
+        public async Task<ILocation> UpdateRatingLocationAsync(Guid eventId, decimal rating)
+        {
+            return Mapper.Map<ILocation>(location);
+        }
+
+        public async Task<ILocation> CreateLocationAsync(ILocation location)
+        {
+            return Mapper.Map<ILocation>(location);
+        }
+
+        #endregion Methods
     }
 }

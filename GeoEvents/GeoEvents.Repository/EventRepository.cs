@@ -120,7 +120,7 @@ namespace GeoEvents.Repository
                         Reserved = Convert.ToInt32(dr[10]),
                         Rating = Convert.ToDecimal(dr[11]),
                         RateCount = Convert.ToInt32(dr[12]),
-                        RatingLocation=Convert.ToDecimal(dr[14])
+                        
                     };
                 }
                
@@ -156,8 +156,8 @@ namespace GeoEvents.Repository
                         Id = new Guid(dr[0].ToString()),
                         StartTime = Convert.ToDateTime(dr[1]),
                         EndTime = Convert.ToDateTime(dr[2]),
-                        Lat = Convert.ToDecimal(dr[3]),
-                        Long = Convert.ToDecimal(dr[4]),
+                        Latitude = Convert.ToDecimal(dr[3]),
+                        Longitude = Convert.ToDecimal(dr[4]),
                         Name = dr[5].ToString(),
                         Description = dr[6].ToString(),
                         Category = Convert.ToInt32(dr[7]),
@@ -370,8 +370,8 @@ namespace GeoEvents.Repository
                         Id = new Guid(drSelect[0].ToString()),
                         StartTime = Convert.ToDateTime(drSelect[1]),
                         EndTime = Convert.ToDateTime(drSelect[2]),
-                        Lat = Convert.ToDecimal(drSelect[3]),
-                        Long = Convert.ToDecimal(drSelect[4]),
+                        Latitude = Convert.ToDecimal(drSelect[3]),
+                        Longitude = Convert.ToDecimal(drSelect[4]),
                         Name = drSelect[5].ToString(),
                         Description = drSelect[6].ToString(),
                         Category = Convert.ToInt32(drSelect[7]),
@@ -427,8 +427,8 @@ namespace GeoEvents.Repository
                         Id = new Guid(dr[0].ToString()),
                         StartTime = Convert.ToDateTime(dr[1]),
                         EndTime = Convert.ToDateTime(dr[2]),
-                        Lat = Convert.ToDecimal(dr[3]),
-                        Long = Convert.ToDecimal(dr[4]),
+                        Latitude = Convert.ToDecimal(dr[3]),
+                        Longitude = Convert.ToDecimal(dr[4]),
                         Name = dr[5].ToString(),
                         Description = dr[6].ToString(),
                         Category = Convert.ToInt32(dr[7]),

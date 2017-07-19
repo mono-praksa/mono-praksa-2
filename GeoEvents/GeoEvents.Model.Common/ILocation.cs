@@ -23,7 +23,7 @@ namespace GeoEvents.Model.Common
         /// <value>
         /// The rating.
         /// </value>
-        decimal Rating { get; set; }
+        double Rating { get; set; }
 
         /// <summary>
         /// Gets or sets the rate count.

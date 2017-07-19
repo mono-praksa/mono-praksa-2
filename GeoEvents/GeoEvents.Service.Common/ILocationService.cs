@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GeoEvents.Model.Common;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,5 +9,9 @@ namespace GeoEvents.Service.Common
 {
     public interface ILocationService
     {
+        Task<ILocation> UpdateRatingLocationAsync(Guid eventId, decimal rating);
+
+        Task<ILocation> CreateLocationAsync(ILocation location);
+
     }
 }

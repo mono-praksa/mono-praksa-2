@@ -146,6 +146,8 @@ namespace GeoEvents.Service
             return Repository.UpdateRatingAsync(eventId, rating);
         }
 
+
+
         #endregion Methods
 
     }

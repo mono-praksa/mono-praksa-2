@@ -1,4 +1,5 @@
-﻿using GeoEvents.Repository.Common;
+﻿using GeoEvents.Model.Common;
+using GeoEvents.Repository.Common;
 using GeoEvents.Service.Common;
 using System;
 using System.Collections.Generic;
@@ -35,5 +36,19 @@ namespace GeoEvents.Service
 
 
         #endregion Constructors
+
+        #region Methods
+
+        public Task<ILocation> UpdateRatingLocationAsync(Guid eventId, decimal rating)
+        {
+            return Repository.UpdateRatingLocationAsync(eventId, rating);
+        }
+
+        public Task<ILocation> CreateLocationAsync(ILocation location)
+        {
+            return Repository.CreateLocationAsync(location);
+        }
+
+        #endregion Methods
     }
 }
