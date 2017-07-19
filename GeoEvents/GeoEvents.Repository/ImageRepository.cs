@@ -4,6 +4,7 @@ using GeoEvents.DAL;
 using GeoEvents.Model.Common;
 using GeoEvents.Repository.Common;
 using Npgsql;
+using NpgsqlTypes;
 using System;
 using System.Collections.Generic;
 using System.Data.Common;
@@ -54,16 +55,16 @@ namespace GeoEvents.Repository
                          PostgresConn.CreateConnection()))
                 {
                     // // insert image
-                    commandInsert.Parameters.AddWithValue(QueryHelper.ParId, NpgsqlTypes.NpgsqlDbType.Uuid, DbImage.Id);
-                    commandInsert.Parameters.AddWithValue(QueryHelper.ParContent, NpgsqlTypes.NpgsqlDbType.Bytea, DbImage.Content);
-                    commandInsert.Parameters.AddWithValue(QueryHelper.ParEventId, NpgsqlTypes.NpgsqlDbType.Uuid, DbImage.EventId);
+                    commandInsert.Parameters.AddWithValue(QueryHelper.ParId, NpgsqlDbType.Uuid, DbImage.Id);
+                    commandInsert.Parameters.AddWithValue(QueryHelper.ParContent, NpgsqlDbType.Bytea, DbImage.Content);
+                    commandInsert.Parameters.AddWithValue(QueryHelper.ParEventId, NpgsqlDbType.Uuid, DbImage.EventId);
 
                     await PostgresConn.CreateConnection().OpenAsync();
                     await commandInsert.ExecuteNonQueryAsync();
                     // //
 
                     // // Select image ,that we just inserted, from db
-                    commandSelect.Parameters.AddWithValue(QueryHelper.ParId, NpgsqlTypes.NpgsqlDbType.Uuid, DbImage.Id);
+                    commandSelect.Parameters.AddWithValue(QueryHelper.ParId, NpgsqlDbType.Uuid, DbImage.Id);
 
                     DbDataReader dr = await commandSelect.ExecuteReaderAsync();
 
@@ -103,7 +104,7 @@ namespace GeoEvents.Repository
                 using (NpgsqlCommand command = new NpgsqlCommand(QueryHelper.GetSelectImagesString(),
                      PostgresConn.CreateConnection()))
                 {
-                    command.Parameters.AddWithValue(QueryHelper.ParEventId, NpgsqlTypes.NpgsqlDbType.Uuid, eventID);
+                    command.Parameters.AddWithValue(QueryHelper.ParEventId, NpgsqlDbType.Uuid, eventID);
 
                     await PostgresConn.CreateConnection().OpenAsync();
                     DbDataReader dr = await command.ExecuteReaderAsync();

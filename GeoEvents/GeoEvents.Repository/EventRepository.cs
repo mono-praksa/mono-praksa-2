@@ -51,23 +51,23 @@ namespace GeoEvents.Repository
             using (NpgsqlCommand commandGetRatingLocation = new NpgsqlCommand(QueryHelper.GetRatingLocation(), Connection.CreateConnection()))
             using (NpgsqlCommand commandGetRateCount = new NpgsqlCommand(QueryHelper.GetRateCountLocation(), Connection.CreateConnection()))
             {
-                commandInsert.Parameters.AddWithValue(QueryHelper.ParId, NpgsqlTypes.NpgsqlDbType.Uuid, evt.Id);
-                commandInsert.Parameters.AddWithValue(QueryHelper.ParCategory, NpgsqlTypes.NpgsqlDbType.Integer, evt.Category);
-                commandInsert.Parameters.AddWithValue(QueryHelper.ParDescription, NpgsqlTypes.NpgsqlDbType.Text, evt.Description);
-                commandInsert.Parameters.AddWithValue(QueryHelper.ParStartTime, NpgsqlTypes.NpgsqlDbType.Timestamp, evt.StartTime);
-                commandInsert.Parameters.AddWithValue(QueryHelper.ParEndTime, NpgsqlTypes.NpgsqlDbType.Timestamp, evt.EndTime);
-                commandInsert.Parameters.AddWithValue(QueryHelper.ParLat, NpgsqlTypes.NpgsqlDbType.Double, evt.Lat);
-                commandInsert.Parameters.AddWithValue(QueryHelper.ParLong, NpgsqlTypes.NpgsqlDbType.Double, evt.Long);
-                commandInsert.Parameters.AddWithValue(QueryHelper.ParName, NpgsqlTypes.NpgsqlDbType.Text, evt.Name);
-                commandInsert.Parameters.AddWithValue(QueryHelper.ParPrice, NpgsqlTypes.NpgsqlDbType.Double, evt.Price);
-                commandInsert.Parameters.AddWithValue(QueryHelper.ParCapacity, NpgsqlTypes.NpgsqlDbType.Integer, evt.Capacity);
-                commandInsert.Parameters.AddWithValue(QueryHelper.ParReserved, NpgsqlTypes.NpgsqlDbType.Integer, evt.Reserved);
-                commandInsert.Parameters.AddWithValue(QueryHelper.ParRating, NpgsqlTypes.NpgsqlDbType.Double, evt.Rating);
-                commandInsert.Parameters.AddWithValue(QueryHelper.ParRateCount, NpgsqlTypes.NpgsqlDbType.Integer, evt.RateCount);
-                commandInsert.Parameters.AddWithValue(QueryHelper.ParRatingLocation, NpgsqlTypes.NpgsqlDbType.Double, evt.RatingLocation);
+                commandInsert.Parameters.AddWithValue(QueryHelper.ParId, NpgsqlDbType.Uuid, evt.Id);
+                commandInsert.Parameters.AddWithValue(QueryHelper.ParCategory, NpgsqlDbType.Integer, evt.Category);
+                commandInsert.Parameters.AddWithValue(QueryHelper.ParDescription, NpgsqlDbType.Text, evt.Description);
+                commandInsert.Parameters.AddWithValue(QueryHelper.ParStartTime, NpgsqlDbType.Timestamp, evt.StartTime);
+                commandInsert.Parameters.AddWithValue(QueryHelper.ParEndTime, NpgsqlDbType.Timestamp, evt.EndTime);
+                commandInsert.Parameters.AddWithValue(QueryHelper.ParLat, NpgsqlDbType.Double, evt.Lat);
+                commandInsert.Parameters.AddWithValue(QueryHelper.ParLong, NpgsqlDbType.Double, evt.Long);
+                commandInsert.Parameters.AddWithValue(QueryHelper.ParName, NpgsqlDbType.Text, evt.Name);
+                commandInsert.Parameters.AddWithValue(QueryHelper.ParPrice, NpgsqlDbType.Double, evt.Price);
+                commandInsert.Parameters.AddWithValue(QueryHelper.ParCapacity, NpgsqlDbType.Integer, evt.Capacity);
+                commandInsert.Parameters.AddWithValue(QueryHelper.ParReserved, NpgsqlDbType.Integer, evt.Reserved);
+                commandInsert.Parameters.AddWithValue(QueryHelper.ParRating, NpgsqlDbType.Double, evt.Rating);
+                commandInsert.Parameters.AddWithValue(QueryHelper.ParRateCount, NpgsqlDbType.Integer, evt.RateCount);
+                commandInsert.Parameters.AddWithValue(QueryHelper.ParRatingLocation, NpgsqlDbType.Double, evt.RatingLocation);
                 commandInsert.Parameters.AddWithValue(QueryHelper.ParLocationId, NpgsqlDbType.Uuid, evt.LocationId);
 
-                commandSelect.Parameters.AddWithValue(QueryHelper.ParEventId, NpgsqlTypes.NpgsqlDbType.Uuid, evt.Id);
+                commandSelect.Parameters.AddWithValue(QueryHelper.ParEventId, NpgsqlDbType.Uuid, evt.Id);
 
                 commandGetRateCount.Parameters.AddWithValue(QueryHelper.ParLat, NpgsqlDbType.Double, evt.Lat);
                 commandGetRateCount.Parameters.AddWithValue(QueryHelper.ParLong, NpgsqlDbType.Double, evt.Long);
@@ -110,8 +110,8 @@ namespace GeoEvents.Repository
                         Id = new Guid(dr[0].ToString()),
                         StartTime = Convert.ToDateTime(dr[1]),
                         EndTime = Convert.ToDateTime(dr[2]),
-                        Lat = Convert.ToDecimal(dr[3]),
-                        Long = Convert.ToDecimal(dr[4]),
+                        Latitude = Convert.ToDecimal(dr[3]),
+                        Longitude = Convert.ToDecimal(dr[4]),
                         Name = dr[5].ToString(),
                         Description = dr[6].ToString(),
                         Category = Convert.ToInt32(dr[7]),

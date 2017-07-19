@@ -11,25 +11,25 @@ namespace GeoEvents.Repository
         /// <summary>
         /// Quoted Constant string
         /// </summary>
-        private static string TableNameEventQ = "\"Events\"";
+        private static string TableNameEventQ = "events";
 
-        private static string TableNameImagesQ = "\"Images\"";
-        private static string NameQ = "\"Name\"";
-        private static string LatQ = "\"Lat\"";
-        private static string LongQ = "\"Long\"";
-        private static string StartTimeQ = "\"StartTime\"";
-        private static string EndTimeQ = "\"EndTime\"";
-        private static string CategoryQ = "\"Category\"";
-        private static string IdQ = "\"Id\"";
-        private static string EventIdQ = "\"EventId\"";
-        private static string DescriptionQ = "\"Description\"";
+        private static string TableNameImagesQ = "images";
+        private static string NameQ = "name";
+        private static string LatQ = "latitude";
+        private static string LongQ = "longitude";
+        private static string StartTimeQ = "starttime";
+        private static string EndTimeQ = "endtime";
+        private static string CategoryQ = "category";
+        private static string IdQ = "id";
+        private static string EventIdQ = "eventid";
+        private static string DescriptionQ = "description";
 
-        private static string PriceQ = "\"Price\"";
-        private static string CapacityQ = "\"Capacity\"";
-        private static string ReservedQ = "\"Reserved\"";
-        private static string RatingQ = "\"Rating\"";
-        private static string RateCountQ = "\"RateCount\"";
-        private static string RatingLocationQ = "\"RatingLocation\"";
+        private static string PriceQ = "price";
+        private static string CapacityQ = "capacity";
+        private static string ReservedQ = "reserved";
+        private static string RatingQ = "rating";
+        private static string RateCountQ = "ratecount";
+        private static string RatingLocationQ = "ratinglocation";
 
         /// <summary>
         /// Parametar Constant strings
@@ -62,19 +62,20 @@ namespace GeoEvents.Repository
         /// <summary>
         /// Added Qouted strings
         /// </summary>
-        private static string TableNameEventNameQ = TableNameEventQ + "." + NameQ;
+        private static string TableNameEventNameQ = "events.name";
 
-        private static string TableNameEventDescriptionQ = TableNameEventQ + "." + DescriptionQ;
-        private static string TableNameEventStartTimeQ = TableNameEventQ + "." + StartTimeQ;
-        private static string TableNameEventEndTimeQ = TableNameEventQ + "." + EndTimeQ;
-        private static string TableNameEventLongQ = TableNameEventQ + "." + LongQ;
-        private static string TableNameEventLatQ = TableNameEventQ + "." + LatQ;
-        private static string TableNameEventCatQ = TableNameEventQ + "." + CategoryQ;
-        private static string TableNameEventIdQ = TableNameEventQ + "." + IdQ;
-        private static string TableNameEventPriceQ = TableNameEventQ + "." + PriceQ;
-        private static string TableNameEventRatingQ = TableNameEventQ + "." + RatingQ;
-        private static string TableNameEventRateCountQ = TableNameEventQ + "." + RateCountQ;
-        private static string TableNameEventRatingLocationQ = TableNameEventQ + "." + RatingLocationQ;
+        private static string TableNameEventDescriptionQ = "events.description";
+        private static string TableNameEventStartTimeQ = "events.starttime";
+        private static string TableNameEventEndTimeQ = "events.endtime";
+        private static string TableNameEventLongQ = "events.longitude";
+        private static string TableNameEventLatQ = "events.latitude";
+        private static string TableNameEventCatQ = "events.category";
+        private static string TableNameEventIdQ = "events.id";
+        private static string TableNameEventPriceQ = "events.price";
+        private static string TableNameEventRatingQ = "events.rating";
+        private static string TableNameEventRateCountQ = "events.ratecount";
+        private static string TableNameEventRatingLocationQ = "events.ratinglocation";
+        private static string TableNameEventLocationIdQ = "events.locationid";
 
         /// <summary>
         /// Default DateTime

@@ -48,7 +48,7 @@ namespace GeoEvents.Model
         /// <value>
         /// The latitude.
         /// </value>
-        public decimal Lat { get; set; }
+        public decimal Latitude { get; set; }
 
 
         /// <summary>
@@ -57,7 +57,7 @@ namespace GeoEvents.Model
         /// <value>
         /// The longitude.
         /// </value>
-        public decimal Long { get; set; }
+        public decimal Longitude { get; set; }
 
 
         /// <summary>

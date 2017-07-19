@@ -47,7 +47,7 @@ namespace GeoEvents.DAL
         /// <value>
         /// The lat.
         /// </value>
-        public Decimal Lat { get; set; }
+        public Decimal Latitude { get; set; }
 
 
         /// <summary>
@@ -56,7 +56,7 @@ namespace GeoEvents.DAL
         /// <value>
         /// The long.
         /// </value>
-        public Decimal Long { get; set; }
+        public Decimal Longitude { get; set; }
 
 
         /// <summary>
@@ -170,24 +170,24 @@ namespace GeoEvents.DAL
         /// <param name="RateCount">The rate count.</param>
         /// <param name="RatingLocation">The rating location.</param>
         /// <param name="LocationId">The location identifier.</param>
-        public EventEntity(Guid Id, DateTime StartTime, DateTime EndTime, Decimal Lat,
-            Decimal Long, string Name, string Description, int Category, decimal Price, int Capacity, int Reserved, decimal Rating, int RateCount, decimal RatingLocation, Guid LocationId)
+        public EventEntity(Guid id, DateTime startTime, DateTime endTime, Decimal latitude,
+            Decimal longitude, string name, string description, int category, decimal price, int capacity, int reserved, decimal rating, int rateCount, decimal ratingLocation, Guid locationId)
         {
-            this.Id = Id;
-            this.StartTime = StartTime;
-            this.EndTime = EndTime;
-            this.Lat = Lat;
-            this.Long = Long;
-            this.Name = Name;
-            this.Description = Description;
-            this.Category = Category;
-            this.Price = Price;
-            this.Capacity = Capacity;
-            this.Reserved = Reserved;
-            this.Rating = Rating;
-            this.RateCount = RateCount;
-            this.RatingLocation = RatingLocation;
-            this.LocationId = LocationId;
+            this.Id = id;
+            this.StartTime = startTime;
+            this.EndTime = endTime;
+            this.Latitude = latitude;
+            this.Longitude = longitude;
+            this.Name = name;
+            this.Description = description;
+            this.Category = category;
+            this.Price = price;
+            this.Capacity = capacity;
+            this.Reserved = reserved;
+            this.Rating = rating;
+            this.RateCount = rateCount;
+            this.RatingLocation = ratingLocation;
+            this.LocationId = locationId;
         }
         #endregion Constructors
 
