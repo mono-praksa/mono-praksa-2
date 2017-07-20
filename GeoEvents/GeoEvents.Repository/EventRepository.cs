@@ -56,48 +56,23 @@ namespace GeoEvents.Repository
                 commandInsert.Parameters.AddWithValue(QueryHelper.ParDescription, NpgsqlDbType.Text, evt.Description);
                 commandInsert.Parameters.AddWithValue(QueryHelper.ParStartTime, NpgsqlDbType.Timestamp, evt.StartTime);
                 commandInsert.Parameters.AddWithValue(QueryHelper.ParEndTime, NpgsqlDbType.Timestamp, evt.EndTime);
-                commandInsert.Parameters.AddWithValue(QueryHelper.ParLat, NpgsqlDbType.Double, evt.Lat);
-                commandInsert.Parameters.AddWithValue(QueryHelper.ParLong, NpgsqlDbType.Double, evt.Long);
+                commandInsert.Parameters.AddWithValue(QueryHelper.ParLat, NpgsqlDbType.Double, evt.Latitude);
+                commandInsert.Parameters.AddWithValue(QueryHelper.ParLong, NpgsqlDbType.Double, evt.Longitude);
                 commandInsert.Parameters.AddWithValue(QueryHelper.ParName, NpgsqlDbType.Text, evt.Name);
                 commandInsert.Parameters.AddWithValue(QueryHelper.ParPrice, NpgsqlDbType.Double, evt.Price);
                 commandInsert.Parameters.AddWithValue(QueryHelper.ParCapacity, NpgsqlDbType.Integer, evt.Capacity);
                 commandInsert.Parameters.AddWithValue(QueryHelper.ParReserved, NpgsqlDbType.Integer, evt.Reserved);
                 commandInsert.Parameters.AddWithValue(QueryHelper.ParRating, NpgsqlDbType.Double, evt.Rating);
                 commandInsert.Parameters.AddWithValue(QueryHelper.ParRateCount, NpgsqlDbType.Integer, evt.RateCount);
-                commandInsert.Parameters.AddWithValue(QueryHelper.ParRatingLocation, NpgsqlDbType.Double, evt.RatingLocation);
                 commandInsert.Parameters.AddWithValue(QueryHelper.ParLocationId, NpgsqlDbType.Uuid, evt.LocationId);
-
+                commandInsert.Parameters.AddWithValue(QueryHelper.ParCustom, NpgsqlDbType.Jsonb, evt.Custom);
                 commandSelect.Parameters.AddWithValue(QueryHelper.ParEventId, NpgsqlDbType.Uuid, evt.Id);
 
-                commandGetRateCount.Parameters.AddWithValue(QueryHelper.ParLat, NpgsqlDbType.Double, evt.Lat);
-                commandGetRateCount.Parameters.AddWithValue(QueryHelper.ParLong, NpgsqlDbType.Double, evt.Long);
 
-
-                commandGetRatingLocation.Parameters.AddWithValue(QueryHelper.ParLat, NpgsqlDbType.Double, evt.Lat);
-                commandGetRatingLocation.Parameters.AddWithValue(QueryHelper.ParLong, NpgsqlDbType.Double, evt.Long);
 
                 await Connection.CreateConnection().OpenAsync();
 
-                object rateC = await commandGetRateCount.ExecuteScalarAsync();
-                int rateCount = 0;
-                if (rateC != DBNull.Value)
-                {
-                    rateCount = Convert.ToInt32(rateC);
-                }
 
-                object ratingL = await commandGetRatingLocation.ExecuteScalarAsync();
-                decimal ratingLocation = 0;
-                if (ratingL != DBNull.Value)
-                {
-                    ratingLocation = Convert.ToDecimal(ratingL);
-                }
-
-                if (rateCount == 0)
-                    evt.RatingLocation = 0;
-                else
-                {
-                    evt.RatingLocation = Convert.ToDecimal(ratingLocation / rateCount);
-                }
 
 
                 await commandInsert.ExecuteNonQueryAsync();
@@ -108,19 +83,22 @@ namespace GeoEvents.Repository
                     evtR = new EventEntity
                     {
                         Id = new Guid(dr[0].ToString()),
-                        StartTime = Convert.ToDateTime(dr[1]),
-                        EndTime = Convert.ToDateTime(dr[2]),
-                        Latitude = Convert.ToDecimal(dr[3]),
-                        Longitude = Convert.ToDecimal(dr[4]),
-                        Name = dr[5].ToString(),
-                        Description = dr[6].ToString(),
-                        Category = Convert.ToInt32(dr[7]),
-                        Price = Convert.ToDecimal(dr[8]),
-                        Capacity = Convert.ToInt32(dr[9]),
-                        Reserved = Convert.ToInt32(dr[10]),
-                        Rating = Convert.ToDecimal(dr[11]),
-                        RateCount = Convert.ToInt32(dr[12]),
-                        
+                        Name = dr[1].ToString(),
+                        Description = dr[2].ToString(),
+                        Category = Convert.ToInt32(dr[3]),
+                        Latitude = Convert.ToDecimal(dr[4]),
+                        Longitude = Convert.ToDecimal(dr[5]),
+                        StartTime = Convert.ToDateTime(dr[6]),
+                        EndTime = Convert.ToDateTime(dr[7]),
+                        Rating = Convert.ToDecimal(dr[8]),
+                        RateCount = Convert.ToInt32(dr[9]),
+                        Price = Convert.ToDecimal(dr[10]),
+                        Capacity = Convert.ToInt32(dr[11]),
+
+                        Reserved = Convert.ToInt32(dr[12]),
+                        Custom = dr[13].ToString(),
+                        //    LocationId = dr[14].LocationId
+
                     };
                 }
                
@@ -154,19 +132,23 @@ namespace GeoEvents.Repository
                     tmp = new EventEntity
                     {
                         Id = new Guid(dr[0].ToString()),
-                        StartTime = Convert.ToDateTime(dr[1]),
-                        EndTime = Convert.ToDateTime(dr[2]),
-                        Latitude = Convert.ToDecimal(dr[3]),
-                        Longitude = Convert.ToDecimal(dr[4]),
-                        Name = dr[5].ToString(),
-                        Description = dr[6].ToString(),
-                        Category = Convert.ToInt32(dr[7]),
-                        Price = Convert.ToDecimal(dr[8]),
-                        Capacity = Convert.ToInt32(dr[9]),
-                        Reserved = Convert.ToInt32(dr[10]),
-                        Rating = Convert.ToDecimal(dr[11]),
-                        RateCount = Convert.ToInt32(dr[12]),
-                        RatingLocation=Convert.ToDecimal(dr[14])
+                        Name = dr[1].ToString(),
+                        Description = dr[2].ToString(),
+                        Category = Convert.ToInt32(dr[3]),
+                        Latitude = Convert.ToDecimal(dr[4]),
+                        Longitude = Convert.ToDecimal(dr[5]),
+                        StartTime = Convert.ToDateTime(dr[6]),
+                        EndTime = Convert.ToDateTime(dr[7]),
+                        Rating = Convert.ToDecimal(dr[8]),
+                        RateCount = Convert.ToInt32(dr[9]),
+                        Price = Convert.ToDecimal(dr[10]),
+                        Capacity = Convert.ToInt32(dr[11]),
+
+                        Reserved = Convert.ToInt32(dr[12]),
+                        Custom = dr[13].ToString(),
+                    //    LocationId = dr[14].LocationId
+
+
                     };
 
                     SelectEvents.Add(Mapper.Map<IEvent>(tmp));
@@ -290,7 +272,7 @@ namespace GeoEvents.Repository
 
                 await Connection.CreateConnection().OpenAsync();
 
-                #region Update rsting for event
+                #region Update rating for event
 
                 commandGetRating.Parameters.AddWithValue(QueryHelper.ParEventId, NpgsqlTypes.NpgsqlDbType.Uuid, eventId);
 

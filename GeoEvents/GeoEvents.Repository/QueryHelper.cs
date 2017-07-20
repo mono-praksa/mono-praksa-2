@@ -57,6 +57,7 @@ namespace GeoEvents.Repository
         public static string ParRateCount = "@RateCount";
         public static string ParRatingLocation = "@RatingLocation";
         public static string ParLocationId = "@LocationId";
+        public static string ParCustom = "@Custom";
 
 
         /// <summary>

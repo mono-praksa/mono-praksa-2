@@ -145,6 +145,12 @@ namespace GeoEvents.Model
         /// </value>
         public Guid LocationId { get; set; }
 
+        /// <summary>
+        /// Gets or sets the custom.
+        /// </summary>
+        /// <value>
+        /// The custom.
+        /// </value>
         public string Custom { get; set; }
         #endregion Properties
     }
