@@ -1,18 +1,20 @@
 <div *ngIf="!this.isDetailMode">
 	<div>
 		<form [formGroup]="filterForm" (ngSubmit)="onSubmit(filterForm.value)" autocomplete="off" novalidate>
-			<div class="row">
-				<div class="col-sm-4" align="right">
-					<input type="text" formControlName="searchString" class="form-control" id="searchString" placeholder="Search..." />
-				</div>
-				<div class="col-sm-6">
-                    <button type="button" class="btn btn-default" (click)="toggleAdvancedSearch()">Show/Hide filters</button>
+            <div class="row">
+                <div class="col-sm-4" align="right">
+                    <input type="text" formControlName="searchString" class="form-control" id="searchString" placeholder="Search..." />
+                </div>
+                <div class="col-sm-6">
+                    <button *ngIf="isAdvancedSearch" type="button" class="btn btn-default" (click)="toggleAdvancedSearch()">Hide filters</button>
+                    <button *ngIf="!isAdvancedSearch" type="button" class="btn btn-default" (click)="toggleAdvancedSearch()">Show filters</button>
                     <i class="fa fa-spinner fa-spin" style="font-size:24px" *ngIf="searchEventLoading"></i>
-				</div>
-				<div class="col-sm-2">
-					<button type="button" class="btn btn-primary" (click)="this.toggleMapMode()" >Map / List Display Mode</button>
-				</div>	
-			</div>
+                </div>
+                <div class="col-sm-2">
+                    <button *ngIf="!isMapMode" type="button" class="btn btn-primary" (click)="this.toggleMapMode()">Map Display Mode</button>
+                    <button *ngIf="isMapMode" type="button" class="btn btn-primary" (click)="this.toggleMapMode()">List Display Mode</button>
+                </div>
+            </div>
 			<div [hidden]="!this.isAdvancedSearch">
 					<br/>
 					<div class="row">
