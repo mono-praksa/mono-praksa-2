@@ -314,7 +314,13 @@ export class EventSearchComponent implements OnInit {
 	}
 	
 	//enters detail mode, sets the event to be displayed
-	enterDetailMode(event: IEvent): void {
+    enterDetailMode(event: IEvent): void {
+
+        //for testing purpose, remove before deploying
+        console.log("entering detail mode with the following event event: ");
+        console.log(event);
+        //
+
 		this.event = event;
 		this.isDetailMode = true;
 	}
