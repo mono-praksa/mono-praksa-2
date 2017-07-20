@@ -6,6 +6,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using GeoEvents.Model.Common;
+using GeoEvents.DAL;
 
 namespace GeoEvents.Repository
 {
@@ -32,11 +34,13 @@ namespace GeoEvents.Repository
 
         public async Task<ILocation> UpdateRatingLocationAsync(Guid eventId, decimal rating)
         {
+            object location = new LocationEntity();
             return Mapper.Map<ILocation>(location);
         }
 
         public async Task<ILocation> CreateLocationAsync(ILocation location)
         {
+
             return Mapper.Map<ILocation>(location);
         }
 

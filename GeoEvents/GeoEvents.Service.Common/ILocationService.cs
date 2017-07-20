@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using GeoEvents.Service;
 
 namespace GeoEvents.Service.Common
 {
