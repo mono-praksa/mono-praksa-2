@@ -5,5 +5,5 @@
         <small>{{evt.StartTime | date: 'MMMM d, y, HH:mm'}} - {{evt.EndTime | date: 'MMMM d, y, HH:mm'}}</small><br />
         {{evt.Description}}
     </div>
-    <p-paginator rows="10" totalRecords="24"></p-paginator>
+    <p-paginator rows="10" totalRecords="this.eventCount"></p-paginator>
 </div>

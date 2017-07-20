@@ -24,7 +24,7 @@
                             <label for="end">End Time</label>
 							<input formControlName="end" ngui-datetime-picker [close-on-select]="false" class="form-control" id="end" placeholder="Click to enter date and time" readonly style="cursor: pointer;" />
                         </div>
-                        <span class="help-block" *ngIf="end.touched && eventForm.hasError('endDateBeforeStartDate')">End date must be after start date!</span>
+                        <span class="help-block" *ngIf="end.touched && filterForm.hasError('endDateBeforeStartDate')">End date must be after start date!</span>
 					</div>
 					<div class="row">
 						<div>
@@ -115,7 +115,7 @@
 				<label for="ascendingCheckbox">Ascending Order?</label>
 				
 			</div>
-			<display-list (event)="enterDetailMode($event)" [events]="this.events"></display-list>
+			<display-list (event)="enterDetailMode($event)" [events]="this.events" [eventCount]="this.eventCount"></display-list>
 			<div *ngIf="this.events">
 				<p>pager</p>
 			</div>
