@@ -10,15 +10,9 @@ import { IEvent } from '../models/event.model';
 
 export class EventListComponent {
     @Input() events: IEvent[];
-    @Input() eventCount: number;
     @Output() event = new EventEmitter();
-    @Output() pageChange = new EventEmitter();
 
     eventDetails(evt: IEvent) {
         this.event.emit(evt);
-    }
-
-    onPageChange(event: any) {
-        this.pageChange.emit(event);
     }
 }

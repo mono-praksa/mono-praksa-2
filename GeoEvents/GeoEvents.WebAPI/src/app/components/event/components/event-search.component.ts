@@ -194,11 +194,11 @@ export class EventSearchComponent implements OnInit {
 	}
 
     onPageChange(event: any) {
-        this.onSubmit(this.filterForm.value, event.page + 1);
+        this.onSubmit(this.filterForm.value, event.page + 1, false);
     }
 
 	//submits
-    onSubmit(formValues: any, pageNumber: number = 1): void {
+    onSubmit(formValues: any, pageNumber: number = 1, filterChanged: boolean = true): void {
         this._loaderService.displayLoader(true);
         let selectedCategories = this.getSelectedCategories();
 
@@ -224,7 +224,10 @@ export class EventSearchComponent implements OnInit {
 		}
 		
         this.getEvents(newFilter);
-        this.getEventCount(newFilter);
+
+        if (filterChanged) {
+            this.getEventCount(newFilter);
+        }
 	}
 	
 	//return a number that represents the chosen categories
@@ -325,7 +328,6 @@ export class EventSearchComponent implements OnInit {
     private getEventCount(filter: IFilter): void {
         this._eventService.getEventCount(filter)
             .subscribe(result => {
-                console.log(result);
                 this.eventCount = result;
             });
     }
