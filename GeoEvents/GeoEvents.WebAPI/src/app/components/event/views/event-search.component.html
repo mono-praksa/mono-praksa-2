@@ -117,7 +117,7 @@
 				<label for="ascendingCheckbox">Ascending Order?</label>
 				
 			</div>
-			<display-list (event)="enterDetailMode($event)" [events]="this.events" [eventCount]="this.eventCount"></display-list>
+			<display-list (event)="enterDetailMode($event)" [events]="this.events" [eventCount]="this.eventCount" (pageChange)="onPageChange($event)"></display-list>
 			<div *ngIf="this.events">
 				<p>pager</p>
 			</div>

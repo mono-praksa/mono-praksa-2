@@ -51,7 +51,7 @@ namespace GeoEvents.WebAPI.Controllers
 
         [HttpGet]
         [Route("search")]
-        public async Task<IEnumerable<EventModel>> GetEventsAsync(int pageNumber = 1, int pageSize = 25, string orderBy = "", bool orderAscending = false, int category = 0, decimal uLat = 1000M, decimal uLong = 1000M, decimal radius = 0, string startTime = "", string endTime = "", string searchString = "", decimal? price = null, decimal ratingEvent = 1)
+        public async Task<IEnumerable<EventModel>> GetEventsAsync(int pageNumber = 1, int pageSize = 25, string orderBy = "", bool orderAscending = false, int category = 0, decimal uLat = 1000M, decimal uLong = 1000M, decimal radius = 0, string startTime = "", string endTime = "", string searchString = "", decimal? price = null, decimal? ratingEvent = null)
         {
             Filter filter = new Filter(uLat, uLong, radius, null, null, category, pageNumber, pageSize, searchString, orderBy, orderAscending, price, ratingEvent);
             DateTime dateValue;
@@ -99,9 +99,9 @@ namespace GeoEvents.WebAPI.Controllers
 
         [HttpGet]
         [Route("search/count")]
-        public async Task<Int64> GetEventCountAsync(int pageNumber = 1, int pageSize = 25, string orderBy = "", bool orderAscending = false, int category = 0, decimal uLat = 1000M, decimal uLong = 1000M, decimal radius = 0, string startTime = "", string endTime = "", string searchString = "")
+        public Task<Int64> GetEventCountAsync(int pageNumber = 1, int pageSize = 25, string orderBy = "", bool orderAscending = false, int category = 0, decimal uLat = 1000M, decimal uLong = 1000M, decimal radius = 0, string startTime = "", string endTime = "", string searchString = "", decimal? price = null, decimal? ratingEvent = null)
         {
-            Filter filter = new Filter(uLat, uLong, radius, null, null, category, pageNumber, pageSize, searchString, orderBy, orderAscending, null, null);
+            Filter filter = new Filter(uLat, uLong, radius, null, null, category, pageNumber, pageSize, searchString, orderBy, orderAscending, price, ratingEvent);
             DateTime dateValue;
             if (startTime != "")
             {
@@ -120,7 +120,7 @@ namespace GeoEvents.WebAPI.Controllers
                 filter.Radius = null;
             }
 
-            return await Service.GetEventCountAsync(filter);
+            return Service.GetEventCountAsync(filter);
         }
 
         [HttpPut]

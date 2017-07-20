@@ -192,12 +192,16 @@ export class EventSearchComponent implements OnInit {
         }
         this.startMapZoomListener();
 	}
-	
+
+    onPageChange(event: any) {
+        this.onSubmit(this.filterForm.value, event.page + 1);
+    }
+
 	//submits
-    onSubmit(formValues: any): void {
+    onSubmit(formValues: any, pageNumber: number = 1): void {
         this._loaderService.displayLoader(true);
-		let selectedCategories = this.getSelectedCategories();
-		
+        let selectedCategories = this.getSelectedCategories();
+
 		let newFilter : IFilter = {
             ULat: formValues.latitude,
             ULong: formValues.longitude,
@@ -208,12 +212,12 @@ export class EventSearchComponent implements OnInit {
             SearchString: formValues.searchString,
             Price: formValues.price,
             RatingEvent: formValues.rating,
-			
-			PageNumber: 1,
+
+            PageNumber: pageNumber,
 			PageSize: 10,
 			OrderByString: "Name",
 			OrderIsAscending: true
-		}
+        }
 		
 		if (newFilter.SearchString == null) {
 			newFilter.SearchString == "";
