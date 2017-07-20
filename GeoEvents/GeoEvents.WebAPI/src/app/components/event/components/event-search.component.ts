@@ -25,7 +25,6 @@ export class EventSearchComponent implements OnInit {
 	private _events: IEvent[];
 	private _event: IEvent;
 	private _errorMessage: string;
-	//isLoadingData: boolean = false;
 	
 	//variables for the filter and retrieving data
     filterForm: FormGroup;
@@ -202,31 +201,36 @@ export class EventSearchComponent implements OnInit {
         this._loaderService.displayLoader(true);
         let selectedCategories = this.getSelectedCategories();
 
-		let newFilter : IFilter = {
-            ULat: formValues.latitude,
-            ULong: formValues.longitude,
-            Radius: formValues.radius,
-            StartTime: formValues.start,
-            EndTime: formValues.end,
-            Category: selectedCategories,
-            SearchString: formValues.searchString,
-            Price: formValues.price,
-            RatingEvent: formValues.rating,
+        if (filterChanged) {
+            let newFilter: IFilter = {
+                ULat: formValues.latitude,
+                ULong: formValues.longitude,
+                Radius: formValues.radius,
+                StartTime: formValues.start,
+                EndTime: formValues.end,
+                Category: selectedCategories,
+                SearchString: formValues.searchString,
+                Price: formValues.price,
+                RatingEvent: formValues.rating,
 
-            PageNumber: pageNumber,
-			PageSize: 10,
-			OrderByString: "Name",
-			OrderIsAscending: true
+                PageNumber: pageNumber,
+                PageSize: 10,
+                OrderByString: "Name",
+                OrderIsAscending: true
+            }
+
+            if (newFilter.SearchString == null) {
+                newFilter.SearchString == "";
+            }
+            this.filter = newFilter;
+        } else {
+            this.filter.PageNumber = pageNumber;
         }
 		
-		if (newFilter.SearchString == null) {
-			newFilter.SearchString == "";
-		}
-		
-        this.getEvents(newFilter);
+        this.getEvents(this.filter);
 
         if (filterChanged) {
-            this.getEventCount(newFilter);
+            this.getEventCount(this.filter);
         }
 	}
 	
@@ -334,9 +338,7 @@ export class EventSearchComponent implements OnInit {
 
 	//calls the http service and gets the events
 	private getEvents(filter: IFilter): void {
-		this.filter = filter;
-		this.events = null;
-//		this.isLoadingData = true;
+		//this.events = null;
 		this.dataServiceSubscription = this._eventService.getEvents(filter)
             .subscribe(result => {
                 this.events = result;
@@ -345,19 +347,16 @@ export class EventSearchComponent implements OnInit {
 	}
 	
 	//gets the events when user checks the ascending order checkbox
-	
 	getEventsAscendingChanged(isAscending: boolean){
-		let newFilter = this.filter;
-		newFilter.OrderIsAscending = !newFilter.OrderIsAscending;
+		this.filter.OrderIsAscending = !this.filter.OrderIsAscending;
 		//get the events
-        this.getEvents(newFilter);
+        this.getEvents(this.filter);
 	}
 	
 	//gets the events when user changes the sorting order
 	getEventsOrderChanged(newOrder: string){
-		let newFilter = this.filter;
-		newFilter.OrderByString = newOrder
-		this.getEvents(newFilter);
+		this.filter.OrderByString = newOrder
+		this.getEvents(this.filter);
 	}
 	
 	toggleMapMode(): void {
