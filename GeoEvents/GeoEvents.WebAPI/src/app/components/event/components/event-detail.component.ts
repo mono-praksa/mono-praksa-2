@@ -1,4 +1,4 @@
-﻿import { Component, Input, OnInit, ViewChild, ElementRef } from '@angular/core';
+﻿import { Component, Input, OnInit, ViewChild, ElementRef, Output, EventEmitter } from '@angular/core';
 import { Http, Response, Headers, RequestOptions } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 
@@ -18,7 +18,49 @@ import { LoaderService } from '../../../shared/loader.service';
         max-width: 640px;
         height: 480px;
         max-height: 480px;
-}
+    }
+
+    .rating {
+        float:left;
+    }
+
+    .rating:not(:checked) > input {
+        position:absolute;
+        top:-9999px;
+        clip:rect(0,0,0,0);
+    }
+
+    .rating:not(:checked) > label {
+        float:right;
+        width:1em;
+        padding:0.1em;
+        overflow:hidden;
+        white-space:nowrap;
+        cursor:pointer;
+        font-size:200%;
+        line-height:1.2;
+        color:#ddd;
+    }
+
+    .rating:not(:checked) > label:before {
+        content: '★ ';
+    }
+
+    .rating > input:checked ~ label {
+        color: #f70;
+    }
+
+    .rating:not(:checked) > label:hover,
+    .rating:not(:checked) > label:hover ~ label {
+        color: gold;
+    }
+
+
+    .rating > input:checked ~ label:hover,
+    .rating > input:checked ~ label:hover ~ label,
+    .rating > label:hover ~ input:checked ~ label {
+        color: #ea0;
+    }
 `]
 })
 
@@ -31,6 +73,12 @@ export class EventDetailComponent implements OnInit{
     private _address: string = "";
     private _getImagesLoading: boolean = false;
 
+    @Input() rating: number;
+    @Input() itemId: number;
+    @Output() ratingClick: EventEmitter<any> = new EventEmitter<any>();
+
+    inpustName: string;
+
     constructor(
         private geocodingService: GeocodingService,
         private eventService: EventService,
@@ -40,6 +88,7 @@ export class EventDetailComponent implements OnInit{
     }
 
     ngOnInit() {
+        this.inpustName = this.itemId + '_rating';
         this._loaderService.loaderStatus.subscribe((value: boolean) => {
             this.getImagesLoading = value;
         });
@@ -79,13 +128,18 @@ export class EventDetailComponent implements OnInit{
         this.userRateElement.nativeElement.innerHTML = slider.value;
     }
 
-    rate() {
-        let rating = this.userRateElement.nativeElement.innerHTML;
+    rate(rating: number) {
         this.eventService.updateRating(this.event.Id, +rating)
             .subscribe((response: IEvent) => {
                 this.event.Rating = response.Rating;
                 this.event.RateCount = response.RateCount;
+                this.rating = rating;
+                this.ratingClick.emit({
+                    itemId: this.itemId,
+                    rating: rating
+                });
             });
+
     }
 
     reserve() {
@@ -136,6 +190,14 @@ export class EventDetailComponent implements OnInit{
     set address(theAddress: string) {
         this._address = theAddress;
     }
+
+    //onClick(rating: number): void {
+    //    this.rating = rating;
+    //    this.ratingClick.emit({
+    //        itemId: this.itemId,
+    //        rating: rating
+    //    });
+    //}
 }
 
 enum CategoryEnum {
