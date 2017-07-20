@@ -37,11 +37,7 @@ export class EventMapComponent implements OnInit {
     map: any;
 
     constructor(private http: Http, private mapsAPILoader: MapsAPILoader, private ngZone: NgZone, private router: Router) {
-        /* inputs are not defined in the constructor so this does not work, moved to onInit;
-        this.lat = this.latitude;
-        this.lng = this.longitude;
-        this.zoom = 14;
-        */
+
     }
 
     ngOnInit() {
@@ -113,11 +109,17 @@ export class EventMapComponent implements OnInit {
             //displays the infowindow
             google.maps.event.addListener(marker, 'click', (function (marker: any, i: any) {
                 return function () {
+                    //
+                    //once this is merged and routing is implemented this will redirect to event details
+                    //
                     infoWindow.setContent('<div><p>' + marker.title + '</p><p>Double click for more</p><a href="home/">click me to go home</a></div>');
                     infoWindow.open(this.map, marker);
                 }
             })(marker, i));
 
+            //
+            //once this is merged and router is implemented remove this function
+            //
             //create a new event listener for the makrer, triggers on dblclick
             //calls the function that emits the marker to the parent component
             google.maps.event.addListener(marker, 'dblclick', (function (marker: any, i: any) {
