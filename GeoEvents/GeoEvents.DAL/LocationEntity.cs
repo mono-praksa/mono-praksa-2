@@ -25,7 +25,7 @@ namespace GeoEvents.DAL
         /// <value>
         /// The rating.
         /// </value>
-        public decimal Rating { get; set; }
+        public double Rating { get; set; }
 
         /// <summary>
         /// Gets or sets the rate count.
@@ -58,7 +58,7 @@ namespace GeoEvents.DAL
         /// <param name="rating">The rating.</param>
         /// <param name="rateCount">The rate count.</param>
         /// <param name="address">The address.</param>
-        public LocationEntity(Guid id, decimal rating, int rateCount, string address)
+        public LocationEntity(Guid id, double rating, int rateCount, string address)
         {
             this.Id = id;
             this.Rating = rating;

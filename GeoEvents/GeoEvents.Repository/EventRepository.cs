@@ -48,8 +48,6 @@ namespace GeoEvents.Repository
             using (Connection.CreateConnection())
             using (NpgsqlCommand commandInsert = new NpgsqlCommand(QueryHelper.GetInsertEventString(), Connection.CreateConnection()))
             using (NpgsqlCommand commandSelect = new NpgsqlCommand(QueryHelper.GetSelectEventStringById(), Connection.CreateConnection()))
-            using (NpgsqlCommand commandGetRatingLocation = new NpgsqlCommand(QueryHelper.GetRatingLocation(), Connection.CreateConnection()))
-            using (NpgsqlCommand commandGetRateCount = new NpgsqlCommand(QueryHelper.GetRateCountLocation(), Connection.CreateConnection()))
             {
                 commandInsert.Parameters.AddWithValue(QueryHelper.ParId, NpgsqlDbType.Uuid, evt.Id);
                 commandInsert.Parameters.AddWithValue(QueryHelper.ParCategory, NpgsqlDbType.Integer, evt.Category);
@@ -66,6 +64,7 @@ namespace GeoEvents.Repository
                 commandInsert.Parameters.AddWithValue(QueryHelper.ParRateCount, NpgsqlDbType.Integer, evt.RateCount);
                 commandInsert.Parameters.AddWithValue(QueryHelper.ParLocationId, NpgsqlDbType.Uuid, evt.LocationId);
                 commandInsert.Parameters.AddWithValue(QueryHelper.ParCustom, NpgsqlDbType.Jsonb, evt.Custom);
+
                 commandSelect.Parameters.AddWithValue(QueryHelper.ParEventId, NpgsqlDbType.Uuid, evt.Id);
 
 
@@ -97,7 +96,7 @@ namespace GeoEvents.Repository
 
                         Reserved = Convert.ToInt32(dr[12]),
                         Custom = dr[13].ToString(),
-                        //    LocationId = dr[14].LocationId
+                        LocationId = new Guid(dr[14].ToString())
 
                     };
                 }
@@ -146,8 +145,7 @@ namespace GeoEvents.Repository
 
                         Reserved = Convert.ToInt32(dr[12]),
                         Custom = dr[13].ToString(),
-                    //    LocationId = dr[14].LocationId
-
+                        LocationId = new Guid(dr[14].ToString())
 
                     };
 
@@ -427,9 +425,52 @@ namespace GeoEvents.Repository
             return Mapper.Map<IEvent>(evtR);
         }
 
-        public Task<IEvent> GetEventByIdAsync(Guid eventId)
+
+        /// <summary>
+        /// Get event by Id
+        /// </summary>
+        /// <param name="eventId"></param>
+        /// <returns>
+        /// Event
+        /// </returns>
+        public async Task<IEvent> GetEventByIdAsync(Guid eventId)
         {
-            throw new NotImplementedException();
+            EventEntity evtR = new EventEntity();
+
+            using (NpgsqlCommand commandSelect = new NpgsqlCommand(QueryHelper.GetSelectEventStringById(), Connection.CreateConnection()))
+            {
+                await Connection.CreateConnection().OpenAsync();
+
+                commandSelect.Parameters.AddWithValue(QueryHelper.ParEventId, NpgsqlDbType.Uuid, eventId);
+
+                DbDataReader dr = await commandSelect.ExecuteReaderAsync();
+                if (dr.Read())
+                {
+                    evtR = new EventEntity
+                    {
+                        Id = new Guid(dr[0].ToString()),
+                        Name = dr[1].ToString(),
+                        Description = dr[2].ToString(),
+                        Category = Convert.ToInt32(dr[3]),
+                        Latitude = Convert.ToDecimal(dr[4]),
+                        Longitude = Convert.ToDecimal(dr[5]),
+                        StartTime = Convert.ToDateTime(dr[6]),
+                        EndTime = Convert.ToDateTime(dr[7]),
+                        Rating = Convert.ToDecimal(dr[8]),
+                        RateCount = Convert.ToInt32(dr[9]),
+                        Price = Convert.ToDecimal(dr[10]),
+                        Capacity = Convert.ToInt32(dr[11]),
+
+                        Reserved = Convert.ToInt32(dr[12]),
+                        Custom = dr[13].ToString(),
+                        LocationId = new Guid(dr[14].ToString())
+
+                    };
+                }
+
+            }
+            return Mapper.Map<IEvent>(evtR);
+
         }
 
 

@@ -12,18 +12,33 @@ namespace GeoEvents.Repository.Common
     {
 
         /// <summary>
-        /// Updates the rating location asynchronous.
+        /// Getslocation or creates if there is non  asynchronous.
         /// </summary>
-        /// <param name="eventId">The event identifier.</param>
-        /// <param name="rating">The rating.</param>
-        /// <returns></returns>
-        Task<ILocation> UpdateRatingLocationAsync(Guid eventId, decimal rating);
+        /// <param name="address"></param>
+        /// <param name="EventRating"></param>
+        /// <param name="EventRatingCount"></param>
+        /// <returns>
+        /// Location
+        /// </returns>
+        Task<ILocation> GetOrCreateLocationAsync(string address,double EventRating,int EventRateCount);
 
         /// <summary>
-        /// Creates the location asynchronous.
+        /// Create Location asynchronous
         /// </summary>
-        /// <param name="location">The location.</param>
-        /// <returns></returns>
+        /// <param name="location"></param>
+        /// <returns>
+        /// Location
+        /// </returns>
         Task<ILocation> CreateLocationAsync(ILocation location);
+
+        /// <summary>
+        /// Get Location by Id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="Rating"></param>
+        /// <returns>
+        /// Location
+        /// </returns>
+        Task<ILocation> GetLocationByIdAsync(Guid id,double Rating);
     }
 }

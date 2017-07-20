@@ -3,7 +3,8 @@ using System;
 using System.Text;
 
 namespace GeoEvents.Repository
-{
+{ // dodaj uvjet za order by distance uvjet jel ima lat long i radius
+
     static public class QueryHelper
     {
         #region Constants
