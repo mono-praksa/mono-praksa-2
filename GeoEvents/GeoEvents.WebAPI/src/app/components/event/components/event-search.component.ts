@@ -338,7 +338,6 @@ export class EventSearchComponent implements OnInit {
 
 	//calls the http service and gets the events
 	private getEvents(filter: IFilter): void {
-		//this.events = null;
 		this.dataServiceSubscription = this._eventService.getEvents(filter)
             .subscribe(result => {
                 this.events = result;

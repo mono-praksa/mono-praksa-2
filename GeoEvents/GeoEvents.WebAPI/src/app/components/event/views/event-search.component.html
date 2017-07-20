@@ -109,7 +109,7 @@
 			
 				<select (change)="getEventsOrderChanged($event.target.value)" class="form-control">
 					<option value="Name">Name</option>
-					<option value="Distance">Distance</option>
+					<option value="Distance" *ngIf="filterForm.value.latitude && filterForm.value.latitude && filterForm.value.radius">Distance</option>
 					<option value="StartTime">Start time</option>
 					<option value="EndTime">End time</option>
 				</select>
