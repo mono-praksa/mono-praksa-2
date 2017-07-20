@@ -36,7 +36,7 @@
 						                <input type="text" formControlName="address" class="form-control" id="address" placeholder="Address..." #search [readonly]="isAddressValid"/>
                                         <span *ngIf="isAddressValid" class="input-group-addon" (click)="clearLocation()">X</span>
                                     </div>
-                                    <a routerlink="" (click)="setCurrentPosition()">Set to current location</a>
+                                    <a style="cursor:pointer" routerlink="" (click)="setCurrentPosition()">Set to current location</a>
                                 </div>
                             <div class="form-group" [ngClass]="{'has-error': radius.touched && radius.invalid || (address.touched || radius.touched) && filterForm.hasError('needBothOrNeitherOfAddressAndRadius')}">
                                 <label for="radius">Radius</label>                                

@@ -50,7 +50,7 @@
             <input type="text" class="form-control" formControlName="address" id="address" placeholder="Address..." #search [readonly]="isAddressValid" />
             <span *ngIf="isAddressValid" class="input-group-addon" (click)="clearLocation()">X</span>
         </div>
-        <a routerlink="" (click)="setCurrentPosition()">Set to current location</a>
+        <a style="cursor:pointer" routerlink="" (click)="setCurrentPosition()">Set to current location</a>
         <div *ngIf="isAddressValid">
             <agm-map [latitude]="latitude.value" [longitude]="longitude.value" [scrollwheel]="true" [zoom]="zoom" (mapClick)="markerUpdated($event)">
                 <agm-marker [latitude]="latitude.value" [longitude]="longitude.value" [markerDraggable]="true" (dragEnd)="markerUpdated($event)"></agm-marker>
