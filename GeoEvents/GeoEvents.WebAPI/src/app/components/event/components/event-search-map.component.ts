@@ -113,7 +113,7 @@ export class EventMapComponent implements OnInit {
             //displays the infowindow
             google.maps.event.addListener(marker, 'click', (function (marker: any, i: any) {
                 return function () {
-                    infoWindow.setContent('<div><p>' + marker.title + '</p><p>Double click for more</p></div>');
+                    infoWindow.setContent('<div><p>' + marker.title + '</p><p>Double click for more</p><a href="home/">click me to go home</a></div>');
                     infoWindow.open(this.map, marker);
                 }
             })(marker, i));
