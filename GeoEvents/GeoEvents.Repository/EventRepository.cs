@@ -51,8 +51,9 @@ namespace GeoEvents.Repository
 
             using (Connection.CreateConnection())
             using (NpgsqlCommand commandInsert = new NpgsqlCommand(QueryHelper.GetInsertEventQueryString(), Connection.CreateConnection()))
-        
+            using (NpgsqlCommand commandSelect = new NpgsqlCommand(QueryHelper.GetSelectEventByIdQueryString(), Connection.CreateConnection()))
             {
+                
                 commandInsert.Parameters.AddWithValue(QueryHelper.ParId, NpgsqlDbType.Uuid, evt.Id);
                 commandInsert.Parameters.AddWithValue(QueryHelper.ParCategory, NpgsqlDbType.Integer, evt.Category);
                 commandInsert.Parameters.AddWithValue(QueryHelper.ParDescription, NpgsqlDbType.Text, evt.Description);
@@ -75,18 +76,11 @@ namespace GeoEvents.Repository
                 }
 
                 await commandInsert.ExecuteNonQueryAsync();
-            }
-
-            using (Connection.CreateConnection())
-            using (NpgsqlCommand commandSelect = new NpgsqlCommand(QueryHelper.GetSelectEventByIdQueryString(), Connection.CreateConnection())) {
+            
 
                 commandSelect.Parameters.AddWithValue(QueryHelper.ParEventId, NpgsqlDbType.Uuid, evt.Id);
 
-                if (Connection.CreateConnection().FullState == ConnectionState.Closed)
-                {
-                    await Connection.CreateConnection().OpenAsync();
-                }
-
+        
                 DbDataReader dr = await commandSelect.ExecuteReaderAsync();
                 while (dr.Read())
                 {

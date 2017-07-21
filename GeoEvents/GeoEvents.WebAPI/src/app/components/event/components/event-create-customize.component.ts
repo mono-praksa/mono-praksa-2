@@ -6,6 +6,7 @@ import { IEvent } from '../models/event.model'
 
 import { LoaderService } from '../../../shared/loader.service'
 import { EventService } from '../event.service'
+import { LocationService } from '../location.service'
 
 @Component({
     selector: 'create-customize',
@@ -24,7 +25,8 @@ export class EventCreateCustomizeComponent implements OnInit {
 
     constructor(
         private _loaderService: LoaderService,
-        private _eventService: EventService
+        private _eventService: EventService,
+        private _locationService: LocationService
     ) { }
 
     ngOnInit() : void {
@@ -55,6 +57,9 @@ export class EventCreateCustomizeComponent implements OnInit {
 
     next(): void {
         this.createdEvent.Custom = JSON.stringify(this.createdEvent.CustomModel);
+        if (!this.createdEvent.Custom) {
+            this.createdEvent.Custom = "";
+        }
         this._loaderService.displayLoader(true);
         this._eventService.createEvent(this.createdEvent).subscribe((response: IEvent) => {
             this.createdEvent = response;

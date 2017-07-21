@@ -11,6 +11,8 @@ using GeoEvents.DAL;
 using Npgsql;
 using System.Data.Common;
 using System.Data;
+using NpgsqlTypes;
+
 namespace GeoEvents.Repository
 {
     public class LocationRepository : ILocationRepository
@@ -39,20 +41,19 @@ namespace GeoEvents.Repository
         /// Getslocation or creates if there is non  asynchronous.
         /// </summary>
         /// <param name="address"></param>
-        /// <param name="eventRating"></param>
-        /// <param name="eventRatingCount"></param>
         /// <returns>
         /// Location
         /// </returns>
-        public async Task<ILocation> GetLocationAsync(string address, double eventRating, int eventRatingCount)
+        public async Task<ILocation> GetLocationAsync(string address)
         {
             LocationEntity location = null;
 
-            LocationEntity NewLocation = new LocationEntity(Guid.NewGuid(), eventRating, eventRatingCount, address);
+            LocationEntity NewLocation = new LocationEntity(Guid.NewGuid(), 0, 0, address);
 
 
             using (Connection.CreateConnection())
             using (NpgsqlCommand command = new NpgsqlCommand(QueryHelper.GetSelectLocationQueryString(), Connection.CreateConnection()))
+            using (NpgsqlCommand commandInsert = new NpgsqlCommand(QueryHelper.GetInsertCreateLocationQueryString(),Connection.CreateConnection()))
             {
                 command.Parameters.AddWithValue(QueryHelper.ParAddress, NpgsqlTypes.NpgsqlDbType.Text, address);
 
@@ -74,6 +75,17 @@ namespace GeoEvents.Repository
                     };
 
 
+                }
+                else
+                {
+                    Connection.CreateConnection().Close();
+                    await Connection.CreateConnection().OpenAsync();
+                    commandInsert.Parameters.AddWithValue(QueryHelper.ParId, NpgsqlDbType.Uuid, NewLocation.Id);
+                    commandInsert.Parameters.AddWithValue(QueryHelper.ParAddress, NpgsqlDbType.Text, NewLocation.Address);
+                    commandInsert.Parameters.AddWithValue(QueryHelper.ParRating, NpgsqlDbType.Double, NewLocation.Rating);
+                    commandInsert.Parameters.AddWithValue(QueryHelper.ParRateCount, NpgsqlDbType.Integer, NewLocation.RateCount);
+
+                    await commandInsert.ExecuteNonQueryAsync();
                 }
             }
 

@@ -430,7 +430,7 @@ namespace GeoEvents.Repository
         public static string GetInsertEventQueryString()
         {
             StringBuilder insertString = new StringBuilder();
-            insertString.AppendFormat("INSERT INTO {0} VALUES ({1}, {2}, {3}, {4}, {5}, {6}, {7}, {8}, {9}, {10}, {11}, {12}, {13},{14})",
+            insertString.AppendFormat("INSERT INTO {0} VALUES ({1}, {2}, {3}, {4}, {5}, {6}, {7}, {8}, {9}, {10}, {11}, {12}, {13}, {14}, {15})",
                 TableNameEventQ,ParId,ParName,ParDescription,ParCategory,ParLatitude,ParLongitude,
                 ParStartTime,ParEndTime,ParRating,ParRateCount,ParPrice,ParCapacity,ParReserved,
                 ParCustom,ParLocationId);

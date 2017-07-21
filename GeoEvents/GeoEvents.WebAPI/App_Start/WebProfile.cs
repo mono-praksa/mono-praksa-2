@@ -10,6 +10,7 @@ namespace GeoEvents.WebAPI.App_Start
         {
             CreateMap<IEvent, EventModel>().ReverseMap();
             CreateMap<IImage, ImageModel>().ReverseMap();
+            CreateMap<ILocation, LocationModel>().ReverseMap();
         }
     }
 }

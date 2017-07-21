@@ -40,9 +40,9 @@ namespace GeoEvents.Service
         #region Methods
 
 
-        public Task<ILocation> GetLocationAsync(string address, double eventRating, int eventRateCount)
+        public Task<ILocation> GetLocationAsync(string address)
         {
-            return Repository.GetLocationAsync(address, eventRating, eventRateCount);
+            return Repository.GetLocationAsync(address);
         }
 
 

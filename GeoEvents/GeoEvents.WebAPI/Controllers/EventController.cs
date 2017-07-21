@@ -35,7 +35,6 @@ namespace GeoEvents.WebAPI.Controllers
         public async Task<EventModel> CreateEvent([FromBody] EventModel evt)
         {
             evt.Id = new Guid();
-            System.Diagnostics.Debug.WriteLine(evt.Custom);
             
             return Mapper.Map<EventModel>(await Service.CreateEventAsync(Mapper.Map<IEvent>(evt)));
         }
@@ -157,8 +156,9 @@ namespace GeoEvents.WebAPI.Controllers
         public int RateCount { get; set; }
         public decimal RatingLocation { get; set; }
         public string Custom { get; set; }
+        public Guid LocationId { get; set; }
 
-        public EventModel(Guid id, string name, string description, DateTime starttime, DateTime endtime, decimal uLat, decimal uLong, List<int> categories, decimal price, int capacity, int reserved, decimal rating, int rateCount, decimal ratingLocation, string custom)
+        public EventModel(Guid id, string name, string description, DateTime starttime, DateTime endtime, decimal uLat, decimal uLong, List<int> categories, decimal price, int capacity, int reserved, decimal rating, int rateCount, decimal ratingLocation, string custom, Guid locationId)
         {
             this.Id = id;
             this.Name = name;
@@ -175,6 +175,7 @@ namespace GeoEvents.WebAPI.Controllers
             this.RateCount = rateCount;
             this.RatingLocation = ratingLocation;
             this.Custom = custom;
+            this.LocationId = locationId;
         }
 
         public EventModel()

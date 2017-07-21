@@ -3,11 +3,13 @@ import { FormControl, FormGroup, Validators, ValidatorFn } from '@angular/forms'
 import { Observable } from 'rxjs/Rx'
 import { MapsAPILoader } from '@agm/core'
 
-import { endDateBeforeStartDate, uniqueName } from '../validators/validator'
-import { IEvent } from '../models/event.model'
-import { CategoryEnum } from '../../../shared/common/category-enum'
-import { LoaderService } from '../../../shared/loader.service'
-import { EventService } from '../event.service'
+import { endDateBeforeStartDate, uniqueName } from '../validators/validator';
+import { IEvent } from '../models/event.model';
+import { ILocation } from '../models/location.model';
+import { CategoryEnum } from '../../../shared/common/category-enum';
+import { LoaderService } from '../../../shared/loader.service';
+import { EventService } from '../event.service';
+import { LocationService } from '../location.service';
 import { GeocodingService } from '../../../shared/geocoding.service';
 
 @Component({
@@ -23,6 +25,7 @@ export class EventCreateDataComponent implements OnInit {
     @Output() eventEmitter = new EventEmitter();
     @ViewChild("search") searchElementRef: ElementRef;
     private _createdEvent: IEvent;
+    private _createEventLoading: boolean = false;
 
     //variables for google maps api
     private _zoom: number = 12;
@@ -57,11 +60,14 @@ export class EventCreateDataComponent implements OnInit {
         private _ngZone: NgZone,
         private _loaderService: LoaderService,
         private _eventService: EventService,
+        private _locationService: LocationService,
         private geocodingService: GeocodingService
     ) { }
 
     ngOnInit(): void {
-        this.setCurrentPosition();
+        this._loaderService.loaderStatus.subscribe((value: boolean) => {
+            this.createEventLoading = value;
+        });
 
         this.buildForm();
 
@@ -139,6 +145,7 @@ export class EventCreateDataComponent implements OnInit {
     }
 
     createEvent(formValues: any) {
+        this._loaderService.displayLoader(true);
         let chosenCategories: number[] = [];
         this.categories.filter(checkbox => {
             if (checkbox.checked) {
@@ -161,11 +168,15 @@ export class EventCreateDataComponent implements OnInit {
             Rating: undefined,
             RateCount: undefined,
             CustomModel: undefined,
-            Custom: undefined
+            Custom: undefined,
+            LocationId: undefined
         }
-        console.log(newEvent);
-
-        this.eventEmitter.emit(newEvent);
+        this._locationService.getLocation(formValues.address).subscribe((res: ILocation) => {
+            newEvent.LocationId = res.Id;
+            this._loaderService.displayLoader(false);
+            console.log(newEvent);
+            this.eventEmitter.emit(newEvent);
+        })
     }
 
     updateCategories(category: number): void {
@@ -222,6 +233,14 @@ export class EventCreateDataComponent implements OnInit {
     set isAddressValid(isAddressValid: boolean) {
         this._isAddressValid = isAddressValid;
     }
+
+    get createEventLoading(): boolean {
+        return this._createEventLoading;
+    }
+
+    set createEventLoading(isCreatingEvent: boolean) {
+        this._createEventLoading = isCreatingEvent;
+    }  
 }
 
 interface ICategoryElement {

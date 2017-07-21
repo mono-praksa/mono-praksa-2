@@ -13,7 +13,8 @@
     Rating: number,
     RateCount: number,
     CustomModel: CustomAttribute[],
-    Custom: string
+    Custom: string,
+    LocationId: string
 }
 
 export interface CustomAttribute {

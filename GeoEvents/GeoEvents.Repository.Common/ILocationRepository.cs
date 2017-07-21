@@ -15,12 +15,10 @@ namespace GeoEvents.Repository.Common
         /// Getslocation or creates if there is non  asynchronous.
         /// </summary>
         /// <param name="address"></param>
-        /// <param name="EventRating"></param>
-        /// <param name="EventRatingCount"></param>
         /// <returns>
         /// Location
         /// </returns>
-        Task<ILocation> GetLocationAsync(string address,double eventRating,int eventRateCount);
+        Task<ILocation> GetLocationAsync(string address);
 
         /// <summary>
         /// Create Location asynchronous
