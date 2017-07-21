@@ -1,7 +1,7 @@
 ﻿<div class="col-md-7">
     <h1>Djsidogjsoidg</h1>
     <div *ngFor="let evt of events" style="padding-bottom: 30px;">
-        <button class="btn btn-link btn-lg" style="padding: 0px;" (click)="eventDetails(evt)">{{evt.Name}}</button><br />
+        <a [routerLink]="[evt.Id]" style="font-size: 18px;">{{evt.Name}}</a><br />
         <small>{{evt.StartTime | date: 'MMMM d, y, HH:mm'}} - {{evt.EndTime | date: 'MMMM d, y, HH:mm'}}</small><br />
         {{evt.Description}}
     </div>

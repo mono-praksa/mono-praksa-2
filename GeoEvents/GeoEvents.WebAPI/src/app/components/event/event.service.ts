@@ -20,6 +20,15 @@ export class EventService {
             .catch(this.handleError);
     }
 
+    getEventById(eventId: number): Observable<IEvent> {
+        return this._http.get("/api/events/get?eventId=" + eventId)
+            .map((response: Response) => {
+                console.log(response);
+                <IEvent>response.json()
+            })
+            .catch(this.handleError);
+    }
+
     getEventCount(filter: IFilter): Observable<number> {
         let query = "/api/events/search/count" + this._makeQueryString(filter);
         return this._http.get(query)

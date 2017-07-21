@@ -23,7 +23,7 @@ export class EventSearchComponent implements OnInit {
 
 	//variables for storing data
 	private _events: IEvent[];
-	private _event: IEvent;
+	//private _event: IEvent;
 	private _errorMessage: string;
 	
 	//variables for the filter and retrieving data
@@ -57,7 +57,7 @@ export class EventSearchComponent implements OnInit {
 	
 	//booleans for displaying ui elements
     private _isMapMode: boolean = false;
-    private _isDetailMode: boolean = false;
+    //private _isDetailMode: boolean = false;
 	private _isAdvancedSearch: boolean = false;
 
     get eventCount(): number {
@@ -92,13 +92,13 @@ export class EventSearchComponent implements OnInit {
         this._events = theEvents;
     }
 
-    get event(): IEvent {
-        return this._event;
-    }	
+    //get event(): IEvent {
+    //    return this._event;
+    //}	
 
-    set event(theEvent: IEvent) {
-        this._event = theEvent;
-    }
+    //set event(theEvent: IEvent) {
+    //    this._event = theEvent;
+    //}
 
     get errorMessage(): string {
         return this._errorMessage;
@@ -124,13 +124,13 @@ export class EventSearchComponent implements OnInit {
         this._isMapMode = isMapMode;
     }
 
-    get isDetailMode(): boolean {
-        return this._isDetailMode;
-    }
+    //get isDetailMode(): boolean {
+    //    return this._isDetailMode;
+    //}
 
-    set isDetailMode(isDetailMode: boolean) {
-        this._isDetailMode = isDetailMode;
-    }
+    //set isDetailMode(isDetailMode: boolean) {
+    //    this._isDetailMode = isDetailMode;
+    //}
 
     get isAdvancedSearch(): boolean {
         return this._isAdvancedSearch;
@@ -313,22 +313,22 @@ export class EventSearchComponent implements OnInit {
 		});	
 	}
 	
-	//enters detail mode, sets the event to be displayed
-    enterDetailMode(event: IEvent): void {
+	////enters detail mode, sets the event to be displayed
+ //   enterDetailMode(event: IEvent): void {
 
-        //for testing purpose, remove before deploying
-        console.log("entering detail mode with the following event event: ");
-        console.log(event);
-        //
+ //       //for testing purpose, remove before deploying
+ //       console.log("entering detail mode with the following event event: ");
+ //       console.log(event);
+ //       //
 
-		this.event = event;
-		this.isDetailMode = true;
-	}
+	//	this.event = event;
+	//	this.isDetailMode = true;
+	//}
 	
-	//exits detail mode
-	exitDetailMode(): void {
-		this.isDetailMode = false;
-	}
+	////exits detail mode
+	//exitDetailMode(): void {
+	//	this.isDetailMode = false;
+	//}
 	
 	//toggles displaying advanced search, triggered on click
 	toggleAdvancedSearch(): void {

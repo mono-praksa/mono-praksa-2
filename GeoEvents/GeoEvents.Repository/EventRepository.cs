@@ -444,9 +444,47 @@ namespace GeoEvents.Repository
             return Mapper.Map<IEvent>(evtR);
         }
 
-        public Task<IEvent> GetEventByIdAsync(Guid eventId)
+        /// <summary>
+        /// Get event by Id
+        /// </summary>
+        /// <param name="eventId"></param>
+        /// <returns>
+        /// Event
+        /// </returns>
+        public async Task<IEvent> GetEventByIdAsync(Guid eventId)
         {
-            throw new NotImplementedException();
+            EventEntity evtR = new EventEntity();
+            using(Connection.CreateConnection())
+            using (NpgsqlCommand commandSelect = new NpgsqlCommand(QueryHelper.GetSelectEventStringById(), Connection.CreateConnection()))
+            {
+                await Connection.CreateConnection().OpenAsync();
+
+                commandSelect.Parameters.AddWithValue(QueryHelper.ParEventId, NpgsqlDbType.Uuid, eventId);
+
+                DbDataReader dr = await commandSelect.ExecuteReaderAsync();
+                if (dr.Read())
+                {
+                    evtR = new EventEntity
+                    {
+                        Id = new Guid(dr[0].ToString()),
+                        StartTime = Convert.ToDateTime(dr[1]),
+                        EndTime = Convert.ToDateTime(dr[2]),
+                        Lat = Convert.ToDecimal(dr[3]),
+                        Long = Convert.ToDecimal(dr[4]),
+                        Name = dr[5].ToString(),
+                        Description = dr[6].ToString(),
+                        Category = Convert.ToInt32(dr[7]),
+                        Price = Convert.ToDecimal(dr[8]),
+                        Capacity = Convert.ToInt32(dr[9]),
+                        Reserved = Convert.ToInt32(dr[10]),
+                        Rating = Convert.ToDecimal(dr[11]),
+                        RateCount = Convert.ToInt32(dr[12])
+                    };
+                }
+
+            }
+            return Mapper.Map<IEvent>(evtR);
+
         }
 
 

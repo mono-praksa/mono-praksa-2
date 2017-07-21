@@ -3,10 +3,12 @@ import { RouterModule } from "@angular/router";
 
 import { EventSearchComponent } from "./components/event-search.component";
 import { EventCreateComponent } from "./components/event-create.component";
+import { EventDetailComponent } from './components/event-detail.component';
 
 @NgModule({
 	imports: [
-		RouterModule.forChild([
+        RouterModule.forChild([
+            { path: "event/search/:eventId", component: EventDetailComponent },
 			{ path: "event/search", component: EventSearchComponent },
 			{ path: "event/create", component: EventCreateComponent }
 		]),

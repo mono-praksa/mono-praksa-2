@@ -75,11 +75,13 @@ namespace GeoEvents.WebAPI.Controllers
             return Mapper.Map<IEnumerable<EventModel>>(await Service.GetEventsAsync(filter));
         }
 
-        //[HttpGet]
-        //[Route("get")]
-        //public async Task<EventModel> GetEventByIdAsync(Guid eventId) {
-        //    return Mapper.Map<EventModel>(await Service.GetEventByIdAsync(eventId));
-        //}
+        [HttpGet]
+        [Route("get")]
+        public async Task<EventModel> GetEventByIdAsync(string eventId)
+        {
+            Guid eventIdGuid = new Guid(eventId);
+            return Mapper.Map<EventModel>(await Service.GetEventByIdAsync(eventIdGuid););
+        }
 
         //[HttpGet]
         //[Route(@"search/{pageNumber:int}/{pageSize:int}/{orderBy}/{orderAscending:bool}/{category:int}/{uLat:decimal}/{uLong:decimal}/{radius:decimal}/{startTime:regex(^s\d{4}-\d{2}-\d{2} \d{2}h\d{2}$)?}/{endTime:regex(^e\d{4}-\d{2}-\d{2} \d{2}h\d{2}$)?}/{searchString?}/{nameOnly:bool?}")]
@@ -146,6 +148,7 @@ namespace GeoEvents.WebAPI.Controllers
         public DateTime EndTime { get; set; }
         public decimal Lat { get; set; }
         public decimal Long { get; set; }
+        public int Category { get; set; }
         public List<int> Categories { get; set; }
         public decimal Price { get; set; }
         public int Capacity { get; set; }
@@ -154,7 +157,7 @@ namespace GeoEvents.WebAPI.Controllers
         public int RateCount { get; set; }
         public decimal RatingLocation { get; set; }
 
-        public EventModel(Guid id, string name, string description, DateTime starttime, DateTime endtime, decimal uLat, decimal uLong, List<int> categories, decimal price, int capacity, int reserved, decimal rating, int rateCount, decimal ratingLocation)
+        public EventModel(Guid id, string name, string description, DateTime starttime, DateTime endtime, decimal uLat, decimal uLong, int category, List<int> categories, decimal price, int capacity, int reserved, decimal rating, int rateCount, decimal ratingLocation)
         {
             this.Id = id;
             this.Name = name;
@@ -163,6 +166,7 @@ namespace GeoEvents.WebAPI.Controllers
             this.EndTime = endtime;
             this.Lat = uLat;
             this.Long = uLong;
+            this.Category = category;
             this.Categories = categories;
             this.Price = price;
             this.Capacity = capacity;

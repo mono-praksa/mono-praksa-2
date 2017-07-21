@@ -1,5 +1,6 @@
 ﻿import { Component, Input, OnInit, ViewChild, ElementRef, Output, EventEmitter } from '@angular/core';
 import { Http, Response, Headers, RequestOptions } from '@angular/http';
+import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
 
 import { IEvent } from '../models/event.model';
@@ -65,7 +66,8 @@ import { LoaderService } from '../../../shared/loader.service';
 })
 
 export class EventDetailComponent implements OnInit{
-    @Input() event: IEvent;
+    //@Input() event: IEvent;
+    private _event: IEvent;
     @ViewChild("carousel") carouselElement: ElementRef;
     @ViewChild("userRate") userRateElement: ElementRef;
     private _images: IImage[];
@@ -82,20 +84,23 @@ export class EventDetailComponent implements OnInit{
     constructor(
         private geocodingService: GeocodingService,
         private eventService: EventService,
-        private _loaderService: LoaderService
+        private _loaderService: LoaderService,
+        private activatedRoute: ActivatedRoute
     ) {
 
     }
 
     ngOnInit() {
         this.inpustName = this.itemId + '_rating';
+        this.eventService.getEventById(this.activatedRoute.snapshot.params['eventId'])
+            .subscribe((event: IEvent) => this.event = event);
         this._loaderService.loaderStatus.subscribe((value: boolean) => {
             this.getImagesLoading = value;
         });
 
         this._loaderService.displayLoader(true);
 
-        this.eventService.getImages(this.event.Id).subscribe((res: IImage[]) => {
+        this.eventService.getImages(this.activatedRoute.snapshot.params['eventId']).subscribe((res: IImage[]) => {
             this.images = res
             for (var i = 0; i < this.images.length; i++) {
                 var item = document.createElement("div");
@@ -119,9 +124,9 @@ export class EventDetailComponent implements OnInit{
             this._loaderService.displayLoader(false);
         });
 
-        this.geocodingService.getAddress(this.event.Lat, this.event.Long).subscribe(response => {
-            this.address = response;
-        });
+        //this.geocodingService.getAddress(this.event.Lat, this.event.Long).subscribe(response => {
+        //    this.address = response;
+        //});
     }
 
     rateChange(slider: any) {
@@ -164,7 +169,14 @@ export class EventDetailComponent implements OnInit{
         let parser = new DOMParser();
         let doc = parser.parseFromString(xmlString, "image/svg+xml");
         return doc.documentElement;
-        //document.getElementById("carousel-inner").appendChild(doc.documentElement);
+    }
+
+    get event(): IEvent {
+        return this._event;
+    }
+
+    set event(thisEvent: IEvent) {
+        this._event = thisEvent;
     }
 
     get getImagesLoading(): boolean {
