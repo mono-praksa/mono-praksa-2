@@ -92,9 +92,18 @@ namespace GeoEvents.Common
         /// </value>
         public decimal? RatingEvent { get; set; }
 
+        /// <summary>
+        /// Gets or sets the custom.
+        /// </summary>
+        /// <value>
+        /// The custom.
+        /// </value>
+        public string Custom { get; set; }
+
         #endregion Properties
 
         #region Constructors
+
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Filter"/> class.
@@ -112,7 +121,8 @@ namespace GeoEvents.Common
         /// <param name="orderAscending">The order ascending.</param>
         /// <param name="price">The price.</param>
         /// <param name="ratingEvent">The rating event.</param>
-        public Filter(decimal? uLat, decimal? uLong, decimal? radius, DateTime? startTime, DateTime? endTime, int? category, int? pageNumber, int? pageSize, string searchString, string orderBy, bool? orderAscending, decimal? price, decimal? ratingEvent)
+        /// <param name="custom">The custom.</param>
+        public Filter(decimal? uLat, decimal? uLong, decimal? radius, DateTime? startTime, DateTime? endTime, int? category, int? pageNumber, int? pageSize, string searchString, string orderBy, bool? orderAscending, decimal? price, decimal? ratingEvent, string custom)
         {
             ULat = uLat;
             ULong = uLong;
@@ -127,6 +137,7 @@ namespace GeoEvents.Common
             OrderAscending = orderAscending;
             Price = price;
             RatingEvent = ratingEvent;
+            Custom = custom;
         }
 
         #endregion Constructors

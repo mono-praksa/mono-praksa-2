@@ -166,7 +166,7 @@ namespace GeoEvents.Repository
                         Reserved = Convert.ToInt32(dr[10]),
                         Rating = Convert.ToDecimal(dr[11]),
                         RateCount = Convert.ToInt32(dr[12]),
-                        RatingLocation=Convert.ToDecimal(dr[14])
+                        Custom = dr[13].ToString()
                     };
 
                     SelectEvents.Add(Mapper.Map<IEvent>(tmp));
@@ -250,6 +250,11 @@ namespace GeoEvents.Repository
             if (!string.IsNullOrWhiteSpace(filter.SearchString))
             {
                 command.Parameters.AddWithValue(QueryHelper.ParSearchString, NpgsqlTypes.NpgsqlDbType.Varchar, "%" + filter.SearchString + "%");
+            }
+
+            if(!string.IsNullOrWhiteSpace(filter.Custom))
+            {
+                command.Parameters.AddWithValue(QueryHelper.ParCustomProperties, NpgsqlDbType.Jsonb, filter.Custom);
             }
         
         }

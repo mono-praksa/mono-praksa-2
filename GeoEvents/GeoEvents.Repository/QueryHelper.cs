@@ -58,6 +58,7 @@ namespace GeoEvents.Repository
         public static string ParRatingLocation = "@RatingLocation";
         public static string ParCustomProperties = "@Custom";
 
+
         /// <summary>
         /// Added Qouted strings
         /// </summary>
@@ -396,6 +397,23 @@ namespace GeoEvents.Repository
                     ParCategory, TableNameEventCatQ);
             }
 
+            /// adding custom search
+            if (!String.IsNullOrWhiteSpace(filter.Custom))
+            {
+                if (isNotFirst)
+
+                {
+                    selectString.Append(" AND ");
+                }
+                else
+                {
+                    isNotFirst = true;
+                }
+
+                selectString.AppendFormat(" ({0} @> {1})) ",
+                    CustomPropertiesQ, ParCustomProperties);
+            }
+
             ///ORDERING orderby orderAscend
             ///
 
@@ -429,6 +447,7 @@ namespace GeoEvents.Repository
                     selectString.AppendFormat(" order by {0} ",
                         TableNameEventRatingQ);
                     break;
+
             }
 
             if (filter.OrderAscending == true && String.IsNullOrEmpty(filter.OrderBy) == false)
