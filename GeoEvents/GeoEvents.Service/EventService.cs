@@ -121,6 +121,10 @@ namespace GeoEvents.Service
             evt.Reserved = 0;
             evt.Rating = 0;
             evt.RateCount = 0;
+<<<<<<< HEAD
+=======
+
+>>>>>>> origin/development-location
             return Repository.CreateEventAsync(evt);
         }
 
