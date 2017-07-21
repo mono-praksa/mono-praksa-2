@@ -1,5 +1,5 @@
 ﻿import { Component, OnInit, ElementRef, NgZone, ViewChild, Output, EventEmitter } from '@angular/core'
-import { FormControl, FormGroup, Validators, ValidatorFn, FormBuilder } from '@angular/forms'
+import { FormControl, FormGroup, Validators, ValidatorFn } from '@angular/forms'
 import { Observable } from 'rxjs/Rx'
 import { MapsAPILoader } from '@agm/core'
 
@@ -22,7 +22,6 @@ import { GeocodingService } from '../../../shared/geocoding.service';
 export class EventCreateDataComponent implements OnInit {
     @Output() eventEmitter = new EventEmitter();
     @ViewChild("search") searchElementRef: ElementRef;
-    private _createEventLoading: boolean = false;
     private _createdEvent: IEvent;
 
     //variables for google maps api
@@ -52,16 +51,12 @@ export class EventCreateDataComponent implements OnInit {
     address: FormControl;
     latitude: FormControl;
     longitude: FormControl;
-    customAttributeKey: FormControl;
-    customAttributeKeyPicker: FormControl;
-    customAttributeValue: FormControl;
 
     constructor(
         private _mapsAPILoader: MapsAPILoader,
         private _ngZone: NgZone,
         private _loaderService: LoaderService,
         private _eventService: EventService,
-        private fb: FormBuilder,
         private geocodingService: GeocodingService
     ) { }
 
@@ -69,10 +64,6 @@ export class EventCreateDataComponent implements OnInit {
         this.setCurrentPosition();
 
         this.buildForm();
-
-        this._loaderService.loaderStatus.subscribe((value: boolean) => {
-            this.createEventLoading = value;
-        });
 
         //GOOGLE MAPS
         this.setCurrentPosition();
@@ -108,18 +99,6 @@ export class EventCreateDataComponent implements OnInit {
         this.eventForm.controls["address"].setValue("");
         this.eventForm.controls["latitude"].setValue(null);
         this.eventForm.controls["longitude"].setValue(null);
-    }
-
-    private buildCustomAttributeForm(attributes: any): void {
-        this.customAttributeKey = new FormControl('');
-    }
-
-    private buildCustomAttributePickerForm(): void {
-        this.customAttributeKeyPicker = new FormControl('');
-    }
-
-    private buildCustomAttributeValueForm(): void {
-        this.customAttributeValue = new FormControl('');
     }
 
     private buildForm(): void {
@@ -160,7 +139,6 @@ export class EventCreateDataComponent implements OnInit {
     }
 
     createEvent(formValues: any) {
-        this._loaderService.displayLoader(true);
         let chosenCategories: number[] = [];
         this.categories.filter(checkbox => {
             if (checkbox.checked) {
@@ -181,15 +159,12 @@ export class EventCreateDataComponent implements OnInit {
             Capacity: formValues.capacity,
             Reserved: undefined,
             Rating: undefined,
-            RateCount: undefined
+            RateCount: undefined,
+            Custom: undefined
         }
         console.log(newEvent);
 
-        this._eventService.createEvent(newEvent).subscribe((response: IEvent) => {
-            this.createdEvent = response;
-            this.eventEmitter.emit(this.createdEvent);
-            this._loaderService.displayLoader(false);
-        });
+        this.eventEmitter.emit(newEvent);
     }
 
     updateCategories(category: number): void {
@@ -229,14 +204,6 @@ export class EventCreateDataComponent implements OnInit {
 
     set zoom(theZoom: number) {
         this._zoom = theZoom;
-    }
-
-    get createEventLoading(): boolean {
-        return this._createEventLoading;
-    }
-
-    set createEventLoading(isCreatingEvent: boolean) {
-        this._createEventLoading = isCreatingEvent;
     }
 
     get createdEvent(): IEvent {

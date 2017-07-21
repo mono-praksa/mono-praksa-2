@@ -13,6 +13,7 @@ import { EventMapComponent } from "./components/event-search-map.component";
 import { EventCreateComponent } from "./components/event-create.component";
 import { EventCreateImagesComponent } from "./components/event-create-images.component";
 import { EventCreateDataComponent } from "./components/event-create-data.component";
+import { EventCreateCustomizeComponent } from './components/event-create-customize.component';
 import { EventDetailComponent } from "./components/event-detail.component";
 
 import { EventService } from "./event.service";
@@ -38,7 +39,8 @@ import { GeocodingService } from '../../shared/geocoding.service';
 		EventMapComponent,
 		EventCreateComponent,
 		EventCreateImagesComponent,
-		EventCreateDataComponent,
+        EventCreateDataComponent,
+        EventCreateCustomizeComponent,
 		EventDetailComponent
 	],
 	

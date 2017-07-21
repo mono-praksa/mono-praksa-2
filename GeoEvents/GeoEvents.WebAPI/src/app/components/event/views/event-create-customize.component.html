@@ -1,0 +1,47 @@
+﻿<form [formGroup]="customAttributeForm" (ngSubmit)="addCustomAttribute(customAttributeForm.value)" autocomplete="off" novalidate>
+    <h2>Add Custom Attributes To Your Event</h2>
+    <div class="row">
+        <div class="col-xs-5">
+            <label for="key">Attribute Name</label>
+        </div>
+        <div class="col-xs-5">
+            <label for="value">Attribute Value</label>
+        </div>
+    </div>
+    <div class="row">
+        <div class="form-group col-xs-5" [ngClass]="{'has-error': key.touched && key.invalid}">
+            <input type="text" formControlName="key" class="form-control" id="key" placeholder="Name..." required>
+            <span class="help-block" *ngIf="key.touched && key.invalid">*Required!</span>
+        </div>
+        <div class="form-group col-xs-5" [ngClass]="{'has-error': value.touched && value.invalid}">
+            <input type="text" formControlName="value" class="form-control" id="value" placeholder="Value..." required>
+            <span class="help-block" *ngIf="value.touched && value.invalid">*Required!</span>
+        </div>
+        <div class="col-xs-2">
+            <button type="submit" class="btn btn-default" [disabled]="customAttributeForm.invalid">Add</button>
+        </div>
+    </div>
+    
+    <div class="row">
+        <div *ngIf="createdEvent.Custom">
+            <div *ngFor="let attribute of createdEvent.Custom; let i = index;">
+                <div class="row well">
+                    <div>
+                        <h3>{{attribute.key}}<span style="float: right; cursor: pointer;" class="glyphicon glyphicon-remove" (click)="removeKey(i)"></span></h3>
+                    </div>
+                    <ul>
+                        <li *ngFor="let value of attribute.values; let j = index;">
+                            <div>
+                                {{value}} <span style="float: right; cursor: pointer;" class="glyphicon glyphicon-remove" (click)="removeValue(i, j)"></span>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+<div class="col-sm-offset-8">
+    <button type="button" (click)="next()" class="btn btn-default" [disabled]="createEventLoading">Next</button>
+    <i class="fa fa-spinner fa-spin" style="font-size:24px" *ngIf="createEventLoading"></i>
+</div>

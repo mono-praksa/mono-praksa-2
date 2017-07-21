@@ -11,5 +11,11 @@
     Capacity: number,
     Reserved: number,
     Rating: number,
-    RateCount: number
+    RateCount: number,
+    Custom: CustomAttribute[]
+}
+
+interface CustomAttribute {
+    key: string,
+    values: string[]
 }

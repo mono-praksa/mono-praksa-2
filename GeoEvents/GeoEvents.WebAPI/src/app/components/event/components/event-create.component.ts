@@ -3,15 +3,21 @@ import { IEvent } from '../models/event.model'
 
 @Component({
     templateUrl: "app/components/event/views/event-create.component.html",
-    styles: [`.oneThird {width: 50%;}
-              .twoThirds {width: 75%;}`]
+    styles: [`.stepOne {width: 50%;}
+              .stepTwo {width: 75%;}
+              .stepThree {width: 100%;`]
 })
 export class EventCreateComponent {
     createdEvent: IEvent;
+    customizedEvent: IEvent;
     _skip: boolean = false;
 
-    eventEmitted(event: IEvent) {
+    createEvent(event: IEvent) {
         this.createdEvent = event;
+    }
+
+    customizeEvent(event: IEvent) {
+        this.customizedEvent = event;
     }
 
     skip(variable: boolean) {

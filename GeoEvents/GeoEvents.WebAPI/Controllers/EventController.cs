@@ -35,6 +35,8 @@ namespace GeoEvents.WebAPI.Controllers
         public async Task<EventModel> CreateEvent([FromBody] EventModel evt)
         {
             evt.Id = new Guid();
+            System.Diagnostics.Debug.WriteLine(evt.Custom);
+            
             return Mapper.Map<EventModel>(await Service.CreateEventAsync(Mapper.Map<IEvent>(evt)));
         }
 
@@ -137,6 +139,13 @@ namespace GeoEvents.WebAPI.Controllers
             return Service.UpdateReservationAsync(eventId);
         }
     }
+
+    public class CustomAttribute
+    {
+        public string key { get; set; }
+        public List<string> values { get; set; }
+    }
+
     public class EventModel
     {
         public Guid Id { get; set; }
@@ -153,8 +162,9 @@ namespace GeoEvents.WebAPI.Controllers
         public decimal Rating { get; set; }
         public int RateCount { get; set; }
         public decimal RatingLocation { get; set; }
+        public List<CustomAttribute> Custom { get; set; }
 
-        public EventModel(Guid id, string name, string description, DateTime starttime, DateTime endtime, decimal uLat, decimal uLong, List<int> categories, decimal price, int capacity, int reserved, decimal rating, int rateCount, decimal ratingLocation)
+        public EventModel(Guid id, string name, string description, DateTime starttime, DateTime endtime, decimal uLat, decimal uLong, List<int> categories, decimal price, int capacity, int reserved, decimal rating, int rateCount, decimal ratingLocation, List<CustomAttribute> custom)
         {
             this.Id = id;
             this.Name = name;
@@ -170,6 +180,7 @@ namespace GeoEvents.WebAPI.Controllers
             this.Rating = rating;
             this.RateCount = rateCount;
             this.RatingLocation = ratingLocation;
+            this.Custom = custom;
         }
 
         public EventModel()
