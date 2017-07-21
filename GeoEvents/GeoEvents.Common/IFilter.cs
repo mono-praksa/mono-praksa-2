@@ -86,6 +86,12 @@ namespace GeoEvents.Common
         /// </value>
         decimal? RatingEvent { get; set; }
 
+        /// <summary>
+        /// Gets or sets the custom.
+        /// </summary>
+        /// <value>
+        /// The custom attributes.
+        /// </value>
         string Custom { get; set; }
     }
 }

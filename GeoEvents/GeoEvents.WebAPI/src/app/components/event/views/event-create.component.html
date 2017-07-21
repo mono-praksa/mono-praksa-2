@@ -1,0 +1,17 @@
+﻿<div class="progress progress-striped active">
+    <div class="progress-bar" role="progressbar" [ngClass]="{'stepOne': !createdEvent, 'stepTwo': createdEvent, 'stepThree': false}">
+        <span *ngIf="!createdEvent">Basic Information</span>
+        <span *ngIf="createdEvent">Customize</span>
+        <span *ngIf="customizedEvent">Add Images</span>
+    </div>
+    <div *ngIf="!createdEvent" class="progress-bar progress-bar-danger" role="progressbar" style="width:25%">
+        Customize
+    </div>
+    <div *ngIf="!customizedEvent" class="progress-bar progress-bar-danger" role="progressbar" style="width:25%">
+        Add Images
+    </div>
+</div>
+
+<create-event (eventEmitter)="createEvent($event)" *ngIf="!createdEvent || _skip"></create-event>
+<create-customize *ngIf="createdEvent && !customizedEvent" (eventEmitter)="customizeEvent($event)" [createdEvent]="createdEvent"></create-customize>
+<create-images *ngIf="customizedEvent && !_skip" (emittSkip)="skip($event)" [customizedEvent]="customizedEvent"></create-images>

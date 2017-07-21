@@ -1,8 +1,21 @@
-﻿<div class="col-md-7">
-    <h1>Djsidogjsoidg</h1>
-    <div *ngFor="let evt of events" style="padding-bottom: 30px;">
-        <button class="btn btn-link btn-lg" style="padding: 0px;" (click)="eventDetails(evt)">{{evt.Name}}</button><br />
-        <small>{{evt.StartTime | date: 'MMMM d, y, HH:mm'}} - {{evt.EndTime | date: 'MMMM d, y, HH:mm'}}</small><br />
-        {{evt.Description}}
-    </div>
+﻿<div class="table-resposnive">
+	<table class="table table-striped">
+		<thead>
+			<tr>
+				<th class="col-md-2">Name</th>
+				<th class="col-md-2">Start Time</th>
+				<th class="col-md-2">End Time</th>
+				<th class="col-md-6">Description</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr *ngFor="let evt of events">
+				<th class="col-md-2"><button class="btn btn-link btn-lg" style="padding: 0px;" (click)="eventDetails(evt)"><small>{{evt.Name}}</small></button></th>
+				<th class="col-md-2"><small>{{evt.StartTime | date: 'MMMM d, y, HH:mm'}}</small></th>
+				<th class="col-md-2"><small>{{evt.EndTime | date: 'MMMM d, y, HH:mm'}}</small></th>
+				<th class="col-md-6"><small>{{evt.Description}}</small></th>
+			</tr>
+		</tbody>
+	</table>
 </div>
+

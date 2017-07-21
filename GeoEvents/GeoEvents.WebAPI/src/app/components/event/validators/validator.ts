@@ -1,4 +1,4 @@
-﻿import { FormGroup } from '@angular/forms'
+﻿import { FormGroup, FormControl } from '@angular/forms'
 
 function stringToDateArray(_date: string, _format: string, _delimiter: string) {
     var formatLowerCase = _format.toLowerCase();
@@ -89,5 +89,18 @@ export function needBothOrNeitherOfAddressAndRadius(addressKey: string, radiusKe
         else {
             return null;
         }
+    }
+}
+
+export function uniqueName(names: string[]){
+    return (control: FormControl): { [key: string]: any } => {
+        if (!names) return null
+
+        if (names.some(function (name) {
+            return name == control.value
+        })) {
+            return { 'uniqueName': 'invalid' }
+        }
+        return null
     }
 }

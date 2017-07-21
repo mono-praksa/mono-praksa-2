@@ -11,5 +11,12 @@
     Capacity: number,
     Reserved: number,
     Rating: number,
-    RateCount: number
+    RateCount: number,
+    CustomModel: CustomAttribute[],
+    Custom: string
+}
+
+export interface CustomAttribute {
+    key: string,
+    values: string[]
 }

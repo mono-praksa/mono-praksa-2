@@ -105,6 +105,24 @@ namespace GeoEvents.Common
         #region Constructors
 
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Filter"/> class.
+        /// </summary>
+        /// <param name="uLat">The u lat.</param>
+        /// <param name="uLong">The u long.</param>
+        /// <param name="radius">The radius.</param>
+        /// <param name="startTime">The start time.</param>
+        /// <param name="endTime">The end time.</param>
+        /// <param name="category">The category.</param>
+        /// <param name="pageNumber">The page number.</param>
+        /// <param name="pageSize">Size of the page.</param>
+        /// <param name="searchString">The search string.</param>
+        /// <param name="orderBy">The order by.</param>
+        /// <param name="orderAscending">The order ascending.</param>
+        /// <param name="price">The price.</param>
+        /// <param name="ratingEvent">The rating event.</param>
+        /// <param name="custom">The custom attributes.</param>
+
         public Filter(decimal? uLat, decimal? uLong, decimal? radius, DateTime? startTime, DateTime? endTime, int? category, int? pageNumber, int? pageSize, string searchString, string orderBy, bool? orderAscending, decimal? price, decimal? ratingEvent, string custom)
         {
             ULat = uLat;

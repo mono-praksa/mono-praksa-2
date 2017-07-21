@@ -171,6 +171,7 @@ namespace GeoEvents.DAL
         /// <param name="RateCount">The rate count.</param>
         /// <param name="RatingLocation">The rating location.</param>
         /// <param name="LocationId">The location identifier.</param>
+        /// <param name="Custom">The custom attributes.</param>
         public EventEntity(Guid id, DateTime startTime, DateTime endTime, double latitude,
             double longitude, string name, string description, int category, double price, int capacity, int reserved, double rating, int rateCount, Guid locationId, string custom)
         {
@@ -189,7 +190,7 @@ namespace GeoEvents.DAL
             this.RateCount = rateCount;
             this.LocationId = locationId;
             this.Custom = custom;
-        }
+
         #endregion Constructors
 
     }

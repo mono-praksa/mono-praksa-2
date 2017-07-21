@@ -146,10 +146,10 @@ namespace GeoEvents.Model
         public Guid LocationId { get; set; }
 
         /// <summary>
-        /// Gets or sets the custom.
+        /// Gets or sets the json string representing custom attributes
         /// </summary>
         /// <value>
-        /// The custom.
+        /// The string.
         /// </value>
         public string Custom { get; set; }
         #endregion Properties

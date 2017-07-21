@@ -258,6 +258,12 @@ namespace GeoEvents.Repository
             {
                 command.Parameters.AddWithValue(QueryHelper.ParSearchString, NpgsqlDbType.Jsonb, filter.Custom);
             }
+
+            if(!string.IsNullOrWhiteSpace(filter.Custom))
+            {
+                command.Parameters.AddWithValue(QueryHelper.ParCustom, NpgsqlDbType.Jsonb, filter.Custom);
+            }
+
         }
 
         /// <summary>
@@ -278,7 +284,6 @@ namespace GeoEvents.Repository
                 #region Update rating for event
 
                 await Connection.CreateConnection().OpenAsync();
-
 
                 int NewRateCount = RateCount + 1;
                 double NewRating = (RateCount * CurrentRating + rating) / Convert.ToDouble(NewRateCount);

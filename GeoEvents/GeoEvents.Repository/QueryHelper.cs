@@ -30,8 +30,8 @@ namespace GeoEvents.Repository
         private static string RatingQ = "rating";
         private static string RateCountQ = "ratecount";
         private static string RatingLocationQ = "ratinglocation";
-        private static string AddressQ = "address";
         private static string CustomQ = "custom";
+        private static string AddressQ = "address";
 
         /// <summary>
         /// Parametar Constant strings
@@ -408,6 +408,7 @@ namespace GeoEvents.Repository
                     ParCategory, TableNameEventCatQ);
             }
 
+            /// adding custom search
             if (!String.IsNullOrWhiteSpace(filter.Custom))
             {
                 if (isNotFirst)
@@ -457,6 +458,7 @@ namespace GeoEvents.Repository
                     selectString.AppendFormat(" order by {0} ",
                         TableNameEventRatingQ);
                     break;
+
             }
 
             if (filter.OrderAscending == true && String.IsNullOrEmpty(filter.OrderBy) == false)
@@ -480,7 +482,7 @@ namespace GeoEvents.Repository
         public static string GetInsertEventQueryString()
         {
             StringBuilder insertString = new StringBuilder();
-            insertString.AppendFormat("INSERT INTO {0} VALUES ({1}, {2}, {3}, {4}, {5}, {6}, {7}, {8}, {9}, {10}, {11}, {12}, jsonb_object({13}),{14})",
+            insertString.AppendFormat("INSERT INTO {0} VALUES ({1}, {2}, {3}, {4}, {5}, {6}, {7}, {8}, {9}, {10}, {11}, {12}, {13},{14})",
                 TableNameEventQ,ParId,ParName,ParDescription,ParCategory,ParLatitude,ParLongitude,
                 ParStartTime,ParEndTime,ParRating,ParRateCount,ParPrice,ParCapacity,ParReserved,
                 ParCustom,ParLocationId);

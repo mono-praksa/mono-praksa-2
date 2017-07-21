@@ -3,7 +3,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs/Subscription';
 import { MapsAPILoader } from '@agm/core';
 
-import { IEvent } from '../models/event.model';
+import { IEvent, CustomAttribute } from '../models/event.model';
 import { IFilter } from '../models/filter.model';
 
 import { PreserveSearchQuerryService } from '../../../shared/preserve-search-querry.service';
@@ -38,6 +38,8 @@ export class EventSearchComponent implements OnInit {
     longitude: FormControl;
     price: FormControl;
     rating: FormControl;
+    customCategoryName: FormControl;
+    customCategoryValue: FormControl;
 	private _filter: IFilter;
 	private dataServiceSubscription: Subscription;
 	
@@ -170,7 +172,8 @@ export class EventSearchComponent implements OnInit {
                 Category: 127,
                 Price: null,
                 RatingEvent: null,
-				SearchString: this._preserveSearchQuerryService.searchQuerry,
+                SearchString: this._preserveSearchQuerryService.searchQuerry,
+                Custom: null,
 				
 				PageNumber: 1,
 				PageSize: 10,
@@ -188,7 +191,13 @@ export class EventSearchComponent implements OnInit {
 	//submits
     onSubmit(formValues: any): void {
         this._loaderService.displayLoader(true);
-		let selectedCategories = this.getSelectedCategories();
+        let selectedCategories = this.getSelectedCategories();
+
+        let customModel: CustomAttribute[] = [{ key: formValues.customCategoryName, values: [formValues.customCategoryValue] }];
+        let custom: string = null;
+        if (customModel[0].key != null) {
+            custom = JSON.stringify(customModel);
+        }
 		
 		let newFilter : IFilter = {
             ULat: formValues.latitude,
@@ -200,6 +209,8 @@ export class EventSearchComponent implements OnInit {
             SearchString: formValues.searchString,
             Price: formValues.price,
             RatingEvent: formValues.rating,
+            Custom: custom,
+            
 			
 			PageNumber: 1,
 			PageSize: 10,
@@ -352,6 +363,8 @@ export class EventSearchComponent implements OnInit {
         this.longitude = new FormControl(null);
         this.price = new FormControl(null, Validators.pattern(/^[0-9]+(\.\d{1,2})?$/));
         this.rating = new FormControl(null, Validators.pattern(/(^[1-4](\.\d+)?|5)$/));
+        this.customCategoryName = new FormControl(null);
+        this.customCategoryValue = new FormControl(null);
 
         this.filterForm = new FormGroup({
             start: this.start,
@@ -362,7 +375,9 @@ export class EventSearchComponent implements OnInit {
             latitude: this.latitude,
             longitude: this.longitude,
             price: this.price,
-            rating: this.rating
+            rating: this.rating,
+            customCategoryName: this.customCategoryName,
+            customCategoryValue: this.customCategoryValue
         });
         this.filterForm.setValidators([needBothOrNeitherOfAddressAndRadius('latitude', 'radius'), endDateBeforeStartDate('start', 'end')]);
     }
