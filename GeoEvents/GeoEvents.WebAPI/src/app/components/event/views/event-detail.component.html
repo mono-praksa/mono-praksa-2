@@ -1,18 +1,18 @@
 ﻿<div class="col-md-7">
-    <h2 class="event-name">{{event.Name}}</h2> <p class="event-time">{{event.StartTime | date: 'MMMM d, y, HH:mm'}} - {{event.EndTime | date: 'MMMM d, y, HH:mm'}}</p>
+    <h2 class="event-name">{{event?.Name}}</h2> <p class="event-time">{{event?.StartTime | date: 'MMMM d, y, HH:mm'}} - {{event?.EndTime | date: 'MMMM d, y, HH:mm'}}</p>
     <h3>Details</h3> 
     <div class="well">
-        <p>{{event.Description}}</p>
+        <p>{{event?.Description}}</p>
         
         <h4>Location: {{address}}</h4>
         Categories:
-        <ul>
+        <ul *ngIf="event">
             <li *ngFor="let category of event.Categories">
                 {{CategoryEnum[category]}}
             </li>
         </ul>
         <div style="float:left; padding-right: 10px;">
-            <h4>Rating: {{event.Rating}}</h4>
+            <h4>Rating: {{event?.Rating}}</h4>
         </div>
         <!--<div>
             1<input type="range" min="1" max="5" step="1" #slider (input)="rateChange(slider)" value="3" />5
@@ -37,10 +37,10 @@
         </div>
       
         <div style="clear:left">
-            <h4>RateCount: {{event.RateCount}}</h4>
+            <h4>RateCount: {{event?.RateCount}}</h4>
         </div>
         <div style="float: left; padding-right: 10px;">
-            <h4>Reserved/Capacity: {{event.Reserved}}/{{event.Capacity}}</h4>
+            <h4>Reserved/Capacity: {{event?.Reserved}}/{{event?.Capacity}}</h4>
         </div>
         <div>
             <input type="button" class="btn btn-default" value="Reserve" (click)="reserve()" />
