@@ -10,10 +10,7 @@ namespace GeoEvents.Service.Common
 {
     public interface ILocationService
     {
-<<<<<<< HEAD
-=======
-        Task<ILocation> GetLocationAsync(string address, double eventRating, int eventRateCount);
->>>>>>> origin/development-location
+
 
         /// <summary>
         /// Getslocation or creates if there is non  asynchronous.
@@ -35,7 +32,6 @@ namespace GeoEvents.Service.Common
         /// </returns>
         Task<ILocation> CreateLocationAsync(ILocation location);
 
-<<<<<<< HEAD
         /// <summary>
         /// Get Location by Id
         /// </summary>
@@ -54,13 +50,8 @@ namespace GeoEvents.Service.Common
         /// <returns>
         /// Location
         /// </returns>
-        Task<ILocation> UpdateLocationRatingAsync(Guid id, double rating);
-    }
-=======
-        Task<ILocation> GetLocationByIdAsync(Guid id);
-
         Task<ILocation> UpdateLocationRatingAsync(Guid eventId, double rating);
 
         }
->>>>>>> origin/development-location
+
 }
