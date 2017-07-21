@@ -80,7 +80,7 @@ namespace GeoEvents.WebAPI.Controllers
         public async Task<EventModel> GetEventByIdAsync(string eventId)
         {
             Guid eventIdGuid = new Guid(eventId);
-            return Mapper.Map<EventModel>(await Service.GetEventByIdAsync(eventIdGuid););
+            return Mapper.Map<EventModel>(await Service.GetEventByIdAsync(eventIdGuid));
         }
 
         //[HttpGet]

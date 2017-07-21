@@ -161,6 +161,7 @@ export class EventCreateDataComponent implements OnInit {
             EndTime: formValues.end,
             Lat: formValues.latitude,
             Long: formValues.longitude,
+            Category: undefined,
             Categories: chosenCategories,
             Price: formValues.price,
             Capacity: formValues.capacity,
