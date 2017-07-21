@@ -190,6 +190,7 @@ namespace GeoEvents.DAL
             this.RateCount = rateCount;
             this.LocationId = locationId;
             this.Custom = custom;
+        }
 
         #endregion Constructors
 

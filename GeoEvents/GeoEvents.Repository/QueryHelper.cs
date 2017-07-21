@@ -98,16 +98,11 @@ namespace GeoEvents.Repository
         {
             StringBuilder selectString = new StringBuilder();
 
-            if (filter.OrderBy == "Distance")
-            {
-                selectString.AppendFormat("SELECT COUNT({0}), earth_distance(ll_to_earth({1},{2}), ll_to_earth({3},{4})) as distance from {5} WHERE",
-                    TableNameEventIdQ, ParLatitude, ParLongitude, TableNameEventLatQ, TableNameEventLongQ, TableNameEventQ);
-            }
-            else
-            {
+ 
+            
                 selectString.AppendFormat("SELECT COUNT({0}) FROM {1} WHERE",
                     TableNameEventIdQ, TableNameEventQ);
-            }
+            
 
             bool isNotFirst = false;
 
@@ -146,7 +141,7 @@ namespace GeoEvents.Repository
                     isNotFirst = true;
                 }
 
-                selectString.AppendFormat(" {0} < {1})",
+                selectString.AppendFormat(" ({0} < {1})",
                     ParUserStartTime, TableNameEventEndTimeQ);
             }
             else if (filter.EndTime > DefaulTime && filter.StartTime == null)
@@ -176,7 +171,7 @@ namespace GeoEvents.Repository
                 {
                     isNotFirst = true;
                 }
-                selectString.AppendFormat(" (  {0} ILIKE ('% {1} %')) ",
+                selectString.AppendFormat(" (  {0} ILIKE ({1})) ",
                     NameQ, ParSearchString);
             }
 
@@ -191,57 +186,10 @@ namespace GeoEvents.Repository
                 {
                     isNotFirst = true;
                 }
-                selectString.AppendFormat(" ({0} & {1} > 0",
+                selectString.AppendFormat(" ({0} & {1} > 0)",
                     ParCategory, TableNameEventCatQ);
             }
-
-            ///ORDERING orderby orderAscend
-            ///
-
-            switch (filter.OrderBy)
-            {
-                case "Name":
-                    selectString.AppendFormat(" order by {0} ",
-                        TableNameEventNameQ);
-                    break;
-
-                case "StartTime":
-                    selectString.AppendFormat(" order by {0} ",
-                        TableNameEventStartTimeQ);
-                    break;
-
-                case "EndTime":
-                    selectString.AppendFormat(" order by {0} ",
-                        TableNameEventEndTimeQ);
-                    break;
-
-                case "Distance":
-                    selectString.Append(" order by distance ");
-                    break;
-
-                case "Price":
-                    selectString.AppendFormat(" order by {0} ",
-                        TableNameEventPriceQ);
-                    break;
-
-                case "Rating":
-                    selectString.AppendFormat(" order by {0} ",
-                        TableNameEventRatingQ);
-                    break;
-            }
-
-            if (filter.OrderAscending == true && String.IsNullOrEmpty(filter.OrderBy) == false)
-            {
-                selectString.Append(" asc ");
-            }
-            else
-            {
-                selectString.Append(" desc ");
-            }
-
-            selectString.AppendFormat(" LIMIT({0}) OFFSET ({1})",
-                filter.PageSize.ToString(), ((filter.PageNumber - 1) * filter.PageSize).ToString());
-
+           
             return selectString.ToString();
         }
 
@@ -370,7 +318,7 @@ namespace GeoEvents.Repository
                     isNotFirst = true;
                 }
 
-                selectString.AppendFormat("{0}>{1}) ",
+                selectString.AppendFormat(" ({0}>{1}) ",
                     ParUserEndTime, TableNameEventStartTimeQ);
             }
             ///
@@ -421,7 +369,7 @@ namespace GeoEvents.Repository
                     isNotFirst = true;
                 }
 
-                selectString.AppendFormat(" ({0} @> {1})) ",
+                selectString.AppendFormat(" ({0} @> {1}) ",
                     CustomQ, ParCustom);
             }
 
