@@ -85,5 +85,7 @@ namespace GeoEvents.Common
         /// The rating event.
         /// </value>
         decimal? RatingEvent { get; set; }
+
+        string Custom { get; set; }
     }
 }

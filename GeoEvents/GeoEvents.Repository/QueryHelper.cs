@@ -31,6 +31,7 @@ namespace GeoEvents.Repository
         private static string RateCountQ = "ratecount";
         private static string RatingLocationQ = "ratinglocation";
         private static string AddressQ = "address";
+        private static string CustomQ = "custom";
 
         /// <summary>
         /// Parametar Constant strings
@@ -76,6 +77,7 @@ namespace GeoEvents.Repository
         private static string TableNameEventRateCountQ = "events.ratecount";
         private static string TableNameEventRatingLocationQ = "events.ratinglocation";
         private static string TableNameEventLocationIdQ = "events.locationid";
+        private static string TableNameEventCustomQ = "events.custom";
 
         /// <summary>
         /// Default DateTime
@@ -404,6 +406,22 @@ namespace GeoEvents.Repository
 
                 selectString.AppendFormat(" ({0} & {1} > 0)",
                     ParCategory, TableNameEventCatQ);
+            }
+
+            if (!String.IsNullOrWhiteSpace(filter.Custom))
+            {
+                if (isNotFirst)
+
+                {
+                    selectString.Append(" AND ");
+                }
+                else
+                {
+                    isNotFirst = true;
+                }
+
+                selectString.AppendFormat(" ({0} @> {1})) ",
+                    CustomQ, ParCustom);
             }
 
             ///ORDERING orderby orderAscend

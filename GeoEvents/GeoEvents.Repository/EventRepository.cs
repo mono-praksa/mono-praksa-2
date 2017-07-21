@@ -212,48 +212,52 @@ namespace GeoEvents.Repository
         {
             if (filter.ULat != null)
             {
-                command.Parameters.AddWithValue(QueryHelper.ParLatitude, NpgsqlTypes.NpgsqlDbType.Double, filter.ULat);
+                command.Parameters.AddWithValue(QueryHelper.ParLatitude, NpgsqlDbType.Double, filter.ULat);
             }
             if (filter.ULong != null)
             {
-                command.Parameters.AddWithValue(QueryHelper.ParLongitude, NpgsqlTypes.NpgsqlDbType.Double, filter.ULong);
+                command.Parameters.AddWithValue(QueryHelper.ParLongitude, NpgsqlDbType.Double, filter.ULong);
             }
 
             if (filter.Radius != null)
             {
-                command.Parameters.AddWithValue(QueryHelper.ParRadius, NpgsqlTypes.NpgsqlDbType.Double, filter.Radius * 1000);
+                command.Parameters.AddWithValue(QueryHelper.ParRadius, NpgsqlDbType.Double, filter.Radius * 1000);
             }
 
             if (filter.StartTime != null)
             {
-                command.Parameters.AddWithValue(QueryHelper.ParUserStartTime, NpgsqlTypes.NpgsqlDbType.Timestamp, filter.StartTime);
+                command.Parameters.AddWithValue(QueryHelper.ParUserStartTime, NpgsqlDbType.Timestamp, filter.StartTime);
             }
 
             if (filter.EndTime != null)
             {
-                command.Parameters.AddWithValue(QueryHelper.ParUserEndTime, NpgsqlTypes.NpgsqlDbType.Timestamp, filter.EndTime);
+                command.Parameters.AddWithValue(QueryHelper.ParUserEndTime, NpgsqlDbType.Timestamp, filter.EndTime);
             }
 
             if (filter.Category != null)
             {
-                command.Parameters.AddWithValue(QueryHelper.ParCategory, NpgsqlTypes.NpgsqlDbType.Integer, filter.Category);
+                command.Parameters.AddWithValue(QueryHelper.ParCategory, NpgsqlDbType.Integer, filter.Category);
             }
 
             if (filter.Price != null)
             {
-                command.Parameters.AddWithValue(QueryHelper.ParPrice, NpgsqlTypes.NpgsqlDbType.Double, filter.Price);
+                command.Parameters.AddWithValue(QueryHelper.ParPrice, NpgsqlDbType.Double, filter.Price);
             }
 
             if (filter.RatingEvent != null)
             {
-                command.Parameters.AddWithValue(QueryHelper.ParRating, NpgsqlTypes.NpgsqlDbType.Double, filter.RatingEvent);
+                command.Parameters.AddWithValue(QueryHelper.ParRating, NpgsqlDbType.Double, filter.RatingEvent);
             }
 
             if (!string.IsNullOrWhiteSpace(filter.SearchString))
             {
-                command.Parameters.AddWithValue(QueryHelper.ParSearchString, NpgsqlTypes.NpgsqlDbType.Varchar, "%" + filter.SearchString + "%");
+                command.Parameters.AddWithValue(QueryHelper.ParSearchString, NpgsqlDbType.Varchar, "%" + filter.SearchString + "%");
             }
-        
+
+            if (!string.IsNullOrWhiteSpace(filter.Custom))
+            {
+                command.Parameters.AddWithValue(QueryHelper.ParSearchString, NpgsqlDbType.Jsonb, filter.Custom);
+            }
         }
 
         /// <summary>
@@ -279,9 +283,9 @@ namespace GeoEvents.Repository
                 int NewRateCount = RateCount + 1;
                 double NewRating = (RateCount * CurrentRating + rating) / Convert.ToDouble(NewRateCount);
 
-                commandUpdateRating.Parameters.AddWithValue(QueryHelper.ParEventId, NpgsqlTypes.NpgsqlDbType.Uuid, eventId);
-                commandUpdateRating.Parameters.AddWithValue(QueryHelper.ParRating, NpgsqlTypes.NpgsqlDbType.Double, NewRating);
-                commandUpdateRating.Parameters.AddWithValue(QueryHelper.ParRateCount, NpgsqlTypes.NpgsqlDbType.Integer, NewRateCount);
+                commandUpdateRating.Parameters.AddWithValue(QueryHelper.ParEventId, NpgsqlDbType.Uuid, eventId);
+                commandUpdateRating.Parameters.AddWithValue(QueryHelper.ParRating, NpgsqlDbType.Double, NewRating);
+                commandUpdateRating.Parameters.AddWithValue(QueryHelper.ParRateCount, NpgsqlDbType.Integer, NewRateCount);
 
                 await commandUpdateRating.ExecuteNonQueryAsync();
                 #endregion
@@ -291,7 +295,7 @@ namespace GeoEvents.Repository
                 #endregion
                 #region return updated event
 
-                commandSelectUpdated.Parameters.AddWithValue(QueryHelper.ParEventId, NpgsqlTypes.NpgsqlDbType.Uuid, eventId);
+                commandSelectUpdated.Parameters.AddWithValue(QueryHelper.ParEventId, NpgsqlDbType.Uuid, eventId);
 
                 DbDataReader drSelect = await commandSelectUpdated.ExecuteReaderAsync();
                 while (drSelect.Read())
@@ -340,7 +344,7 @@ namespace GeoEvents.Repository
             using (NpgsqlCommand commandUpdate = new NpgsqlCommand(QueryHelper.GetInsertUpdateReservationQueryString(), Connection.CreateConnection()))
             using (NpgsqlCommand commandSelect = new NpgsqlCommand(QueryHelper.GetSelectEventByIdQueryString(), Connection.CreateConnection()))
             {
-                commandGetReserved.Parameters.AddWithValue(QueryHelper.ParEventId, NpgsqlTypes.NpgsqlDbType.Uuid, eventId);
+                commandGetReserved.Parameters.AddWithValue(QueryHelper.ParEventId, NpgsqlDbType.Uuid, eventId);
 
               
                     await Connection.CreateConnection().OpenAsync();
@@ -351,12 +355,12 @@ namespace GeoEvents.Repository
                 parReserved++;
 
 
-                commandUpdate.Parameters.AddWithValue(QueryHelper.ParEventId, NpgsqlTypes.NpgsqlDbType.Uuid, eventId);
-                commandUpdate.Parameters.AddWithValue(QueryHelper.ParReserved, NpgsqlTypes.NpgsqlDbType.Integer, parReserved);
+                commandUpdate.Parameters.AddWithValue(QueryHelper.ParEventId, NpgsqlDbType.Uuid, eventId);
+                commandUpdate.Parameters.AddWithValue(QueryHelper.ParReserved, NpgsqlDbType.Integer, parReserved);
 
                 await commandUpdate.ExecuteNonQueryAsync();          
 
-                commandSelect.Parameters.AddWithValue(QueryHelper.ParEventId, NpgsqlTypes.NpgsqlDbType.Uuid, eventId);
+                commandSelect.Parameters.AddWithValue(QueryHelper.ParEventId, NpgsqlDbType.Uuid, eventId);
                 DbDataReader dr = await commandSelect.ExecuteReaderAsync();
                 while (dr.Read())
                 {
