@@ -30,7 +30,7 @@ namespace GeoEvents.Repository
         private static string RatingQ = "\"Rating\"";
         private static string RateCountQ = "\"RateCount\"";
         private static string RatingLocationQ = "\"RatingLocation\"";
-
+        private static string CustomPropertiesQ = "\"CustomProperties\"";
         /// <summary>
         /// Parametar Constant strings
         /// </summary>
@@ -56,7 +56,7 @@ namespace GeoEvents.Repository
         public static string ParRating = "@Rating";
         public static string ParRateCount = "@RateCount";
         public static string ParRatingLocation = "@RatingLocation";
-
+        public static string ParCustomProperties = "@Custom";
 
         /// <summary>
         /// Added Qouted strings
@@ -74,6 +74,7 @@ namespace GeoEvents.Repository
         private static string TableNameEventRatingQ = TableNameEventQ + "." + RatingQ;
         private static string TableNameEventRateCountQ = TableNameEventQ + "." + RateCountQ;
         private static string TableNameEventRatingLocationQ = TableNameEventQ + "." + RatingLocationQ;
+        private static string TableNameEventCustomPropertiesQ = TableNameEventQ + "." + CustomPropertiesQ;
 
         /// <summary>
         /// Default DateTime
@@ -451,9 +452,9 @@ namespace GeoEvents.Repository
         public static string GetInsertEventString()
         {
             StringBuilder insertString = new StringBuilder();
-            insertString.AppendFormat("INSERT INTO {0} VALUES ({1}, {2}, {3}, {4}, {5}, {6}, {7}, {8}, {9}, {10}, {11}, {12}, {13})",
-                TableNameEventQ, ParId, ParStartTime, ParEndTime, ParLat, ParLong, ParName, ParDescription, ParCategory, ParPrice,
-                ParCapacity, ParReserved, ParRating, ParRateCount);
+            insertString.AppendFormat("INSERT INTO {0} VALUES ({1}, {2}, {3}, {4}, {5}, {6}, {7}, {8}, {9}, {10}, {11}, {12}, {13}, {14})",
+                TableNameEventQ, ParId, ParStartTime, ParEndTime, ParLat, ParLong, ParName, ParDescription, ParCategory,
+                 ParPrice, ParCapacity, ParReserved, ParRating, ParRateCount, ParCustomProperties);
 
             return insertString.ToString();
         }

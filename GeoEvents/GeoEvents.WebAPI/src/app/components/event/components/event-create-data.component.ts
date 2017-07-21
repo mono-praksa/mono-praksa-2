@@ -160,6 +160,7 @@ export class EventCreateDataComponent implements OnInit {
             Reserved: undefined,
             Rating: undefined,
             RateCount: undefined,
+            CustomModel: undefined,
             Custom: undefined
         }
         console.log(newEvent);
