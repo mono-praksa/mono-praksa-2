@@ -3,7 +3,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs/Subscription';
 import { MapsAPILoader } from '@agm/core';
 
-import { IEvent } from '../models/event.model';
+import { IEvent, CustomAttribute } from '../models/event.model';
 import { IFilter } from '../models/filter.model';
 
 import { PreserveSearchQuerryService } from '../../../shared/preserve-search-querry.service';
@@ -38,6 +38,8 @@ export class EventSearchComponent implements OnInit {
     longitude: FormControl;
     price: FormControl;
     rating: FormControl;
+    customCategoryName: FormControl;
+    customCategoryValue: FormControl;
 	private _filter: IFilter;
 	private dataServiceSubscription: Subscription;
 	
@@ -170,7 +172,8 @@ export class EventSearchComponent implements OnInit {
                 Category: 127,
                 Price: null,
                 RatingEvent: null,
-				SearchString: this._preserveSearchQuerryService.searchQuerry,
+                SearchString: this._preserveSearchQuerryService.searchQuerry,
+                Custom: null,
 				
 				PageNumber: 1,
 				PageSize: 10,
@@ -188,7 +191,13 @@ export class EventSearchComponent implements OnInit {
 	//submits
     onSubmit(formValues: any): void {
         this._loaderService.displayLoader(true);
-		let selectedCategories = this.getSelectedCategories();
+        let selectedCategories = this.getSelectedCategories();
+
+        let customModel: CustomAttribute[] = [{ key: formValues.customCategoryName, values: [formValues.customCategoryValue] }];
+        let custom: string = null;
+        if (customModel.length !== 0) {
+            custom = JSON.stringify(customModel);
+        }
 		
 		let newFilter : IFilter = {
             ULat: formValues.latitude,
@@ -200,6 +209,8 @@ export class EventSearchComponent implements OnInit {
             SearchString: formValues.searchString,
             Price: formValues.price,
             RatingEvent: formValues.rating,
+            Custom: custom,
+            
 			
 			PageNumber: 1,
 			PageSize: 10,

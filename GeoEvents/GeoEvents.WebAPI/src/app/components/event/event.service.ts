@@ -46,6 +46,10 @@ export class EventService {
             }
         }
 
+        if (filter.Custom != null) {
+            querry += '&custom=' + filter.Custom;
+        }
+
         querry += '&pageNumber=' + filter.PageNumber.toString();
         querry += '&pageSize=' + filter.PageSize.toString();
         querry += '&orderAscending=' + filter.OrderIsAscending.toString();

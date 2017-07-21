@@ -16,7 +16,7 @@
     Custom: string
 }
 
-interface CustomAttribute {
+export interface CustomAttribute {
     key: string,
     values: string[]
 }
