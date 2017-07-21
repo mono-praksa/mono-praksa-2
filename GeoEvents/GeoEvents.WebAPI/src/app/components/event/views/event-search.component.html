@@ -1,45 +1,59 @@
 <div *ngIf="!this.isDetailMode">
 	<div>
 		<form [formGroup]="filterForm" (ngSubmit)="onSubmit(filterForm.value)" autocomplete="off" novalidate>
+		
 			<div class="row">
 				<div class="col-sm-4" align="right">
 					<input type="text" formControlName="searchString" class="form-control" id="searchString" placeholder="Search..." />
 				</div>
-				<div class="col-sm-6">
-                    <button type="button" class="btn btn-default" (click)="toggleAdvancedSearch()">Show/Hide filters</button>
-                    <i class="fa fa-spinner fa-spin" style="font-size:24px" *ngIf="searchEventLoading"></i>
+				<div class="col-sm-1">
+					<div>
+						<button type="submit" class="btn btn-primary" [disabled]="filterForm.invalid">Search</button>
+					</div>
 				</div>
-				<div class="col-sm-2">
-					<button type="button" class="btn btn-primary" (click)="this.toggleMapMode()" >Map / List Display Mode</button>
+				<div class="col-sm-4" style="height: 34px; display: flex; align-items: flex-end;">
+					<div>
+						<a routerlink="" (click)="toggleAdvancedSearch()" style="cursor: pointer">Show/Hide filters</a>
+					</div>
+				</div>
+				<div class="col-sm-2" style="display: flex; justify-items: flex-end;">
+					<div>
+						<button type="button" class="btn btn-primary" (click)="this.toggleMapMode()" >Map / List Display Mode</button>
+					</div>
 				</div>	
 			</div>
+			
 			<div [hidden]="!this.isAdvancedSearch">
-					<br/>
-					<div class="row">
+				<br/>
+				<div class="row">
+				
+					<div class="col-md-2">
 						<div class="form-group" [ngClass]="{'has-error': start.touched && filterForm.hasError('endDateBeforeStartDate')}">
                             <label for="start">Start Time</label>
-							<input formControlName="start" ngui-datetime-picker [close-on-select]="false" class="form-control" id="start" placeholder="Click to enter date and time" readonly style="cursor: pointer;" />
+							<input formControlName="start" ngui-datetime-picker [close-on-select]="true" class="form-control input-sm" id="start" placeholder="Start Date" readonly style="cursor: pointer;" />
                         </div>
                         <div class="form-group" [ngClass]="{'has-error': end.touched && filterForm.hasError('endDateBeforeStartDate')}">
                             <label for="end">End Time</label>
-							<input formControlName="end" ngui-datetime-picker [close-on-select]="false" class="form-control" id="end" placeholder="Click to enter date and time" readonly style="cursor: pointer;" />
+							<input formControlName="end" ngui-datetime-picker [close-on-select]="true" class="form-control input-sm" id="end" placeholder="End Date" readonly style="cursor: pointer;" />
                         </div>
+						<!--
                         <span class="help-block" *ngIf="end.touched && eventForm.hasError('endDateBeforeStartDate')">End date must be after start date!</span>
+						-->
 					</div>
-					<div class="row">
+					
+					<div class="col-md-2">
 						<div>
-                                <div class="form-group" [ngClass]="{'has-error': (address.touched || radius.touched) && filterForm.hasError('needBothOrNeitherOfAddressAndRadius')}">
-                                    <label for="address">Address</label>
-                                    <div [ngClass]="{'input-group': isAddressValid}">
-						                <input type="text" formControlName="address" class="form-control" id="address" placeholder="Address..." #search [readonly]="isAddressValid"/>
-                                        <span *ngIf="isAddressValid" class="input-group-addon" (click)="clearLocation()">X</span>
-                                    </div>
-                                    <a routerlink="" (click)="setCurrentPosition()">Set to current location</a>
-                                </div>
+                            <div class="form-group" [ngClass]="{'has-error': (address.touched || radius.touched) && filterForm.hasError('needBothOrNeitherOfAddressAndRadius')}">
+								<label for="address">Address</label>
+								<div [ngClass]="{'input-group': isAddressValid}">
+									<input type="text" formControlName="address" class="form-control input-sm" id="address" placeholder="Address..." #search [readonly]="isAddressValid"/>
+									<span *ngIf="isAddressValid" class="input-group-addon" (click)="clearLocation()">X</span>
+								</div>
+							</div>
                             <div class="form-group" [ngClass]="{'has-error': radius.touched && radius.invalid || (address.touched || radius.touched) && filterForm.hasError('needBothOrNeitherOfAddressAndRadius')}">
                                 <label for="radius">Radius</label>                                
                                 <div class="input-group">
-                                    <input type="text" formControlName="radius" class="form-control" id="radius" placeholder="Radius" />
+                                    <input type="text" formControlName="radius" class="form-control input-sm" id="radius" placeholder="Radius" />
                                     <span class="input-group-addon">km</span>
                                 </div>
                                 <span *ngIf="(address.touched || radius.touched ) && filterForm.hasError('needBothOrNeitherOfAddressAndRadius')" class="help-block">
@@ -47,75 +61,109 @@
                                 </span>
                                 <span *ngIf="radius.touched && radius.invalid" class="help-block">*Please enter a valid radius!</span>
                             </div>
+							<div>
+								<a routerlink="" (click)="setCurrentPosition()" style="cursor: pointer">Set to current location</a>
+							</div>
                         </div>
 					</div>
-                    <div class="row">
+					
+                    <div class="col-md-2">
                         <div class="form-group" [ngClass]="{'has-error': price.touched && price.invalid}">
                             <label for="price">Max. Price</label>
                             <div class="input-group">
                                 <span class="input-group-addon">$</span>
-                                <input type="text" formControlName="price" class="form-control" id="price" placeholder="0" />
+                                <input type="text" formControlName="price" class="form-control input-sm" id="price" placeholder="0" />
                             </div>
                             <span *ngIf="price.touched && price.invalid" class="help-block">*Please enter a valid ammount!</span>
                         </div>
+
                         <div class="form-group" [ngClass]="{'has-error': rating.touched && rating.invalid}">
                             <label for="rating">Min. Rating</label>
-                            <input type="text" formControlName="rating" class="form-control" id="rating" placeholder="(1-5)" />
+                            <input type="text" formControlName="rating" class="form-control input-sm" id="rating" placeholder="(1-5)" />
                             <span class="help-block" *ngIf="rating.touched && rating.invalid">*Enter a decimal number between 1 and 5!</span>
                         </div>
                     </div>
-					<div class="row">
-						<div>
+					
+					<div class="col-md-4">
+						<label for="categoriesWrapper">Select Categories</label>
+						<div id="categoriesWrapper">
 							<div class="row">
-								<label class="col-xs-4">
+								<div class="col-xs-4">
 									<input type="checkbox" value="1" (change)="updateCategories(1)" /> Music
-								</label>
-								<label class="col-xs-4">
+								</div>
+								<div class="col-xs-4">
 									<input type="checkbox" value="2" (change)="updateCategories(2)" /> Culture
-								</label>
-								<label class="col-xs-4">
+								</div>
+								<div class="col-xs-4">
 									<input type="checkbox" value="4" (change)="updateCategories(4)" /> Sport
-								</label>
+								</div>
 							</div>
 							<div class="row">
-								<label class="col-xs-4">
+								<div class="col-xs-4">
 									<input type="checkbox" value="8" (change)="updateCategories(8)" /> Gastro
-								</label>
-								<label class="col-xs-4">
+								</div>
+								<div class="col-xs-4">
 									<input type="checkbox" value="16" (change)="updateCategories(16)" /> Religious
-								</label>
-								<label class="col-xs-4">
+								</div>
+								<div class="col-xs-4">
 									<input type="checkbox" value="32" (change)="updateCategories(32)" /> Business
-								</label>
+								</div>
 							</div>
 							<div class="row">
-								<label class="col-xs-4">
+								<div class="col-xs-5">
 									<input type="checkbox" value="64" (change)="updateCategories(64)" /> Miscellaneous
-								</label>
+								</div>
 							</div>
 						</div>
-					</div>			
+					</div>
+					
+                    <div class="col-md-2">
+                        <div class="form-group">
+                            <label for="customCategoryName">Custom Category</label>
+                            <div>
+                                <input type="text" class="form-control input-sm" id="customCategoryName" placeholder="Custom Category" />
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="customCategoryValue">Value</label>
+							<div>
+								<input type="text" class="form-control input-sm" id="customCategoryValue" placeholder="Value" />
+							</div>
+                        </div>
+                    </div>
+					
+				</div>
 			</div>
-            <button type="submit" class="btn btn-default" [disabled]="filterForm.invalid">Search</button>
+            <div [hidden]="!this.isAdvancedSearch" align="right">
+				<button type="submit" class="btn btn-primary" [disabled]="filterForm.invalid">Search</button>
+			</div>
 		</form>
 	</div>
     <hr />
 	<div>
-		
+		<div align="center">
+			<i class="fa fa-spinner fa-spin" style="font-size:24px" *ngIf="searchEventLoading"></i>
+		</div>
 		<div *ngIf="!this.isMapMode">
 			<div *ngIf="this.events" class="row" align="right">
-			
-				<select (change)="getEventsOrderChanged($event.target.value)" class="form-control">
-					<option value="Name">Name</option>
-					<option value="Distance">Distance</option>
-					<option value="StartTime">Start time</option>
-					<option value="EndTime">End time</option>
-				</select>
-				<input type="checkbox" #isAscending id="ascendingCheckbox" (change)="getEventsAscendingChanged(isAscending.value)"/>
-				<label for="ascendingCheckbox">Ascending Order?</label>
-				
+				<div class="col-sm-7"></div>
+				<div class="col-sm-3">
+					<select (change)="getEventsOrderChanged($event.target.value)" class="form-control">
+						<option value="Name">Name</option>
+						<option value="Distance">Distance</option>
+						<option value="StartTime">Start time</option>
+						<option value="EndTime">End time</option>
+					</select>
+				</div>
+				<div>
+					<input type="checkbox" #isAscending id="ascendingCheckbox" (change)="getEventsAscendingChanged(isAscending.value)"/> Ascending Order?
+				</div>
+				<hr/>
 			</div>
-			<display-list (event)="enterDetailMode($event)" [events]="this.events"></display-list>
+			<div *ngIf="this.events">
+				<display-list (event)="enterDetailMode($event)" [events]="this.events"></display-list>
+			</div>
 			<div *ngIf="this.events">
 				<p>pager</p>
 			</div>
