@@ -55,7 +55,21 @@ namespace GeoEvents.Service
         /// <returns>The event.</returns>
         public async Task<IEvent> GetEventByIdAsync(Guid id)
         {
-            return await Repository.GetEventByIdAsync(id);
+            IEvent evt = await Repository.GetEventByIdAsync(id);
+            int mult = 1;
+            evt.Categories = new List<int>();
+            int cat = evt.Category;
+            while (cat > 0)
+            {
+                int mod = cat % 2;
+                if (mod == 1)
+                {
+                    evt.Categories.Add(mult);
+                }
+                mult *= 2;
+                cat = cat >> 1;
+            }
+            return evt;
         }
 
         /// <summary>
@@ -121,7 +135,7 @@ namespace GeoEvents.Service
             evt.Reserved = 0;
             evt.Rating = 0;
             evt.RateCount = 0;
-            evt.RatingLocation = 0;
+
             return Repository.CreateEventAsync(evt);
         }
 
@@ -141,10 +155,12 @@ namespace GeoEvents.Service
         /// <param name="eventId">The event identifier.</param>
         /// <param name="rating"></param>
         /// <returns></returns>
-        public Task<IEvent> UpdateRatingAsync(Guid eventId, decimal rating)
+        public Task<IEvent> UpdateRatingAsync(Guid eventId, double rating, double CurrentRating, int RateCount)
         {
-            return Repository.UpdateRatingAsync(eventId, rating);
+            return Repository.UpdateRatingAsync(eventId, rating,CurrentRating,RateCount);
         }
+
+
 
         #endregion Methods
 

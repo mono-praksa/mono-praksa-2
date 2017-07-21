@@ -54,11 +54,11 @@ namespace GeoEvents.DAL
         /// <param name="Id">The identifier.</param>
         /// <param name="Content">The content.</param>
         /// <param name="EventId">The event identifier.</param>
-        public ImageEntity(Guid Id, byte[] Content, Guid EventId)
+        public ImageEntity(Guid id, byte[] content, Guid eventId)
         {
-            this.Id = Id;
-            this.Content = Content;
-            this.EventId = EventId;
+            this.Id = id;
+            this.Content = content;
+            this.EventId = eventId;
         }
         #endregion Constructors
 

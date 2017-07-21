@@ -8,7 +8,8 @@
     Price: number,
     RatingEvent: number,
 	
-	SearchString: string,
+    SearchString: string,
+    Custom: string,
 	
 	PageNumber: number,
 	PageSize: number,

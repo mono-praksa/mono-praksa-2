@@ -51,6 +51,7 @@
     <Compile Include="DIModule.cs" />
     <Compile Include="Event.cs" />
     <Compile Include="Image.cs" />
+    <Compile Include="Location.cs" />
     <Compile Include="Mapping\ModelProfile.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

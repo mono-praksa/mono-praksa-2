@@ -47,7 +47,7 @@ namespace GeoEvents.DAL
         /// <value>
         /// The lat.
         /// </value>
-        public Decimal Lat { get; set; }
+        public double Latitude { get; set; }
 
 
         /// <summary>
@@ -56,7 +56,7 @@ namespace GeoEvents.DAL
         /// <value>
         /// The long.
         /// </value>
-        public Decimal Long { get; set; }
+        public double Longitude { get; set; }
 
 
         /// <summary>
@@ -91,7 +91,7 @@ namespace GeoEvents.DAL
         /// <value>
         /// The price.
         /// </value>
-        public decimal Price { get; set; }
+        public double Price { get; set; }
 
         /// <summary>
         /// Gets or sets the capacity.
@@ -115,7 +115,7 @@ namespace GeoEvents.DAL
         /// <value>
         /// The rating.
         /// </value>
-        public decimal Rating { get; set; }
+        public double Rating { get; set; }
 
         /// <summary>
         /// Gets or sets the rate count.
@@ -125,13 +125,22 @@ namespace GeoEvents.DAL
         /// </value>
         public int RateCount { get; set; }
 
+
         /// <summary>
-        /// Gets or sets the rating location.
+        /// Gets or sets the location identifier.
         /// </summary>
         /// <value>
-        /// The rating location.
+        /// The location identifier.
         /// </value>
-        public decimal RatingLocation { get; set; }
+        public Guid LocationId { get; set; }
+
+        /// <summary>
+        /// Gets or sets the custom.
+        /// </summary>
+        /// <value>
+        /// The custom.
+        /// </value>
+        public string Custom { get; set; }
         #endregion Properties
 
 
@@ -140,6 +149,7 @@ namespace GeoEvents.DAL
         /// Initializes a new instance of the <see cref="EventEntity"/> class.
         /// </summary>
         public EventEntity() { }
+
 
 
 
@@ -160,24 +170,28 @@ namespace GeoEvents.DAL
         /// <param name="Rating">The rating.</param>
         /// <param name="RateCount">The rate count.</param>
         /// <param name="RatingLocation">The rating location.</param>
-        public EventEntity(Guid Id, DateTime StartTime, DateTime EndTime, Decimal Lat,
-            Decimal Long, string Name, string Description, int Category, decimal Price, int Capacity, int Reserved, decimal Rating, int RateCount, decimal RatingLocation)
+        /// <param name="LocationId">The location identifier.</param>
+        /// <param name="Custom">The custom attributes.</param>
+        public EventEntity(Guid id, DateTime startTime, DateTime endTime, double latitude,
+            double longitude, string name, string description, int category, double price, int capacity, int reserved, double rating, int rateCount, Guid locationId, string custom)
         {
-            this.Id = Id;
-            this.StartTime = StartTime;
-            this.EndTime = EndTime;
-            this.Lat = Lat;
-            this.Long = Long;
-            this.Name = Name;
-            this.Description = Description;
-            this.Category = Category;
-            this.Price = Price;
-            this.Capacity = Capacity;
-            this.Reserved = Reserved;
-            this.Rating = Rating;
-            this.RateCount = RateCount;
-            this.RatingLocation = RatingLocation;
+            this.Id = id;
+            this.StartTime = startTime;
+            this.EndTime = endTime;
+            this.Latitude = latitude;
+            this.Longitude = longitude;
+            this.Name = name;
+            this.Description = description;
+            this.Category = category;
+            this.Price = price;
+            this.Capacity = capacity;
+            this.Reserved = reserved;
+            this.Rating = rating;
+            this.RateCount = rateCount;
+            this.LocationId = locationId;
+            this.Custom = custom;
         }
+
         #endregion Constructors
 
     }

@@ -56,6 +56,7 @@
     <Compile Include="DIModule.cs" />
     <Compile Include="EventEntity.cs" />
     <Compile Include="ImageEntity.cs" />
+    <Compile Include="LocationEntity.cs" />
     <Compile Include="PostgresConnection.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

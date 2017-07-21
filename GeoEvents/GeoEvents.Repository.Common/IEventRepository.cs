@@ -57,8 +57,9 @@ namespace GeoEvents.Repository.Common
         /// <param name="eventId">The event identifier.</param>
         /// <param name="rating">The rating.</param>
         /// <returns></returns>
-        Task<IEvent> UpdateRatingAsync(Guid eventId, decimal rating);
+        Task<IEvent> UpdateRatingAsync(Guid eventId, double rating,double CurrentRating,int RateCount);
 
         #endregion Methods
     }
 }
+

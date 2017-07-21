@@ -48,7 +48,7 @@ namespace GeoEvents.Model
         /// <value>
         /// The latitude.
         /// </value>
-        public decimal Lat { get; set; }
+        public double Latitude { get; set; }
 
 
         /// <summary>
@@ -57,7 +57,7 @@ namespace GeoEvents.Model
         /// <value>
         /// The longitude.
         /// </value>
-        public decimal Long { get; set; }
+        public double Longitude { get; set; }
 
 
         /// <summary>
@@ -103,7 +103,7 @@ namespace GeoEvents.Model
         /// <value>
         /// The price.
         /// </value>
-        public decimal Price { get; set; }
+        public double Price { get; set; }
 
         /// <summary>
         /// Gets or sets the capacity.
@@ -127,7 +127,7 @@ namespace GeoEvents.Model
         /// <value>
         /// The rating.
         /// </value>
-        public decimal Rating { get; set; }
+        public double Rating { get; set; }
 
         /// <summary>
         /// Gets or sets the rate count.
@@ -138,12 +138,20 @@ namespace GeoEvents.Model
         public int RateCount { get; set; }
 
         /// <summary>
-        /// Gets or sets the rating event.
+        /// Gets or sets the location identifier.
         /// </summary>
         /// <value>
-        /// The rating event.
+        /// The location identifier.
         /// </value>
-        public decimal RatingLocation { get; set; }
+        public Guid LocationId { get; set; }
+
+        /// <summary>
+        /// Gets or sets the json string representing custom attributes
+        /// </summary>
+        /// <value>
+        /// The string.
+        /// </value>
+        public string Custom { get; set; }
         #endregion Properties
     }
 }

@@ -17,6 +17,7 @@ namespace GeoEvents.Model.Mapping
         {
             CreateMap<EventEntity, IEvent>().ReverseMap();
             CreateMap<ImageEntity, IImage>().ReverseMap();
+            CreateMap<LocationEntity, ILocation>().ReverseMap();
         }
     }
 }

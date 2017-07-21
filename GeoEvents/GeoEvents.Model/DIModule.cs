@@ -15,6 +15,7 @@ namespace GeoEvents.Model
         {
             Bind<IEvent>().To<Event>();
             Bind<IImage>().To<Image>();
+            Bind<ILocation>().To<Location>();
         }
     }
 

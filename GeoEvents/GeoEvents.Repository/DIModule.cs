@@ -15,6 +15,7 @@ namespace GeoEvents.Repository
         {
             Bind<IEventRepository>().To<EventRepository>();
             Bind<IImageRepository>().To<ImageRepository>();
+            Bind<ILocationRepository>().To<LocationRepository>();
         }
     }
 

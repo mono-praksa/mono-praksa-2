@@ -134,7 +134,7 @@ export class EventDetailComponent implements OnInit{
     }
 
     rate(rating: number) {
-        this.eventService.updateRating(this.event.Id, +rating)
+        this.eventService.updateRating(this.event.Id, +rating, this.event.Rating, this.event.RateCount)
             .subscribe((response: IEvent) => {
                 this.event.Rating = response.Rating;
                 this.event.RateCount = response.RateCount;

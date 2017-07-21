@@ -35,6 +35,7 @@ namespace GeoEvents.WebAPI.Controllers
         public async Task<EventModel> CreateEvent([FromBody] EventModel evt)
         {
             evt.Id = new Guid();
+            
             return Mapper.Map<EventModel>(await Service.CreateEventAsync(Mapper.Map<IEvent>(evt)));
         }
 
@@ -51,9 +52,9 @@ namespace GeoEvents.WebAPI.Controllers
 
         [HttpGet]
         [Route("search")]
-        public async Task<IEnumerable<EventModel>> GetEventsAsync(int pageNumber = 1, int pageSize = 25, string orderBy = "", bool orderAscending = false, int category = 0, decimal uLat = 1000M, decimal uLong = 1000M, decimal radius = 0, string startTime = "", string endTime = "", string searchString = "", decimal? price = null, decimal? ratingEvent = null)
+        public async Task<IEnumerable<EventModel>> GetEventsAsync(int pageNumber = 1, int pageSize = 25, string orderBy = "", bool orderAscending = false, int category = 0, decimal uLat = 1000M, decimal uLong = 1000M, decimal radius = 0, string startTime = "", string endTime = "", string searchString = "", decimal? price = null, decimal ratingEvent = 1, string custom = "")
         {
-            Filter filter = new Filter(uLat, uLong, radius, null, null, category, pageNumber, pageSize, searchString, orderBy, orderAscending, price, ratingEvent);
+            Filter filter = new Filter(uLat, uLong, radius, null, null, category, pageNumber, pageSize, searchString, orderBy, orderAscending, price, ratingEvent, custom);
             DateTime dateValue;
             if (startTime != "")
             {
@@ -103,7 +104,8 @@ namespace GeoEvents.WebAPI.Controllers
         [Route("search/count")]
         public Task<Int64> GetEventCountAsync(int pageNumber = 1, int pageSize = 25, string orderBy = "", bool orderAscending = false, int category = 0, decimal uLat = 1000M, decimal uLong = 1000M, decimal radius = 0, string startTime = "", string endTime = "", string searchString = "", decimal? price = null, decimal? ratingEvent = null)
         {
-            Filter filter = new Filter(uLat, uLong, radius, null, null, category, pageNumber, pageSize, searchString, orderBy, orderAscending, price, ratingEvent);
+
+            Filter filter = new Filter(uLat, uLong, radius, null, null, category, pageNumber, pageSize, searchString, orderBy, orderAscending, null, null, "");
             DateTime dateValue;
             if (startTime != "")
             {
@@ -127,9 +129,9 @@ namespace GeoEvents.WebAPI.Controllers
 
         [HttpPut]
         [Route("update/rating")]
-        public Task<IEvent> UpdateRatingAsync(Guid eventId, decimal rating)
+        public Task<IEvent> UpdateRatingAsync(Guid eventId, double rating, double CurrentRating, int RateCount)
         {
-            return Service.UpdateRatingAsync(eventId, rating);
+            return Service.UpdateRatingAsync(eventId, rating,CurrentRating,RateCount);
         }
 
         [HttpPut]
@@ -139,6 +141,7 @@ namespace GeoEvents.WebAPI.Controllers
             return Service.UpdateReservationAsync(eventId);
         }
     }
+
     public class EventModel
     {
         public Guid Id { get; set; }
@@ -148,7 +151,6 @@ namespace GeoEvents.WebAPI.Controllers
         public DateTime EndTime { get; set; }
         public decimal Lat { get; set; }
         public decimal Long { get; set; }
-        public int Category { get; set; }
         public List<int> Categories { get; set; }
         public decimal Price { get; set; }
         public int Capacity { get; set; }
@@ -156,8 +158,10 @@ namespace GeoEvents.WebAPI.Controllers
         public decimal Rating { get; set; }
         public int RateCount { get; set; }
         public decimal RatingLocation { get; set; }
+        public string Custom { get; set; }
+        public Guid LocationId { get; set; }
 
-        public EventModel(Guid id, string name, string description, DateTime starttime, DateTime endtime, decimal uLat, decimal uLong, int category, List<int> categories, decimal price, int capacity, int reserved, decimal rating, int rateCount, decimal ratingLocation)
+        public EventModel(Guid id, string name, string description, DateTime starttime, DateTime endtime, decimal uLat, decimal uLong, List<int> categories, decimal price, int capacity, int reserved, decimal rating, int rateCount, decimal ratingLocation, string custom, Guid locationId)
         {
             this.Id = id;
             this.Name = name;
@@ -166,7 +170,6 @@ namespace GeoEvents.WebAPI.Controllers
             this.EndTime = endtime;
             this.Lat = uLat;
             this.Long = uLong;
-            this.Category = category;
             this.Categories = categories;
             this.Price = price;
             this.Capacity = capacity;
@@ -174,6 +177,8 @@ namespace GeoEvents.WebAPI.Controllers
             this.Rating = rating;
             this.RateCount = rateCount;
             this.RatingLocation = ratingLocation;
+            this.Custom = custom;
+            this.LocationId = locationId;
         }
 
         public EventModel()

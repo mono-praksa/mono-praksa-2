@@ -10,7 +10,7 @@ import { EventService } from '../event.service'
     templateUrl: "app/components/event/views/event-create-images.component.html"
 })
 export class EventCreateImagesComponent {
-    @Input() createdEvent: IEvent;
+    @Input() customizedEvent: IEvent;
     @Output() emittSkip = new EventEmitter();
 
     private _files: Array<file>;
@@ -92,7 +92,7 @@ export class EventCreateImagesComponent {
 
             this._eventService.createImage({
                 Id: undefined,
-                EventId: this.createdEvent.Id,
+                EventId: this.customizedEvent.Id,
                 FormData: this.formData
             }).subscribe((data: any) => {
                 this.files[i].uploading = false;

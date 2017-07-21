@@ -4,6 +4,7 @@ using GeoEvents.DAL;
 using GeoEvents.Model.Common;
 using GeoEvents.Repository.Common;
 using Npgsql;
+using NpgsqlTypes;
 using System;
 using System.Collections.Generic;
 using System.Data.Common;
@@ -48,22 +49,22 @@ namespace GeoEvents.Repository
 
             {
                 using (PostgresConn.CreateConnection())
-                using (NpgsqlCommand commandInsert = new NpgsqlCommand(QueryHelper.GetInsertImagesString(),
+                using (NpgsqlCommand commandInsert = new NpgsqlCommand(QueryHelper.GetInsertImagesQueryString(),
                          PostgresConn.CreateConnection()))
-                using (NpgsqlCommand commandSelect = new NpgsqlCommand(QueryHelper.GetSelectImageString(),
+                using (NpgsqlCommand commandSelect = new NpgsqlCommand(QueryHelper.GetSelectImageQueryString(),
                          PostgresConn.CreateConnection()))
                 {
                     // // insert image
-                    commandInsert.Parameters.AddWithValue(QueryHelper.ParId, NpgsqlTypes.NpgsqlDbType.Uuid, DbImage.Id);
-                    commandInsert.Parameters.AddWithValue(QueryHelper.ParContent, NpgsqlTypes.NpgsqlDbType.Bytea, DbImage.Content);
-                    commandInsert.Parameters.AddWithValue(QueryHelper.ParEventId, NpgsqlTypes.NpgsqlDbType.Uuid, DbImage.EventId);
+                    commandInsert.Parameters.AddWithValue(QueryHelper.ParId, NpgsqlDbType.Uuid, DbImage.Id);
+                    commandInsert.Parameters.AddWithValue(QueryHelper.ParContent, NpgsqlDbType.Bytea, DbImage.Content);
+                    commandInsert.Parameters.AddWithValue(QueryHelper.ParEventId, NpgsqlDbType.Uuid, DbImage.EventId);
 
                     await PostgresConn.CreateConnection().OpenAsync();
                     await commandInsert.ExecuteNonQueryAsync();
                     // //
 
                     // // Select image ,that we just inserted, from db
-                    commandSelect.Parameters.AddWithValue(QueryHelper.ParId, NpgsqlTypes.NpgsqlDbType.Uuid, DbImage.Id);
+                    commandSelect.Parameters.AddWithValue(QueryHelper.ParId, NpgsqlDbType.Uuid, DbImage.Id);
 
                     DbDataReader dr = await commandSelect.ExecuteReaderAsync();
 
@@ -100,10 +101,10 @@ namespace GeoEvents.Repository
 
             {
                 using (PostgresConn.CreateConnection())
-                using (NpgsqlCommand command = new NpgsqlCommand(QueryHelper.GetSelectImagesString(),
+                using (NpgsqlCommand command = new NpgsqlCommand(QueryHelper.GetSelectImagesQueryString(),
                      PostgresConn.CreateConnection()))
                 {
-                    command.Parameters.AddWithValue(QueryHelper.ParEventId, NpgsqlTypes.NpgsqlDbType.Uuid, eventID);
+                    command.Parameters.AddWithValue(QueryHelper.ParEventId, NpgsqlDbType.Uuid, eventID);
 
                     await PostgresConn.CreateConnection().OpenAsync();
                     DbDataReader dr = await command.ExecuteReaderAsync();

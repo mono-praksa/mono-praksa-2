@@ -50,7 +50,7 @@
             <input type="text" class="form-control" formControlName="address" id="address" placeholder="Address..." #search [readonly]="isAddressValid" />
             <span *ngIf="isAddressValid" class="input-group-addon" (click)="clearLocation()">X</span>
         </div>
-        <a style="cursor:pointer" routerlink="" (click)="setCurrentPosition()">Set to current location</a>
+        <button type="button" class="btn btn-link" (click)="setCurrentPosition()">Set to current location</button>
         <div *ngIf="isAddressValid">
             <agm-map [latitude]="latitude.value" [longitude]="longitude.value" [scrollwheel]="true" [zoom]="zoom" (mapClick)="markerUpdated($event)">
                 <agm-marker [latitude]="latitude.value" [longitude]="longitude.value" [markerDraggable]="true" (dragEnd)="markerUpdated($event)"></agm-marker>
@@ -72,6 +72,8 @@
         <span class="help-block" *ngIf="capacity.touched && capacity.invalid">Required!</span>
         <span class="help-block" *ngIf="price.touched && price.hasError('lessThanZero')">Please enter a valid price!</span>
     </div>
-    <button type="submit" class="btn btn-default" [disabled]="eventForm.invalid || isAllUnchecked() || createEventLoading">Submit</button>
-    <i class="fa fa-spinner fa-spin" style="font-size:24px" *ngIf="createEventLoading"></i>
+    <div>
+        <button type="submit" class="btn btn-default" [disabled]="eventForm.invalid || isAllUnchecked() || createEventLoading">Submit</button>
+        <i class="fa fa-spinner fa-spin" style="font-size:24px" *ngIf="createEventLoading"></i>
+    </div>
 </form>

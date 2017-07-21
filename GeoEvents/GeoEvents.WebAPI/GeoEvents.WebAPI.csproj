@@ -263,6 +263,7 @@
     <Compile Include="Controllers\EventController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ImageController.cs" />
+    <Compile Include="Controllers\LocationController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
     <Compile Include="DbConnection\DIModule.cs" />
     <Compile Include="DbConnection\GeoEventsConfiguration.cs" />
@@ -322,8 +323,10 @@
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
     <Content Include="src\app\components\event\components\markerclusterer.js" />
+    <Content Include="src\app\components\event\views\event-create-customize.component.html" />
     <Content Include="src\app\components\event\views\event-create-data.component.html" />
     <Content Include="src\app\components\event\views\event-create-images.component.html" />
+    <Content Include="src\app\components\event\views\event-create.component.html" />
     <Content Include="src\app\components\event\views\event-detail.component.html" />
     <Content Include="src\app\components\event\views\event-search-list.component.html" />
     <Content Include="src\app\components\event\views\event-search.component.html" />
@@ -370,6 +373,7 @@
     <TypeScriptCompile Include="src\app\app.component.ts" />
     <TypeScriptCompile Include="src\app\app.module.ts" />
     <TypeScriptCompile Include="src\app\components\error\error-404.component.ts" />
+    <TypeScriptCompile Include="src\app\components\event\components\event-create-customize.component.ts" />
     <TypeScriptCompile Include="src\app\components\event\components\event-create-data.component.ts" />
     <TypeScriptCompile Include="src\app\components\event\components\event-create-images.component.ts" />
     <TypeScriptCompile Include="src\app\components\event\components\event-create.component.ts" />
@@ -380,9 +384,11 @@
     <TypeScriptCompile Include="src\app\components\event\event-routing.module.ts" />
     <TypeScriptCompile Include="src\app\components\event\event.module.ts" />
     <TypeScriptCompile Include="src\app\components\event\event.service.ts" />
+    <TypeScriptCompile Include="src\app\components\event\location.service.ts" />
     <TypeScriptCompile Include="src\app\components\event\models\event.model.ts" />
     <TypeScriptCompile Include="src\app\components\event\models\filter.model.ts" />
     <TypeScriptCompile Include="src\app\components\event\models\image.model.ts" />
+    <TypeScriptCompile Include="src\app\components\event\models\location.model.ts" />
     <TypeScriptCompile Include="src\app\components\event\validators\validator.ts" />
     <TypeScriptCompile Include="src\app\components\home\home.component.ts" />
     <TypeScriptCompile Include="src\app\shared\common\category-enum.ts" />

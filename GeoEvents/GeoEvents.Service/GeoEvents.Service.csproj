@@ -47,6 +47,7 @@
     <Compile Include="DIModule.cs" />
     <Compile Include="EventService.cs" />
     <Compile Include="ImageService.cs" />
+    <Compile Include="LocationService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

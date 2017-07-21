@@ -50,6 +50,7 @@
   <ItemGroup>
     <Compile Include="IEventRepository.cs" />
     <Compile Include="IImageRepository.cs" />
+    <Compile Include="ILocationRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
