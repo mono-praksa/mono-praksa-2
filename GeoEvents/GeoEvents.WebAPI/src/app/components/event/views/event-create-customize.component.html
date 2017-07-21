@@ -23,8 +23,8 @@
     </div>
     
     <div class="row">
-        <div *ngIf="createdEvent.Custom">
-            <div *ngFor="let attribute of createdEvent.Custom; let i = index;">
+        <div *ngIf="createdEvent.CustomModel">
+            <div *ngFor="let attribute of createdEvent.CustomModel; let i = index;">
                 <div class="row well">
                     <div>
                         <h3>{{attribute.key}}<span style="float: right; cursor: pointer;" class="glyphicon glyphicon-remove" (click)="removeKey(i)"></span></h3>

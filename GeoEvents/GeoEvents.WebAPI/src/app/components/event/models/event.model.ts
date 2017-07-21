@@ -12,7 +12,8 @@
     Reserved: number,
     Rating: number,
     RateCount: number,
-    Custom: CustomAttribute[]
+    CustomModel: CustomAttribute[],
+    Custom: string
 }
 
 interface CustomAttribute {

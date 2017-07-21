@@ -36,16 +36,16 @@ export class EventCreateCustomizeComponent implements OnInit {
     }
 
     addCustomAttribute(formValues: any): void {
-        if (!this.createdEvent.Custom) {
-            this.createdEvent.Custom = [];
+        if (!this.createdEvent.CustomModel) {
+            this.createdEvent.CustomModel = [];
         }
 
-        let i = this.createdEvent.Custom.findIndex(attr => { return attr.key === formValues.key});
+        let i = this.createdEvent.CustomModel.findIndex(attr => { return attr.key === formValues.key});
         if (i !== -1) {
-            this.createdEvent.Custom[i].values.push(formValues.value);
+            this.createdEvent.CustomModel[i].values.push(formValues.value);
         }
         else {
-            this.createdEvent.Custom.push({
+            this.createdEvent.CustomModel.push({
                 key: formValues.key,
                 values: [formValues.value]
             });
@@ -53,7 +53,8 @@ export class EventCreateCustomizeComponent implements OnInit {
         this.resetValueControl();        
     }
 
-    next() : void {
+    next(): void {
+        this.createdEvent.Custom = JSON.stringify(this.createdEvent.CustomModel);
         this._loaderService.displayLoader(true);
         this._eventService.createEvent(this.createdEvent).subscribe((response: IEvent) => {
             this.createdEvent = response;
@@ -77,15 +78,15 @@ export class EventCreateCustomizeComponent implements OnInit {
     }
 
     private removeKey(keyIndex: number): void {
-        this.createdEvent.Custom.splice(keyIndex, 1);
-        if (this.createdEvent.Custom.length === 0) {
-            this.createdEvent.Custom = undefined;
+        this.createdEvent.CustomModel.splice(keyIndex, 1);
+        if (this.createdEvent.CustomModel.length === 0) {
+            this.createdEvent.CustomModel = undefined;
         }
     }
 
     private removeValue(keyIndex: number, valueIndex: number) {
-        this.createdEvent.Custom[keyIndex].values.splice(valueIndex, 1);
-        if (this.createdEvent.Custom[keyIndex].values.length === 0) {
+        this.createdEvent.CustomModel[keyIndex].values.splice(valueIndex, 1);
+        if (this.createdEvent.CustomModel[keyIndex].values.length === 0) {
             this.removeKey(keyIndex);
         }
     }

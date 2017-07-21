@@ -140,12 +140,6 @@ namespace GeoEvents.WebAPI.Controllers
         }
     }
 
-    public class CustomAttribute
-    {
-        public string key { get; set; }
-        public List<string> values { get; set; }
-    }
-
     public class EventModel
     {
         public Guid Id { get; set; }
@@ -162,9 +156,9 @@ namespace GeoEvents.WebAPI.Controllers
         public decimal Rating { get; set; }
         public int RateCount { get; set; }
         public decimal RatingLocation { get; set; }
-        public List<CustomAttribute> Custom { get; set; }
+        public string Custom { get; set; }
 
-        public EventModel(Guid id, string name, string description, DateTime starttime, DateTime endtime, decimal uLat, decimal uLong, List<int> categories, decimal price, int capacity, int reserved, decimal rating, int rateCount, decimal ratingLocation, List<CustomAttribute> custom)
+        public EventModel(Guid id, string name, string description, DateTime starttime, DateTime endtime, decimal uLat, decimal uLong, List<int> categories, decimal price, int capacity, int reserved, decimal rating, int rateCount, decimal ratingLocation, string custom)
         {
             this.Id = id;
             this.Name = name;

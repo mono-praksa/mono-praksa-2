@@ -138,12 +138,20 @@ namespace GeoEvents.Model
         public int RateCount { get; set; }
 
         /// <summary>
-        /// Gets or sets the rating event.
+        /// Gets or sets the event's location rating.
         /// </summary>
         /// <value>
-        /// The rating event.
+        /// The location rating.
         /// </value>
         public decimal RatingLocation { get; set; }
+
+        /// <summary>
+        /// Gets or sets the json string representing custom attributes
+        /// </summary>
+        /// <value>
+        /// The string.
+        /// </value>
+        public string Custom { get; set; }
         #endregion Properties
     }
 }
