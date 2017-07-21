@@ -103,7 +103,7 @@ namespace GeoEvents.WebAPI.Controllers
         [Route("search/count")]
         public async Task<Int64> GetEventCountAsync(int pageNumber = 1, int pageSize = 25, string orderBy = "", bool orderAscending = false, int category = 0, decimal uLat = 1000M, decimal uLong = 1000M, decimal radius = 0, string startTime = "", string endTime = "", string searchString = "")
         {
-            Filter filter = new Filter(uLat, uLong, radius, null, null, category, pageNumber, pageSize, searchString, orderBy, orderAscending, null, null);
+            Filter filter = new Filter(uLat, uLong, radius, null, null, category, pageNumber, pageSize, searchString, orderBy, orderAscending, null, null, "");
             DateTime dateValue;
             if (startTime != "")
             {
