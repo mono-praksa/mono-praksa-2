@@ -125,9 +125,9 @@ namespace GeoEvents.WebAPI.Controllers
 
         [HttpPut]
         [Route("update/rating")]
-        public Task<IEvent> UpdateRatingAsync(Guid eventId, decimal rating)
+        public Task<IEvent> UpdateRatingAsync(Guid eventId, double rating, double CurrentRating, int RateCount)
         {
-            return Service.UpdateRatingAsync(eventId, rating);
+            return Service.UpdateRatingAsync(eventId, rating,CurrentRating,RateCount);
         }
 
         [HttpPut]

@@ -10,7 +10,7 @@ namespace GeoEvents.Service.Common
 {
     public interface ILocationService
     {
-        Task<ILocation> UpdateRatingLocationAsync(Guid eventId, decimal rating);
+        Task<ILocation> UpdateRatingLocationAsync(Guid eventId, double rating);
 
         Task<ILocation> CreateLocationAsync(ILocation location);
 

@@ -79,8 +79,8 @@ export class EventService {
             }).catch(this.handleError);
     }
 
-    updateRating(eventId: string, rating: number) {
-        return this._http.put("/api/events/update/rating?eventId=" + eventId + "&rating=" + rating, {})
+    updateRating(eventId: string, rating: number, currentrating: number, ratecount: number) {
+        return this._http.put("/api/events/update/rating?eventId=" + eventId + "&rating=" + rating+"&currentrating=" + currentrating + "&ratecount=" + ratecount, {})
             .map((response: Response) => {
                 return <IEvent>response.json();
             }).catch(this.handleError);

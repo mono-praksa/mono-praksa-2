@@ -49,9 +49,9 @@ namespace GeoEvents.Repository
 
             {
                 using (PostgresConn.CreateConnection())
-                using (NpgsqlCommand commandInsert = new NpgsqlCommand(QueryHelper.GetInsertImagesString(),
+                using (NpgsqlCommand commandInsert = new NpgsqlCommand(QueryHelper.GetInsertImagesQueryString(),
                          PostgresConn.CreateConnection()))
-                using (NpgsqlCommand commandSelect = new NpgsqlCommand(QueryHelper.GetSelectImageString(),
+                using (NpgsqlCommand commandSelect = new NpgsqlCommand(QueryHelper.GetSelectImageQueryString(),
                          PostgresConn.CreateConnection()))
                 {
                     // // insert image
@@ -101,7 +101,7 @@ namespace GeoEvents.Repository
 
             {
                 using (PostgresConn.CreateConnection())
-                using (NpgsqlCommand command = new NpgsqlCommand(QueryHelper.GetSelectImagesString(),
+                using (NpgsqlCommand command = new NpgsqlCommand(QueryHelper.GetSelectImagesQueryString(),
                      PostgresConn.CreateConnection()))
                 {
                     command.Parameters.AddWithValue(QueryHelper.ParEventId, NpgsqlDbType.Uuid, eventID);

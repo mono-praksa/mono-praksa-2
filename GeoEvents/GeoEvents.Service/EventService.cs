@@ -121,7 +121,6 @@ namespace GeoEvents.Service
             evt.Reserved = 0;
             evt.Rating = 0;
             evt.RateCount = 0;
-            evt.RatingLocation = 0;
             return Repository.CreateEventAsync(evt);
         }
 
@@ -141,9 +140,9 @@ namespace GeoEvents.Service
         /// <param name="eventId">The event identifier.</param>
         /// <param name="rating"></param>
         /// <returns></returns>
-        public Task<IEvent> UpdateRatingAsync(Guid eventId, decimal rating)
+        public Task<IEvent> UpdateRatingAsync(Guid eventId, double rating, double CurrentRating, int RateCount)
         {
-            return Repository.UpdateRatingAsync(eventId, rating);
+            return Repository.UpdateRatingAsync(eventId, rating,CurrentRating,RateCount);
         }
 
 

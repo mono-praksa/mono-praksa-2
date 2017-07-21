@@ -20,7 +20,7 @@ namespace GeoEvents.Repository.Common
         /// <returns>
         /// Location
         /// </returns>
-        Task<ILocation> GetOrCreateLocationAsync(string address,double EventRating,int EventRateCount);
+        Task<ILocation> GetLocationAsync(string address,double eventRating,int eventRateCount);
 
         /// <summary>
         /// Create Location asynchronous
@@ -39,6 +39,17 @@ namespace GeoEvents.Repository.Common
         /// <returns>
         /// Location
         /// </returns>
-        Task<ILocation> GetLocationByIdAsync(Guid id,double Rating);
+        Task<ILocation> GetLocationByIdAsync(Guid id);
+
+        /// <summary>
+        /// Get Location by Id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="Rating"></param>
+        /// <returns>
+        /// Location
+        /// </returns>
+        Task<ILocation> UpdateLocationRatingAsync(Guid id, double Rating);
+       
     }
 }

@@ -39,9 +39,9 @@ namespace GeoEvents.Service
 
         #region Methods
 
-        public Task<ILocation> UpdateRatingLocationAsync(Guid eventId, decimal rating)
+        public Task<ILocation> UpdateRatingLocationAsync(Guid eventId, double rating)
         {
-            return Repository.UpdateRatingLocationAsync(eventId, rating);
+            return Repository.UpdateLocationRatingAsync(eventId, rating);
         }
 
         public Task<ILocation> CreateLocationAsync(ILocation location)

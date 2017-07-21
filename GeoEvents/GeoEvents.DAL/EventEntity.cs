@@ -47,7 +47,7 @@ namespace GeoEvents.DAL
         /// <value>
         /// The lat.
         /// </value>
-        public Decimal Latitude { get; set; }
+        public double Latitude { get; set; }
 
 
         /// <summary>
@@ -56,7 +56,7 @@ namespace GeoEvents.DAL
         /// <value>
         /// The long.
         /// </value>
-        public Decimal Longitude { get; set; }
+        public double Longitude { get; set; }
 
 
         /// <summary>
@@ -91,7 +91,7 @@ namespace GeoEvents.DAL
         /// <value>
         /// The price.
         /// </value>
-        public decimal Price { get; set; }
+        public double Price { get; set; }
 
         /// <summary>
         /// Gets or sets the capacity.
@@ -115,7 +115,7 @@ namespace GeoEvents.DAL
         /// <value>
         /// The rating.
         /// </value>
-        public decimal Rating { get; set; }
+        public double Rating { get; set; }
 
         /// <summary>
         /// Gets or sets the rate count.
@@ -125,13 +125,6 @@ namespace GeoEvents.DAL
         /// </value>
         public int RateCount { get; set; }
 
-        /// <summary>
-        /// Gets or sets the rating location.
-        /// </summary>
-        /// <value>
-        /// The rating location.
-        /// </value>
-        public decimal RatingLocation { get; set; }
 
         /// <summary>
         /// Gets or sets the location identifier.
@@ -178,8 +171,8 @@ namespace GeoEvents.DAL
         /// <param name="RateCount">The rate count.</param>
         /// <param name="RatingLocation">The rating location.</param>
         /// <param name="LocationId">The location identifier.</param>
-        public EventEntity(Guid id, DateTime startTime, DateTime endTime, Decimal latitude,
-            Decimal longitude, string name, string description, int category, decimal price, int capacity, int reserved, decimal rating, int rateCount, decimal ratingLocation, Guid locationId, string custom)
+        public EventEntity(Guid id, DateTime startTime, DateTime endTime, double latitude,
+            double longitude, string name, string description, int category, double price, int capacity, int reserved, double rating, int rateCount, Guid locationId, string custom)
         {
             this.Id = id;
             this.StartTime = startTime;
@@ -194,7 +187,6 @@ namespace GeoEvents.DAL
             this.Reserved = reserved;
             this.Rating = rating;
             this.RateCount = rateCount;
-            this.RatingLocation = ratingLocation;
             this.LocationId = locationId;
             this.Custom = custom;
         }

@@ -140,6 +140,7 @@ namespace GeoEvents.Model.Common
         Guid LocationId { get; set; }
 
         string Custom { get; set; }
+            
         #endregion Properties
     }
 }
