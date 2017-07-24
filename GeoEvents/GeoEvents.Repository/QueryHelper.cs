@@ -3,8 +3,7 @@ using System;
 using System.Text;
 
 namespace GeoEvents.Repository
-{ // dodaj uvjet za order by distance uvjet jel ima lat long i radius
-
+{
     static public class QueryHelper
     {
         #region Constants
@@ -60,7 +59,6 @@ namespace GeoEvents.Repository
         public static string ParCustom = "@Custom";
         public static string ParAddress = "@Address";
 
-
         /// <summary>
         /// Added Qouted strings
         /// </summary>
@@ -83,8 +81,8 @@ namespace GeoEvents.Repository
         /// Default DateTime
         /// </summary>
         private static DateTime DefaulTime = new DateTime(0001, 01, 01);
-
         #endregion Constants
+
 
         #region Metods
 
@@ -93,14 +91,12 @@ namespace GeoEvents.Repository
         /// </summary>
         /// <param name="filter"></param>
         /// <returns>Query string</returns>
-        ///
         public static string GetSelectCountEventQueryString(IFilter filter)
         {
             StringBuilder selectString = new StringBuilder();
 
-                selectString.AppendFormat("SELECT COUNT({0}) FROM {1} WHERE",
-                    TableNameEventIdQ, TableNameEventQ);
-            
+            selectString.AppendFormat("SELECT COUNT({0}) FROM {1} WHERE",
+                TableNameEventIdQ, TableNameEventQ);
 
             bool isNotFirst = false;
 
@@ -112,7 +108,7 @@ namespace GeoEvents.Repository
                 isNotFirst = true;
             }
 
-            //Adding Price filter query if there is price
+            ///Adding Price filter query if there is price
             if (filter.Price != null)
             {
                 if (isNotFirst)
@@ -127,7 +123,7 @@ namespace GeoEvents.Repository
                     TableNameEventPriceQ, ParPrice);
             }
 
-            //Adding Rating Event filter query if there is rating event
+            ///Adding Rating Event filter query if there is rating event
             if (filter.RatingEvent != null)
             {
                 if (isNotFirst)
@@ -185,7 +181,6 @@ namespace GeoEvents.Repository
                 selectString.AppendFormat(" ({0}>{1}) ",
                     ParUserEndTime, TableNameEventStartTimeQ);
             }
-            ///
 
             ///Adding searcstring filter in queri if there is searchstring
             if (!String.IsNullOrWhiteSpace(filter.SearchString))
@@ -200,7 +195,7 @@ namespace GeoEvents.Repository
                     isNotFirst = true;
                 }
 
-                selectString.AppendFormat(" ({0} ILIKE ({1})) ",
+                selectString.AppendFormat(" (lower({0}) LIKE lower({1})) ",
                     NameQ, ParSearchString);
             }
 
@@ -253,13 +248,18 @@ namespace GeoEvents.Repository
             return selectString.ToString();
         }
 
+        /// <summary>
+        /// Get Rating and reate Count
+        /// </summary>
+        /// <returns>
+        /// string
+        /// </returns>
         public static string GetSelectFromEventRatingQueryString()
         {
             StringBuilder selectString = new StringBuilder();
             selectString.AppendFormat("SELECT rating,ratecount FROM {0} WHERE {1}={2}", TableNameEventQ, TableNameEventIdQ, ParEventId);
 
             return selectString.ToString();
-
         }
 
         /// <summary>
@@ -294,7 +294,7 @@ namespace GeoEvents.Repository
                 isNotFirst = true;
             }
 
-            //Adding Price filter query if there is price
+            ///Adding Price filter query if there is price
             if (filter.Price != null)
             {
                 if (isNotFirst)
@@ -309,7 +309,7 @@ namespace GeoEvents.Repository
                     TableNameEventPriceQ, ParPrice);
             }
 
-            //Adding Rating Event filter query if there is rating event
+            ///Adding Rating Event filter query if there is rating event
             if (filter.RatingEvent != null)
             {
                 if (isNotFirst)
@@ -367,7 +367,6 @@ namespace GeoEvents.Repository
                 selectString.AppendFormat(" ({0}>{1}) ",
                     ParUserEndTime, TableNameEventStartTimeQ);
             }
-            ///
 
             ///Adding searcstring filter in queri if there is searchstring
             if (!String.IsNullOrWhiteSpace(filter.SearchString))
@@ -382,7 +381,7 @@ namespace GeoEvents.Repository
                     isNotFirst = true;
                 }
 
-                selectString.AppendFormat(" ({0} ILIKE ({1})) ",
+                selectString.AppendFormat(" (lower({0}) ILIKE lower({1})) ",
                     NameQ, ParSearchString);
             }
 
@@ -476,9 +475,9 @@ namespace GeoEvents.Repository
         {
             StringBuilder insertString = new StringBuilder();
             insertString.AppendFormat("INSERT INTO {0} VALUES ({1}, {2}, {3}, {4}, {5}, {6}, {7}, {8}, {9}, {10}, {11}, {12}, {13}, {14}, {15})",
-                TableNameEventQ,ParId,ParName,ParDescription,ParCategory,ParLatitude,ParLongitude,
-                ParStartTime,ParEndTime,ParRating,ParRateCount,ParPrice,ParCapacity,ParReserved,
-                ParCustom,ParLocationId);
+                TableNameEventQ, ParId, ParName, ParDescription, ParCategory, ParLatitude, ParLongitude,
+                ParStartTime, ParEndTime, ParRating, ParRateCount, ParPrice, ParCapacity, ParReserved,
+                ParCustom, ParLocationId);
 
             return insertString.ToString();
         }
@@ -529,10 +528,9 @@ namespace GeoEvents.Repository
         /// </returns>
         public static string GetSelectUpdateRatingQueryString()
         {
-
             StringBuilder getCurrentRating = new StringBuilder();
             getCurrentRating.AppendFormat("SELECT {0},{1},{2},{3} FROM {4} WHERE {5}={6}",
-                RatingQ, RateCountQ,LatQ,LongQ, TableNameEventQ, TableNameEventIdQ, ParEventId);
+                RatingQ, RateCountQ, LatQ, LongQ, TableNameEventQ, TableNameEventIdQ, ParEventId);
 
             return getCurrentRating.ToString();
         }
@@ -545,7 +543,6 @@ namespace GeoEvents.Repository
         /// </returns>
         public static string GetsInsertUpdateRatingQueryString()
         {
-
             StringBuilder updateRatingString = new StringBuilder();
             updateRatingString.AppendFormat("UPDATE {0} SET {1}={2} , {3}={4} WHERE {5}={6}",
                 TableNameEventQ, RatingQ, ParRating, RateCountQ, ParRateCount, TableNameEventIdQ, ParEventId);
@@ -560,9 +557,7 @@ namespace GeoEvents.Repository
         /// query string
         /// </returns>
         public static string GetSelectCurrentReservationQueryString()
-        {
-
-
+        { 
             StringBuilder getCurrentReservation = new StringBuilder();
             getCurrentReservation.AppendFormat("SELECT {0} FROM {1} WHERE {2}={3}",
                 ReservedQ, TableNameEventQ, TableNameEventIdQ, ParEventId);
@@ -578,7 +573,6 @@ namespace GeoEvents.Repository
         /// </returns>
         public static string GetInsertUpdateReservationQueryString()
         {
-
             StringBuilder updateReservationString = new StringBuilder();
             updateReservationString.AppendFormat("UPDATE {0} SET {1}={2} WHERE {3}={4}",
                 TableNameEventQ, ReservedQ, ParReserved, TableNameEventIdQ, ParEventId);
@@ -594,7 +588,6 @@ namespace GeoEvents.Repository
         /// </returns>
         public static string GetSelectLocationQueryString()
         {
-
             StringBuilder selectLocationString = new StringBuilder();
             selectLocationString.AppendFormat("SELECT * FROM {0} WHERE {1}={2}", TableNameLocationQ, AddressQ, ParAddress);
 

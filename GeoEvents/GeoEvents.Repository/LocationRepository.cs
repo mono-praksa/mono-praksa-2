@@ -42,7 +42,7 @@ namespace GeoEvents.Repository
         /// </summary>
         /// <param name="address"></param>
         /// <returns>
-        /// Location
+        /// ILocation
         /// </returns>
         public async Task<ILocation> GetLocationAsync(string address)
         {
@@ -93,13 +93,12 @@ namespace GeoEvents.Repository
             }
         }
 
-
         /// <summary>
         /// Get Location by Id
         /// </summary>
         /// <param name="id"></param>
         /// <returns>
-        /// Location
+        /// ILocation
         /// </returns>
         public async Task<ILocation> GetLocationByIdAsync(Guid id)
         {
@@ -131,12 +130,13 @@ namespace GeoEvents.Repository
 
             return Mapper.Map<ILocation>(location);
         }
+
         /// <summary>
         /// Create Location asynchronous
         /// </summary>
         /// <param name="location"></param>
         /// <returns>
-        /// Location
+        /// ILocation
         /// </returns>
         public async Task<ILocation> CreateLocationAsync(ILocation location)
         {
@@ -145,7 +145,6 @@ namespace GeoEvents.Repository
             using (Connection.CreateConnection())
             using (NpgsqlCommand command = new NpgsqlCommand(QueryHelper.GetInsertCreateLocationQueryString(), Connection.CreateConnection()))
             {
-                #region Create Location
                 if (Connection.CreateConnection().FullState == ConnectionState.Closed)
                 {
                     await Connection.CreateConnection().OpenAsync();
@@ -155,7 +154,6 @@ namespace GeoEvents.Repository
                 command.Parameters.AddWithValue(QueryHelper.ParRating, NpgsqlTypes.NpgsqlDbType.Uuid, location.Rating);
                 command.Parameters.AddWithValue(QueryHelper.ParRateCount, NpgsqlTypes.NpgsqlDbType.Uuid, location.RateCount);
                 await command.ExecuteNonQueryAsync();
-                #endregion
             }
             using (Connection.CreateConnection())
             {
@@ -164,13 +162,14 @@ namespace GeoEvents.Repository
             return NewLocation;
 
         }
+
         /// <summary>
         /// Get Location by Id
         /// </summary>
         /// <param name="id"></param>
         /// <param name="rating"></param>
         /// <returns>
-        /// Location
+        /// ILocation
         /// </returns>
         public async Task<ILocation> UpdateLocationRatingAsync(Guid id, double rating)
         {
@@ -188,8 +187,10 @@ namespace GeoEvents.Repository
                 {
                     await Connection.CreateConnection().OpenAsync();
                 }
+
                 double NewRating = 0;
                 int NewRateCount = location.RateCount + 1;
+
                 NewRating = (location.Rating * location.RateCount + rating) / NewRateCount;
 
                 command.Parameters.AddWithValue(QueryHelper.ParId, NpgsqlTypes.NpgsqlDbType.Double, id);
@@ -200,8 +201,10 @@ namespace GeoEvents.Repository
             using (Connection.CreateConnection()) { 
             NewLocation = await GetLocationByIdAsync(id);
             }
+
             return NewLocation;
         }
+
         #endregion Methods
     }
 }
