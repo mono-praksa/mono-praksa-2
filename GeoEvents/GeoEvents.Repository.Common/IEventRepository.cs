@@ -22,7 +22,7 @@ namespace GeoEvents.Repository.Common
         /// </summary>
         /// <param name="evt"></param>
         /// <returns>
-        /// return Created event (IEvent)
+        /// Created event (IEvent)
         /// </returns>
         Task<IEnumerable<IEvent>> GetEventsAsync(IFilter filter);
 
@@ -48,7 +48,9 @@ namespace GeoEvents.Repository.Common
         /// Updates the reservation asynchronous.
         /// </summary>
         /// <param name="eventId">The event identifier.</param>
-        /// <returns></returns>
+        /// <returns>
+        /// Updated event
+        /// </returns>
         Task<IEvent> UpdateReservationAsync(Guid eventId);
 
         /// <summary>
@@ -56,10 +58,11 @@ namespace GeoEvents.Repository.Common
         /// </summary>
         /// <param name="eventId">The event identifier.</param>
         /// <param name="rating">The rating.</param>
-        /// <returns></returns>
-        Task<IEvent> UpdateRatingAsync(Guid eventId, double rating,double CurrentRating,int RateCount);
+        /// <returns>
+        /// Updated event
+        /// </returns>
+        Task<IEvent> UpdateRatingAsync(Guid eventId, double rating, double CurrentRating, int RateCount);
 
         #endregion Methods
     }
 }
-

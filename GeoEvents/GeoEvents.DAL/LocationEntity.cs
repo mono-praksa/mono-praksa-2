@@ -1,9 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 
 namespace GeoEvents.DAL
 {
@@ -42,6 +37,7 @@ namespace GeoEvents.DAL
         /// The address.
         /// </value>
         public string Address { get; set; }
+
         #endregion Properties
 
         #region Constructors
@@ -64,9 +60,8 @@ namespace GeoEvents.DAL
             this.Rating = rating;
             this.RateCount = rateCount;
             this.Address = address;
-
         }
-        #endregion Constructors
 
+        #endregion Constructors
     }
 }

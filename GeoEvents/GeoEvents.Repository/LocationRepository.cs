@@ -1,17 +1,14 @@
 ﻿using AutoMapper;
 using GeoEvents.Common;
-using GeoEvents.Repository.Common;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using GeoEvents.Model.Common;
 using GeoEvents.DAL;
+using GeoEvents.Model.Common;
+using GeoEvents.Repository.Common;
 using Npgsql;
-using System.Data.Common;
-using System.Data;
 using NpgsqlTypes;
+using System;
+using System.Data;
+using System.Data.Common;
+using System.Threading.Tasks;
 
 namespace GeoEvents.Repository
 {
@@ -36,7 +33,6 @@ namespace GeoEvents.Repository
 
         #region Methods
 
-
         /// <summary>
         /// Getslocation or creates if there is non  asynchronous.
         /// </summary>
@@ -51,7 +47,7 @@ namespace GeoEvents.Repository
 
             using (Connection.CreateConnection())
             using (NpgsqlCommand command = new NpgsqlCommand(QueryHelper.GetSelectLocationQueryString(), Connection.CreateConnection()))
-            using (NpgsqlCommand commandInsert = new NpgsqlCommand(QueryHelper.GetInsertCreateLocationQueryString(),Connection.CreateConnection()))
+            using (NpgsqlCommand commandInsert = new NpgsqlCommand(QueryHelper.GetInsertCreateLocationQueryString(), Connection.CreateConnection()))
             {
                 command.Parameters.AddWithValue(QueryHelper.ParAddress, NpgsqlTypes.NpgsqlDbType.Text, address);
                 if (Connection.CreateConnection().FullState == ConnectionState.Closed)
@@ -85,7 +81,6 @@ namespace GeoEvents.Repository
             if (location == null)
             {
                 return await GetLocationByIdAsync(NewLocation.Id);
-
             }
             else
             {
@@ -107,7 +102,6 @@ namespace GeoEvents.Repository
             using (Connection.CreateConnection())
             using (NpgsqlCommand command = new NpgsqlCommand(QueryHelper.GetSelectLocationByIdQueryString(), Connection.CreateConnection()))
             {
-
                 command.Parameters.AddWithValue(QueryHelper.ParId, NpgsqlTypes.NpgsqlDbType.Uuid, id);
                 if (Connection.CreateConnection().FullState == ConnectionState.Closed)
                 {
@@ -126,8 +120,6 @@ namespace GeoEvents.Repository
                 }
             }
 
-
-
             return Mapper.Map<ILocation>(location);
         }
 
@@ -140,7 +132,6 @@ namespace GeoEvents.Repository
         /// </returns>
         public async Task<ILocation> CreateLocationAsync(ILocation location)
         {
-
             ILocation NewLocation;
             using (Connection.CreateConnection())
             using (NpgsqlCommand command = new NpgsqlCommand(QueryHelper.GetInsertCreateLocationQueryString(), Connection.CreateConnection()))
@@ -160,7 +151,6 @@ namespace GeoEvents.Repository
                 NewLocation = await GetLocationByIdAsync(location.Id);
             }
             return NewLocation;
-
         }
 
         /// <summary>
@@ -198,8 +188,9 @@ namespace GeoEvents.Repository
                 command.Parameters.AddWithValue(QueryHelper.ParRating, NpgsqlTypes.NpgsqlDbType.Integer, NewRating);
                 await command.ExecuteNonQueryAsync();
             }
-            using (Connection.CreateConnection()) { 
-            NewLocation = await GetLocationByIdAsync(id);
+            using (Connection.CreateConnection())
+            {
+                NewLocation = await GetLocationByIdAsync(id);
             }
 
             return NewLocation;

@@ -1,16 +1,11 @@
-﻿
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System;
 
 namespace GeoEvents.DAL
 {
     /// <summary>
     /// Database model EventEntity
     /// </summary>
-    public class EventEntity 
+    public class EventEntity
     {
         #region Properties
 
@@ -22,7 +17,6 @@ namespace GeoEvents.DAL
         /// </value>
         public Guid Id { get; set; }
 
-
         /// <summary>
         /// Gets or sets the start time.
         /// </summary>
@@ -30,7 +24,6 @@ namespace GeoEvents.DAL
         /// The start time.
         /// </value>
         public DateTime StartTime { get; set; }
-
 
         /// <summary>
         /// Gets or sets the end time.
@@ -40,24 +33,21 @@ namespace GeoEvents.DAL
         /// </value>
         public DateTime EndTime { get; set; }
 
-
         /// <summary>
-        /// Gets or sets the lat.
+        /// Gets or sets the latitude.
         /// </summary>
         /// <value>
-        /// The lat.
+        /// The latitude.
         /// </value>
         public double Latitude { get; set; }
 
-
         /// <summary>
-        /// Gets or sets the long.
+        /// Gets or sets the longitude.
         /// </summary>
         /// <value>
-        /// The long.
+        /// The longitude.
         /// </value>
         public double Longitude { get; set; }
-
 
         /// <summary>
         /// Gets or sets the name.
@@ -67,7 +57,6 @@ namespace GeoEvents.DAL
         /// </value>
         public string Name { get; set; }
 
-
         /// <summary>
         /// Gets or sets the description.
         /// </summary>
@@ -75,7 +64,6 @@ namespace GeoEvents.DAL
         /// The description.
         /// </value>
         public string Description { get; set; }
-
 
         /// <summary>
         /// Gets or sets the category.
@@ -125,7 +113,6 @@ namespace GeoEvents.DAL
         /// </value>
         public int RateCount { get; set; }
 
-
         /// <summary>
         /// Gets or sets the location identifier.
         /// </summary>
@@ -141,17 +128,15 @@ namespace GeoEvents.DAL
         /// The custom.
         /// </value>
         public string Custom { get; set; }
+
         #endregion Properties
 
-
         #region Constructors
+
         /// <summary>
         /// Initializes a new instance of the <see cref="EventEntity"/> class.
         /// </summary>
         public EventEntity() { }
-
-
-
 
         /// <summary>
         /// Initializes a new instance of the <see cref="EventEntity"/> class.
@@ -193,7 +178,5 @@ namespace GeoEvents.DAL
         }
 
         #endregion Constructors
-
     }
 }
-

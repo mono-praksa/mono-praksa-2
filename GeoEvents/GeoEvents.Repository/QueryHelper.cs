@@ -12,6 +12,7 @@ namespace GeoEvents.Repository
         /// Quoted Constant string
         /// </summary>
         private static string TableNameEventQ = "events";
+
         private static string TableNameLocationQ = "locations";
         private static string TableNameImagesQ = "images";
         private static string NameQ = "name";
@@ -36,6 +37,7 @@ namespace GeoEvents.Repository
         /// Parametar Constant strings
         /// </summary>
         public static string ParLatitude = "@Latitude";
+
         public static string ParLongitude = "@Longitude";
         public static string ParName = "@Name";
         public static string ParEndTime = "@EndTime";
@@ -63,6 +65,7 @@ namespace GeoEvents.Repository
         /// Added Qouted strings
         /// </summary>
         private static string TableNameEventNameQ = "events.name";
+
         private static string TableNameEventDescriptionQ = "events.description";
         private static string TableNameEventStartTimeQ = "events.starttime";
         private static string TableNameEventEndTimeQ = "events.endtime";
@@ -81,8 +84,8 @@ namespace GeoEvents.Repository
         /// Default DateTime
         /// </summary>
         private static DateTime DefaulTime = new DateTime(0001, 01, 01);
-        #endregion Constants
 
+        #endregion Constants
 
         #region Metods
 
@@ -450,7 +453,6 @@ namespace GeoEvents.Repository
                     selectString.AppendFormat(" order by {0} ",
                         TableNameEventRatingQ);
                     break;
-
             }
 
             if (filter.OrderAscending == true && String.IsNullOrEmpty(filter.OrderBy) == false)
@@ -521,7 +523,7 @@ namespace GeoEvents.Repository
         }
 
         /// <summary>
-        /// Get select query for Update Rating 
+        /// Get select query for Update Rating
         /// </summary>
         /// <returns>
         /// query string
@@ -536,7 +538,7 @@ namespace GeoEvents.Repository
         }
 
         /// <summary>
-        /// Get insert query for Rating 
+        /// Get insert query for Rating
         /// </summary>
         /// <returns>
         /// query string
@@ -557,7 +559,7 @@ namespace GeoEvents.Repository
         /// query string
         /// </returns>
         public static string GetSelectCurrentReservationQueryString()
-        { 
+        {
             StringBuilder getCurrentReservation = new StringBuilder();
             getCurrentReservation.AppendFormat("SELECT {0} FROM {1} WHERE {2}={3}",
                 ReservedQ, TableNameEventQ, TableNameEventIdQ, ParEventId);
@@ -603,7 +605,7 @@ namespace GeoEvents.Repository
         public static string GetSelectLocationByIdQueryString()
         {
             StringBuilder selectString = new StringBuilder();
-            selectString.AppendFormat("SELECT * FROM {0} WHERE {1}={2}",TableNameLocationQ, IdQ, ParId);
+            selectString.AppendFormat("SELECT * FROM {0} WHERE {1}={2}", TableNameLocationQ, IdQ, ParId);
 
             return selectString.ToString();
         }
@@ -621,7 +623,6 @@ namespace GeoEvents.Repository
                 TableNameLocationQ, ParId, ParAddress, ParRating, ParRateCount);
 
             return insertString.ToString();
-
         }
 
         /// <summary>
@@ -634,12 +635,12 @@ namespace GeoEvents.Repository
         {
             StringBuilder updateString = new StringBuilder();
             updateString.AppendFormat("UPDATE {0} SET {1}={2},{3}={4} WHERE  {5}={6} ",
-                TableNameLocationQ, RatingQ, ParRating,RateCountQ ,
+                TableNameLocationQ, RatingQ, ParRating, RateCountQ,
                 ParRateCount, IdQ, ParId);
-
 
             return updateString.ToString();
         }
+
         #endregion Metods
     }
 }
