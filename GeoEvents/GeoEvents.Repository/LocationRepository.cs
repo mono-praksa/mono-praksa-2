@@ -74,6 +74,7 @@ namespace GeoEvents.Repository
                 {
                     Connection.CreateConnection().Close();
                     await Connection.CreateConnection().OpenAsync();
+
                     commandInsert.Parameters.AddWithValue(QueryHelper.ParId, NpgsqlDbType.Uuid, NewLocation.Id);
                     commandInsert.Parameters.AddWithValue(QueryHelper.ParAddress, NpgsqlDbType.Text, NewLocation.Address);
                     commandInsert.Parameters.AddWithValue(QueryHelper.ParRating, NpgsqlDbType.Double, NewLocation.Rating);
@@ -83,7 +84,7 @@ namespace GeoEvents.Repository
             }
             if (location == null)
             {
-                return Mapper.Map<ILocation>(NewLocation);
+                return await GetLocationByIdAsync(NewLocation.Id);
 
             }
             else
