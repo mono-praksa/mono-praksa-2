@@ -43,6 +43,7 @@ export class EventDetailComponent implements OnInit {
     ngOnInit() {
         this.inpustName = this.itemId + '_rating';
         this.event = this._activatedRoute.snapshot.data.event;
+        this.event.Custom = eval(this.event.Custom);
         
         this._loaderService.loaderStatus.subscribe((value: boolean) => {
             this.getImagesLoading = value;

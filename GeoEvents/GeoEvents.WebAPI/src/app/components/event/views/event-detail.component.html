@@ -11,6 +11,19 @@
                 {{CategoryEnum[category]}}
             </li>
         </ul>
+        <div *ngIf="event.Custom">
+            <h4>Custom attributes:</h4>
+            <div *ngFor="let attribute of event.Custom">
+                <div>
+                    {{attribute.key}}
+                </div>
+                <ul>
+                    <li *ngFor="let value of attribute.values">
+                        {{value}}
+                    </li>
+                </ul>
+            </div>
+        </div>
         <div style="float:left; padding-right: 10px;">
             <h4>Rating: {{event?.Rating | number:'1.2-2'}}</h4>
         </div>
