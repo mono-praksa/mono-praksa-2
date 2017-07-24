@@ -14,7 +14,6 @@ import { LocationService } from '../location.service'
 })
 
 export class EventCreateCustomizeComponent implements OnInit {
-    keysGetter = Object.keys;
     key: FormControl;
     value: FormControl;
     customAttributeForm: FormGroup;

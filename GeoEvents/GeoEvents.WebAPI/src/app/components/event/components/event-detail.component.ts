@@ -18,9 +18,9 @@ import { LoaderService } from '../../../shared/loader.service';
 
 export class EventDetailComponent implements OnInit {
     private _event: IEvent;
+    private _images: IImage[];
     @ViewChild("carousel") carouselElement: ElementRef;
     @ViewChild("userRate") userRateElement: ElementRef;
-    private _images: IImage[];
     CategoryEnum: any = CategoryEnum;
     private _address: string = "";
     private _getImagesLoading: boolean = false;
@@ -32,27 +32,25 @@ export class EventDetailComponent implements OnInit {
     inpustName: string;
 
     constructor(
-        private geocodingService: GeocodingService,
-        private eventService: EventService,
+        private _geocodingService: GeocodingService,
+        private _eventService: EventService,
         private _loaderService: LoaderService,
-        private activatedRoute: ActivatedRoute
+        private _activatedRoute: ActivatedRoute
     ) {
 
     }
 
     ngOnInit() {
         this.inpustName = this.itemId + '_rating';
-        this.event = this.activatedRoute.snapshot.data.event;
+        this.event = this._activatedRoute.snapshot.data.event;
         
-        //this.eventService.getEventById(this.activatedRoute.snapshot.params['eventId'])
-        //    .subscribe((event: IEvent) => { this.event = event });
         this._loaderService.loaderStatus.subscribe((value: boolean) => {
             this.getImagesLoading = value;
         });
 
         this._loaderService.displayLoader(true);
 
-        this.eventService.getImages(this.activatedRoute.snapshot.params['eventId']).subscribe((res: IImage[]) => {
+        this._eventService.getImages(this._activatedRoute.snapshot.params['eventId']).subscribe((res: IImage[]) => {
             this.images = res
             for (var i = 0; i < this.images.length; i++) {
                 var item = document.createElement("div");
@@ -76,7 +74,7 @@ export class EventDetailComponent implements OnInit {
             this._loaderService.displayLoader(false);
         });
 
-        this.geocodingService.getAddress(this.event.Latitude, this.event.Longitude).subscribe(response => {
+        this._geocodingService.getAddress(this.event.Latitude, this.event.Longitude).subscribe(response => {
             this.address = response;
         });
     }
@@ -86,7 +84,7 @@ export class EventDetailComponent implements OnInit {
     }
 
     rate(rating: number) {
-        this.eventService.updateRating(this.event.Id, +rating, this.event.Rating, this.event.RateCount)
+        this._eventService.updateRating(this.event.Id, +rating, this.event.Rating, this.event.RateCount)
             .subscribe((response: IEvent) => {
                 this.event.Rating = response.Rating;
                 this.event.RateCount = response.RateCount;
@@ -100,7 +98,7 @@ export class EventDetailComponent implements OnInit {
     }
 
     reserve() {
-        this.eventService.updateReservation(this.event.Id)
+        this._eventService.updateReservation(this.event.Id)
             .subscribe((response: IEvent) => {
                 this.event.Reserved = response.Reserved;
             });
@@ -154,14 +152,6 @@ export class EventDetailComponent implements OnInit {
     set address(theAddress: string) {
         this._address = theAddress;
     }
-
-    //onClick(rating: number): void {
-    //    this.rating = rating;
-    //    this.ratingClick.emit({
-    //        itemId: this.itemId,
-    //        rating: rating
-    //    });
-    //}
 }
 
 enum CategoryEnum {

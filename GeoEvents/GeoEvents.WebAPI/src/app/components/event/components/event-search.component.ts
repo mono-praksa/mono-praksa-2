@@ -40,7 +40,7 @@ export class EventSearchComponent implements OnInit {
     customCategoryName: FormControl;
     customCategoryValue: FormControl;
 	private _filter: IFilter;
-	private dataServiceSubscription: Subscription;
+	private _dataServiceSubscription: Subscription;
 	
 	//variables for the location services
     isAddressValid: boolean = false;
@@ -62,86 +62,6 @@ export class EventSearchComponent implements OnInit {
     //private _isDetailMode: boolean = false;
 	private _isAdvancedSearch: boolean = false;
 
-    get eventCount(): number {
-        return this._eventCount;
-    }
-
-    set eventCount(theEventCount: number) {
-        this._eventCount = theEventCount;
-    }
-
-    get searchEventLoading(): boolean {
-        return this._searchEventLoading;
-    }
-
-    set searchEventLoading(thesearchEventLoading: boolean) {
-        this._searchEventLoading = thesearchEventLoading;
-    }
-
-    get userApproximateAddress(): string {
-        return this._userApproximateAddress;
-    }
-
-    set userApproximateAddress(theUserApproximateAddress: string) {
-        this._userApproximateAddress = theUserApproximateAddress;
-    }
-
-    get events(): IEvent[] {
-        return this._events;
-    }
-
-    set events(theEvents: IEvent[]) {
-        this._events = theEvents;
-    }
-
-    //get event(): IEvent {
-    //    return this._event;
-    //}	
-
-    //set event(theEvent: IEvent) {
-    //    this._event = theEvent;
-    //}
-
-    get errorMessage(): string {
-        return this._errorMessage;
-    }
-
-    set errorMessage(theErrorMessage: string) {
-        this._errorMessage = theErrorMessage;
-    }
-
-    get filter(): IFilter {
-        return this._filter;
-    }
-
-    set filter(theFilter: IFilter) {
-        this._filter = theFilter;
-    }
-
-    get isMapMode(): boolean {
-        return this._isMapMode;
-    }
-
-    set isMapMode(isMapMode: boolean) {
-        this._isMapMode = isMapMode;
-    }
-
-    //get isDetailMode(): boolean {
-    //    return this._isDetailMode;
-    //}
-
-    //set isDetailMode(isDetailMode: boolean) {
-    //    this._isDetailMode = isDetailMode;
-    //}
-
-    get isAdvancedSearch(): boolean {
-        return this._isAdvancedSearch;
-    }
-
-    set isAdvancedSearch(isAdvancedSearch: boolean) {
-        this._isAdvancedSearch = isAdvancedSearch;
-    }
-
     //constructor
     constructor(
         private _eventService: EventService,
@@ -152,10 +72,6 @@ export class EventSearchComponent implements OnInit {
         private _loaderService: LoaderService
     ) {
 		this.createForm();
-				
-		//checking if this service has any params inside, used when redirected from searching in home component
-		//if there are params, user likely selected the search button on the home component
-		//if there are not any params, user likely clicked on the advanced search button, or redirected from somewhere else.
 	}
 	
     ngOnInit(): void {
@@ -165,12 +81,16 @@ export class EventSearchComponent implements OnInit {
                     this.userApproximateAddress = response.city + ", " + response.country;
                 }
             });
+
         this._loaderService.loaderStatus.subscribe((value: boolean) => {
             this.searchEventLoading = value;
         });
 
+        //checking if this service has any params inside, used when redirected from searching in home component
+		//if there are params, user likely selected the search button on the home component
+		//if there are not any params, user likely clicked on the advanced search button, or redirected from somewhere else.
 		if(this._preserveSearchQuerryService.searchQuerry != null && this._preserveSearchQuerryService.searchQuerry != ""){
-			let newFilter : IFilter = {
+			this.filter = {
 				ULat: null,
 				ULong: null,
 				Radius: 0,
@@ -186,12 +106,14 @@ export class EventSearchComponent implements OnInit {
 				PageSize: 25,
 				OrderByString: "Name",
 				OrderIsAscending: true
-			}		
-			this.getEvents(newFilter);
+            }		
+            this.getEvents(this.filter);
+            this.getEventCount(this.filter);
 		}
 		else{
 			this.isAdvancedSearch = true;
         }
+
         this.startMapZoomListener();
 	}
 
@@ -211,7 +133,7 @@ export class EventSearchComponent implements OnInit {
                 custom = JSON.stringify(customModel);
             }
 
-            let newFilter: IFilter = {
+            this.filter = {
                 ULat: formValues.latitude,
                 ULong: formValues.longitude,
                 Radius: formValues.radius,
@@ -230,10 +152,9 @@ export class EventSearchComponent implements OnInit {
                 OrderIsAscending: true
             }
 
-            if (newFilter.SearchString == null) {
-                newFilter.SearchString == "";
+            if (this.filter.SearchString == null) {
+                this.filter.SearchString == "";
             }
-            this.filter = newFilter;
         }
         else {
             this.filter.PageNumber = pageNumber;
@@ -305,8 +226,6 @@ export class EventSearchComponent implements OnInit {
 				this._ngZone.run(() => {
 					//get the place result
                     let place: google.maps.places.PlaceResult = autocomplete.getPlace();
-                    console.log(place);
-                    console.log(this.filterForm.controls);
 					//verify result
                     if (place.geometry === undefined || place.geometry === null) {
                         this.filterForm.controls["latitude"].setValue(null);
@@ -325,23 +244,6 @@ export class EventSearchComponent implements OnInit {
 		});	
 	}
 	
-	////enters detail mode, sets the event to be displayed
- //   enterDetailMode(event: IEvent): void {
-
- //       //for testing purpose, remove before deploying
- //       console.log("entering detail mode with the following event event: ");
- //       console.log(event);
- //       //
-
-	//	this.event = event;
-	//	this.isDetailMode = true;
-	//}
-	
-	////exits detail mode
-	//exitDetailMode(): void {
-	//	this.isDetailMode = false;
-	//}
-	
 	//toggles displaying advanced search, triggered on click
 	toggleAdvancedSearch(): void {
 		this.isAdvancedSearch = !this.isAdvancedSearch;
@@ -356,7 +258,7 @@ export class EventSearchComponent implements OnInit {
 
 	//calls the http service and gets the events
 	private getEvents(filter: IFilter): void {
-		this.dataServiceSubscription = this._eventService.getEvents(filter)
+		this._dataServiceSubscription = this._eventService.getEvents(filter)
             .subscribe(result => {
                 this.events = result;
                 this._loaderService.displayLoader(false);
@@ -364,8 +266,8 @@ export class EventSearchComponent implements OnInit {
 	}
 	
 	//gets the events when user checks the ascending order checkbox
-	getEventsAscendingChanged(isAscending: boolean){
-		this.filter.OrderIsAscending = !this.filter.OrderIsAscending;
+    getEventsAscendingChanged() {
+        this.filter.OrderIsAscending = !this.filter.OrderIsAscending;
 		//get the events
         this.getEvents(this.filter);
 	}
@@ -415,5 +317,69 @@ export class EventSearchComponent implements OnInit {
         this.filterForm.controls["address"].setValue("");
         this.filterForm.controls["latitude"].setValue(null);
         this.filterForm.controls["longitude"].setValue(null);
+    }
+
+    get eventCount(): number {
+        return this._eventCount;
+    }
+
+    set eventCount(theEventCount: number) {
+        this._eventCount = theEventCount;
+    }
+
+    get searchEventLoading(): boolean {
+        return this._searchEventLoading;
+    }
+
+    set searchEventLoading(thesearchEventLoading: boolean) {
+        this._searchEventLoading = thesearchEventLoading;
+    }
+
+    get userApproximateAddress(): string {
+        return this._userApproximateAddress;
+    }
+
+    set userApproximateAddress(theUserApproximateAddress: string) {
+        this._userApproximateAddress = theUserApproximateAddress;
+    }
+
+    get events(): IEvent[] {
+        return this._events;
+    }
+
+    set events(theEvents: IEvent[]) {
+        this._events = theEvents;
+    }
+
+    get errorMessage(): string {
+        return this._errorMessage;
+    }
+
+    set errorMessage(theErrorMessage: string) {
+        this._errorMessage = theErrorMessage;
+    }
+
+    get filter(): IFilter {
+        return this._filter;
+    }
+
+    set filter(theFilter: IFilter) {
+        this._filter = theFilter;
+    }
+
+    get isMapMode(): boolean {
+        return this._isMapMode;
+    }
+
+    set isMapMode(isMapMode: boolean) {
+        this._isMapMode = isMapMode;
+    }
+
+    get isAdvancedSearch(): boolean {
+        return this._isAdvancedSearch;
+    }
+
+    set isAdvancedSearch(isAdvancedSearch: boolean) {
+        this._isAdvancedSearch = isAdvancedSearch;
     }
 }

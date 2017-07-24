@@ -134,8 +134,11 @@ export class EventCreateDataComponent implements OnInit {
                 this.eventForm.controls["longitude"].setValue(position.coords.longitude);
                 this.geocodingService.getAddress(this.eventForm.controls["latitude"].value, this.eventForm.controls["longitude"].value).subscribe(response => {
                     this.eventForm.controls["address"].setValue(response);
+                    if (this.eventForm.value.address !== "") {
+                        this.isAddressValid = true;
+                        this.eventForm.controls["address"].markAsTouched();
+                    }
                 });
-                this.isAddressValid = true;
             });
         }
     }
@@ -170,7 +173,6 @@ export class EventCreateDataComponent implements OnInit {
         this._locationService.getLocation(formValues.address).subscribe((res: ILocation) => {
             newEvent.LocationId = res.Id;
             this._loaderService.displayLoader(false);
-            console.log(newEvent);
             this.eventEmitter.emit(newEvent);
         })
     }

@@ -1,13 +1,12 @@
 <div class="jumbotron" style="display: flex; align-items: center;">
 	<div class="container">
 		<h1>Djsidogjsoidg</h1>
-		<div>
+		<form [formGroup]="searchForm" (ngSubmit)="onSearch(searchForm.value)" autocomplete="on" novalidate>
             <div class="input-group">
-                <input class="form-control" placeholder="Search..." type="text" [(ngModel)]="this.searchTerm">
+                <input class="form-control" formControlName="searchTerm" id="searchTerm" placeholder="Search..." type="text">
                 <span class="input-group-addon glyphicon glyphicon-search" (click)="this.onSearch()" style="cursor:pointer"></span>
-                <!--<button class="btn btn-primary" (click)="this.onSearch()">Search</button>-->
             </div>
-		</div>
+		</form>
 		<div>
 			<a [routerLink]="['/event/search/']" routerlinkactive="active">Advanced Search</a>
 		</div>

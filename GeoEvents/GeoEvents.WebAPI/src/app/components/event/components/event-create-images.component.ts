@@ -19,39 +19,6 @@ export class EventCreateImagesComponent {
 
     constructor(private _eventService: EventService) { }
 
-    get files(): file[] {
-        return this._files;
-    }
-
-    set files(theFiles: file[]) {
-        this._files = theFiles;
-    }
-
-    get uploadedFiles(): string[] {
-        return this._uploadedFiles;
-    }
-
-    set uploadedFiles(theFiles: string[]) {
-        this._uploadedFiles = theFiles;
-    }
-
-    get fileList(): FileList {
-        return this._fileList;
-    }
-
-    set fileList(theFileList: FileList) {
-        this._fileList = theFileList;
-    }
-
-    get formData() {
-        if (this._formData === undefined) {
-            this._formData = new FormData();
-        }
-        return this._formData;
-    }
-
-    set formData(value: FormData) { this._formData = value; }
-
     onChange(fileInput: any) {
 
         this.fileList = fileInput.target.files;
@@ -97,6 +64,39 @@ export class EventCreateImagesComponent {
         }
         return false;
     }
+
+    get files(): file[] {
+        return this._files;
+    }
+
+    set files(theFiles: file[]) {
+        this._files = theFiles;
+    }
+
+    get uploadedFiles(): string[] {
+        return this._uploadedFiles;
+    }
+
+    set uploadedFiles(theFiles: string[]) {
+        this._uploadedFiles = theFiles;
+    }
+
+    get fileList(): FileList {
+        return this._fileList;
+    }
+
+    set fileList(theFileList: FileList) {
+        this._fileList = theFileList;
+    }
+
+    get formData() {
+        if (this._formData === undefined) {
+            this._formData = new FormData();
+        }
+        return this._formData;
+    }
+
+    set formData(value: FormData) { this._formData = value; }
 }
 
 interface file {
