@@ -22,13 +22,6 @@ namespace GeoEvents.WebAPI.Controllers
             this.Mapper = mapper;
         }
 
-        //[HttpGet]
-        //[Route("get/{eventId:guid}")]
-        //public List<ImageModel> GetImages(Guid eventId)
-        //{
-        //    return Mapper.Map<List<ImageModel>>(Service.GetImages(eventId));
-        //}
-
         //async
         [HttpGet]
         [Route("get/{eventId}")]
@@ -36,39 +29,6 @@ namespace GeoEvents.WebAPI.Controllers
         {
             return Mapper.Map<IEnumerable<ImageModel>>(await Service.GetImagesAsync(eventId));
         }
-
-        //[HttpPost]
-        //[Route("create")]
-        //public async Task<HttpResponseMessage> CreateImages()
-        //{
-        //    List<ImageModel> img = new List<ImageModel>();
-        //    ImageModel img1 = new ImageModel();
-        //    img1.Id = Guid.NewGuid();
-        //    img1.EventId = new Guid(("0b6b497b-7717-4a3e-bf1e-8bf7fca151d8").ToString());
-
-        //    if (!Request.Content.IsMimeMultipartContent())
-        //        throw new HttpResponseException(HttpStatusCode.UnsupportedMediaType);
-
-        //    var provider = new MultipartMemoryStreamProvider();
-
-        //    // Read the form data.
-        //    await Request.Content.ReadAsMultipartAsync(provider);
-
-        //    foreach (var file in provider.Contents)
-        //    {
-        //        var filename = file.Headers.ContentDisposition.FileName.Trim('\"');
-
-        //        if (!System.Web.MimeMapping.GetMimeMapping(filename).StartsWith("image/")) {
-        //            throw new Exception("You can upload images only!");
-        //        }
-
-        //        img1.Content = await file.ReadAsByteArrayAsync();
-        //        //Do whatever you want with filename and its binaray data.
-        //        img.Add(img1);
-        //        Service.CreateImages(Mapper.Map<List<IImage>>(img));
-        //    }
-        //    return Request.CreateResponse(HttpStatusCode.OK, "Upload successful");
-        //}
 
         //async
         [HttpPost]

@@ -21,14 +21,6 @@ namespace GeoEvents.WebAPI.Controllers
             this.Mapper = mapper;
         }
 
-        //[HttpPost]
-        //[Route("create")]
-        //public bool CreateEvent([FromBody] EventModel evt)
-        //{
-        //    evt.Id = Guid.NewGuid();
-        //    return Service.CreateEvent(Mapper.Map<IEvent>(evt));
-        //}
-
         //async
         [HttpPost]
         [Route("create")]
@@ -38,15 +30,6 @@ namespace GeoEvents.WebAPI.Controllers
             
             return Mapper.Map<EventModel>(await Service.CreateEventAsync(Mapper.Map<IEvent>(evt)));
         }
-
-        //[HttpGet]
-        //[Route(@"search/{ULat:decimal}/{ULong:decimal}/{Radius:decimal}/{Category:int}/{StartTime:regex(^\d{4}-\d{2}-\d{2} \d{2}h\d{2}$)}/{EndTime:regex(^\d{4}-\d{2}-\d{2} \d{2}h\d{2}$)}")]
-        //public List<EventModel> SearchEvents(decimal ULat, decimal ULong, decimal Radius, int Category, string StartTime, string EndTime)
-        //{
-        //    Filter filter = new Filter(ULat, ULong, Radius, DateTime.Parse(StartTime.Replace('h', ':')), DateTime.Parse(EndTime.Replace('h', ':')), Category);
-
-        //    return Mapper.Map<List<EventModel>>(Service.GetEvents(filter));
-        //}
 
         //async
 
@@ -83,22 +66,6 @@ namespace GeoEvents.WebAPI.Controllers
             Guid eventIdGuid = new Guid(eventId);
             return Mapper.Map<EventModel>(await Service.GetEventByIdAsync(eventIdGuid));
         }
-
-        //[HttpGet]
-        //[Route(@"search/{pageNumber:int}/{pageSize:int}/{orderBy}/{orderAscending:bool}/{category:int}/{uLat:decimal}/{uLong:decimal}/{radius:decimal}/{startTime:regex(^s\d{4}-\d{2}-\d{2} \d{2}h\d{2}$)?}/{endTime:regex(^e\d{4}-\d{2}-\d{2} \d{2}h\d{2}$)?}/{searchString?}/{nameOnly:bool?}")]
-        //public async Task<IEnumerable<EventModel>> GetEventsAsync(int pageNumber, int pageSize, string orderBy, bool orderAscending, int category, decimal uLat, decimal uLong, decimal radius, string startTime = "", string endTime = "", string searchString = "", bool? nameOnly = true )
-        //{
-        //    Filter filter;
-        //    if (startTime != "" && endTime != "")
-        //    {
-        //        filter = new Filter(uLat, uLong, radius, DateTime.Parse(startTime.Replace('h', ':').Remove(0, 1)), DateTime.Parse(endTime.Replace('h', ':').Remove(0, 1)), category, pageNumber, pageSize, searchString, orderBy, orderAscending);
-        //    }
-        //    else
-        //    {
-        //        filter = new Filter(uLat, uLong, radius, new DateTime(), new DateTime(), category, pageNumber, pageSize, searchString, orderBy, orderAscending);
-        //    }
-        //    return Mapper.Map<List<EventModel>>(await Service.GetEventsAsync(filter));
-        //}
 
         [HttpGet]
         [Route("search/count")]
