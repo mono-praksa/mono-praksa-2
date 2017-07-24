@@ -12,27 +12,27 @@ import { EventService } from '../event.service'
 export class EventCreateImagesComponent {
     @Input() customizedEvent: IEvent;
 
-    private _files: Array<file>;
-    private _indices: Array<number>;
+    private _files: file[];
+    private _uploadedFiles: string[] = [];
     private _formData: FormData;
     private _fileList: FileList;
 
     constructor(private _eventService: EventService) { }
 
-    get files(): Array<file> {
+    get files(): file[] {
         return this._files;
     }
 
-    set files(theFiles: Array<file>) {
+    set files(theFiles: file[]) {
         this._files = theFiles;
     }
 
-    get indices(): Array<number> {
-        return this._indices;
+    get uploadedFiles(): string[] {
+        return this._uploadedFiles;
     }
 
-    set indices(theIndices: Array<number>) {
-        this._indices = theIndices;
+    set uploadedFiles(theFiles: string[]) {
+        this._uploadedFiles = theFiles;
     }
 
     get fileList(): FileList {
@@ -52,14 +52,12 @@ export class EventCreateImagesComponent {
 
     set formData(value: FormData) { this._formData = value; }
 
-    onChange(fileInput: any, showFileNum: any) {
-        let i: number = 0;
+    onChange(fileInput: any) {
 
         this.fileList = fileInput.target.files;
         let filesTmp = [].slice.call(this.fileList);
 
         this.files = [];
-        this.indices = [];
 
         for (var el of filesTmp) {
             this.files.push({
@@ -68,13 +66,10 @@ export class EventCreateImagesComponent {
                 finished: false,
                 error: false
             })
-            this.indices.push(i);
-            i += 1;
         }
-        showFileNum.value = i + " files selected";
     }
 
-    upload(fileInput: any) {
+    upload() {
         this.files.forEach((listItem, i) => {
             this.files[i].uploading = true;
             this.formData.append("name" + i, this.fileList[i], this.fileList[i].name);
@@ -86,6 +81,8 @@ export class EventCreateImagesComponent {
             }).subscribe((data: any) => {
                 this.files[i].uploading = false;
                 this.files[i].finished = true;
+                this.uploadedFiles.push(this.files[i].name);
+                this.files.splice(i, 1);                
             }, (error: any) => {
                 this.files[i].error = true;
             });
