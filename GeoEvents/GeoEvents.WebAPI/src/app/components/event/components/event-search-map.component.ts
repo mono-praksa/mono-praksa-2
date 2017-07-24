@@ -1,4 +1,4 @@
-﻿﻿import { Component, Output, EventEmitter, NgZone, Input, OnInit } from '@angular/core'
+﻿﻿import { Component, Output, EventEmitter, NgZone, Input, OnInit, ViewChild } from '@angular/core'
 import { IEvent } from '../models/event.model'
 import { MapsAPILoader } from '@agm/core'
 import { Observable } from 'rxjs/Observable'
@@ -26,9 +26,9 @@ var MarkerClusterer = require('./markerclusterer.js');
 })
 
 export class EventMapComponent implements OnInit {
-    @Input() events: IEvent[]
-    @Input() latitude: number
-    @Input() longitude: number
+    @Input() events: IEvent[];
+    @Input() latitude: number;
+    @Input() longitude: number;
     private _zoom: number;
     private _lat: number;
     private _lng: number;
@@ -46,13 +46,13 @@ export class EventMapComponent implements OnInit {
             this.lat = this.latitude;
         }
         else {
-            this.lat = 0;
+            this.lat = this.events[0].Latitude;
         }
         if (this.longitude) {
             this.lng = this.longitude;
         }
         else {
-            this.lng = 0;
+            this.lng = this.events[0].Longitude;
         }
 
         //create a new object containing lat and lng
@@ -62,9 +62,9 @@ export class EventMapComponent implements OnInit {
         //this searches the template for a div with the id "map"
         //sets the zoom and centers the map on the latitude and longitude from the input
         this.map = new google.maps.Map(document.getElementById('map'), {
-            zoom: 8,
+            zoom: 3,
             center: myLatLng,
-			minZoom: 14
+			minZoom: 3
         });
 
         //this initializes markers for the marker clusterer
@@ -88,11 +88,10 @@ export class EventMapComponent implements OnInit {
 
         //infowindow that is shown on click
         var infoWindow = new google.maps.InfoWindow();
-
         //craete google markers for each event
         for (; i < markers.length; ++i) {
             //set the coordinates
-            let myLatLng = { lat: markers[i].Lat, lng: markers[i].Long };
+            let myLatLng = { lat: markers[i].Latitude, lng: markers[i].Longitude };
 
             //create a new marker
 
@@ -112,7 +111,8 @@ export class EventMapComponent implements OnInit {
                     //
                     //once this is merged and routing is implemented this will redirect to event details
                     //
-                    infoWindow.setContent('<div><p>' + marker.title + '</p> <a [routerLink]="[\'event/search/' + marker.data.Id + ']">Click for more</a></div>');
+                    infoWindow.setContent('<div><p>' + marker.title + '</p> <p>Double-click for more!</p></div>');
+                 //   self.MarkerLink.addListener('click', self.router.navigate(['/event/create']));
                     infoWindow.open(this.map, marker);
                 }
             })(marker, i));
@@ -123,14 +123,14 @@ export class EventMapComponent implements OnInit {
             //create a new event listener for the makrer, triggers on dblclick
             //calls the function that emits the marker to the parent component
 			
-			/*
+			
             google.maps.event.addListener(marker, 'dblclick', (function (marker: any, i: any) {
                 return function () {
                     let eventToEmit: IEvent = marker.data;
                     self.displayEvent(eventToEmit);
                 }
             })(marker, i));
-			*/
+			
 
             //push the marker to the results
             result.push(marker);
@@ -140,10 +140,13 @@ export class EventMapComponent implements OnInit {
     }
 
     displayEvent(evt: IEvent) {
-        this.event.emit(evt);
+        let routeUrl = "/event/search/" + evt.Id;
+        this.router.navigate([routeUrl]);
     }
 	
-	
+    test(id: string) {
+        console.log(id);
+    }
 	
 	
 	

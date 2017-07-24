@@ -149,8 +149,8 @@ namespace GeoEvents.WebAPI.Controllers
         public string Description { get; set; }
         public DateTime StartTime { get; set; }
         public DateTime EndTime { get; set; }
-        public decimal Lat { get; set; }
-        public decimal Long { get; set; }
+        public decimal Latitude { get; set; }
+        public decimal Longitude { get; set; }
         public List<int> Categories { get; set; }
         public decimal Price { get; set; }
         public int Capacity { get; set; }
@@ -168,8 +168,8 @@ namespace GeoEvents.WebAPI.Controllers
             this.Description = description;
             this.StartTime = starttime;
             this.EndTime = endtime;
-            this.Lat = uLat;
-            this.Long = uLong;
+            this.Latitude = uLat;
+            this.Longitude = uLong;
             this.Categories = categories;
             this.Price = price;
             this.Capacity = capacity;
