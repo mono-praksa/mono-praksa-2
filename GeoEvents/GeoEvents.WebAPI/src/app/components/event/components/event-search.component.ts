@@ -129,7 +129,7 @@ export class EventSearchComponent implements OnInit {
         if (filterChanged) {
             let customModel: CustomAttribute[] = [{ key: formValues.customCategoryName, values: [formValues.customCategoryValue] }];
             let custom: string = null;
-            if (customModel[0].key != null) {
+            if (customModel[0].key) {
                 custom = JSON.stringify(customModel);
             }
 

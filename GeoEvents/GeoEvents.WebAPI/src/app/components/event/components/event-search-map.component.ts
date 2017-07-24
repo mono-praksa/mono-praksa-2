@@ -35,7 +35,7 @@ export class EventMapComponent implements OnInit, OnChanges {
     ngOnInit() {
 
         //this sets the latitude and longitude form input
-        if (this.events) {
+        if (this.events && this.events.length > 0) {
             if (this.latitude) {
                 this.lat = this.latitude;
             }
@@ -67,19 +67,22 @@ export class EventMapComponent implements OnInit, OnChanges {
         });
 
         //this initializes markers for the marker clusterer
-        if (this.events) {
+        if (this.events && this.events.length > 0) {
             this.googleMarkers = this.initMarkers();
 
             //initializes the marker clusterer
             //this.map is the map where we will place the markers
             //this.googlemarkers are the markers that will be clustered
             //imagepath is the path to images for the cluster icons
-            var mc = new MarkerClusterer(this.map, this.googleMarkers, { imagePath: 'https://googlemaps.github.io/js-marker-clusterer/images/m' });
+            var mc = new MarkerClusterer(this.map, this.googleMarkers, { maxZoom: 15, imagePath: 'https://googlemaps.github.io/js-marker-clusterer/images/m' });
         }
     }
 
     ngOnChanges() {
-        if (this.events) {
+        this.map = undefined;
+        this.googleMarkers = undefined;
+
+        if (this.events && this.events.length > 0) {
             if (this.latitude) {
                 this.lat = this.latitude;
             }
@@ -92,6 +95,10 @@ export class EventMapComponent implements OnInit, OnChanges {
             else {
                 this.lng = this.events[0].Longitude;
             }
+        }
+        else {
+            this.lat = 0;
+            this.lng = 0;
         }
 
         //create a new object containing lat and lng
@@ -107,14 +114,14 @@ export class EventMapComponent implements OnInit, OnChanges {
         });
 
         //this initializes markers for the marker clusterer
-        if (this.events) {
+        if (this.events && this.events.length > 0) {
             this.googleMarkers = this.initMarkers();
 
             //initializes the marker clusterer
             //this.map is the map where we will place the markers
             //this.googlemarkers are the markers that will be clustered
             //imagepath is the path to images for the cluster icons
-            var mc = new MarkerClusterer(this.map, this.googleMarkers, { imagePath: 'https://googlemaps.github.io/js-marker-clusterer/images/m' });
+            var mc = new MarkerClusterer(this.map, this.googleMarkers, { maxZoom: 15, imagePath: 'https://googlemaps.github.io/js-marker-clusterer/images/m' });
         }
     }
 
