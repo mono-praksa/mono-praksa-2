@@ -22,10 +22,7 @@ export class EventService {
 
     getEventById(eventId: number): Observable<IEvent> {
         return this._http.get("/api/events/get?eventId=" + eventId)
-            .map((response: Response) => {
-                console.log(response);
-                <IEvent>response.json()
-            })
+            .map((response: Response) => <IEvent>response.json())
             .catch(this.handleError);
     }
 

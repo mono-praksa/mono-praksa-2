@@ -10,7 +10,8 @@
 		</thead>
 		<tbody>
 			<tr *ngFor="let evt of events">
-				<th class="col-md-2"><button class="btn btn-link btn-lg" style="padding: 0px;" (click)="eventDetails(evt)"><small>{{evt.Name}}</small></button></th>
+				<!--<th class="col-md-2"><button class="btn btn-link btn-lg" style="padding: 0px;" (click)="eventDetails(evt)"><small>{{evt.Name}}</small></button></th>-->
+                <th class="col-md-2"><a [routerLink]="evt.Id"><small>{{evt.Name}}</small></a></th>
 				<th class="col-md-2"><small>{{evt.StartTime | date: 'MMMM d, y, HH:mm'}}</small></th>
 				<th class="col-md-2"><small>{{evt.EndTime | date: 'MMMM d, y, HH:mm'}}</small></th>
 				<th class="col-md-6"><small>{{evt.Description}}</small></th>
