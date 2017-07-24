@@ -44,12 +44,13 @@
             <span class="help-block" *ngIf="isAllUnchecked()">Please check at least one category!</span>
         </fieldset>
     </div>
-    <div class="form-group">
+    <div class="form-group" [ngClass]="{'has-error': address.touched && address.invalid, 'has-success': address.touched && address.valid}">
         <label for="address">Address</label>
         <div [ngClass]="{'input-group': isAddressValid}">
             <input type="text" class="form-control" formControlName="address" id="address" placeholder="Address..." #search [readonly]="isAddressValid" />
             <span *ngIf="isAddressValid" class="input-group-addon" (click)="clearLocation()">X</span>
         </div>
+        <span class="help-block" *ngIf="address.touched && address.invalid">Required!</span>
         <button type="button" class="btn btn-link" (click)="setCurrentPosition()">Set to current location</button>
         <div *ngIf="isAddressValid">
             <agm-map [latitude]="latitude.value" [longitude]="longitude.value" [scrollwheel]="true" [zoom]="zoom" (mapClick)="markerUpdated($event)">
@@ -64,13 +65,13 @@
             <input type="text" class="form-control" formControlName="price" id="price" placeholder="Price..." required />
         </div>
         <span class="help-block" *ngIf="price.touched && price.hasError('required')">Required!</span>
-        <span class="help-block" *ngIf="price.touched && price.hasError('pattern')">Please enter a valid capacity!</span>
+        <span class="help-block" *ngIf="price.touched && price.hasError('pattern')">Please enter a valid price!</span>
     </div>
     <div class="form-group" [ngClass]="{'has-error': capacity.touched && capacity.invalid, 'has-success': capacity.touched && !capacity.invalid}">
         <label for="capacity">Capacity</label>
         <input type="text" class="form-control" formControlName="capacity" id="capacity" placeholder="Capacity..." required />
-        <span class="help-block" *ngIf="capacity.touched && capacity.invalid">Required!</span>
-        <span class="help-block" *ngIf="price.touched && price.hasError('lessThanZero')">Please enter a valid price!</span>
+        <span class="help-block" *ngIf="capacity.touched && capacity.hasError('required')">Required!</span>
+        <span class="help-block" *ngIf="capacity.touched && capacity.hasError('pattern')">Please enter a valid capacity!</span>
     </div>
     <div>
         <button type="submit" class="btn btn-default" [disabled]="eventForm.invalid || isAllUnchecked() || createEventLoading">Submit</button>

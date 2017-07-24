@@ -1,4 +1,4 @@
-﻿<h2>Uploading images for event {{createdEvent?.Name}}</h2>
+﻿<h2>Uploading images for event {{customizedEvent?.Name}}</h2>
 <div id="form-group">
     <label for="file" class="control-label">File</label>
     <div class="input-group">
@@ -21,7 +21,7 @@
     </div>
     <span *ngIf="uploadingFilter()">Uploading <i class="fa fa-spinner fa-spin" style="font-size:24px"></i></span>
     <div style="width:100%; text-align:right; padding-top:10px"> 
-        <button *ngIf="!btnUploadClicked" style="width:85px" class="btn btn-primary" (click)="skip()"> Skip </button> 
-        <button *ngIf="btnUploadClicked" style="width:85px" class="btn btn-primary" (click)="skip()"> Close </button> 
+        <button *ngIf="!btnUploadClicked" style="width:85px" class="btn btn-primary" [routerLink]="['/event/search/', customizedEvent.Id]"> Skip </button> 
+        <button *ngIf="btnUploadClicked" style="width:85px" class="btn btn-primary" [routerLink]="['/event/search/', customizedEvent.Id]"> Close </button> 
     </div>
 </div>

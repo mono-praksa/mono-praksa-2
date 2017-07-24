@@ -183,7 +183,7 @@ export class EventSearchComponent implements OnInit {
                 Custom: null,
 				
 				PageNumber: 1,
-				PageSize: 10,
+				PageSize: 25,
 				OrderByString: "Name",
 				OrderIsAscending: true
 			}		
@@ -225,7 +225,7 @@ export class EventSearchComponent implements OnInit {
 
 
                 PageNumber: 1,
-                PageSize: 10,
+                PageSize: 25,
                 OrderByString: "Name",
                 OrderIsAscending: true
             }

@@ -1,4 +1,4 @@
-﻿import { Component, Input, EventEmitter, Output } from '@angular/core'
+﻿import { Component, Input } from '@angular/core'
 import { Http, RequestOptions, Headers, Response } from '@angular/http'
 import { Observable } from 'rxjs/Observable'
 import { IEvent } from '../models/event.model'
@@ -11,7 +11,6 @@ import { EventService } from '../event.service'
 })
 export class EventCreateImagesComponent {
     @Input() customizedEvent: IEvent;
-    @Output() emittSkip = new EventEmitter();
 
     private _files: Array<file>;
     private _indices: Array<number>;
@@ -110,10 +109,6 @@ export class EventCreateImagesComponent {
             }).length > 0;
         }
         return false;
-    }
-
-    skip() {
-        this.emittSkip.emit(true);
     }
 }
 
