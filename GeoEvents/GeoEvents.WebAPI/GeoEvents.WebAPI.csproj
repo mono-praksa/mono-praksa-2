@@ -329,6 +329,7 @@
     <Content Include="src\app\components\event\views\event-create-images.component.html" />
     <Content Include="src\app\components\event\views\event-create.component.css" />
     <Content Include="src\app\components\event\views\event-create.component.html" />
+    <Content Include="src\app\components\event\views\event-detail.component.css" />
     <Content Include="src\app\components\event\views\event-detail.component.html" />
     <Content Include="src\app\components\event\views\event-search-list.component.html" />
     <Content Include="src\app\components\event\views\event-search-map.component.css" />

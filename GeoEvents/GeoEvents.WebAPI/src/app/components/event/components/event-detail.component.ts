@@ -13,60 +13,10 @@ import { LoaderService } from '../../../shared/loader.service';
 @Component({
     templateUrl: 'app/components/event/views/event-detail.component.html',
     selector: 'event-details',
-    styles: [`
-    .carousel, :host /deep/ img, :host /deep/ svg {
-        width: 640px;
-        max-width: 640px;
-        height: 480px;
-        max-height: 480px;
-    }
-
-    .rating {
-        float:left;
-    }
-
-    .rating:not(:checked) > input {
-        position:absolute;
-        top:-9999px;
-        clip:rect(0,0,0,0);
-    }
-
-    .rating:not(:checked) > label {
-        float:right;
-        width:1em;
-        padding:0.1em;
-        overflow:hidden;
-        white-space:nowrap;
-        cursor:pointer;
-        font-size:200%;
-        line-height:1.2;
-        color:#ddd;
-    }
-
-    .rating:not(:checked) > label:before {
-        content: '★ ';
-    }
-
-    .rating > input:checked ~ label {
-        color: #f70;
-    }
-
-    .rating:not(:checked) > label:hover,
-    .rating:not(:checked) > label:hover ~ label {
-        color: gold;
-    }
-
-
-    .rating > input:checked ~ label:hover,
-    .rating > input:checked ~ label:hover ~ label,
-    .rating > label:hover ~ input:checked ~ label {
-        color: #ea0;
-    }
-`]
+    styleUrls: ['app/components/event/views/event-detail.component.css']
 })
 
-export class EventDetailComponent implements OnInit{
-    //@Input() event: IEvent;
+export class EventDetailComponent implements OnInit {
     private _event: IEvent;
     @ViewChild("carousel") carouselElement: ElementRef;
     @ViewChild("userRate") userRateElement: ElementRef;
