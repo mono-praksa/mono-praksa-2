@@ -14,13 +14,6 @@
         <div style="float:left; padding-right: 10px;">
             <h4>Rating: {{event?.Rating | number:'1.2-2'}}</h4>
         </div>
-        <!--<div>
-            1<input type="range" min="1" max="5" step="1" #slider (input)="rateChange(slider)" value="3" />5
-            <div #userRate style="padding-left: 30px; display: inline-block; width:50px;">
-                3
-            </div>
-            <input type="button" class="btn btn-default" (click)="rate()" value="Rate"/>
-        </div>-->
         <div>
             <fieldset class="rating">
                 <input type="radio" [name]="inpustName" value="5" [checked]="rating===5" />

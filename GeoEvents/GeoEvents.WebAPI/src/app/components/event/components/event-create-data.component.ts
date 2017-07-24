@@ -15,11 +15,7 @@ import { GeocodingService } from '../../../shared/geocoding.service';
 @Component({
     selector: "create-event",
     templateUrl: "app/components/event/views/event-create-data.component.html",
-    styles: [`
-        agm-map {
-            height: 300px;
-        }
-    `]
+    styleUrls: ['app/components/event/views/event-create-data.component.css']
 })
 export class EventCreateDataComponent implements OnInit {
     @Output() eventEmitter = new EventEmitter();
