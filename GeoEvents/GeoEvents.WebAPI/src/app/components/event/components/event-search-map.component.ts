@@ -32,7 +32,6 @@ export class EventMapComponent implements OnInit {
     private _zoom: number;
     private _lat: number;
     private _lng: number;
-    @Output() event = new EventEmitter()
     googleMarkers: any;
     map: any;
 
@@ -64,7 +63,8 @@ export class EventMapComponent implements OnInit {
         //sets the zoom and centers the map on the latitude and longitude from the input
         this.map = new google.maps.Map(document.getElementById('map'), {
             zoom: 8,
-            center: myLatLng
+            center: myLatLng,
+			minZoom: 14
         });
 
         //this initializes markers for the marker clusterer
@@ -112,7 +112,7 @@ export class EventMapComponent implements OnInit {
                     //
                     //once this is merged and routing is implemented this will redirect to event details
                     //
-                    infoWindow.setContent('<div><p>' + marker.title + '</p><p>Double click for more</p><a href="home/">click me to go home</a></div>');
+                    infoWindow.setContent('<div><p>' + marker.title + '</p> <a [routerLink]="[\'event/search/' + marker.data.Id + ']">Click for more</a></div>');
                     infoWindow.open(this.map, marker);
                 }
             })(marker, i));
@@ -122,12 +122,15 @@ export class EventMapComponent implements OnInit {
             //
             //create a new event listener for the makrer, triggers on dblclick
             //calls the function that emits the marker to the parent component
+			
+			/*
             google.maps.event.addListener(marker, 'dblclick', (function (marker: any, i: any) {
                 return function () {
                     let eventToEmit: IEvent = marker.data;
                     self.displayEvent(eventToEmit);
                 }
             })(marker, i));
+			*/
 
             //push the marker to the results
             result.push(marker);
@@ -139,6 +142,11 @@ export class EventMapComponent implements OnInit {
     displayEvent(evt: IEvent) {
         this.event.emit(evt);
     }
+	
+	
+	
+	
+	
 
     get zoom(): number {
         return this._zoom;
