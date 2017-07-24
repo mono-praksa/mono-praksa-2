@@ -324,11 +324,15 @@
     <Content Include="Scripts\respond.min.js" />
     <Content Include="src\app\components\event\components\markerclusterer.js" />
     <Content Include="src\app\components\event\views\event-create-customize.component.html" />
+    <Content Include="src\app\components\event\views\event-create-data.component.css" />
     <Content Include="src\app\components\event\views\event-create-data.component.html" />
     <Content Include="src\app\components\event\views\event-create-images.component.html" />
+    <Content Include="src\app\components\event\views\event-create.component.css" />
     <Content Include="src\app\components\event\views\event-create.component.html" />
     <Content Include="src\app\components\event\views\event-detail.component.html" />
     <Content Include="src\app\components\event\views\event-search-list.component.html" />
+    <Content Include="src\app\components\event\views\event-search-map.component.css" />
+    <Content Include="src\app\components\event\views\event-search-map.component.html" />
     <Content Include="src\app\components\event\views\event-search.component.html" />
     <Content Include="src\app\components\home\home.component.html" />
     <Content Include="src\app\shared\navbar\navbar.component.html" />

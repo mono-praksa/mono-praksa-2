@@ -14,7 +14,7 @@ var MarkerClusterer = require('./markerclusterer.js');
 
 @Component({
     selector: 'display-map',
-    templateUrl: 'app/components/event/views/event-search-map.component.ts',
+    templateUrl: 'app/components/event/views/event-search-map.component.html',
     styleUrls: ['app/components/event/views/event-search-map.component.css']
 })
 

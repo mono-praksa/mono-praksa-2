@@ -58,7 +58,7 @@ export class EventCreateCustomizeComponent implements OnInit {
     next(): void {
         this.createdEvent.Custom = JSON.stringify(this.createdEvent.CustomModel);
         if (!this.createdEvent.Custom) {
-            this.createdEvent.Custom = "";
+            this.createdEvent.Custom = JSON.stringify("");
         }
         this._loaderService.displayLoader(true);
         this._eventService.createEvent(this.createdEvent).subscribe((response: IEvent) => {
