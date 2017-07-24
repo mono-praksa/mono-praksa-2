@@ -28,16 +28,16 @@
             <h4>Rating: {{event?.Rating | number:'1.2-2'}}</h4>
         </div>
         <div>
-            <fieldset class="rating">
-                <input type="radio" [name]="inpustName" value="5" [checked]="rating===5" />
+            <fieldset class="rating" [ngClass]="{'notrated': !hasRated}">
+                <input type="radio" value="5" [checked]="rating===5" />
                 <label title="5 stars" (click)='rate(5)'>5 stars</label>
-                <input type="radio" [name]="inpustName" value="4" [checked]="rating===4" />
+                <input type="radio" value="4" [checked]="rating===4" />
                 <label title="4 stars" (click)='rate(4)'>4 stars</label>
-                <input type="radio" [name]="inpustName" value="3" [checked]="rating===3" />
+                <input type="radio" value="3" [checked]="rating===3" />
                 <label title="3 stars" (click)='rate(3)'>3 stars</label>
-                <input type="radio" [name]="inpustName" value="2" [checked]="rating===2" />
-                <label title="2 starsd" (click)='rate(2)'>2 stars</label>
-                <input type="radio" [name]="inpustName" value="1" [checked]="rating===1" />
+                <input type="radio" value="2" [checked]="rating===2" />
+                <label title="2 stars" (click)='rate(2)'>2 stars</label>
+                <input type="radio" value="1" [checked]="rating===1" />
                 <label title="1 stars" (click)='rate(1)'>1 star</label>
             </fieldset>
         </div>

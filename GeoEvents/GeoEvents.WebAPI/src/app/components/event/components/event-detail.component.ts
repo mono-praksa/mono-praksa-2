@@ -29,7 +29,7 @@ export class EventDetailComponent implements OnInit {
     @Input() itemId: number;
     @Output() ratingClick: EventEmitter<any> = new EventEmitter<any>();
 
-    inpustName: string;
+    hasRated: boolean = false;
 
     constructor(
         private _geocodingService: GeocodingService,
@@ -41,7 +41,6 @@ export class EventDetailComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.inpustName = this.itemId + '_rating';
         this.event = this._activatedRoute.snapshot.data.event;
         this.event.Custom = eval(this.event.Custom);
         
@@ -85,16 +84,19 @@ export class EventDetailComponent implements OnInit {
     }
 
     rate(rating: number) {
-        this._eventService.updateRating(this.event.Id, +rating, this.event.Rating, this.event.RateCount)
-            .subscribe((response: IEvent) => {
-                this.event.Rating = response.Rating;
-                this.event.RateCount = response.RateCount;
-                this.rating = rating;
-                this.ratingClick.emit({
-                    itemId: this.itemId,
-                    rating: rating
+        if (!this.hasRated){
+            this._eventService.updateRating(this.event.Id, +rating, this.event.Rating, this.event.RateCount)
+                .subscribe((response: IEvent) => {
+                    this.event.Rating = response.Rating;
+                    this.event.RateCount = response.RateCount;
+                    this.rating = rating;
+                    this.hasRated = true;
+                    this.ratingClick.emit({
+                        itemId: this.itemId,
+                        rating: rating
+                    });
                 });
-            });
+        }
 
     }
 
