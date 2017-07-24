@@ -21,6 +21,9 @@ import { EventService } from "./event.service";
 import { LocationService } from './location.service';
 import { PreserveSearchQuerryService } from "../../shared/preserve-search-querry.service";
 import { GeocodingService } from '../../shared/geocoding.service';
+import { EventDetailRouteActivatorService } from './event-detail-route-activator.service';
+import { EventDetailResolverService } from './event-detail-resolver.service'
+
 import { DecimalPipe } from '@angular/common';
 
 @NgModule({
@@ -52,7 +55,9 @@ import { DecimalPipe } from '@angular/common';
         EventService,
         LocationService,
         PreserveSearchQuerryService,
-        GeocodingService
+        GeocodingService,
+        EventDetailRouteActivatorService,
+        EventDetailResolverService
 	]
 })
 export class EventModule { }

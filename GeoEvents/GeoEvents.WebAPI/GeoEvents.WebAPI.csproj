@@ -385,6 +385,8 @@
     <TypeScriptCompile Include="src\app\components\event\components\event-search-list.component.ts" />
     <TypeScriptCompile Include="src\app\components\event\components\event-search-map.component.ts" />
     <TypeScriptCompile Include="src\app\components\event\components\event-search.component.ts" />
+    <TypeScriptCompile Include="src\app\components\event\event-detail-resolver.service.ts" />
+    <TypeScriptCompile Include="src\app\components\event\event-detail-route-activator.service.ts" />
     <TypeScriptCompile Include="src\app\components\event\event-routing.module.ts" />
     <TypeScriptCompile Include="src\app\components\event\event.module.ts" />
     <TypeScriptCompile Include="src\app\components\event\event.service.ts" />
