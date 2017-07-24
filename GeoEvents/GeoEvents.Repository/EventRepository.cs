@@ -178,7 +178,7 @@ namespace GeoEvents.Repository
         /// </returns>
         public async Task<Int64> GetEventCountAsync(IFilter filter)
         {
-            Int64 Count;
+            Int64 Count = new Int64();
 
             using (Connection.CreateConnection())
             using (NpgsqlCommand command = new NpgsqlCommand(QueryHelper.GetSelectCountEventQueryString(filter), Connection.CreateConnection()))

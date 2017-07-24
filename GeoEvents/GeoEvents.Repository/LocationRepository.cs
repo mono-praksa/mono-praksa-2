@@ -47,17 +47,13 @@ namespace GeoEvents.Repository
         public async Task<ILocation> GetLocationAsync(string address)
         {
             LocationEntity location = null;
-
             LocationEntity NewLocation = new LocationEntity(Guid.NewGuid(), 0, 0, address);
-
 
             using (Connection.CreateConnection())
             using (NpgsqlCommand command = new NpgsqlCommand(QueryHelper.GetSelectLocationQueryString(), Connection.CreateConnection()))
             using (NpgsqlCommand commandInsert = new NpgsqlCommand(QueryHelper.GetInsertCreateLocationQueryString(),Connection.CreateConnection()))
             {
                 command.Parameters.AddWithValue(QueryHelper.ParAddress, NpgsqlTypes.NpgsqlDbType.Text, address);
-
-
                 if (Connection.CreateConnection().FullState == ConnectionState.Closed)
                 {
                     await Connection.CreateConnection().OpenAsync();
@@ -73,8 +69,6 @@ namespace GeoEvents.Repository
                         Rating = Convert.ToDouble(dr[2]),
                         RateCount = Convert.ToInt32(dr[3])
                     };
-
-
                 }
                 else
                 {
@@ -84,11 +78,9 @@ namespace GeoEvents.Repository
                     commandInsert.Parameters.AddWithValue(QueryHelper.ParAddress, NpgsqlDbType.Text, NewLocation.Address);
                     commandInsert.Parameters.AddWithValue(QueryHelper.ParRating, NpgsqlDbType.Double, NewLocation.Rating);
                     commandInsert.Parameters.AddWithValue(QueryHelper.ParRateCount, NpgsqlDbType.Integer, NewLocation.RateCount);
-
                     await commandInsert.ExecuteNonQueryAsync();
                 }
             }
-
             if (location == null)
             {
                 return Mapper.Map<ILocation>(NewLocation);
@@ -117,13 +109,10 @@ namespace GeoEvents.Repository
             {
 
                 command.Parameters.AddWithValue(QueryHelper.ParId, NpgsqlTypes.NpgsqlDbType.Uuid, id);
-
-
                 if (Connection.CreateConnection().FullState == ConnectionState.Closed)
                 {
                     await Connection.CreateConnection().OpenAsync();
                 }
-
                 DbDataReader dr = await command.ExecuteReaderAsync();
                 if (dr.Read())
                 {
@@ -141,8 +130,6 @@ namespace GeoEvents.Repository
 
             return Mapper.Map<ILocation>(location);
         }
-
-
         /// <summary>
         /// Create Location asynchronous
         /// </summary>
@@ -154,39 +141,28 @@ namespace GeoEvents.Repository
         {
 
             ILocation NewLocation;
-
             using (Connection.CreateConnection())
             using (NpgsqlCommand command = new NpgsqlCommand(QueryHelper.GetInsertCreateLocationQueryString(), Connection.CreateConnection()))
             {
-
                 #region Create Location
-
                 if (Connection.CreateConnection().FullState == ConnectionState.Closed)
                 {
                     await Connection.CreateConnection().OpenAsync();
                 }
-
-
                 command.Parameters.AddWithValue(QueryHelper.ParId, NpgsqlTypes.NpgsqlDbType.Uuid, location.Id);
                 command.Parameters.AddWithValue(QueryHelper.ParAddress, NpgsqlTypes.NpgsqlDbType.Text, location.Address);
                 command.Parameters.AddWithValue(QueryHelper.ParRating, NpgsqlTypes.NpgsqlDbType.Uuid, location.Rating);
                 command.Parameters.AddWithValue(QueryHelper.ParRateCount, NpgsqlTypes.NpgsqlDbType.Uuid, location.RateCount);
-
-
                 await command.ExecuteNonQueryAsync();
                 #endregion
-
             }
             using (Connection.CreateConnection())
             {
                 NewLocation = await GetLocationByIdAsync(location.Id);
             }
-
             return NewLocation;
 
         }
-
-
         /// <summary>
         /// Get Location by Id
         /// </summary>
@@ -197,7 +173,6 @@ namespace GeoEvents.Repository
         /// </returns>
         public async Task<ILocation> UpdateLocationRatingAsync(Guid id, double rating)
         {
-
             LocationEntity location = new LocationEntity();
             ILocation NewLocation;
             using (Connection.CreateConnection())
@@ -208,34 +183,24 @@ namespace GeoEvents.Repository
             using (Connection.CreateConnection())
             using (NpgsqlCommand command = new NpgsqlCommand(QueryHelper.GetUpdateLocationRatingQueryString(), Connection.CreateConnection()))
             {
-
-
                 if (Connection.CreateConnection().FullState == ConnectionState.Closed)
                 {
                     await Connection.CreateConnection().OpenAsync();
                 }
-
                 double NewRating = 0;
                 int NewRateCount = location.RateCount + 1;
-
                 NewRating = (location.Rating * location.RateCount + rating) / NewRateCount;
 
                 command.Parameters.AddWithValue(QueryHelper.ParId, NpgsqlTypes.NpgsqlDbType.Double, id);
                 command.Parameters.AddWithValue(QueryHelper.ParRateCount, NpgsqlTypes.NpgsqlDbType.Double, NewRateCount);
                 command.Parameters.AddWithValue(QueryHelper.ParRating, NpgsqlTypes.NpgsqlDbType.Integer, NewRating);
-
-
                 await command.ExecuteNonQueryAsync();
-
             }
             using (Connection.CreateConnection()) { 
             NewLocation = await GetLocationByIdAsync(id);
             }
-
-
             return NewLocation;
         }
-
         #endregion Methods
     }
 }

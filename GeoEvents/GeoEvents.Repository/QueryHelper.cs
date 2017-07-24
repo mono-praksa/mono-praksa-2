@@ -107,175 +107,8 @@ namespace GeoEvents.Repository
             /// adding Distance filter to query if there is Location and radius
             if (filter.ULat != null && filter.ULong != null && filter.Radius != 0)
             {
-                selectString.AppendFormat(" (earth_box(ll_to_earth({0},{1}),{2})@> ll_to_earth({3},{4}))",
-                    ParLatitude, ParLongitude, ParRadius, TableNameEventLatQ, TableNameEventLongQ);
-
-                isNotFirst = true;
-            }
-
-
-            //Adding Price filter query if there is price
-            if (filter.Price != null)
-            {
-                if (isNotFirst)
-                {
-                    selectString.Append(" AND ");
-                }
-                else
-                {
-                    isNotFirst = true;
-                }
-                selectString.AppendFormat("({0} <= {1}) ",
-                    TableNameEventPriceQ, ParPrice);
-            }
-
-            //Adding Rating Event filter query if there is rating event
-            if (filter.RatingEvent != null)
-            {
-                if (isNotFirst)
-                {
-                    selectString.Append(" AND ");
-                }
-                else
-                {
-                    isNotFirst = true;
-                }
-                selectString.AppendFormat("({0} >= {1}) ",
-                    TableNameEventRatingQ, ParRating);
-            }
-
-            /// Adding Time filter query if there is time in filter
-            if (filter.EndTime > DefaulTime && filter.StartTime > DefaulTime)
-            {
-                if (isNotFirst)
-                {
-                    selectString.Append(" AND ");
-                }
-                else
-                {
-                    isNotFirst = true;
-                }
-
-                selectString.AppendFormat(" ({0},{1})OVERLAPS({2},{3})",
-                    ParUserStartTime, ParUserEndTime, TableNameEventStartTimeQ, TableNameEventEndTimeQ);
-            }
-            else if (filter.EndTime == null && filter.StartTime > DefaulTime)
-            {
-                if (isNotFirst)
-                {
-                    selectString.Append(" AND ");
-                }
-                else
-                {
-                    isNotFirst = true;
-                }
-
-                selectString.AppendFormat(" ({0} < {1})",
-                    ParUserStartTime, TableNameEventEndTimeQ);
-            }
-            else if (filter.EndTime > DefaulTime && filter.StartTime == null)
-            {
-                if (isNotFirst)
-                {
-                    selectString.Append(" AND ");
-                }
-                else
-                {
-                    isNotFirst = true;
-                }
-
-                selectString.AppendFormat("({0}>{1}) ",
-                    ParUserEndTime, TableNameEventStartTimeQ);
-            }
-            ///
-
-            ///Adding searcstring filter in queri if there is searchstring
-            if (!String.IsNullOrWhiteSpace(filter.SearchString))
-            {
-                if (isNotFirst)
-
-                {
-                    selectString.Append(" AND ");
-                }
-                else
-                {
-                    isNotFirst = true;
-                }
-
-                selectString.AppendFormat(" ({0} ILIKE ({1})) ",
-                    NameQ, ParSearchString);
-            }
-
-            /// adding category filter in query if there is category
-            if (filter.Category > 0)
-            {
-                if (isNotFirst)
-                {
-                    selectString.Append(" AND ");
-                }
-                else
-                {
-                    isNotFirst = true;
-                }
-                selectString.AppendFormat(" ({0} & {1} > 0)",
-                    ParCategory, TableNameEventCatQ);
-            }
-
-            return selectString.ToString();
-        }
-
-        /// <summary>
-        /// Gets query filter select string for event by Id
-        /// </summary>
-        /// <returns>
-        /// query string
-        /// </returns>
-        public static string GetSelectEventByIdQueryString()
-        {
-            StringBuilder selectString = new StringBuilder();
-            selectString.AppendFormat("SELECT * FROM {0} WHERE {1}={2}", TableNameEventQ, TableNameEventIdQ, ParEventId);
-
-            return selectString.ToString();
-        }
-
-        public static string GetSelectFromEventRatingQueryString()
-        {
-            StringBuilder selectString = new StringBuilder();
-            selectString.AppendFormat("SELECT rating,ratecount FROM {0} WHERE {1}={2}", TableNameEventQ, TableNameEventIdQ, ParEventId);
-
-            return selectString.ToString();
-
-        }
-
-        /// <summary>
-        /// Gets query filter select string for query events
-        /// </summary>
-        /// <param name="filter">The filter.</param>
-        /// <returns>
-        /// query string
-        /// </returns>
-        public static string GetSelectEventQueryString(IFilter filter)
-        {
-            StringBuilder selectString = new StringBuilder();
-
-            if (filter.OrderBy == "Distance" && filter.ULat != null && filter.ULong != null)
-            {
-                selectString.AppendFormat("SELECT *, earth_distance(ll_to_earth({0},{1}), ll_to_earth({2},{3})) as distance from {4} WHERE ",
-                    ParLatitude, ParLongitude, TableNameEventLatQ, TableNameEventLongQ, TableNameEventQ);
-            }
-            else
-            {
-                selectString.AppendFormat("SELECT * FROM {0} WHERE ",
-                    TableNameEventQ);
-            }
-
-            bool isNotFirst = false;
-
-            /// adding Distance filter to query if there is Location and radius
-            if (filter.ULat != null && filter.ULong != null && filter.Radius != 0)
-            {
                 selectString.AppendFormat(" (earth_box(ll_to_earth({0},{1}),{2})@> ll_to_earth({3},{4})) ",
-      ParLatitude, ParLongitude, ParRadius, TableNameEventLatQ, TableNameEventLongQ);
+                        ParLatitude, ParLongitude, ParRadius, TableNameEventLatQ, TableNameEventLongQ);
                 isNotFirst = true;
             }
 
@@ -391,7 +224,188 @@ namespace GeoEvents.Repository
             if (!String.IsNullOrWhiteSpace(filter.Custom))
             {
                 if (isNotFirst)
+                {
+                    selectString.Append(" AND ");
+                }
+                else
+                {
+                    isNotFirst = true;
+                }
 
+                selectString.AppendFormat(" ({0} @> {1}) ",
+                    CustomQ, ParCustom);
+            }
+
+            return selectString.ToString();
+        }
+
+        /// <summary>
+        /// Gets query filter select string for event by Id
+        /// </summary>
+        /// <returns>
+        /// query string
+        /// </returns>
+        public static string GetSelectEventByIdQueryString()
+        {
+            StringBuilder selectString = new StringBuilder();
+            selectString.AppendFormat("SELECT * FROM {0} WHERE {1}={2}", TableNameEventQ, TableNameEventIdQ, ParEventId);
+
+            return selectString.ToString();
+        }
+
+        public static string GetSelectFromEventRatingQueryString()
+        {
+            StringBuilder selectString = new StringBuilder();
+            selectString.AppendFormat("SELECT rating,ratecount FROM {0} WHERE {1}={2}", TableNameEventQ, TableNameEventIdQ, ParEventId);
+
+            return selectString.ToString();
+
+        }
+
+        /// <summary>
+        /// Gets query filter select string for query events
+        /// </summary>
+        /// <param name="filter">The filter.</param>
+        /// <returns>
+        /// query string
+        /// </returns>
+        public static string GetSelectEventQueryString(IFilter filter)
+        {
+            StringBuilder selectString = new StringBuilder();
+
+            if (filter.OrderBy == "Distance" && filter.ULat != null && filter.ULong != null)
+            {
+                selectString.AppendFormat("SELECT *, earth_distance(ll_to_earth({0},{1}), ll_to_earth({2},{3})) as distance from {4} WHERE ",
+                    ParLatitude, ParLongitude, TableNameEventLatQ, TableNameEventLongQ, TableNameEventQ);
+            }
+            else
+            {
+                selectString.AppendFormat("SELECT * FROM {0} WHERE ",
+                    TableNameEventQ);
+            }
+
+            bool isNotFirst = false;
+
+            /// adding Distance filter to query if there is Location and radius
+            if (filter.ULat != null && filter.ULong != null && filter.Radius != 0)
+            {
+                selectString.AppendFormat(" (earth_box(ll_to_earth({0},{1}),{2})@> ll_to_earth({3},{4})) ",
+                        ParLatitude, ParLongitude, ParRadius, TableNameEventLatQ, TableNameEventLongQ);
+                isNotFirst = true;
+            }
+
+            //Adding Price filter query if there is price
+            if (filter.Price != null)
+            {
+                if (isNotFirst)
+                {
+                    selectString.Append(" AND ");
+                }
+                else
+                {
+                    isNotFirst = true;
+                }
+                selectString.AppendFormat("({0} <= {1}) ",
+                    TableNameEventPriceQ, ParPrice);
+            }
+
+            //Adding Rating Event filter query if there is rating event
+            if (filter.RatingEvent != null)
+            {
+                if (isNotFirst)
+                {
+                    selectString.Append(" AND ");
+                }
+                else
+                {
+                    isNotFirst = true;
+                }
+                selectString.AppendFormat("({0} >= {1}) ",
+                    TableNameEventRatingQ, ParRating);
+            }
+
+            /// Adding Time filter query if there is time in filter
+            if (filter.EndTime > DefaulTime && filter.StartTime > DefaulTime)
+            {
+                if (isNotFirst)
+                {
+                    selectString.Append(" AND ");
+                }
+                else
+                {
+                    isNotFirst = true;
+                }
+
+                selectString.AppendFormat(" (({0},{1}) OVERLAPS ({2},{3})) ",
+                    ParUserStartTime, ParUserEndTime, TableNameEventStartTimeQ, TableNameEventEndTimeQ);
+            }
+            else if (filter.EndTime == null && filter.StartTime > DefaulTime)
+            {
+                if (isNotFirst)
+                {
+                    selectString.Append(" AND ");
+                }
+                else
+                {
+                    isNotFirst = true;
+                }
+
+                selectString.AppendFormat(" ({0}<{1}) ",
+                    ParUserStartTime, TableNameEventEndTimeQ);
+            }
+            else if (filter.EndTime > DefaulTime && filter.StartTime == null)
+            {
+                if (isNotFirst)
+                {
+                    selectString.Append(" AND ");
+                }
+                else
+                {
+                    isNotFirst = true;
+                }
+
+                selectString.AppendFormat(" ({0}>{1}) ",
+                    ParUserEndTime, TableNameEventStartTimeQ);
+            }
+            ///
+
+            ///Adding searcstring filter in queri if there is searchstring
+            if (!String.IsNullOrWhiteSpace(filter.SearchString))
+            {
+                if (isNotFirst)
+
+                {
+                    selectString.Append(" AND ");
+                }
+                else
+                {
+                    isNotFirst = true;
+                }
+
+                selectString.AppendFormat(" ({0} ILIKE ({1})) ",
+                    NameQ, ParSearchString);
+            }
+
+            /// adding category filter in query if there is category
+            if (filter.Category > 0)
+            {
+                if (isNotFirst)
+                {
+                    selectString.Append(" AND ");
+                }
+                else
+                {
+                    isNotFirst = true;
+                }
+
+                selectString.AppendFormat(" ({0} & {1} > 0)",
+                    ParCategory, TableNameEventCatQ);
+            }
+
+            /// adding custom search
+            if (!String.IsNullOrWhiteSpace(filter.Custom))
+            {
+                if (isNotFirst)
                 {
                     selectString.Append(" AND ");
                 }
