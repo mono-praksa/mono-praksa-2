@@ -55,7 +55,7 @@ export class EventCreateCustomizeComponent implements OnInit {
         this.resetValueControl();        
     }
 
-    next(): void {
+    createEvent(): void {
         this.createdEvent.Custom = JSON.stringify(this.createdEvent.CustomModel);
         if (!this.createdEvent.Custom) {
             this.createdEvent.Custom = JSON.stringify("");

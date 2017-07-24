@@ -77,10 +77,11 @@ namespace GeoEvents.WebAPI.Controllers
         {
             ImageModel img = new ImageModel();
             img.EventId = eventId;
-
+           
+            
             if (!Request.Content.IsMimeMultipartContent())
                 throw new HttpResponseException(HttpStatusCode.UnsupportedMediaType);
-
+            
             var provider = new MultipartMemoryStreamProvider();
 
             // Read the form data.

@@ -89,7 +89,7 @@ export class EventService {
 
     createImage(image: IImage): Observable<IImage> {
         let options = new RequestOptions();
-        return this._http.post('/api/images/create/' + image.EventId, image.Content, options)
+        return this._http.post('/api/images/create/' + image.EventId, image.FormData, options)
             .map((response: Response) => response.json())
             .catch(this.handleError);
     }

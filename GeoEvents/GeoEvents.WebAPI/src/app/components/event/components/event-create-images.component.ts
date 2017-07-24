@@ -16,7 +16,6 @@ export class EventCreateImagesComponent {
     private _indices: Array<number>;
     private _formData: FormData;
     private _fileList: FileList;
-    private _btnUploadClicked: boolean = false;
 
     constructor(private _eventService: EventService) { }
 
@@ -42,14 +41,6 @@ export class EventCreateImagesComponent {
 
     set fileList(theFileList: FileList) {
         this._fileList = theFileList;
-    }
-
-    get btnUploadClicked(): boolean {
-        return this._btnUploadClicked;
-    }
-
-    set btnUploadClicked(isBtnUploadClicked: boolean) {
-        this._btnUploadClicked = isBtnUploadClicked;
     }
 
     get formData() {
@@ -84,7 +75,6 @@ export class EventCreateImagesComponent {
     }
 
     upload(fileInput: any) {
-        this.btnUploadClicked = true;
         this.files.forEach((listItem, i) => {
             this.files[i].uploading = true;
             this.formData.append("name" + i, this.fileList[i], this.fileList[i].name);
