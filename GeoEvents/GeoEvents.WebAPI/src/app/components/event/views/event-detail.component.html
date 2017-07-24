@@ -12,7 +12,7 @@
             </li>
         </ul>
         <div style="float:left; padding-right: 10px;">
-            <h4>Rating: {{event?.Rating}}</h4>
+            <h4>Rating: {{event?.Rating | number:'1.2-2'}}</h4>
         </div>
         <!--<div>
             1<input type="range" min="1" max="5" step="1" #slider (input)="rateChange(slider)" value="3" />5

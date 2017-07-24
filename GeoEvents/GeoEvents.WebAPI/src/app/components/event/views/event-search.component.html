@@ -12,12 +12,14 @@
 				</div>
 				<div class="col-sm-4" style="height: 34px; display: flex; align-items: flex-end;">
 					<div>
-						<a routerlink="" (click)="toggleAdvancedSearch()" style="cursor: pointer">Show/Hide filters</a>
+						<a routerlink="" *ngIf=!isAdvancedSearch (click)="toggleAdvancedSearch()" style="cursor: pointer">Show filters</a>
+                        <a routerlink="" *ngIf=isAdvancedSearch (click)="toggleAdvancedSearch()" style="cursor: pointer">Hide filters</a>
 					</div>
 				</div>
 				<div class="col-sm-2" style="display: flex; justify-items: flex-end;">
 					<div>
-						<button type="button" class="btn btn-primary" (click)="this.toggleMapMode()" >Map / List Display Mode</button>
+						<button type="button" *ngIf="!isMapMode" class="btn btn-primary" (click)="this.toggleMapMode()" >Show map</button>
+                        <button type="button" *ngIf="isMapMode" class="btn btn-primary" (click)="this.toggleMapMode()">Hide map</button>
 					</div>
 				</div>	
 			</div>

@@ -21,6 +21,7 @@ import { EventService } from "./event.service";
 import { LocationService } from './location.service';
 import { PreserveSearchQuerryService } from "../../shared/preserve-search-querry.service";
 import { GeocodingService } from '../../shared/geocoding.service';
+import { DecimalPipe } from '@angular/common';
 
 @NgModule({
     imports: [
