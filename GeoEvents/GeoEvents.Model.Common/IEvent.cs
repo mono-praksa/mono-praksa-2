@@ -1,15 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GeoEvents.Model.Common
 {
     public interface IEvent
     {
         #region Properties
-
 
         /// <summary>
         /// Gets or sets the identifier.
@@ -19,7 +15,6 @@ namespace GeoEvents.Model.Common
         /// </value>
         Guid Id { get; set; }
 
-
         /// <summary>
         /// Gets or sets the name.
         /// </summary>
@@ -27,7 +22,6 @@ namespace GeoEvents.Model.Common
         /// The name.
         /// </value>
         string Name { get; set; }
-
 
         /// <summary>
         /// Gets or sets the description.
@@ -37,7 +31,6 @@ namespace GeoEvents.Model.Common
         /// </value>
         string Description { get; set; }
 
-
         /// <summary>
         /// Gets or sets the lat.
         /// </summary>
@@ -45,7 +38,6 @@ namespace GeoEvents.Model.Common
         /// The lat.
         /// </value>
         double Latitude { get; set; }
-
 
         /// <summary>
         /// Gets or sets the long.
@@ -55,7 +47,6 @@ namespace GeoEvents.Model.Common
         /// </value>
         double Longitude { get; set; }
 
-
         /// <summary>
         /// Gets or sets the categories.
         /// </summary>
@@ -63,7 +54,6 @@ namespace GeoEvents.Model.Common
         /// The categories.
         /// </value>
         List<int> Categories { get; set; }
-
 
         /// <summary>
         /// Gets or sets the start time.
@@ -73,7 +63,6 @@ namespace GeoEvents.Model.Common
         /// </value>
         DateTime StartTime { get; set; }
 
-
         /// <summary>
         /// Gets or sets the end time.
         /// </summary>
@@ -81,7 +70,6 @@ namespace GeoEvents.Model.Common
         /// The end time.
         /// </value>
         DateTime EndTime { get; set; }
-
 
         /// <summary>
         /// Gets or sets the category.
@@ -146,6 +134,7 @@ namespace GeoEvents.Model.Common
         /// The string.
         /// </value>
         string Custom { get; set; }
+
         #endregion Properties
     }
 }

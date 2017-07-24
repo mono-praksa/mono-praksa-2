@@ -1,9 +1,6 @@
-﻿using System;
+﻿using GeoEvents.Model.Common;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using GeoEvents.Model.Common;
 
 namespace GeoEvents.Model
 {
@@ -23,7 +20,6 @@ namespace GeoEvents.Model
         /// </value>
         public Guid Id { get; set; }
 
-
         /// <summary>
         /// Gets or sets the name.
         /// </summary>
@@ -31,7 +27,6 @@ namespace GeoEvents.Model
         /// The name.
         /// </value>
         public string Name { get; set; }
-
 
         /// <summary>
         /// Gets or sets the description.
@@ -41,7 +36,6 @@ namespace GeoEvents.Model
         /// </value>
         public string Description { get; set; }
 
-
         /// <summary>
         /// Gets or sets the latitude.
         /// </summary>
@@ -49,7 +43,6 @@ namespace GeoEvents.Model
         /// The latitude.
         /// </value>
         public double Latitude { get; set; }
-
 
         /// <summary>
         /// Gets or sets the longitude.
@@ -59,7 +52,6 @@ namespace GeoEvents.Model
         /// </value>
         public double Longitude { get; set; }
 
-
         /// <summary>
         /// Gets or sets the categories of the event.
         /// </summary>
@@ -67,7 +59,6 @@ namespace GeoEvents.Model
         /// The categories.
         /// </value>
         public int Category { get; set; }
-
 
         /// <summary>
         /// Gets or sets the start time of the event.
@@ -77,7 +68,6 @@ namespace GeoEvents.Model
         /// </value>
         public DateTime StartTime { get; set; }
 
-
         /// <summary>
         /// Gets or sets the end time of the event.
         /// </summary>
@@ -85,7 +75,6 @@ namespace GeoEvents.Model
         /// The end time.
         /// </value>
         public DateTime EndTime { get; set; }
-
 
         /// <summary>
         /// Gets or sets the integer representing the categories.
@@ -95,7 +84,6 @@ namespace GeoEvents.Model
         /// The integer.
         /// </value>
         public List<int> Categories { get; set; }
-
 
         /// <summary>
         /// Gets or sets the price.
@@ -152,6 +140,7 @@ namespace GeoEvents.Model
         /// The string.
         /// </value>
         public string Custom { get; set; }
+
         #endregion Properties
     }
 }

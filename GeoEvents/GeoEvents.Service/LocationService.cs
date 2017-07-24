@@ -2,9 +2,6 @@
 using GeoEvents.Repository.Common;
 using GeoEvents.Service.Common;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace GeoEvents.Service
@@ -34,23 +31,19 @@ namespace GeoEvents.Service
             this.Repository = repository;
         }
 
-
         #endregion Constructors
 
         #region Methods
-
 
         public Task<ILocation> GetLocationAsync(string address)
         {
             return Repository.GetLocationAsync(address);
         }
 
-
         public Task<ILocation> CreateLocationAsync(ILocation location)
         {
             return Repository.CreateLocationAsync(location);
         }
-
 
         public Task<ILocation> GetLocationByIdAsync(Guid id)
         {
@@ -60,7 +53,6 @@ namespace GeoEvents.Service
         public Task<ILocation> UpdateLocationRatingAsync(Guid eventId, double rating)
         {
             return Repository.UpdateLocationRatingAsync(eventId, rating);
-
         }
 
         #endregion Methods

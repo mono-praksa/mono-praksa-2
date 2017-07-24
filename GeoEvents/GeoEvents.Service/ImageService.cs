@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using GeoEvents.Service.Common;
-using GeoEvents.Model.Common;
-using GeoEvents.Common;
+﻿using GeoEvents.Model.Common;
 using GeoEvents.Repository.Common;
+using GeoEvents.Service.Common;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace GeoEvents.Service
 {
@@ -28,8 +25,6 @@ namespace GeoEvents.Service
 
         #endregion Properties
 
-
-
         #region Constructors
 
         /// <summary>
@@ -41,13 +36,9 @@ namespace GeoEvents.Service
             this.Repository = repository;
         }
 
-
         #endregion Constructors
 
-
-
         #region Methods
-
 
         /// <summary>
         /// Gets images attached to an event.
@@ -58,7 +49,6 @@ namespace GeoEvents.Service
         {
             return Repository.GetImagesAsync(eventId);
         }
-
 
         /// <summary>
         /// Adds an image to an event.

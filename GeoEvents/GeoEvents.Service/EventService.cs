@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using GeoEvents.Service.Common;
+﻿using GeoEvents.Common;
 using GeoEvents.Model.Common;
-using GeoEvents.Common;
 using GeoEvents.Repository.Common;
+using GeoEvents.Service.Common;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace GeoEvents.Service
 {
@@ -28,8 +26,6 @@ namespace GeoEvents.Service
 
         #endregion Properties
 
-
-
         #region Constructors
 
         /// <summary>
@@ -41,10 +37,7 @@ namespace GeoEvents.Service
             this.Repository = repository;
         }
 
-
         #endregion Constructors
-
-
 
         #region Methods
 
@@ -103,7 +96,6 @@ namespace GeoEvents.Service
             return events;
         }
 
-
         /// <summary>
         /// Gets the number of events that satisfy a filter asynchronously.
         /// </summary>
@@ -115,7 +107,6 @@ namespace GeoEvents.Service
         {
             return Repository.GetEventCountAsync(filter);
         }
-
 
         /// <summary>
         /// Creates an event asynchronously.
@@ -157,12 +148,9 @@ namespace GeoEvents.Service
         /// <returns></returns>
         public Task<IEvent> UpdateRatingAsync(Guid eventId, double rating, double CurrentRating, int RateCount)
         {
-            return Repository.UpdateRatingAsync(eventId, rating,CurrentRating,RateCount);
+            return Repository.UpdateRatingAsync(eventId, rating, CurrentRating, RateCount);
         }
 
-
-
         #endregion Methods
-
     }
 }

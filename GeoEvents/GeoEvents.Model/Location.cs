@@ -1,15 +1,12 @@
 ﻿using GeoEvents.Model.Common;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GeoEvents.Model
 {
     public class Location : ILocation
     {
         #region Properties
+
         /// <summary>
         /// Gets or sets the identifier.
         /// </summary>
@@ -41,6 +38,7 @@ namespace GeoEvents.Model
         /// The address.
         /// </value>
         public string Address { get; set; }
+
         #endregion Properties
     }
 }

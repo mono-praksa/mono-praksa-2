@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using GeoEvents.Common;
 using GeoEvents.Model.Common;
-using GeoEvents.Common;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace GeoEvents.Service.Common
 {
@@ -31,7 +29,6 @@ namespace GeoEvents.Service.Common
         /// </returns>
         Task<IEnumerable<IEvent>> GetEventsAsync(IFilter filter);
 
-
         /// <summary>
         /// Gets the number of events that satisfy a filter asynchronously.
         /// </summary>
@@ -39,14 +36,12 @@ namespace GeoEvents.Service.Common
         /// <returns></returns>
         Task<Int64> GetEventCountAsync(IFilter filter);
 
-
         /// <summary>
         /// Creates an event asynchronously.
         /// </summary>
         /// <param name="evt">The evt.</param>
         /// <returns></returns>
         Task<IEvent> CreateEventAsync(IEvent evt);
-
 
         /// <summary>
         /// Updates the reservation asynchronously.

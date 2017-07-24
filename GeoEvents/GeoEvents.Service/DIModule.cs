@@ -1,9 +1,4 @@
 ﻿using GeoEvents.Service.Common;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GeoEvents.Service
 {
@@ -11,6 +6,9 @@ namespace GeoEvents.Service
 
     public class DIModule : Ninject.Modules.NinjectModule
     {
+        /// <summary>
+        /// Loads the module into the kernel.
+        /// </summary>
         public override void Load()
         {
             Bind<IEventService>().To<EventService>();

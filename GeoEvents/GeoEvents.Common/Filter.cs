@@ -63,7 +63,6 @@ namespace GeoEvents.Common
         /// <value>The search string.</value>
         public string SearchString { get; set; }
 
-
         /// <summary>
         /// Gets or sets the attribute by which the result should be sorted.
         /// </summary>
@@ -104,7 +103,6 @@ namespace GeoEvents.Common
 
         #region Constructors
 
-
         /// <summary>
         /// Initializes a new instance of the <see cref="Filter"/> class.
         /// </summary>
@@ -121,8 +119,7 @@ namespace GeoEvents.Common
         /// <param name="orderAscending">The order ascending.</param>
         /// <param name="price">The price.</param>
         /// <param name="ratingEvent">The rating event.</param>
-        /// <param name="custom">The custom attributes.</param>
-
+        /// <param name="custom">The custom.</param>
         public Filter(decimal? uLat, decimal? uLong, decimal? radius, DateTime? startTime, DateTime? endTime, int? category, int? pageNumber, int? pageSize, string searchString, string orderBy, bool? orderAscending, decimal? price, decimal? ratingEvent, string custom)
         {
             ULat = uLat;

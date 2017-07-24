@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GeoEvents.Model.Common
 {
@@ -18,8 +14,6 @@ namespace GeoEvents.Model.Common
         /// </value>
         Guid Id { get; set; }
 
-
-
         /// <summary>
         /// Gets or sets the event identifier.
         /// </summary>
@@ -27,8 +21,6 @@ namespace GeoEvents.Model.Common
         /// The event identifier.
         /// </value>
         Guid EventId { get; set; }
-
-
 
         /// <summary>
         /// Gets or sets the content.

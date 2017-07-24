@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using GeoEvents.Model.Common;
+﻿using GeoEvents.Model.Common;
+using System;
 
 namespace GeoEvents.Model
 {
@@ -23,8 +19,6 @@ namespace GeoEvents.Model
         /// </value>
         public Guid Id { get; set; }
 
-
-
         /// <summary>
         /// Gets or sets the event identifier.
         /// </summary>
@@ -32,8 +26,6 @@ namespace GeoEvents.Model
         /// The event identifier.
         /// </value>
         public Guid EventId { get; set; }
-
-
 
         /// <summary>
         /// Gets or sets the content of the image.
