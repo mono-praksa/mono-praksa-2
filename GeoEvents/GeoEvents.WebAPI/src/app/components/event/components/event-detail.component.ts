@@ -126,9 +126,9 @@ export class EventDetailComponent implements OnInit{
             this._loaderService.displayLoader(false);
         });
 
-        //this.geocodingService.getAddress(this.event.Lat, this.event.Long).subscribe(response => {
-        //    this.address = response;
-        //});
+        this.geocodingService.getAddress(this.event.Latitude, this.event.Longitude).subscribe(response => {
+            this.address = response;
+        });
     }
 
     rateChange(slider: any) {
