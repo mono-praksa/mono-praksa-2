@@ -54,7 +54,7 @@ export class EventCreateDataComponent implements OnInit {
             this.createEventLoading = value;
         });
 
-        this._categoryService.buildCategories();
+        this._categoryService.buildCategories(true);
 
         this.buildForm();
 

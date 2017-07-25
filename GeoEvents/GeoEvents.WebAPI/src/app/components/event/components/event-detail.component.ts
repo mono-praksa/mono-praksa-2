@@ -49,7 +49,7 @@ export class EventDetailComponent implements OnInit {
         this.event = this._activatedRoute.snapshot.data.event;
         this.event.Custom = eval(this.event.Custom);
 
-        this._categoryService.buildCategories();
+        this._categoryService.buildCategories(false);
 
         this._locationService.getLocationById(this.event.LocationId).subscribe((response: ILocation) => {
             this.location = response;

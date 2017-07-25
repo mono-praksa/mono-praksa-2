@@ -15,14 +15,17 @@ export class CategoryService {
     CategoryEnum = CategoryEnum;
     categories: ICategoryElement[] = [];
 
-    buildCategories(): void {
+    buildCategories(checkLast: boolean): void {
+        this.categories = [];
         for (let i of this.keys()) {
             this.categories.push({
                 id: parseInt(i),
                 checked: false
             });
         }
-        this.categories[this.categories.length - 1].checked = true;
+        if (checkLast) {
+            this.categories[this.categories.length - 1].checked = true;
+        }        
     }
 
     keys(): string[] {
