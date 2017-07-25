@@ -85,32 +85,10 @@
 					<div class="col-md-4">
 						<label for="categoriesWrapper">Select Categories</label>
 						<div id="categoriesWrapper">
-							<div class="row">
-								<div class="col-xs-4">
-									<input type="checkbox" value="1" (change)="updateCategories(1)" /> Music
-								</div>
-								<div class="col-xs-4">
-									<input type="checkbox" value="2" (change)="updateCategories(2)" /> Culture
-								</div>
-								<div class="col-xs-4">
-									<input type="checkbox" value="4" (change)="updateCategories(4)" /> Sport
-								</div>
-							</div>
-							<div class="row">
-								<div class="col-xs-4">
-									<input type="checkbox" value="8" (change)="updateCategories(8)" /> Gastro
-								</div>
-								<div class="col-xs-4">
-									<input type="checkbox" value="16" (change)="updateCategories(16)" /> Religious
-								</div>
-								<div class="col-xs-4">
-									<input type="checkbox" value="32" (change)="updateCategories(32)" /> Business
-								</div>
-							</div>
-							<div class="row">
-								<div class="col-xs-5">
-									<input type="checkbox" value="64" (change)="updateCategories(64)" /> Miscellaneous
-								</div>
+							<div class="row control-label">
+                                <label class="col-xs-6" *ngFor="let category of _categoryService.keys()">
+                                    <input type="checkbox" value="{{category}}" (change)="updateCategories(category)" /> {{_categoryService.CategoryEnum[category]}}
+                                </label>
 							</div>
 						</div>
 					</div>

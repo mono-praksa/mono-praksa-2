@@ -3,7 +3,7 @@ import { Http, RequestOptions, Headers, Response } from '@angular/http'
 import { Observable } from 'rxjs/Observable'
 import { IEvent } from '../models/event.model'
 import { IImage } from '../models/image.model'
-import { EventService } from '../event.service'
+import { EventService } from '../providers/event.service'
 
 @Component({
     selector: "create-images",

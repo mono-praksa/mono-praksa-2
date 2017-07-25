@@ -8,9 +8,10 @@ import { FormGroup } from '@angular/forms';
 import { IEvent } from '../models/event.model';
 import { IImage } from '../models/image.model';
 
-import { EventService } from '../event.service';
+import { EventService } from '../providers/event.service';
 import { LoaderService } from '../../../shared/loader.service';
 import { GeocodingService } from '../../../shared/geocoding.service';
+import { CategoryService } from '../providers/category.service';
 
 @Component({
     templateUrl: 'app/components/event/views/event-detail.component.html',
@@ -24,7 +25,6 @@ export class EventDetailComponent implements OnInit {
     @ViewChild("carousel") carouselElement: ElementRef;
     @ViewChild("userRate") userRateElement: ElementRef;
     @ViewChild("search") searchElementRef: ElementRef;
-    CategoryEnum: any = CategoryEnum;
     private _address: string = "";
     private _getImagesLoading: boolean = false;
 
@@ -45,7 +45,8 @@ export class EventDetailComponent implements OnInit {
         private _eventService: EventService,
         private _loaderService: LoaderService,
         private _activatedRoute: ActivatedRoute,
-        private _geocodingService: GeocodingService
+        private _geocodingService: GeocodingService,
+        private _categoryService: CategoryService
     ) {
 
     }
@@ -53,7 +54,9 @@ export class EventDetailComponent implements OnInit {
     ngOnInit() {
         this.event = this._activatedRoute.snapshot.data.event;
         this.event.Custom = eval(this.event.Custom);
-        
+
+        this._categoryService.buildCategories();
+
         this._loaderService.loaderStatus.subscribe((value: boolean) => {
             this.getImagesLoading = value;
         });
@@ -165,14 +168,4 @@ export class EventDetailComponent implements OnInit {
     set address(theAddress: string) {
         this._address = theAddress;
     }
-}
-
-enum CategoryEnum {
-    Music = 1,
-    Culture = 2,
-    Sport = 4,
-    Gastro = 8,
-    Religious = 16,
-    Business = 32,
-    Miscellaneous = 64
 }

@@ -6,10 +6,10 @@ import { MapsAPILoader } from '@agm/core'
 import { endDateBeforeStartDate, uniqueName } from '../validators/validator';
 import { IEvent } from '../models/event.model';
 import { ILocation } from '../models/location.model';
-import { CategoryEnum } from '../../../shared/common/category-enum';
+import { CategoryService } from '../providers/category.service';
 import { LoaderService } from '../../../shared/loader.service';
-import { EventService } from '../event.service';
-import { LocationService } from '../location.service';
+import { EventService } from '../providers/event.service';
+import { LocationService } from '../providers/location.service';
 import { GeocodingService } from '../../../shared/geocoding.service';
 
 @Component({
@@ -26,18 +26,6 @@ export class EventCreateDataComponent implements OnInit {
     //variables for google maps api
     private _zoom: number = 12;
     private _isAddressValid: boolean = false;
-
-    CategoryEnum: any = CategoryEnum;
-
-    categories: Array<ICategoryElement> = [
-        { id: CategoryEnum["Music"], checked: false },
-        { id: CategoryEnum["Culture"], checked: false },
-        { id: CategoryEnum["Sport"], checked: false },
-        { id: CategoryEnum["Gastro"], checked: false },
-        { id: CategoryEnum["Religious"], checked: false },
-        { id: CategoryEnum["Business"], checked: false },
-        { id: CategoryEnum["Miscellaneous"], checked: true }
-    ]
 
     eventForm: FormGroup;
     name: FormControl;
@@ -57,13 +45,16 @@ export class EventCreateDataComponent implements OnInit {
         private _loaderService: LoaderService,
         private _eventService: EventService,
         private _locationService: LocationService,
-        private geocodingService: GeocodingService
+        private _geocodingService: GeocodingService,
+        private _categoryService: CategoryService
     ) { }
 
     ngOnInit(): void {
         this._loaderService.loaderStatus.subscribe((value: boolean) => {
             this.createEventLoading = value;
         });
+
+        this._categoryService.buildCategories();
 
         this.buildForm();
 
@@ -87,7 +78,7 @@ export class EventCreateDataComponent implements OnInit {
                     //set latitude, longitude and zoom
                     this.eventForm.controls["latitude"].setValue(place.geometry.location.lat());
                     this.eventForm.controls["longitude"].setValue(place.geometry.location.lng());
-                    this.geocodingService.getAddress(this.eventForm.controls["latitude"].value, this.eventForm.controls["longitude"].value).subscribe(response => {
+                    this._geocodingService.getAddress(this.eventForm.controls["latitude"].value, this.eventForm.controls["longitude"].value).subscribe(response => {
                         this.eventForm.controls["address"].setValue(response);
                     });
                     this.isAddressValid = true;
@@ -132,7 +123,7 @@ export class EventCreateDataComponent implements OnInit {
             navigator.geolocation.getCurrentPosition((position) => {
                 this.eventForm.controls["latitude"].setValue(position.coords.latitude);
                 this.eventForm.controls["longitude"].setValue(position.coords.longitude);
-                this.geocodingService.getAddress(this.eventForm.controls["latitude"].value, this.eventForm.controls["longitude"].value).subscribe(response => {
+                this._geocodingService.getAddress(this.eventForm.controls["latitude"].value, this.eventForm.controls["longitude"].value).subscribe(response => {
                     this.eventForm.controls["address"].setValue(response);
                     if (this.eventForm.value.address !== "") {
                         this.isAddressValid = true;
@@ -146,7 +137,7 @@ export class EventCreateDataComponent implements OnInit {
     createEvent(formValues: any) {
         this._loaderService.displayLoader(true);
         let chosenCategories: number[] = [];
-        this.categories.filter(checkbox => {
+        this._categoryService.categories.filter(checkbox => {
             if (checkbox.checked) {
                 chosenCategories.push(checkbox.id);
             }
@@ -178,7 +169,7 @@ export class EventCreateDataComponent implements OnInit {
     }
 
     updateCategories(category: number): void {
-        this.categories.filter(checkbox => {
+        this._categoryService.categories.filter(checkbox => {
             if (checkbox.id == category) {
                 checkbox.checked = !checkbox.checked;
             }
@@ -188,24 +179,19 @@ export class EventCreateDataComponent implements OnInit {
     markerUpdated(event: any): void {
         this.eventForm.controls["latitude"].setValue( event.coords.lat);
         this.eventForm.controls["longitude"].setValue(event.coords.lng);
-        this.geocodingService.getAddress(this.eventForm.controls["latitude"].value, this.eventForm.controls["longitude"].value).subscribe(response => {
+        this._geocodingService.getAddress(this.eventForm.controls["latitude"].value, this.eventForm.controls["longitude"].value).subscribe(response => {
             this.eventForm.controls["address"].setValue(response);
         });
     }
 
     isAllUnchecked(): boolean {
         let checkbox: ICategoryElement
-        for (checkbox of this.categories) {
+        for (checkbox of this._categoryService.categories) {
             if (checkbox.checked) {
                 return false;
             }
         }
         return true;
-    }
-
-    keys(): Array<string> {
-        var keys = Object.keys(CategoryEnum);
-        return keys.slice(keys.length / 2);
     }
 
     get zoom(): number {

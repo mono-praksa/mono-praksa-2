@@ -5,9 +5,10 @@ import { MapsAPILoader } from '@agm/core';
 
 import { IEvent, CustomAttribute } from '../models/event.model';
 import { IFilter } from '../models/filter.model';
+import { CategoryService } from '../providers/category.service';
 
 import { PreserveSearchQuerryService } from '../../../shared/preserve-search-querry.service';
-import { EventService } from '../event.service';
+import { EventService } from '../providers/event.service';
 import { GeocodingService } from '../../../shared/geocoding.service';
 import { LoaderService } from '../../../shared/loader.service';
 
@@ -47,16 +48,6 @@ export class EventSearchComponent implements OnInit {
 	
 	@ViewChild("search") searchElementRef: ElementRef;
 	
-	categories: any[] = [
-		{ id: 1, checked: false },
-		{ id: 2, checked: false },
-		{ id: 4, checked: false },
-		{ id: 8, checked: false },
-		{ id: 16, checked: false },
-		{ id: 32, checked: false },
-		{ id: 64, checked: false }
-	]
-	
 	//booleans for displaying ui elements
     private _isMapMode: boolean = false;
     //private _isDetailMode: boolean = false;
@@ -68,14 +59,15 @@ export class EventSearchComponent implements OnInit {
         private _preserveSearchQuerryService: PreserveSearchQuerryService,
         private _mapsAPILoader: MapsAPILoader,
         private _ngZone: NgZone,
-        private geocodingService: GeocodingService,
-        private _loaderService: LoaderService
+        private _geocodingService: GeocodingService,
+        private _loaderService: LoaderService,
+        private _categoryService: CategoryService
     ) {
 		this.createForm();
 	}
 	
     ngOnInit(): void {
-        this.geocodingService.getUserApproximateAddress()
+        this._geocodingService.getUserApproximateAddress()
             .subscribe(response => {
                 if (response.status == "success") {
                     this.userApproximateAddress = response.city + ", " + response.country;
@@ -96,7 +88,7 @@ export class EventSearchComponent implements OnInit {
 				Radius: 0,
 				StartTime: null,
 				EndTime: null,
-                Category: 127,
+                Category: 0,
                 Price: null,
                 RatingEvent: null,
                 SearchString: this._preserveSearchQuerryService.searchQuerry,
@@ -172,7 +164,7 @@ export class EventSearchComponent implements OnInit {
 	getSelectedCategories(): number {
         let chosenCategories: number[] = [];
 		
-        this.categories.filter(checkbox => {
+        this._categoryService.categories.filter(checkbox => {
             if (checkbox.checked) {
                 chosenCategories.push(checkbox.id);
             }
@@ -181,18 +173,13 @@ export class EventSearchComponent implements OnInit {
         for (let c of chosenCategories) {
             cat += c
         }
-		if(cat != 0){
-			return cat;
-		}
-		else {
-			return 127;
-		}		
+        return cat;
 	}
 	
 	//called when the checkbox for one of the categories changes
 	//updates the array of categories (i think)
     updateCategories(category: number) {
-        this.categories.filter(checkbox => {
+        this._categoryService.categories.filter(checkbox => {
             if (checkbox.id == category) {
                 checkbox.checked = !checkbox.checked;
             }
@@ -206,7 +193,7 @@ export class EventSearchComponent implements OnInit {
 			navigator.geolocation.getCurrentPosition((position) => {
 				this.filterForm.controls["latitude"].setValue(position.coords.latitude);
                 this.filterForm.controls["longitude"].setValue(position.coords.longitude);
-                this.geocodingService.getAddress(this.filterForm.controls["latitude"].value, this.filterForm.controls["longitude"].value).subscribe(response => {
+                this._geocodingService.getAddress(this.filterForm.controls["latitude"].value, this.filterForm.controls["longitude"].value).subscribe(response => {
                     this.filterForm.controls["address"].setValue(response);
                 });
                 this.isAddressValid = true;
@@ -235,7 +222,7 @@ export class EventSearchComponent implements OnInit {
 					//set latitude, longitude and zoom
 					this.filterForm.controls["latitude"].setValue(place.geometry.location.lat());
                     this.filterForm.controls["longitude"].setValue(place.geometry.location.lng());
-                    this.geocodingService.getAddress(this.filterForm.controls["latitude"].value, this.filterForm.controls["longitude"].value).subscribe(response => {
+                    this._geocodingService.getAddress(this.filterForm.controls["latitude"].value, this.filterForm.controls["longitude"].value).subscribe(response => {
                         this.filterForm.controls["address"].setValue(response);
                     });
                     this.isAddressValid = true;

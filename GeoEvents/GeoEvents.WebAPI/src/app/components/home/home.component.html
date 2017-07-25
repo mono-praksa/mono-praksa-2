@@ -4,7 +4,7 @@
 		<form [formGroup]="searchForm" (ngSubmit)="onSearch(searchForm.value)" autocomplete="on" novalidate>
             <div class="input-group">
                 <input class="form-control" formControlName="searchTerm" id="searchTerm" placeholder="Search..." type="text">
-                <span class="input-group-addon glyphicon glyphicon-search" (click)="this.onSearch()" style="cursor:pointer"></span>
+                <span class="input-group-addon glyphicon glyphicon-search input-lg" (click)="this.onSearch()" style="cursor:pointer"></span>
             </div>
 		</form>
 		<div>

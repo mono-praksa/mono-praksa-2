@@ -4,9 +4,9 @@ import { Observable } from "rxjs/Observable";
 import "rxjs/add/operator/map";
 import "rxjs/add/operator/catch";
 
-import { IEvent } from "./models/event.model";
-import { IFilter } from "./models/filter.model";
-import { IImage } from './models/image.model';
+import { IEvent } from "../models/event.model";
+import { IFilter } from "../models/filter.model";
+import { IImage } from '../models/image.model';
 
 @Injectable()
 export class EventService {
