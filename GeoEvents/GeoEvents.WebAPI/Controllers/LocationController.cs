@@ -4,6 +4,7 @@ using GeoEvents.Model.Common;
 using GeoEvents.Service.Common;
 using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Threading.Tasks;
 using System.Web.Http;
 
@@ -23,9 +24,28 @@ namespace GeoEvents.WebAPI.Controllers
 
         [HttpGet]
         [Route("get")]
-        public async Task<LocationModel> GetLocationAsync(string address)
+        public async Task<LocationModel> GetLocationAsync(string address = "", string id = "")
         {
-            return Mapper.Map<LocationModel>(await Service.GetLocationAsync(address));
+            if(address != "" && id == "")
+            {
+                return Mapper.Map<LocationModel>(await Service.GetLocationAsync(address));
+            }
+            else if(address == "" && id != "")
+            {
+                return Mapper.Map<LocationModel>(await Service.GetLocationByIdAsync(new Guid(id)));
+            }
+            else
+            {
+                throw new HttpResponseException(HttpStatusCode.BadRequest);
+            }
+            
+        }
+
+        [HttpPut]
+        [Route("update/rating")]
+        public Task<ILocation> UpdateRatingAsync(Guid locationId, double rating, double currentRating, int rateCount)
+        {
+            return Service.UpdateLocationRatingAsync(locationId, rating, currentRating, rateCount);
         }
     }
 

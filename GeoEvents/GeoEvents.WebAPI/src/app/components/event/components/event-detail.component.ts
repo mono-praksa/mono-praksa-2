@@ -7,11 +7,12 @@ import { FormGroup } from '@angular/forms';
 
 import { IEvent } from '../models/event.model';
 import { IImage } from '../models/image.model';
+import { ILocation } from '../models/location.model';
 
 import { EventService } from '../providers/event.service';
 import { LoaderService } from '../../../shared/loader.service';
-import { GeocodingService } from '../../../shared/geocoding.service';
 import { CategoryService } from '../providers/category.service';
+import { LocationService } from '../providers/location.service';
 
 @Component({
     templateUrl: 'app/components/event/views/event-detail.component.html',
@@ -22,20 +23,13 @@ import { CategoryService } from '../providers/category.service';
 export class EventDetailComponent implements OnInit {
     private _event: IEvent;
     private _images: IImage[];
+    private _location: ILocation;
     @ViewChild("carousel") carouselElement: ElementRef;
     @ViewChild("userRate") userRateElement: ElementRef;
     @ViewChild("search") searchElementRef: ElementRef;
-    private _address: string = "";
     private _getImagesLoading: boolean = false;
 
-    //variables for google maps api
-    private _zoom: number = 12;
-    private _isAddressValid: boolean = false;
-
-    @Input() rating: number;
-    @Input() itemId: number;
-    @Output() ratingClick: EventEmitter<any> = new EventEmitter<any>();
-
+    rating: number;
     hasRated: boolean = false;
     eventForm: FormGroup;
 
@@ -45,8 +39,8 @@ export class EventDetailComponent implements OnInit {
         private _eventService: EventService,
         private _loaderService: LoaderService,
         private _activatedRoute: ActivatedRoute,
-        private _geocodingService: GeocodingService,
-        private _categoryService: CategoryService
+        private _categoryService: CategoryService,
+        private _locationService: LocationService
     ) {
 
     }
@@ -56,6 +50,10 @@ export class EventDetailComponent implements OnInit {
         this.event.Custom = eval(this.event.Custom);
 
         this._categoryService.buildCategories();
+
+        this._locationService.getLocationById(this.event.LocationId).subscribe((response: ILocation) => {
+            this.location = response;
+        })
 
         this._loaderService.loaderStatus.subscribe((value: boolean) => {
             this.getImagesLoading = value;
@@ -86,10 +84,6 @@ export class EventDetailComponent implements OnInit {
             }
             this._loaderService.displayLoader(false);
         });
-
-        this._geocodingService.getAddress(this.event.Latitude, this.event.Longitude).subscribe(response => {
-            this.address = response;
-        });
     }
 
     rateChange(slider: any) {
@@ -104,10 +98,11 @@ export class EventDetailComponent implements OnInit {
                     this.event.RateCount = response.RateCount;
                     this.rating = rating;
                     this.hasRated = true;
-                    this.ratingClick.emit({
-                        itemId: this.itemId,
-                        rating: rating
-                    });
+                });
+            this._locationService.updateRating(this.location.Id, +rating, this.location.Rating, this.location.RateCount)
+                .subscribe((response: ILocation) => {
+                    this.location.Rating = response.Rating;
+                    this.location.RateCount = response.RateCount;
                 });
         }
 
@@ -161,11 +156,11 @@ export class EventDetailComponent implements OnInit {
         this._images = theImages;
     }
 
-    get address(): string {
-        return this._address;
+    get location(): ILocation {
+        return this._location;
     }
 
-    set address(theAddress: string) {
-        this._address = theAddress;
+    set location(theLocation: ILocation) {
+        this._location = theLocation;
     }
 }

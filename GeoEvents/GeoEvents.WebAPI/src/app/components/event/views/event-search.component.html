@@ -127,6 +127,7 @@
 				<div class="col-sm-3">
 					<select (change)="getEventsOrderChanged($event.target.value)" class="form-control">
 						<option value="Name">Name</option>
+                        <option value="Rating">Rating</option>
 						<option *ngIf="filter.ULat" value="Distance">Distance</option>
 						<option value="StartTime">Start time</option>
 						<option value="EndTime">End time</option>

@@ -101,14 +101,14 @@ export class EventService {
             }).catch(this.handleError);
     }
 
-    updateRating(eventId: string, rating: number, currentrating: number, ratecount: number) {
-        return this._http.put("/api/events/update/rating?eventId=" + eventId + "&rating=" + rating+"&currentrating=" + currentrating + "&ratecount=" + ratecount, {})
+    updateRating(eventId: string, rating: number, currentrating: number, ratecount: number): Observable<IEvent> {
+        return this._http.put("/api/events/update/rating?eventId=" + eventId + "&rating=" + rating + "&currentrating=" + currentrating + "&ratecount=" + ratecount, {})
             .map((response: Response) => {
                 return <IEvent>response.json();
             }).catch(this.handleError);
     }
 
-    updateReservation(eventId: string) {
+    updateReservation(eventId: string): Observable<IEvent> {
         return this._http.put("/api/events/update/reservation?eventId=" + eventId, {})
             .map((response: Response) => {
                 return <IEvent>response.json();

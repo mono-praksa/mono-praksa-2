@@ -4,7 +4,6 @@
     <div class="well">
         <p>{{event?.Description}}</p>
         
-        <h4>Location: {{address}}</h4>
         Categories:
         <ul *ngIf="event">
             <li *ngFor="let category of event.Categories">
@@ -75,6 +74,16 @@
             <span class="glyphicon glyphicon-chevron-right"></span>
             <span class="sr-only">Next</span>
         </a>
+    </div>
+</div>
+<div class="col-md-5" *ngIf="location">
+    <h4>Location: {{location.Address}}</h4>
+    <div style="float:left; padding-right: 10px;">
+        <h4>Location Rating: {{location.Rating | number:'1.2-2'}}</h4>
+    </div>
+
+    <div style="clear:left">
+        <h4>Location RateCount: {{location.RateCount}}</h4>
     </div>
     <div>
         <agm-map [latitude]="event.Latitude" [longitude]="event.Longitude">

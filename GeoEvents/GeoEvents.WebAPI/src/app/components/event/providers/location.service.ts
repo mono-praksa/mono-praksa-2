@@ -16,6 +16,19 @@ export class LocationService {
             .catch(this.handleError);
     }
 
+    getLocationById(id: string): Observable<ILocation> {
+        return this._http.get("/api/locations/get?id=" + id)
+            .map((response: Response) => <ILocation>response.json())
+            .catch(this.handleError);
+    }
+
+    updateRating(locationId: string, rating: number, currentRating: number, rateCount: number): Observable<ILocation> {
+        return this._http.put("/api/locations/update/rating?locationId=" + locationId + "&rating=" + rating + "&currentrating=" + currentrating + "&ratecount=" + ratecount, {})
+            .map((response: Response) => {
+                return <ILocation>response.json();
+            }).catch(this.handleError);
+    }
+
     handleError(error: Response) {
         console.error(error);
         return Observable.throw(error.json().error || "Server error");

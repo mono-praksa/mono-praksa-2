@@ -42,6 +42,6 @@ namespace GeoEvents.Service.Common
         /// <returns>
         /// Location
         /// </returns>
-        Task<ILocation> UpdateLocationRatingAsync(Guid eventId, double rating);
+        Task<ILocation> UpdateLocationRatingAsync(Guid eventId, double rating, double currentRating, int rateCount);
     }
 }
