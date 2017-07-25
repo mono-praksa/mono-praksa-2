@@ -23,7 +23,7 @@ export class LocationService {
     }
 
     updateRating(locationId: string, rating: number, currentRating: number, rateCount: number): Observable<ILocation> {
-        return this._http.put("/api/locations/update/rating?locationId=" + locationId + "&rating=" + rating + "&currentrating=" + currentrating + "&ratecount=" + ratecount, {})
+        return this._http.put("/api/locations/update/rating?locationId=" + locationId + "&rating=" + rating + "&currentrating=" + currentRating + "&ratecount=" + rateCount, {})
             .map((response: Response) => {
                 return <ILocation>response.json();
             }).catch(this.handleError);
