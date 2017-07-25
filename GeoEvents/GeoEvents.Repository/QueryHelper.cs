@@ -98,7 +98,7 @@ namespace GeoEvents.Repository
         {
             StringBuilder selectString = new StringBuilder();
 
-            selectString.AppendFormat("SELECT COUNT({0}) FROM {1} WHERE",
+            selectString.AppendFormat("SELECT COUNT({0}) FROM {1} ",
                 TableNameEventIdQ, TableNameEventQ);
 
             bool isNotFirst = false;
@@ -106,6 +106,7 @@ namespace GeoEvents.Repository
             /// adding Distance filter to query if there is Location and radius
             if (filter.ULat != null && filter.ULong != null && filter.Radius != 0)
             {
+                selectString.Append(" WHERE ");
                 selectString.AppendFormat(" (earth_box(ll_to_earth({0},{1}),{2})@> ll_to_earth({3},{4})) ",
                         ParLatitude, ParLongitude, ParRadius, TableNameEventLatQ, TableNameEventLongQ);
                 isNotFirst = true;
@@ -120,6 +121,7 @@ namespace GeoEvents.Repository
                 }
                 else
                 {
+                    selectString.Append(" WHERE ");
                     isNotFirst = true;
                 }
                 selectString.AppendFormat("({0} <= {1}) ",
@@ -135,6 +137,7 @@ namespace GeoEvents.Repository
                 }
                 else
                 {
+                    selectString.Append(" WHERE ");
                     isNotFirst = true;
                 }
                 selectString.AppendFormat("({0} >= {1}) ",
@@ -150,6 +153,7 @@ namespace GeoEvents.Repository
                 }
                 else
                 {
+                    selectString.Append(" WHERE ");
                     isNotFirst = true;
                 }
 
@@ -164,6 +168,7 @@ namespace GeoEvents.Repository
                 }
                 else
                 {
+                    selectString.Append(" WHERE ");
                     isNotFirst = true;
                 }
 
@@ -178,6 +183,7 @@ namespace GeoEvents.Repository
                 }
                 else
                 {
+                    selectString.Append(" WHERE ");
                     isNotFirst = true;
                 }
 
@@ -195,6 +201,7 @@ namespace GeoEvents.Repository
                 }
                 else
                 {
+                    selectString.Append(" WHERE ");
                     isNotFirst = true;
                 }
 
@@ -211,6 +218,7 @@ namespace GeoEvents.Repository
                 }
                 else
                 {
+                    selectString.Append(" WHERE ");
                     isNotFirst = true;
                 }
 
@@ -227,6 +235,7 @@ namespace GeoEvents.Repository
                 }
                 else
                 {
+                    selectString.Append(" WHERE ");
                     isNotFirst = true;
                 }
 
@@ -283,7 +292,7 @@ namespace GeoEvents.Repository
             }
             else
             {
-                selectString.AppendFormat("SELECT * FROM {0} WHERE ",
+                selectString.AppendFormat("SELECT * FROM {0} ",
                     TableNameEventQ);
             }
 
@@ -292,6 +301,7 @@ namespace GeoEvents.Repository
             /// adding Distance filter to query if there is Location and radius
             if (filter.ULat != null && filter.ULong != null && filter.Radius != 0)
             {
+                selectString.Append(" WHERE ");
                 selectString.AppendFormat(" (earth_box(ll_to_earth({0},{1}),{2})@> ll_to_earth({3},{4})) ",
                         ParLatitude, ParLongitude, ParRadius, TableNameEventLatQ, TableNameEventLongQ);
                 isNotFirst = true;
@@ -306,6 +316,7 @@ namespace GeoEvents.Repository
                 }
                 else
                 {
+                    selectString.Append(" WHERE ");
                     isNotFirst = true;
                 }
                 selectString.AppendFormat("({0} <= {1}) ",
@@ -321,6 +332,7 @@ namespace GeoEvents.Repository
                 }
                 else
                 {
+                    selectString.Append(" WHERE ");
                     isNotFirst = true;
                 }
                 selectString.AppendFormat("({0} >= {1}) ",
@@ -336,6 +348,7 @@ namespace GeoEvents.Repository
                 }
                 else
                 {
+                    selectString.Append(" WHERE ");
                     isNotFirst = true;
                 }
 
@@ -350,6 +363,7 @@ namespace GeoEvents.Repository
                 }
                 else
                 {
+                    selectString.Append(" WHERE ");
                     isNotFirst = true;
                 }
 
@@ -364,6 +378,7 @@ namespace GeoEvents.Repository
                 }
                 else
                 {
+                    selectString.Append(" WHERE ");
                     isNotFirst = true;
                 }
 
@@ -381,6 +396,7 @@ namespace GeoEvents.Repository
                 }
                 else
                 {
+                    selectString.Append(" WHERE ");
                     isNotFirst = true;
                 }
 
@@ -397,6 +413,7 @@ namespace GeoEvents.Repository
                 }
                 else
                 {
+                    selectString.Append(" WHERE ");
                     isNotFirst = true;
                 }
 
@@ -413,6 +430,7 @@ namespace GeoEvents.Repository
                 }
                 else
                 {
+                    selectString.Append(" WHERE ");
                     isNotFirst = true;
                 }
 

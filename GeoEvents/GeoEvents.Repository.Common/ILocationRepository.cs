@@ -38,11 +38,11 @@ namespace GeoEvents.Repository.Common
         /// Get Location by Id
         /// </summary>
         /// <param name="id"></param>
-        /// <param name="Rating"></param>
+        /// <param name="rating"></param>
         /// <returns>
         /// Location
         /// </returns>
-        Task<ILocation> UpdateLocationRatingAsync(Guid id, double Rating,double currentRating,int rateCount);
+        Task<ILocation> UpdateLocationRatingAsync(Guid id, double rating,double currentRating,int rateCount);
        
 
     }
