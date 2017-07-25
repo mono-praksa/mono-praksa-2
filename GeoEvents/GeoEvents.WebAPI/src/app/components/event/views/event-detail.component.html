@@ -76,4 +76,9 @@
             <span class="sr-only">Next</span>
         </a>
     </div>
+    <div>
+        <agm-map [latitude]="event.Latitude" [longitude]="event.Longitude">
+            <agm-marker [latitude]="event.Latitude" [longitude]="event.Longitude"></agm-marker>
+        </agm-map>
+    </div>
 </div>

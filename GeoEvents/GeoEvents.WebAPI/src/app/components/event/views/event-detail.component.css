@@ -46,3 +46,7 @@
     .notrated > label:hover ~ input:checked ~ label {
         color: #ea0;
     }
+
+    agm-map {
+    height: 300px;
+}

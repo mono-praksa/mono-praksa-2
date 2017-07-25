@@ -1,14 +1,16 @@
-﻿import { Component, Input, OnInit, ViewChild, ElementRef, Output, EventEmitter } from '@angular/core';
+﻿import { Component, Input, OnInit, NgZone, ViewChild, ElementRef, Output, EventEmitter } from '@angular/core';
 import { Http, Response, Headers, RequestOptions } from '@angular/http';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
+import { MapsAPILoader } from '@agm/core';
+import { FormGroup } from '@angular/forms';
 
 import { IEvent } from '../models/event.model';
 import { IImage } from '../models/image.model';
 
-import { GeocodingService } from '../../../shared/geocoding.service';
 import { EventService } from '../event.service';
 import { LoaderService } from '../../../shared/loader.service';
+import { GeocodingService } from '../../../shared/geocoding.service';
 
 @Component({
     templateUrl: 'app/components/event/views/event-detail.component.html',
@@ -21,21 +23,29 @@ export class EventDetailComponent implements OnInit {
     private _images: IImage[];
     @ViewChild("carousel") carouselElement: ElementRef;
     @ViewChild("userRate") userRateElement: ElementRef;
+    @ViewChild("search") searchElementRef: ElementRef;
     CategoryEnum: any = CategoryEnum;
     private _address: string = "";
     private _getImagesLoading: boolean = false;
+
+    //variables for google maps api
+    private _zoom: number = 12;
+    private _isAddressValid: boolean = false;
 
     @Input() rating: number;
     @Input() itemId: number;
     @Output() ratingClick: EventEmitter<any> = new EventEmitter<any>();
 
     hasRated: boolean = false;
+    eventForm: FormGroup;
 
     constructor(
-        private _geocodingService: GeocodingService,
+        private _mapsAPILoader: MapsAPILoader,
+        private _ngZone: NgZone,
         private _eventService: EventService,
         private _loaderService: LoaderService,
-        private _activatedRoute: ActivatedRoute
+        private _activatedRoute: ActivatedRoute,
+        private _geocodingService: GeocodingService
     ) {
 
     }
