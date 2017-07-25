@@ -17,12 +17,13 @@ import { EventCreateDataComponent } from "./components/event-create-data.compone
 import { EventCreateCustomizeComponent } from './components/event-create-customize.component';
 import { EventDetailComponent } from "./components/event-detail.component";
 
-import { EventService } from "./event.service";
-import { LocationService } from './location.service';
+import { EventService } from "./providers/event.service";
+import { LocationService } from './providers/location.service';
 import { PreserveSearchQuerryService } from "../../shared/preserve-search-querry.service";
 import { GeocodingService } from '../../shared/geocoding.service';
-import { EventDetailRouteActivatorService } from './event-detail-route-activator.service';
-import { EventDetailResolverService } from './event-detail-resolver.service'
+import { EventDetailRouteActivatorService } from './providers/event-detail-route-activator.service';
+import { EventDetailResolverService } from './providers/event-detail-resolver.service';
+import { CategoryService } from './providers/category.service';
 
 import { DecimalPipe } from '@angular/common';
 
@@ -57,7 +58,8 @@ import { DecimalPipe } from '@angular/common';
         PreserveSearchQuerryService,
         GeocodingService,
         EventDetailRouteActivatorService,
-        EventDetailResolverService
+        EventDetailResolverService,
+        CategoryService
 	]
 })
 export class EventModule { }

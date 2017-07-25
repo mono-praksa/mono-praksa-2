@@ -4,8 +4,8 @@ import { RouterModule } from "@angular/router";
 import { EventSearchComponent } from "./components/event-search.component";
 import { EventCreateComponent } from "./components/event-create.component";
 import { EventDetailComponent } from './components/event-detail.component';
-import { EventDetailRouteActivatorService } from './event-detail-route-activator.service';
-import { EventDetailResolverService } from './event-detail-resolver.service'
+import { EventDetailRouteActivatorService } from './providers/event-detail-route-activator.service';
+import { EventDetailResolverService } from './providers/event-detail-resolver.service'
 
 @NgModule({
 	imports: [

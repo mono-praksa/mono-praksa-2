@@ -27,7 +27,12 @@ export class GeocodingService {
     getAddress(latitude: number, longitude: number) : Observable<string>{
         return this.http.get('https://maps.googleapis.com/maps/api/geocode/json?latlng=' + latitude.toString() + ',' + longitude.toString() + '&key=AIzaSyDHKcbmM0jpW7BOet42_S92KJSr5PYKc5w')
             .map((response: Response) => {
-                return <string>response.json()["results"][0]["formatted_address"];
+                if (response.json().status === "ZERO_RESULTS") {
+                    return "";
+                }
+                else {
+                    return <string>response.json()["results"][0]["formatted_address"];
+                }                
             }).catch(this.handleError);
     }
 

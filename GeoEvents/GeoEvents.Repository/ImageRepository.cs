@@ -44,14 +44,13 @@ namespace GeoEvents.Repository
         {
             ImageEntity DbImage = Mapper.Map<ImageEntity>(img);
             ImageEntity selectImage = null;
-      
+
             using (PostgresConn.CreateConnection())
             using (NpgsqlCommand commandInsert = new NpgsqlCommand(QueryHelper.GetInsertImagesQueryString(),
                         PostgresConn.CreateConnection()))
             using (NpgsqlCommand commandSelect = new NpgsqlCommand(QueryHelper.GetSelectImageQueryString(),
                         PostgresConn.CreateConnection()))
             {
-
                 commandInsert.Parameters.AddWithValue(QueryHelper.ParId, NpgsqlDbType.Uuid, DbImage.Id);
                 commandInsert.Parameters.AddWithValue(QueryHelper.ParContent, NpgsqlDbType.Bytea, DbImage.Content);
                 commandInsert.Parameters.AddWithValue(QueryHelper.ParEventId, NpgsqlDbType.Uuid, DbImage.EventId);
@@ -73,7 +72,6 @@ namespace GeoEvents.Repository
                     selectImage.Content = (byte[])dr["Content"];
                 }
             }
-            
 
             return Mapper.Map<IImage>(selectImage);
         }
@@ -108,8 +106,8 @@ namespace GeoEvents.Repository
                     tmp.Content = (byte[])dr["Content"];
                     selectImages.Add(Mapper.Map<IImage>(tmp));
                 }
-             }
-                      
+            }
+
             return Mapper.Map<IEnumerable<IImage>>(selectImages);
         }
 

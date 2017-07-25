@@ -2,7 +2,7 @@ import { NgModule }      from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpModule } from '@angular/http';
 import { RouterModule } from '@angular/router';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { AppComponent } from './app.component';
 import { NavbarComponent } from './shared/navbar/navbar.component';
@@ -22,7 +22,8 @@ import { LoaderService } from './shared/loader.service';
         RouterModule,
 		EventModule,
 		AppRoutingModule,
-		FormsModule
+        FormsModule,
+        ReactiveFormsModule
     ],
     declarations: [
         AppComponent,

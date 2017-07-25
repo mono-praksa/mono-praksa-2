@@ -1,16 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using GeoEvents.Model.Common;
+using System;
 using System.Threading.Tasks;
-using GeoEvents.Common;
-using GeoEvents.Model.Common;
 
 namespace GeoEvents.Repository.Common
 {
     public interface ILocationRepository
     {
-
         /// <summary>
         /// Getslocation or creates if there is non  asynchronous.
         /// </summary>
@@ -49,5 +44,6 @@ namespace GeoEvents.Repository.Common
         /// </returns>
         Task<ILocation> UpdateLocationRatingAsync(Guid id, double Rating,double currentRating,int rateCount);
        
+
     }
 }

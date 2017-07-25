@@ -1,17 +1,14 @@
 ﻿using AutoMapper;
 using GeoEvents.Common;
-using GeoEvents.Repository.Common;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using GeoEvents.Model.Common;
 using GeoEvents.DAL;
+using GeoEvents.Model.Common;
+using GeoEvents.Repository.Common;
 using Npgsql;
-using System.Data.Common;
-using System.Data;
 using NpgsqlTypes;
+using System;
+using System.Data;
+using System.Data.Common;
+using System.Threading.Tasks;
 
 namespace GeoEvents.Repository
 {
@@ -36,7 +33,6 @@ namespace GeoEvents.Repository
 
         #region Methods
 
-
         /// <summary>
         /// Getslocation or creates if there is non  asynchronous.
         /// </summary>
@@ -51,6 +47,7 @@ namespace GeoEvents.Repository
 
             using (Connection.CreateConnection())
             using (NpgsqlCommand commandSelect = new NpgsqlCommand(QueryHelper.GetSelectLocationQueryString(), Connection.CreateConnection()))
+
             {
                 commandSelect.Parameters.AddWithValue(QueryHelper.ParAddress, NpgsqlTypes.NpgsqlDbType.Text, address);
                 if (Connection.CreateConnection().FullState == ConnectionState.Closed)
@@ -77,6 +74,7 @@ namespace GeoEvents.Repository
                 }
 
                 return await GetLocationByIdAsync(location.Id);
+
 
             }
          
@@ -114,8 +112,6 @@ namespace GeoEvents.Repository
                     };
                 }
             }
-
-
 
             return Mapper.Map<ILocation>(location);
         }
@@ -183,6 +179,7 @@ namespace GeoEvents.Repository
 
 
                 return await GetLocationByIdAsync(id);
+
             }
 
           

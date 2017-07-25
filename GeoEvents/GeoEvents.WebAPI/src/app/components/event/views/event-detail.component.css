@@ -35,14 +35,18 @@
         color: #f70;
     }
 
-    .rating:not(:checked) > label:hover,
-    .rating:not(:checked) > label:hover ~ label {
+    .notrated:not(:checked) > label:hover,
+    .notrated:not(:checked) > label:hover ~ label {
         color: gold;
     }
 
 
-    .rating > input:checked ~ label:hover,
-    .rating > input:checked ~ label:hover ~ label,
-    .rating > label:hover ~ input:checked ~ label {
+    .notrated > input:checked ~ label:hover,
+    .notrated > input:checked ~ label:hover ~ label,
+    .notrated > label:hover ~ input:checked ~ label {
         color: #ea0;
     }
+
+    agm-map {
+    height: 300px;
+}

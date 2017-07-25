@@ -36,9 +36,9 @@
                 Categories
             </legend>
             <div class="row control-label">
-                <label class="col-md-3" *ngFor="let category of keys()">
-                    <input type="checkbox" value="{{CategoryEnum[category]}}" (change)="updateCategories(CategoryEnum[category])" *ngIf="category!='Miscellaneous'" />
-                    <input type="checkbox" value="{{CategoryEnum[category]}}" (change)="updateCategories(CategoryEnum[category])" *ngIf="category=='Miscellaneous'" checked/> {{category}}
+                <label class="col-md-3" *ngFor="let category of _categoryService.keys()">
+                    <input type="checkbox" value="{{category}}" (change)="updateCategories(category)" *ngIf="_categoryService.CategoryEnum[category]!='Miscellaneous'" />
+                    <input type="checkbox" value="{{category}}" (change)="updateCategories(category)" *ngIf="_categoryService.CategoryEnum[category]=='Miscellaneous'" checked/> {{_categoryService.CategoryEnum[category]}}
                 </label>
             </div>
             <span class="help-block" *ngIf="isAllUnchecked()">Please check at least one category!</span>

@@ -5,8 +5,8 @@ import { Observable } from 'rxjs/Rx'
 import { IEvent } from '../models/event.model'
 
 import { LoaderService } from '../../../shared/loader.service'
-import { EventService } from '../event.service'
-import { LocationService } from '../location.service'
+import { EventService } from '../providers/event.service'
+import { LocationService } from '../providers/location.service'
 
 @Component({
     selector: 'create-customize',
@@ -14,7 +14,6 @@ import { LocationService } from '../location.service'
 })
 
 export class EventCreateCustomizeComponent implements OnInit {
-    keysGetter = Object.keys;
     key: FormControl;
     value: FormControl;
     customAttributeForm: FormGroup;
