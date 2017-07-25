@@ -1,10 +1,8 @@
-﻿﻿import { Component, Output, EventEmitter, NgZone, Input, OnInit, OnChanges, ViewChild } from '@angular/core'
+﻿﻿import { Component, Output, EventEmitter, Input, OnInit, OnChanges, ViewChild } from '@angular/core'
 import { IEvent } from '../models/event.model'
-import { MapsAPILoader } from '@agm/core'
 import { Observable } from 'rxjs/Observable'
 
 import { FormControl, FormGroup, FormBuilder, Validators } from '@angular/forms'
-import { Http, Response, Headers, RequestOptions } from '@angular/http'
 
 import { Router } from '@angular/router'
 
@@ -28,7 +26,7 @@ export class EventMapComponent implements OnInit, OnChanges {
     googleMarkers: any;
     map: any;
 
-    constructor(private http: Http, private mapsAPILoader: MapsAPILoader, private ngZone: NgZone, private router: Router) {
+    constructor(private _router: Router) {
 
     }
 
@@ -189,7 +187,7 @@ export class EventMapComponent implements OnInit, OnChanges {
 
     displayEvent(evt: IEvent) {
         let routeUrl = "/event/search/" + evt.Id;
-        this.router.navigate([routeUrl]);
+        this._router.navigate([routeUrl]);
     }
 	
     test(id: string) {
