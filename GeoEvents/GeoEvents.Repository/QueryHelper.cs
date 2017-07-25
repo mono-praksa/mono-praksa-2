@@ -127,7 +127,7 @@ namespace GeoEvents.Repository
             }
 
             ///Adding Rating Event filter query if there is rating event
-            if (filter.RatingEvent != null)
+            if (filter.RatingEvent != 0)
             {
                 if (isNotFirst)
                 {
@@ -313,7 +313,7 @@ namespace GeoEvents.Repository
             }
 
             ///Adding Rating Event filter query if there is rating event
-            if (filter.RatingEvent != null)
+            if (filter.RatingEvent != 0)
             {
                 if (isNotFirst)
                 {
@@ -384,7 +384,7 @@ namespace GeoEvents.Repository
                     isNotFirst = true;
                 }
 
-                selectString.AppendFormat(" (lower({0}) ILIKE lower({1})) ",
+                selectString.AppendFormat(" (lower({0}) LIKE lower({1})) ",
                     NameQ, ParSearchString);
             }
 
