@@ -9,7 +9,7 @@
         /// </summary>
         public override void Load()
         {
-            Bind<IFilter>().To<IFilter>();
+            Bind<IFilter>().To<Filter>();
         }
     }
 
