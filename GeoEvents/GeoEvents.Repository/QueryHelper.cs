@@ -80,6 +80,8 @@ namespace GeoEvents.Repository
         private static string TableNameEventLocationIdQ = "events.locationid";
         private static string TableNameEventCustomQ = "events.custom";
 
+        private static string TableNameLocationIdQ = "locations.id";
+        private static string TableNameLocationRatingQ = "locations.rating";
         /// <summary>
         /// Default DateTime
         /// </summary>
@@ -290,6 +292,11 @@ namespace GeoEvents.Repository
                 selectString.AppendFormat("SELECT *, earth_distance(ll_to_earth({0},{1}), ll_to_earth({2},{3})) as distance from {4} WHERE ",
                     ParLatitude, ParLongitude, TableNameEventLatQ, TableNameEventLongQ, TableNameEventQ);
             }
+            else if(filter.OrderBy == "RatingLocation")
+            {
+                selectString.AppendFormat("SELECT * FROM {0} INNER JOIN {1} ON ({2} = {3}) ",
+                    TableNameEventQ, TableNameLocationQ, TableNameEventLocationIdQ, TableNameLocationIdQ);
+            }
             else
             {
                 selectString.AppendFormat("SELECT * FROM {0} ",
@@ -470,6 +477,11 @@ namespace GeoEvents.Repository
                 case "RatingEvent":
                     selectString.AppendFormat(" order by {0} ",
                         TableNameEventRatingQ);
+                    break;
+
+                case "RatingLocation":
+                    selectString.AppendFormat(" order by {0} ",
+                        TableNameLocationRatingQ);
                     break;
             }
 

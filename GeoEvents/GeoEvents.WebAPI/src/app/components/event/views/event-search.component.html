@@ -30,11 +30,17 @@
 					<div class="col-md-2">
 						<div class="form-group" [ngClass]="{'has-error': start.touched && filterForm.hasError('endDateBeforeStartDate')}">
                             <label for="start">Start Time</label>
-							<input formControlName="start" ngui-datetime-picker [close-on-select]="true" class="form-control input-sm" id="start" placeholder="Start Date" readonly style="cursor: pointer;" />
+                            <div [ngClass]="{'input-group': start.value != ''}">
+							    <input formControlName="start" ngui-datetime-picker [close-on-select]="true" class="form-control input-sm" id="start" placeholder="Start Date" readonly style="cursor: pointer;" />
+                                <span *ngIf="start.value!=''" class="input-group-addon" (click)="clearStartTime()">X</span>
+                            </div>
                         </div>
                         <div class="form-group" [ngClass]="{'has-error': end.touched && filterForm.hasError('endDateBeforeStartDate')}">
                             <label for="end">End Time</label>
-							<input formControlName="end" ngui-datetime-picker [close-on-select]="true" class="form-control input-sm" id="end" placeholder="End Date" readonly style="cursor: pointer;" />
+                            <div [ngClass]="{'input-group': end.value != ''}">
+                                <input formControlName="end" ngui-datetime-picker [close-on-select]="true" class="form-control input-sm" id="end" placeholder="End Date" readonly style="cursor: pointer;" />
+                                <span *ngIf="end.value!=''" class="input-group-addon" (click)="clearEndTime()">X</span>
+                            </div>
                         </div>
                         <span class="help-block" *ngIf="end.touched && filterForm.hasError('endDateBeforeStartDate')">End date must be after start date!</span>
 					</div>
@@ -127,7 +133,8 @@
 				<div class="col-sm-3">
 					<select (change)="getEventsOrderChanged($event.target.value)" class="form-control">
 						<option value="Name">Name</option>
-                        <option value="Rating">Rating</option>
+                        <option value="RatingEvent">Event Rating</option>
+                        <option value="RatingLocation">Location Rating</option>
 						<option *ngIf="filter.ULat" value="Distance">Distance</option>
 						<option value="StartTime">Start time</option>
 						<option value="EndTime">End time</option>

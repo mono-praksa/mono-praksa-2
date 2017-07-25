@@ -264,9 +264,6 @@ export class EventSearchComponent implements OnInit {
 	
 	//gets the events when user changes the sorting order
     getEventsOrderChanged(newOrder: string) {
-        if (newOrder == "Rating") {
-            newOrder = "RatingEvent";
-        }
 		this.filter.OrderByString = newOrder
 		this.getEvents(this.filter);
 	}
@@ -310,6 +307,14 @@ export class EventSearchComponent implements OnInit {
         this.filterForm.controls["address"].setValue("");
         this.filterForm.controls["latitude"].setValue(null);
         this.filterForm.controls["longitude"].setValue(null);
+    }
+
+    clearStartTime(): void {
+        this.filterForm.controls["start"].setValue("");
+    }
+
+    clearEndTime(): void {
+        this.filterForm.controls["end"].setValue("");
     }
 
     get eventCount(): number {
