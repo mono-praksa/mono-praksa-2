@@ -1,14 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { PreserveSearchQuerryService } from '../../shared/preserve-search-querry.service';
+import { PreserveSearchQueryService } from '../../shared/preserve-search-query.service';
 import { FormControl, FormGroup } from '@angular/forms';
 
 @Component({
 	templateUrl: './home.component.html',
-//	providers: [ PreserveSearchQuerryService ]
 })
 export class HomeComponent implements OnInit {
-	constructor(public _preserveSearchQuerryService: PreserveSearchQuerryService, private _router: Router) { }
+	constructor(public _preserveSearchQueryService: PreserveSearchQueryService, private _router: Router) { }
     searchForm: FormGroup;
     searchTerm: FormControl;
 
@@ -20,7 +19,7 @@ export class HomeComponent implements OnInit {
     }
 
     onSearch(formValues: any) {
-        this._preserveSearchQuerryService.searchQuerry = formValues.searchTerm;
+        this._preserveSearchQueryService.searchQuery = formValues.searchTerm;
 		this._router.navigate(["/event/search/"]);
 	}
 }

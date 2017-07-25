@@ -19,7 +19,7 @@ import { EventDetailComponent } from "./components/event-detail.component";
 
 import { EventService } from "./providers/event.service";
 import { LocationService } from './providers/location.service';
-import { PreserveSearchQuerryService } from "../../shared/preserve-search-querry.service";
+import { PreserveSearchQueryService } from "../../shared/preserve-search-query.service";
 import { GeocodingService } from '../../shared/geocoding.service';
 import { EventDetailRouteActivatorService } from './providers/event-detail-route-activator.service';
 import { EventDetailResolverService } from './providers/event-detail-resolver.service';
@@ -55,7 +55,7 @@ import { DecimalPipe } from '@angular/common';
 	providers: [ 
         EventService,
         LocationService,
-        PreserveSearchQuerryService,
+        PreserveSearchQueryService,
         GeocodingService,
         EventDetailRouteActivatorService,
         EventDetailResolverService,

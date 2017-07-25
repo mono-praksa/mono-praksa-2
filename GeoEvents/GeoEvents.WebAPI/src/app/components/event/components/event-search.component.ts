@@ -7,7 +7,7 @@ import { IEvent, CustomAttribute } from '../models/event.model';
 import { IFilter } from '../models/filter.model';
 import { CategoryService } from '../providers/category.service';
 
-import { PreserveSearchQuerryService } from '../../../shared/preserve-search-querry.service';
+import { PreserveSearchQueryService } from '../../../shared/preserve-search-query.service';
 import { EventService } from '../providers/event.service';
 import { GeocodingService } from '../../../shared/geocoding.service';
 import { LoaderService } from '../../../shared/loader.service';
@@ -56,7 +56,7 @@ export class EventSearchComponent implements OnInit {
     //constructor
     constructor(
         private _eventService: EventService,
-        private _preserveSearchQuerryService: PreserveSearchQuerryService,
+        private _preserveSearchQueryService: PreserveSearchQueryService,
         private _mapsAPILoader: MapsAPILoader,
         private _ngZone: NgZone,
         private _geocodingService: GeocodingService,
@@ -83,7 +83,7 @@ export class EventSearchComponent implements OnInit {
         //checking if this service has any params inside, used when redirected from searching in home component
 		//if there are params, user likely selected the search button on the home component
 		//if there are not any params, user likely clicked on the advanced search button, or redirected from somewhere else.
-		if(this._preserveSearchQuerryService.searchQuerry != null && this._preserveSearchQuerryService.searchQuerry != ""){
+		if(this._preserveSearchQueryService.searchQuery != null){
 			this.filter = {
 				ULat: null,
 				ULong: null,
@@ -93,7 +93,7 @@ export class EventSearchComponent implements OnInit {
                 Category: 0,
                 Price: null,
                 RatingEvent: null,
-                SearchString: this._preserveSearchQuerryService.searchQuerry,
+                SearchString: this._preserveSearchQueryService.searchQuery,
                 Custom: null,
 				
 				PageNumber: 1,
@@ -250,6 +250,7 @@ export class EventSearchComponent implements OnInit {
 		this._dataServiceSubscription = this._eventService.getEvents(filter)
             .subscribe(result => {
                 this.events = result;
+                this._preserveSearchQueryService.searchQuery = null;
                 this._loaderService.displayLoader(false);
             }, error => this.errorMessage = <any>error);
 	}

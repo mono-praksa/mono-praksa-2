@@ -1,10 +1,12 @@
 <div class="jumbotron" style="display: flex; align-items: center;">
 	<div class="container">
-		<h1>Djsidogjsoidg</h1>
+        <div style="text-align: center">
+            <img src="app/assets/images/elephant-acid-green_480.png" style="height: 200px;" alt="African Bush Elephant Acid Green"/>
+        </div>
 		<form [formGroup]="searchForm" (ngSubmit)="onSearch(searchForm.value)" autocomplete="on" novalidate>
             <div class="input-group">
-                <input class="form-control" formControlName="searchTerm" id="searchTerm" placeholder="Search..." type="text">
-                <span class="input-group-addon glyphicon glyphicon-search input-lg" (click)="this.onSearch()" style="cursor:pointer"></span>
+                <input class="form-control input-lg" formControlName="searchTerm" id="searchTerm" placeholder="Search..." type="text">
+                <span class="input-group-addon glyphicon glyphicon-search" (click)="onSearch(searchForm.value)" style="cursor:pointer"></span>
             </div>
 		</form>
 		<div>
