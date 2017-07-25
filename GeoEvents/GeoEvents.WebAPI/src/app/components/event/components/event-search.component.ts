@@ -263,7 +263,10 @@ export class EventSearchComponent implements OnInit {
 	}
 	
 	//gets the events when user changes the sorting order
-	getEventsOrderChanged(newOrder: string){
+    getEventsOrderChanged(newOrder: string) {
+        if (newOrder == "Rating") {
+            newOrder = "RatingEvent";
+        }
 		this.filter.OrderByString = newOrder
 		this.getEvents(this.filter);
 	}
