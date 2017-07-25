@@ -16,7 +16,12 @@ namespace GeoEvents.Service.Tests
         public async Task CreateEventReturnsEvent()
         {
             var mockEventRepository = new Mock<IEventRepository>();
-            var evt = new Event { Id = new Guid("11112222-3333-4444-5555-666677778888"), Name = "TestEvent", Description = "Testni opis", StartTime = new DateTime(2017, 7, 6), EndTime = new DateTime(2017, 7, 7), Latitude = 40.2, Longitude = 23.1, Categories = new List<int>() { 1, 4 } };
+            var evt = new Event { Id = new Guid("11112222-3333-4444-5555-666677778888"), Name = "TestEvent",
+                Description = "Testni opis", StartTime = new DateTime(2017, 7, 6), EndTime = new DateTime(2017, 7, 7),
+                Latitude = 40.2, Longitude = 23.1, Categories = new List<int>() { 1, 4 }, Category = 5, Price = 12,
+                Rating = 3.4,RateCount=10,Custom="Custom atributes",Capacity=120,Reserved=20,
+                LocationId = new Guid("88887777-3333-4444-5555-666611112222")
+            };
 
             mockEventRepository
                 .Setup(er => er.CreateEventAsync(evt))
@@ -24,7 +29,12 @@ namespace GeoEvents.Service.Tests
 
             var eventService = new EventService(mockEventRepository.Object);
             var result = await eventService.CreateEventAsync(evt);
-            var expected = await new Task<IEvent>(() => new Event { Id = new Guid("11112222-3333-4444-5555-666677778888"), Name = "TestEvent", Description = "Testni opis", StartTime = new DateTime(2017, 7, 6), EndTime = new DateTime(2017, 7, 7), Latitude = 40.2, Longitude = 23.1, Categories = new List<int>() { 1, 4 }, Category = 5 });
+            var expected = await new Task<IEvent>(() => new Event { Id = new Guid("11112222-3333-4444-5555-666677778888"), Name = "TestEvent",
+                Description = "Testni opis", StartTime = new DateTime(2017, 7, 6), EndTime = new DateTime(2017, 7, 7),
+                Latitude = 40.2, Longitude = 23.1, Categories = new List<int>() { 1, 4 }, Category = 5, Price = 12,
+                Rating = 3.4, RateCount = 10, Custom = "Custom atributes", Capacity = 120, Reserved = 20,
+                LocationId = new Guid("88887777-3333-4444-5555-666611112222")
+            });
 
             Assert.Equal(expected, result);
         }
@@ -34,10 +44,10 @@ namespace GeoEvents.Service.Tests
         {
             var filter = new Mock<Filter>();
             var db = new List<IEvent>();
-            var evt1 = new Event { Id = Guid.NewGuid(), Category = 10, Name = "Test1", Description = "Testt1", Latitude = 10.1, Longitude = 10.2, StartTime = new DateTime(), EndTime = new DateTime() };
-            var evt2 = new Event { Id = Guid.NewGuid(), Category = 3, Name = "Test2", Description = "Testt2", Latitude = 10.2, Longitude = 10.3, StartTime = new DateTime(), EndTime = new DateTime() };
-            var evt3 = new Event { Id = Guid.NewGuid(), Category = 0, Name = "Test3", Description = "Testt3", Latitude = 10.3, Longitude = 10.4, StartTime = new DateTime(), EndTime = new DateTime() };
-            var evt4 = new Event { Id = Guid.NewGuid(), Category = 5, Name = "Test4", Description = "Testt4", Latitude = 10.4, Longitude = 10.5, StartTime = new DateTime(), EndTime = new DateTime() };
+            var evt1 = new Event { Id = Guid.NewGuid(), Category = 10, Name = "Test1", Description = "Testt1", Latitude = 10.1, Longitude = 10.2, StartTime = new DateTime(), EndTime = new DateTime(),Price=10.1,Capacity=101,Rating=3.1,RateCount=11,Reserved=11,Custom="11",LocationId = Guid.NewGuid()};
+            var evt2 = new Event { Id = Guid.NewGuid(), Category = 3, Name = "Test2", Description = "Testt2", Latitude = 10.2, Longitude = 10.3, StartTime = new DateTime(), EndTime = new DateTime(), Price = 10.2, Capacity = 102, Rating = 3.2, RateCount = 12, Reserved = 12, Custom = "12", LocationId = Guid.NewGuid() };
+            var evt3 = new Event { Id = Guid.NewGuid(), Category = 0, Name = "Test3", Description = "Testt3", Latitude = 10.3, Longitude = 10.4, StartTime = new DateTime(), EndTime = new DateTime(), Price = 10.3, Capacity = 103, Rating = 3.3, RateCount = 13, Reserved = 13, Custom = "13", LocationId = Guid.NewGuid() };
+            var evt4 = new Event { Id = Guid.NewGuid(), Category = 5, Name = "Test4", Description = "Testt4", Latitude = 10.4, Longitude = 10.5, StartTime = new DateTime(), EndTime = new DateTime(), Price = 10.4, Capacity = 104, Rating = 3.4, RateCount = 14, Reserved = 14, Custom = "14", LocationId = Guid.NewGuid() };
 
             db.Add(evt1);
             db.Add(evt2);
