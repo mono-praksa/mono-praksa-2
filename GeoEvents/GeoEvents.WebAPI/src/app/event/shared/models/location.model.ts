@@ -1,6 +1,6 @@
-﻿export interface ILocation {
-    Id: string,
-    Address: string,
-    Rating: number,
-    RateCount: number
+﻿export class Location {
+    Id: string;
+    Address: string;
+    RateCount: number;
+    Rating: number;
 }
