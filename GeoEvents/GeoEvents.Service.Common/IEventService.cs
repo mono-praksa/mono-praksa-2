@@ -3,6 +3,7 @@ using GeoEvents.Model.Common;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using X.PagedList;
 
 namespace GeoEvents.Service.Common
 {
@@ -27,14 +28,14 @@ namespace GeoEvents.Service.Common
         /// <returns>
         /// List of events.
         /// </returns>
-        Task<IEnumerable<IEvent>> GetEventsAsync(IFilter filter);
+        Task<StaticPagedList<IEvent>> GetEventsAsync(IFilter filter);
 
         /// <summary>
         /// Gets the number of events that satisfy a filter asynchronously.
         /// </summary>
         /// <param name="filter">The filter.</param>
         /// <returns></returns>
-        Task<Int64> GetEventCountAsync(IFilter filter);
+        Task<int> GetEventCountAsync(IFilter filter);
 
         /// <summary>
         /// Creates an event asynchronously.

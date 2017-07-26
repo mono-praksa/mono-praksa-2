@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using System.Web.Http;
 using System.Net.Http;
 using System.Net;
-
+using X.PagedList;
 
 namespace GeoEvents.WebAPI.Controllers
 {
@@ -46,9 +46,15 @@ namespace GeoEvents.WebAPI.Controllers
         [Route("search")]
         public async Task<HttpResponseMessage> GetEventsAsync([FromUri] Filter filter)
         {
-            var result = Mapper.Map<IEnumerable<EventModel>>(await Service.GetEventsAsync(filter));
+            var result = await Service.GetEventsAsync(filter);
 
-            return Request.CreateResponse(HttpStatusCode.OK, result);
+            var temp = Mapper.Map<IEnumerable<IEvent>, IEnumerable<EventModel>>(result);
+
+            var responseData = new StaticPagedList<EventModel>(temp, result.GetMetaData());
+
+            var response = new { data = responseData, metaData = responseData.GetMetaData() };
+
+            return Request.CreateResponse(HttpStatusCode.OK, response);
         }
 
         [HttpGet]
@@ -74,16 +80,6 @@ namespace GeoEvents.WebAPI.Controllers
             {
                 return Request.CreateResponse(HttpStatusCode.NotFound, "could not find an event with the requested id");
             }
-        }
-
-        [HttpGet]
-        [Route("search/count")]
-        public async Task<HttpResponseMessage> GetEventCountAsync([FromUri] Filter filter)
-        {
-
-            var result = await Service.GetEventCountAsync(filter);
-            return Request.CreateResponse(HttpStatusCode.OK, result);
-
         }
 
         [HttpPut]
