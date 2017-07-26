@@ -7,12 +7,12 @@ import { Event } from "../shared/models/event.model";
 
 
 declare var google: any;
-var MarkerClusterer = require("./markerclusterer.js");
+var MarkerClusterer = require("../../../../Scripts/markerclusterer.js");
 
 @Component({
     selector: "display-map",
-    styleUrls: ["app/components/event/views/event-search-map.component.css"],
-    templateUrl: "app/components/event/views/event-search-map.component.html"
+    styleUrls: ["app/event/event-search/event-search-map.component.css"],
+    templateUrl: "app/event/event-search/event-search-map.component.html"
 })
 
 export class EventMapComponent implements OnInit, OnChanges {

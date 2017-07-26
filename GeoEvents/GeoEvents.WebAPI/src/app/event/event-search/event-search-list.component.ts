@@ -5,7 +5,7 @@ import { Event } from "../shared/models/event.model";
 
 @Component({
     selector: "display-list",
-    templateUrl:"app/components/event/views/event-search-list.component.html"
+    templateUrl:"app/event/event-search/event-search-list.component.html"
 })
 
 export class EventListComponent {

@@ -13,7 +13,7 @@ import { LoaderService } from "../../shared/loader.service";
 import { PreserveSearchQueryService } from "../../shared/preserve-search-query.service";
 
 @Component({
-	templateUrl: "app/components/event/views/event-search.component.html"
+	templateUrl: "app/event/event-search/event-search.component.html"
 })
 export class EventSearchComponent implements OnInit {
 
@@ -91,7 +91,6 @@ export class EventSearchComponent implements OnInit {
 				OrderIsAscending: true
             }		
             this.getEvents(this.filter);
-            this.getEventCount(this.filter);
 		}
 		else{
 			this.isAdvancedSearch = true;
@@ -230,10 +229,6 @@ export class EventSearchComponent implements OnInit {
         }
         		
         this.getEvents(this.filter);
-
-        if (filterChanged) {
-            this.getEventCount(this.filter);
-        }
 	}
 
 	//sets the position(latitude and longitude) using geolocation services

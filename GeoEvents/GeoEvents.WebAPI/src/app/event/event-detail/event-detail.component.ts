@@ -15,8 +15,8 @@ import { LocationService } from "../shared/location.service";
 
 @Component({
     selector: "event-details",
-    styleUrls: ["app/components/event/views/event-detail.component.css"],
-    templateUrl: "app/components/event/views/event-detail.component.html"
+    styleUrls: ["app/event/event-detail/event-detail.component.css"],
+    templateUrl: "app/event/event-detail/event-detail.component.html"
 })
 
 export class EventDetailComponent implements OnInit {

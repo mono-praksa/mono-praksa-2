@@ -338,6 +338,7 @@
     <Content Include="src\app\event\event-search\event-search.component.css" />
     <Content Include="src\app\event\event-search\event-search.component.html" />
     <Content Include="src\app\home\home.component.html" />
+    <Content Include="src\app\shared\navbar\navbar.component.css" />
     <Content Include="src\app\shared\navbar\navbar.component.html" />
     <Content Include="src\favicon.ico" />
     <Content Include="src\index.html" />
