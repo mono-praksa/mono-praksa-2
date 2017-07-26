@@ -46,11 +46,11 @@ export class EventService {
         }
 
         if (filter.StartTime != null && filter.StartTime.toString() != "") {
-            query += '&startTime=' + filter.StartTime.toString().replace(':', 'h');
+            query += '&startTime=' + filter.StartTime.toString();
         }
 
         if (filter.EndTime != null && filter.EndTime.toString() != "") {
-            query += '&endTime=' + filter.EndTime.toString().replace(':', 'h');
+            query += '&endTime=' + filter.EndTime.toString();
         }
 
         if (filter.Price != null && filter.Price >= 0) {
