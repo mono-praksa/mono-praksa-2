@@ -86,7 +86,7 @@ namespace GeoEvents.Repository
         /// Default DateTime
         /// </summary>
         private static DateTime DefaulTime = new DateTime(0001, 01, 01);
-
+        private static bool isNotFirst = false;
         #endregion Constants
 
         #region Metods
@@ -103,7 +103,7 @@ namespace GeoEvents.Repository
             selectString.AppendFormat("SELECT COUNT({0}) FROM {1} ",
                 TableNameEventIdQ, TableNameEventQ);
 
-            bool isNotFirst = false;
+             isNotFirst = false;
 
             /// adding Distance filter to query if there is Location and radius
             if (filter.ULat != null && filter.ULong != null && filter.Radius != 0)
@@ -117,15 +117,7 @@ namespace GeoEvents.Repository
             ///Adding Price filter query if there is price
             if (filter.Price != null)
             {
-                if (isNotFirst)
-                {
-                    selectString.Append(" AND ");
-                }
-                else
-                {
-                    selectString.Append(" WHERE ");
-                    isNotFirst = true;
-                }
+                selectString = ConditionValidation(selectString);
                 selectString.AppendFormat("({0} <= {1}) ",
                     TableNameEventPriceQ, ParPrice);
             }
@@ -133,15 +125,8 @@ namespace GeoEvents.Repository
             ///Adding Rating Event filter query if there is rating event
             if (filter.RatingEvent != 0)
             {
-                if (isNotFirst)
-                {
-                    selectString.Append(" AND ");
-                }
-                else
-                {
-                    selectString.Append(" WHERE ");
-                    isNotFirst = true;
-                }
+                selectString = ConditionValidation(selectString);
+
                 selectString.AppendFormat("({0} >= {1}) ",
                     TableNameEventRatingQ, ParRating);
             }
@@ -149,45 +134,24 @@ namespace GeoEvents.Repository
             /// Adding Time filter query if there is time in filter
             if (filter.EndTime > DefaulTime && filter.StartTime > DefaulTime)
             {
-                if (isNotFirst)
-                {
-                    selectString.Append(" AND ");
-                }
-                else
-                {
-                    selectString.Append(" WHERE ");
-                    isNotFirst = true;
-                }
+                selectString = ConditionValidation(selectString);
+
 
                 selectString.AppendFormat(" (({0},{1}) OVERLAPS ({2},{3})) ",
                     ParUserStartTime, ParUserEndTime, TableNameEventStartTimeQ, TableNameEventEndTimeQ);
             }
             else if (filter.EndTime == null && filter.StartTime > DefaulTime)
             {
-                if (isNotFirst)
-                {
-                    selectString.Append(" AND ");
-                }
-                else
-                {
-                    selectString.Append(" WHERE ");
-                    isNotFirst = true;
-                }
+                selectString = ConditionValidation(selectString);
+
 
                 selectString.AppendFormat(" ({0}<{1}) ",
                     ParUserStartTime, TableNameEventEndTimeQ);
             }
             else if (filter.EndTime > DefaulTime && filter.StartTime == null)
             {
-                if (isNotFirst)
-                {
-                    selectString.Append(" AND ");
-                }
-                else
-                {
-                    selectString.Append(" WHERE ");
-                    isNotFirst = true;
-                }
+                selectString = ConditionValidation(selectString);
+
 
                 selectString.AppendFormat(" ({0}>{1}) ",
                     ParUserEndTime, TableNameEventStartTimeQ);
@@ -196,16 +160,8 @@ namespace GeoEvents.Repository
             ///Adding searcstring filter in queri if there is searchstring
             if (!String.IsNullOrWhiteSpace(filter.SearchString))
             {
-                if (isNotFirst)
+                selectString = ConditionValidation(selectString);
 
-                {
-                    selectString.Append(" AND ");
-                }
-                else
-                {
-                    selectString.Append(" WHERE ");
-                    isNotFirst = true;
-                }
 
                 selectString.AppendFormat(" (lower({0}) LIKE lower({1})) ",
                     NameQ, ParSearchString);
@@ -214,15 +170,8 @@ namespace GeoEvents.Repository
             /// adding category filter in query if there is category
             if (filter.Category > 0)
             {
-                if (isNotFirst)
-                {
-                    selectString.Append(" AND ");
-                }
-                else
-                {
-                    selectString.Append(" WHERE ");
-                    isNotFirst = true;
-                }
+                selectString = ConditionValidation(selectString);
+
 
                 selectString.AppendFormat(" ({0} & {1} > 0)",
                     ParCategory, TableNameEventCatQ);
@@ -231,15 +180,7 @@ namespace GeoEvents.Repository
             /// adding custom search
             if (!String.IsNullOrWhiteSpace(filter.Custom))
             {
-                if (isNotFirst)
-                {
-                    selectString.Append(" AND ");
-                }
-                else
-                {
-                    selectString.Append(" WHERE ");
-                    isNotFirst = true;
-                }
+                selectString = ConditionValidation(selectString);
 
                 selectString.AppendFormat(" ({0} @> {1}) ",
                     CustomQ, ParCustom);
@@ -256,10 +197,7 @@ namespace GeoEvents.Repository
         /// </returns>
         public static string GetSelectEventByIdQueryString()
         {
-            StringBuilder selectString = new StringBuilder();
-            selectString.AppendFormat("SELECT * FROM {0} WHERE {1}={2}", TableNameEventQ, TableNameEventIdQ, ParEventId);
-
-            return selectString.ToString();
+            return String.Format("SELECT * FROM {0} WHERE {1}={2}", TableNameEventQ, TableNameEventIdQ, ParEventId);
         }
 
         /// <summary>
@@ -270,10 +208,7 @@ namespace GeoEvents.Repository
         /// </returns>
         public static string GetSelectFromEventRatingQueryString()
         {
-            StringBuilder selectString = new StringBuilder();
-            selectString.AppendFormat("SELECT rating,ratecount FROM {0} WHERE {1}={2}", TableNameEventQ, TableNameEventIdQ, ParEventId);
-
-            return selectString.ToString();
+            return String.Format("SELECT rating,ratecount FROM {0} WHERE {1}={2}", TableNameEventQ, TableNameEventIdQ, ParEventId);
         }
 
         /// <summary>
@@ -303,7 +238,7 @@ namespace GeoEvents.Repository
                     TableNameEventQ);
             }
 
-            bool isNotFirst = false;
+             isNotFirst = false;
 
             /// adding Distance filter to query if there is Location and radius
             if (filter.ULat != null && filter.ULong != null && filter.Radius != 0)
@@ -317,15 +252,8 @@ namespace GeoEvents.Repository
             ///Adding Price filter query if there is price
             if (filter.Price != null)
             {
-                if (isNotFirst)
-                {
-                    selectString.Append(" AND ");
-                }
-                else
-                {
-                    selectString.Append(" WHERE ");
-                    isNotFirst = true;
-                }
+                selectString = ConditionValidation(selectString);
+
                 selectString.AppendFormat("({0} <= {1}) ",
                     TableNameEventPriceQ, ParPrice);
             }
@@ -333,15 +261,8 @@ namespace GeoEvents.Repository
             ///Adding Rating Event filter query if there is rating event
             if (filter.RatingEvent != 0)
             {
-                if (isNotFirst)
-                {
-                    selectString.Append(" AND ");
-                }
-                else
-                {
-                    selectString.Append(" WHERE ");
-                    isNotFirst = true;
-                }
+                selectString = ConditionValidation(selectString);
+
                 selectString.AppendFormat("({0} >= {1}) ",
                     TableNameEventRatingQ, ParRating);
             }
@@ -349,45 +270,21 @@ namespace GeoEvents.Repository
             /// Adding Time filter query if there is time in filter
             if (filter.EndTime > DefaulTime && filter.StartTime > DefaulTime)
             {
-                if (isNotFirst)
-                {
-                    selectString.Append(" AND ");
-                }
-                else
-                {
-                    selectString.Append(" WHERE ");
-                    isNotFirst = true;
-                }
+                selectString = ConditionValidation(selectString);
 
                 selectString.AppendFormat(" (({0},{1}) OVERLAPS ({2},{3})) ",
                     ParUserStartTime, ParUserEndTime, TableNameEventStartTimeQ, TableNameEventEndTimeQ);
             }
             else if (filter.EndTime == null && filter.StartTime > DefaulTime)
             {
-                if (isNotFirst)
-                {
-                    selectString.Append(" AND ");
-                }
-                else
-                {
-                    selectString.Append(" WHERE ");
-                    isNotFirst = true;
-                }
+                selectString = ConditionValidation(selectString);
 
                 selectString.AppendFormat(" ({0}<{1}) ",
                     ParUserStartTime, TableNameEventEndTimeQ);
             }
             else if (filter.EndTime > DefaulTime && filter.StartTime == null)
             {
-                if (isNotFirst)
-                {
-                    selectString.Append(" AND ");
-                }
-                else
-                {
-                    selectString.Append(" WHERE ");
-                    isNotFirst = true;
-                }
+                selectString = ConditionValidation(selectString);
 
                 selectString.AppendFormat(" ({0}>{1}) ",
                     ParUserEndTime, TableNameEventStartTimeQ);
@@ -396,16 +293,7 @@ namespace GeoEvents.Repository
             ///Adding searcstring filter in queri if there is searchstring
             if (!String.IsNullOrWhiteSpace(filter.SearchString))
             {
-                if (isNotFirst)
-
-                {
-                    selectString.Append(" AND ");
-                }
-                else
-                {
-                    selectString.Append(" WHERE ");
-                    isNotFirst = true;
-                }
+                selectString = ConditionValidation(selectString);
 
                 selectString.AppendFormat(" (lower({0}) LIKE lower({1})) ",
                     NameQ, ParSearchString);
@@ -414,15 +302,7 @@ namespace GeoEvents.Repository
             /// adding category filter in query if there is category
             if (filter.Category > 0)
             {
-                if (isNotFirst)
-                {
-                    selectString.Append(" AND ");
-                }
-                else
-                {
-                    selectString.Append(" WHERE ");
-                    isNotFirst = true;
-                }
+                selectString = ConditionValidation(selectString);
 
                 selectString.AppendFormat(" ({0} & {1} > 0)",
                     ParCategory, TableNameEventCatQ);
@@ -431,15 +311,7 @@ namespace GeoEvents.Repository
             /// adding custom search
             if (!String.IsNullOrWhiteSpace(filter.Custom))
             {
-                if (isNotFirst)
-                {
-                    selectString.Append(" AND ");
-                }
-                else
-                {
-                    selectString.Append(" WHERE ");
-                    isNotFirst = true;
-                }
+                selectString = ConditionValidation(selectString);
 
                 selectString.AppendFormat(" ({0} @> {1}) ",
                     CustomQ, ParCustom);
@@ -496,6 +368,7 @@ namespace GeoEvents.Repository
 
             selectString.AppendFormat(" LIMIT({0}) OFFSET ({1}) ",
                 filter.PageSize.ToString(), ((filter.PageNumber - 1) * filter.PageSize).ToString());
+
             return selectString.ToString();
         }
 
@@ -504,14 +377,11 @@ namespace GeoEvents.Repository
         /// </summary>
         /// <returns>Query string</returns>
         public static string GetInsertEventQueryString()
-        {
-            StringBuilder insertString = new StringBuilder();
-            insertString.AppendFormat("INSERT INTO {0} VALUES ({1}, {2}, {3}, {4}, {5}, {6}, {7}, {8}, {9}, {10}, {11}, {12}, {13}, {14}, {15})",
+        {   
+         return String.Format("INSERT INTO {0} VALUES ({1}, {2}, {3}, {4}, {5}, {6}, {7}, {8}, {9}, {10}, {11}, {12}, {13}, {14}, {15})",
                 TableNameEventQ, ParId, ParName, ParDescription, ParCategory, ParLatitude, ParLongitude,
                 ParStartTime, ParEndTime, ParRating, ParRateCount, ParPrice, ParCapacity, ParReserved,
                 ParCustom, ParLocationId);
-
-            return insertString.ToString();
         }
 
         /// <summary>
@@ -520,11 +390,8 @@ namespace GeoEvents.Repository
         /// <returns>Query string</returns>
         public static string GetSelectImagesQueryString()
         {
-            StringBuilder selectString = new StringBuilder();
-            selectString.AppendFormat(" SELECT * FROM {0} WHERE ({1}={2}.{3})",
+            return String.Format(" SELECT * FROM {0} WHERE ({1}={2}.{3})",
                 TableNameImagesQ, ParEventId, TableNameImagesQ, EventIdQ);
-
-            return selectString.ToString();
         }
 
         /// <summary>
@@ -533,11 +400,8 @@ namespace GeoEvents.Repository
         /// <returns>guery string</returns>
         public static string GetInsertImagesQueryString()
         {
-            StringBuilder insertString = new StringBuilder();
-            insertString.AppendFormat(" INSERT INTO {0} VALUES({1},{2},{3}) ",
+            return String.Format(" INSERT INTO {0} VALUES({1},{2},{3}) ",
                 TableNameImagesQ, ParId, ParContent, ParEventId);
-
-            return insertString.ToString();
         }
 
         /// <summary>
@@ -546,10 +410,8 @@ namespace GeoEvents.Repository
         /// <returns></returns>
         public static string GetSelectImageQueryString()
         {
-            StringBuilder selectString = new StringBuilder();
-            selectString.AppendFormat(" SELECT * FROM {0} WHERE {1}.{2}={3} ",
+            return String.Format(" SELECT * FROM {0} WHERE {1}.{2}={3} ",
                 TableNameImagesQ, TableNameImagesQ, IdQ, ParId);
-            return selectString.ToString();
         }
 
         /// <summary>
@@ -560,11 +422,8 @@ namespace GeoEvents.Repository
         /// </returns>
         public static string GetSelectUpdateRatingQueryString()
         {
-            StringBuilder getCurrentRating = new StringBuilder();
-            getCurrentRating.AppendFormat("SELECT {0},{1},{2},{3} FROM {4} WHERE {5}={6}",
+            return String.Format("SELECT {0},{1},{2},{3} FROM {4} WHERE {5}={6}",
                 RatingQ, RateCountQ, LatQ, LongQ, TableNameEventQ, TableNameEventIdQ, ParEventId);
-
-            return getCurrentRating.ToString();
         }
 
         /// <summary>
@@ -575,11 +434,8 @@ namespace GeoEvents.Repository
         /// </returns>
         public static string GetsInsertUpdateRatingQueryString()
         {
-            StringBuilder updateRatingString = new StringBuilder();
-            updateRatingString.AppendFormat("UPDATE {0} SET {1}={2} , {3}={4} WHERE {5}={6}",
+            return String.Format("UPDATE {0} SET {1}={2} , {3}={4} WHERE {5}={6}",
                 TableNameEventQ, RatingQ, ParRating, RateCountQ, ParRateCount, TableNameEventIdQ, ParEventId);
-
-            return updateRatingString.ToString();
         }
 
         /// <summary>
@@ -590,11 +446,8 @@ namespace GeoEvents.Repository
         /// </returns>
         public static string GetSelectCurrentReservationQueryString()
         {
-            StringBuilder getCurrentReservation = new StringBuilder();
-            getCurrentReservation.AppendFormat("SELECT {0} FROM {1} WHERE {2}={3}",
+            return String.Format("SELECT {0} FROM {1} WHERE {2}={3}",
                 ReservedQ, TableNameEventQ, TableNameEventIdQ, ParEventId);
-
-            return getCurrentReservation.ToString();
         }
 
         /// <summary>
@@ -605,11 +458,8 @@ namespace GeoEvents.Repository
         /// </returns>
         public static string GetInsertUpdateReservationQueryString()
         {
-            StringBuilder updateReservationString = new StringBuilder();
-            updateReservationString.AppendFormat("UPDATE {0} SET {1}={2} WHERE {3}={4}",
+            return String.Format("UPDATE {0} SET {1}={2} WHERE {3}={4}",
                 TableNameEventQ, ReservedQ, ParReserved, TableNameEventIdQ, ParEventId);
-
-            return updateReservationString.ToString();
         }
 
         /// <summary>
@@ -620,10 +470,7 @@ namespace GeoEvents.Repository
         /// </returns>
         public static string GetSelectLocationQueryString()
         {
-            StringBuilder selectLocationString = new StringBuilder();
-            selectLocationString.AppendFormat("SELECT * FROM {0} WHERE {1}={2}", TableNameLocationQ, AddressQ, ParAddress);
-
-            return selectLocationString.ToString();
+            return String.Format("SELECT * FROM {0} WHERE {1}={2}", TableNameLocationQ, AddressQ, ParAddress);
         }
 
         /// <summary>
@@ -634,10 +481,7 @@ namespace GeoEvents.Repository
         /// </returns>
         public static string GetSelectLocationByIdQueryString()
         {
-            StringBuilder selectString = new StringBuilder();
-            selectString.AppendFormat("SELECT * FROM {0} WHERE {1}={2}", TableNameLocationQ, IdQ, ParId);
-
-            return selectString.ToString();
+            return String.Format("SELECT * FROM {0} WHERE {1}={2}", TableNameLocationQ, IdQ, ParId);
         }
 
         /// <summary>
@@ -648,11 +492,8 @@ namespace GeoEvents.Repository
         /// </returns>
         public static string GetInsertCreateLocationQueryString()
         {
-            StringBuilder insertString = new StringBuilder();
-            insertString.AppendFormat("INSERT INTO {0} VALUES ({1},{2},{3},{4})",
+            return String.Format("INSERT INTO {0} VALUES ({1},{2},{3},{4})",
                 TableNameLocationQ, ParId, ParAddress, ParRating, ParRateCount);
-
-            return insertString.ToString();
         }
 
         /// <summary>
@@ -663,12 +504,24 @@ namespace GeoEvents.Repository
         /// </returns>
         public static string GetUpdateLocationRatingQueryString()
         {
-            StringBuilder updateString = new StringBuilder();
-            updateString.AppendFormat("UPDATE {0} SET {1}={2},{3}={4} WHERE  {5}={6} ",
+            return String.Format("UPDATE {0} SET {1}={2},{3}={4} WHERE  {5}={6} ",
                 TableNameLocationQ, RatingQ, ParRating, RateCountQ,
                 ParRateCount, IdQ, ParId);
+        }
 
-            return updateString.ToString();
+        private static StringBuilder ConditionValidation(StringBuilder selectString)
+        {
+            if (isNotFirst)
+            {
+                selectString.Append(" AND ");
+            }
+            else
+            {
+                selectString.Append(" WHERE ");
+                isNotFirst = true;
+            }
+
+            return selectString;
         }
 
         #endregion Metods
