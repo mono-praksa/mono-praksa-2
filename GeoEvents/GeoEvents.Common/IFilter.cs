@@ -44,13 +44,13 @@ namespace GeoEvents.Common
         /// Gets or sets the filter's desired page.
         /// </summary>
         /// <value>The page number.</value>
-        int? PageNumber { get; set; }
+        int PageNumber { get; set; }
 
         /// <summary>
         /// Gets or sets the filter's desired number of events on one page.
         /// </summary>
         /// <value>The page size.</value>
-        int? PageSize { get; set; }
+        int PageSize { get; set; }
 
         /// <summary>
         /// Gets or sets the filter's search string.

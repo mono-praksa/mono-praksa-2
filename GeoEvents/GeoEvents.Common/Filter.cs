@@ -49,13 +49,13 @@ namespace GeoEvents.Common
         /// Gets or sets the filter's desired page.
         /// </summary>
         /// <value>The page number.</value>
-        public int? PageNumber { get; set; }
+        public int PageNumber { get; set; }
 
         /// <summary>
         /// Gets or sets the filter's desired number of events on one page.
         /// </summary>
         /// <value>The page size.</value>
-        public int? PageSize { get; set; }
+        public int PageSize { get; set; }
 
         /// <summary>
         /// Gets or sets the filter's search string.
@@ -120,7 +120,7 @@ namespace GeoEvents.Common
         /// <param name="price">The price.</param>
         /// <param name="ratingEvent">The rating event.</param>
         /// <param name="custom">The custom.</param>
-        public Filter(decimal? uLat, decimal? uLong, decimal? radius, DateTime? startTime, DateTime? endTime, int? category, int? pageNumber, int? pageSize, string searchString, string orderBy, bool? orderAscending, decimal? price, decimal? ratingEvent, string custom)
+        public Filter(decimal? uLat=1000M, decimal? uLong=1000M, decimal? radius=0, DateTime? startTime=null, DateTime? endTime=null, int? category=0, int pageNumber=1, int pageSize=25, string searchString="", string orderBy="", bool? orderAscending=false, decimal? price=null, decimal? ratingEvent=0, string custom="")
         {
             ULat = uLat;
             ULong = uLong;
