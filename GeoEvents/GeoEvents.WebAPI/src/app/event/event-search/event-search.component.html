@@ -10,13 +10,13 @@
 						<button type="submit" class="btn btn-primary" [disabled]="filterForm.invalid">Search</button>
 					</div>
 				</div>
-				<div class="col-sm-4" class="advanced-search">
+				<div class="col-sm-4 advanced-search">
 					<div>
 						<a routerlink="" *ngIf=!isAdvancedSearch (click)="toggleAdvancedSearch()" class="clickable">Show filters</a>
                         <a routerlink="" *ngIf=isAdvancedSearch (click)="toggleAdvancedSearch()" class="clickable">Hide filters</a>
 					</div>
 				</div>
-				<div class="col-sm-2" class="map-toggle">
+				<div class="col-sm-2 map-toggle">
 					<div>
 						<button type="button" *ngIf="!isMapMode" class="btn btn-primary" (click)="this.toggleMapMode()" >Show map</button>
                         <button type="button" *ngIf="isMapMode" class="btn btn-primary" (click)="this.toggleMapMode()">Hide map</button>

@@ -10,8 +10,8 @@ import { EventModule } from "./event/event.module";
 import { Error404Component } from "./error/error-404.component";
 import { HomeComponent } from "./home/home.component";
 import { LoaderService } from "./shared/loader.service";
-import { PreserveSearchQueryService } from "./shared/preserve-search-query.service";
 import { NavbarComponent } from "./shared/navbar/navbar.component";
+import { PreserveSearchQueryService } from "./shared/preserve-search-query.service";
 
 @NgModule({
     imports: [

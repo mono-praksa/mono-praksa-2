@@ -13,7 +13,8 @@ import { LoaderService } from "../../shared/loader.service";
 import { PreserveSearchQueryService } from "../../shared/preserve-search-query.service";
 
 @Component({
-	templateUrl: "app/event/event-search/event-search.component.html"
+    styleUrls: ["./event-search.component.css"],
+	templateUrl: "./event-search.component.html"
 })
 export class EventSearchComponent implements OnInit {
 

@@ -3,6 +3,10 @@ li > a.active {
     font-weight: bold;
 }
 
+.icon-bar {
+    background-color: #2a6496;
+}
+
 @media (min-width: 768px) {
     .navbar-nav.navbar-center {
         position: absolute;
