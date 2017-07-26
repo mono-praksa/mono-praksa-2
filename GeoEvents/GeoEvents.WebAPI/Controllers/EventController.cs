@@ -4,10 +4,10 @@ using GeoEvents.Model.Common;
 using GeoEvents.Service.Common;
 using System;
 using System.Collections.Generic;
+using System.Net;
+using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
-using System.Net.Http;
-using System.Net;
 using X.PagedList;
 
 namespace GeoEvents.WebAPI.Controllers
@@ -15,7 +15,8 @@ namespace GeoEvents.WebAPI.Controllers
     [RoutePrefix("api/events")]
     public class EventController : ApiController
     {
-        #region Parameters        
+        #region Parameters
+
         /// <summary>
         /// Gets the service.
         /// </summary>
@@ -23,6 +24,7 @@ namespace GeoEvents.WebAPI.Controllers
         /// The service.
         /// </value>
         protected IEventService Service { get; private set; }
+
         /// <summary>
         /// Gets the mapper.
         /// </summary>
@@ -30,9 +32,11 @@ namespace GeoEvents.WebAPI.Controllers
         /// The mapper.
         /// </value>
         protected IMapper Mapper { get; private set; }
-        #endregion
 
-        #region Constructor        
+        #endregion Parameters
+
+        #region Constructor
+
         /// <summary>
         /// Initializes a new instance of the <see cref="EventController"/> class.
         /// </summary>
@@ -43,7 +47,8 @@ namespace GeoEvents.WebAPI.Controllers
             this.Service = service;
             this.Mapper = mapper;
         }
-        #endregion
+
+        #endregion Constructor
 
         #region Methods
 
@@ -168,187 +173,186 @@ namespace GeoEvents.WebAPI.Controllers
 
             return Request.CreateResponse(HttpStatusCode.OK, result);
         }
-        #endregion
-    }
 
+        #endregion Methods
 
-    #region Model
-    public class EventModel
-    {
-        /// <summary>
-        /// Gets or sets the identifier.
-        /// </summary>
-        /// <value>
-        /// The identifier.
-        /// </value>
-        public Guid Id { get; set; }
+        #region Model
 
-        /// <summary>
-        /// Gets or sets the name.
-        /// </summary>
-        /// <value>
-        /// The name.
-        /// </value>
-        public string Name { get; set; }
-
-        /// <summary>
-        /// Gets or sets the description.
-        /// </summary>
-        /// <value>
-        /// The description.
-        /// </value>
-        public string Description { get; set; }
-
-        /// <summary>
-        /// Gets or sets the start time.
-        /// </summary>
-        /// <value>
-        /// The start time.
-        /// </value>
-        public DateTime StartTime { get; set; }
-
-        /// <summary>
-        /// Gets or sets the end time.
-        /// </summary>
-        /// <value>
-        /// The end time.
-        /// </value>
-        public DateTime EndTime { get; set; }
-
-        /// <summary>
-        /// Gets or sets the latitude.
-        /// </summary>
-        /// <value>
-        /// The latitude.
-        /// </value>
-        public decimal Latitude { get; set; }
-
-        /// <summary>
-        /// Gets or sets the longitude.
-        /// </summary>
-        /// <value>
-        /// The longitude.
-        /// </value>
-        public decimal Longitude { get; set; }
-
-        /// <summary>
-        /// Gets or sets the categories.
-        /// </summary>
-        /// <value>
-        /// The categories list.
-        /// </value>
-        public List<int> Categories { get; set; }
-
-        /// <summary>
-        /// Gets or sets the price.
-        /// </summary>
-        /// <value>
-        /// The price.
-        /// </value>
-        public decimal Price { get; set; }
-
-        /// <summary>
-        /// Gets or sets the capacity.
-        /// </summary>
-        /// <value>
-        /// The capacity.
-        /// </value>
-        public int Capacity { get; set; }
-
-        /// <summary>
-        /// Gets or sets the reserved.
-        /// </summary>
-        /// <value>
-        /// The reserved.
-        /// </value>
-        public int Reserved { get; set; }
-
-        /// <summary>
-        /// Gets or sets the rating.
-        /// </summary>
-        /// <value>
-        /// The rating.
-        /// </value>
-        public decimal Rating { get; set; }
-
-        /// <summary>
-        /// Gets or sets the rate count.
-        /// </summary>
-        /// <value>
-        /// The rate count.
-        /// </value>
-        public int RateCount { get; set; }
-
-        /// <summary>
-        /// Gets or sets the rating location.
-        /// </summary>
-        /// <value>
-        /// The location rating.
-        /// </value>
-        public decimal RatingLocation { get; set; }
-
-        /// <summary>
-        /// Gets or sets the custom.
-        /// </summary>
-        /// <value>
-        /// The custom atribute.
-        /// </value>
-        public string Custom { get; set; }
-
-        /// <summary>
-        /// Gets or sets the location identifier.
-        /// </summary>
-        /// <value>
-        /// The location identifier.
-        /// </value>
-        public Guid LocationId { get; set; }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="EventModel"/> class.
-        /// </summary>
-        /// <param name="id">The identifier.</param>
-        /// <param name="name">The name.</param>
-        /// <param name="description">The description.</param>
-        /// <param name="starttime">The starttime.</param>
-        /// <param name="endtime">The endtime.</param>
-        /// <param name="uLat">The u lat.</param>
-        /// <param name="uLong">The u long.</param>
-        /// <param name="categories">The categories.</param>
-        /// <param name="price">The price.</param>
-        /// <param name="capacity">The capacity.</param>
-        /// <param name="reserved">The reserved.</param>
-        /// <param name="rating">The rating.</param>
-        /// <param name="rateCount">The rate count.</param>
-        /// <param name="ratingLocation">The rating location.</param>
-        /// <param name="custom">The custom.</param>
-        /// <param name="locationId">The location identifier.</param>
-        public EventModel(Guid id, string name, string description, DateTime starttime, DateTime endtime, decimal uLat, decimal uLong, List<int> categories, decimal price, int capacity, int reserved, decimal rating, int rateCount, decimal ratingLocation, string custom, Guid locationId)
+        public class EventModel
         {
-            this.Id = id;
-            this.Name = name;
-            this.Description = description;
-            this.StartTime = starttime;
-            this.EndTime = endtime;
-            this.Latitude = uLat;
-            this.Longitude = uLong;
-            this.Categories = categories;
-            this.Price = price;
-            this.Capacity = capacity;
-            this.Reserved = reserved;
-            this.Rating = rating;
-            this.RateCount = rateCount;
-            this.RatingLocation = ratingLocation;
-            this.Custom = custom;
-            this.LocationId = locationId;
+            /// <summary>
+            /// Gets or sets the identifier.
+            /// </summary>
+            /// <value>
+            /// The identifier.
+            /// </value>
+            public Guid Id { get; set; }
+
+            /// <summary>
+            /// Gets or sets the name.
+            /// </summary>
+            /// <value>
+            /// The name.
+            /// </value>
+            public string Name { get; set; }
+
+            /// <summary>
+            /// Gets or sets the description.
+            /// </summary>
+            /// <value>
+            /// The description.
+            /// </value>
+            public string Description { get; set; }
+
+            /// <summary>
+            /// Gets or sets the start time.
+            /// </summary>
+            /// <value>
+            /// The start time.
+            /// </value>
+            public DateTime StartTime { get; set; }
+
+            /// <summary>
+            /// Gets or sets the end time.
+            /// </summary>
+            /// <value>
+            /// The end time.
+            /// </value>
+            public DateTime EndTime { get; set; }
+
+            /// <summary>
+            /// Gets or sets the latitude.
+            /// </summary>
+            /// <value>
+            /// The latitude.
+            /// </value>
+            public decimal Latitude { get; set; }
+
+            /// <summary>
+            /// Gets or sets the longitude.
+            /// </summary>
+            /// <value>
+            /// The longitude.
+            /// </value>
+            public decimal Longitude { get; set; }
+
+            /// <summary>
+            /// Gets or sets the categories.
+            /// </summary>
+            /// <value>
+            /// The categories list.
+            /// </value>
+            public List<int> Categories { get; set; }
+
+            /// <summary>
+            /// Gets or sets the price.
+            /// </summary>
+            /// <value>
+            /// The price.
+            /// </value>
+            public decimal Price { get; set; }
+
+            /// <summary>
+            /// Gets or sets the capacity.
+            /// </summary>
+            /// <value>
+            /// The capacity.
+            /// </value>
+            public int Capacity { get; set; }
+
+            /// <summary>
+            /// Gets or sets the reserved.
+            /// </summary>
+            /// <value>
+            /// The reserved.
+            /// </value>
+            public int Reserved { get; set; }
+
+            /// <summary>
+            /// Gets or sets the rating.
+            /// </summary>
+            /// <value>
+            /// The rating.
+            /// </value>
+            public decimal Rating { get; set; }
+
+            /// <summary>
+            /// Gets or sets the rate count.
+            /// </summary>
+            /// <value>
+            /// The rate count.
+            /// </value>
+            public int RateCount { get; set; }
+
+            /// <summary>
+            /// Gets or sets the rating location.
+            /// </summary>
+            /// <value>
+            /// The location rating.
+            /// </value>
+            public decimal RatingLocation { get; set; }
+
+            /// <summary>
+            /// Gets or sets the custom.
+            /// </summary>
+            /// <value>
+            /// The custom atribute.
+            /// </value>
+            public string Custom { get; set; }
+
+            /// <summary>
+            /// Gets or sets the location identifier.
+            /// </summary>
+            /// <value>
+            /// The location identifier.
+            /// </value>
+            public Guid LocationId { get; set; }
+
+            /// <summary>
+            /// Initializes a new instance of the <see cref="EventModel"/> class.
+            /// </summary>
+            /// <param name="id">The identifier.</param>
+            /// <param name="name">The name.</param>
+            /// <param name="description">The description.</param>
+            /// <param name="starttime">The starttime.</param>
+            /// <param name="endtime">The endtime.</param>
+            /// <param name="uLat">The u lat.</param>
+            /// <param name="uLong">The u long.</param>
+            /// <param name="categories">The categories.</param>
+            /// <param name="price">The price.</param>
+            /// <param name="capacity">The capacity.</param>
+            /// <param name="reserved">The reserved.</param>
+            /// <param name="rating">The rating.</param>
+            /// <param name="rateCount">The rate count.</param>
+            /// <param name="ratingLocation">The rating location.</param>
+            /// <param name="custom">The custom.</param>
+            /// <param name="locationId">The location identifier.</param>
+            public EventModel(Guid id, string name, string description, DateTime starttime, DateTime endtime, decimal uLat, decimal uLong, List<int> categories, decimal price, int capacity, int reserved, decimal rating, int rateCount, decimal ratingLocation, string custom, Guid locationId)
+            {
+                this.Id = id;
+                this.Name = name;
+                this.Description = description;
+                this.StartTime = starttime;
+                this.EndTime = endtime;
+                this.Latitude = uLat;
+                this.Longitude = uLong;
+                this.Categories = categories;
+                this.Price = price;
+                this.Capacity = capacity;
+                this.Reserved = reserved;
+                this.Rating = rating;
+                this.RateCount = rateCount;
+                this.RatingLocation = ratingLocation;
+                this.Custom = custom;
+                this.LocationId = locationId;
+            }
+
+            /// <summary>
+            /// Initializes a new instance of the <see cref="EventModel"/> class.
+            /// </summary>
+            public EventModel() { }
         }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="EventModel"/> class.
-        /// </summary>
-        public EventModel() { }
-       
+        #endregion Model
     }
-    #endregion
-
 }
-

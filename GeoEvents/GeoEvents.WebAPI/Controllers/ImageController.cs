@@ -3,7 +3,6 @@ using GeoEvents.Model.Common;
 using GeoEvents.Service.Common;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -15,6 +14,7 @@ namespace GeoEvents.WebAPI.Controllers
     public class ImageController : ApiController
     {
         #region Properties
+
         /// <summary>
         /// Gets the service.
         /// </summary>
@@ -22,6 +22,7 @@ namespace GeoEvents.WebAPI.Controllers
         /// The service.
         /// </value>
         protected IImageService Service { get; private set; }
+
         /// <summary>
         /// Gets the mapper.
         /// </summary>
@@ -29,9 +30,11 @@ namespace GeoEvents.WebAPI.Controllers
         /// The mapper.
         /// </value>
         protected IMapper Mapper { get; private set; }
-        #endregion
+
+        #endregion Properties
 
         #region Constructor
+
         /// <summary>
         /// Initializes a new instance of the <see cref="ImageController"/> class.
         /// </summary>
@@ -42,9 +45,11 @@ namespace GeoEvents.WebAPI.Controllers
             this.Service = service;
             this.Mapper = mapper;
         }
-        #endregion
+
+        #endregion Constructor
 
         #region Methods
+
         //async
         /// <summary>
         /// Gets the images asynchronous.
@@ -75,7 +80,6 @@ namespace GeoEvents.WebAPI.Controllers
             ImageModel img = new ImageModel();
             img.EventId = eventId;
 
-
             if (!Request.Content.IsMimeMultipartContent())
                 throw new HttpResponseException(HttpStatusCode.UnsupportedMediaType);
 
@@ -93,34 +97,38 @@ namespace GeoEvents.WebAPI.Controllers
             }
             return Request.CreateResponse(HttpStatusCode.OK, "Upload successful");
         }
-    }
-    #endregion
 
-    #region Model
-    public class ImageModel
-    {
-        /// <summary>
-        /// Gets or sets the identifier.
-        /// </summary>
-        /// <value>
-        /// The identifier.
-        /// </value>
-        public Guid Id { get; set; }
-        /// <summary>
-        /// Gets or sets the event identifier.
-        /// </summary>
-        /// <value>
-        /// The event identifier.
-        /// </value>
-        public Guid EventId { get; set; }
-        /// <summary>
-        /// Gets or sets the content.
-        /// </summary>
-        /// <value>
-        /// The content.
-        /// </value>
-        public byte[] Content { get; set; }
+        #endregion Methods
+
+        #region Model
+
+        public class ImageModel
+        {
+            /// <summary>
+            /// Gets or sets the identifier.
+            /// </summary>
+            /// <value>
+            /// The identifier.
+            /// </value>
+            public Guid Id { get; set; }
+
+            /// <summary>
+            /// Gets or sets the event identifier.
+            /// </summary>
+            /// <value>
+            /// The event identifier.
+            /// </value>
+            public Guid EventId { get; set; }
+
+            /// <summary>
+            /// Gets or sets the content.
+            /// </summary>
+            /// <value>
+            /// The content.
+            /// </value>
+            public byte[] Content { get; set; }
+        }
+
+        #endregion Model
     }
-    #endregion
 }
-

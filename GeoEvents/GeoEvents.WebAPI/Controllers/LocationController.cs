@@ -1,9 +1,6 @@
 ﻿using AutoMapper;
-using GeoEvents.Common;
-using GeoEvents.Model.Common;
 using GeoEvents.Service.Common;
 using System;
-using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -15,6 +12,7 @@ namespace GeoEvents.WebAPI.Controllers
     public class LocationController : ApiController
     {
         #region Properties
+
         /// <summary>
         /// Gets the service.
         /// </summary>
@@ -30,9 +28,11 @@ namespace GeoEvents.WebAPI.Controllers
         /// The mapper.
         /// </value>
         protected IMapper Mapper { get; private set; }
-        #endregion
+
+        #endregion Properties
 
         #region Constructor
+
         /// <summary>
         /// Initializes a new instance of the <see cref="LocationController"/> class.
         /// </summary>
@@ -43,9 +43,11 @@ namespace GeoEvents.WebAPI.Controllers
             this.Service = service;
             this.Mapper = mapper;
         }
-        #endregion
+
+        #endregion Constructor
 
         #region Methods
+
         /// <summary>
         /// Gets the location asynchronous.
         /// </summary>
@@ -59,12 +61,12 @@ namespace GeoEvents.WebAPI.Controllers
         [Route("get")]
         public async Task<HttpResponseMessage> GetLocationAsync(string address = "", string id = "")
         {
-            if(address != "" && id == "")
+            if (address != "" && id == "")
             {
                 var result = Mapper.Map<LocationModel>(await Service.GetLocationAsync(address));
                 return Request.CreateResponse(HttpStatusCode.OK, result);
             }
-            else if(address == "" && id != "")
+            else if (address == "" && id != "")
             {
                 var result = Mapper.Map<LocationModel>(await Service.GetLocationByIdAsync(new Guid(id)));
                 return Request.CreateResponse(HttpStatusCode.OK, result);
@@ -73,7 +75,6 @@ namespace GeoEvents.WebAPI.Controllers
             {
                 return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "invalid adress and/or id");
             }
-            
         }
 
         /// <summary>
@@ -90,9 +91,9 @@ namespace GeoEvents.WebAPI.Controllers
         [Route("update/rating")]
         public async Task<HttpResponseMessage> UpdateRatingAsync(Guid locationId, double rating, double currentRating, int rateCount)
         {
-            var result =  await Service.UpdateLocationRatingAsync(locationId, rating, currentRating, rateCount);
+            var result = await Service.UpdateLocationRatingAsync(locationId, rating, currentRating, rateCount);
 
-            if(result.RateCount == rateCount +1)
+            if (result.RateCount == rateCount + 1)
             {
                 return Request.CreateResponse(HttpStatusCode.OK, result);
             }
@@ -101,66 +102,68 @@ namespace GeoEvents.WebAPI.Controllers
                 return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, "failed to update rating");
             }
         }
-    }
-    #endregion
 
-    #region Model
-    public class LocationModel
-    {
-        /// <summary>
-        /// Gets or sets the identifier.
-        /// </summary>
-        /// <value>
-        /// The identifier.
-        /// </value>
-        public Guid Id { get; set; }
+        #endregion Methods
 
-        /// <summary>
-        /// Gets or sets the address.
-        /// </summary>
-        /// <value>
-        /// The address.
-        /// </value>
-        public string Address { get; set; }
+        #region Model
 
-        /// <summary>
-        /// Gets or sets the rating.
-        /// </summary>
-        /// <value>
-        /// The rating.
-        /// </value>
-        public double Rating { get; set; }
-
-        /// <summary>
-        /// Gets or sets the rate count.
-        /// </summary>
-        /// <value>
-        /// The rate count.
-        /// </value>
-        public int RateCount { get; set; }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="LocationModel"/> class.
-        /// </summary>
-        /// <param name="id">The identifier.</param>
-        /// <param name="address">The address.</param>
-        /// <param name="rating">The rating.</param>
-        /// <param name="rateCount">The rate count.</param>
-        public LocationModel(Guid id, string address, double rating, int rateCount)
+        public class LocationModel
         {
-            this.Id = id;
-            this.Address = address;
-            this.Rating = rating;
-            this.RateCount = rateCount;
+            /// <summary>
+            /// Gets or sets the identifier.
+            /// </summary>
+            /// <value>
+            /// The identifier.
+            /// </value>
+            public Guid Id { get; set; }
+
+            /// <summary>
+            /// Gets or sets the address.
+            /// </summary>
+            /// <value>
+            /// The address.
+            /// </value>
+            public string Address { get; set; }
+
+            /// <summary>
+            /// Gets or sets the rating.
+            /// </summary>
+            /// <value>
+            /// The rating.
+            /// </value>
+            public double Rating { get; set; }
+
+            /// <summary>
+            /// Gets or sets the rate count.
+            /// </summary>
+            /// <value>
+            /// The rate count.
+            /// </value>
+            public int RateCount { get; set; }
+
+            /// <summary>
+            /// Initializes a new instance of the <see cref="LocationModel"/> class.
+            /// </summary>
+            /// <param name="id">The identifier.</param>
+            /// <param name="address">The address.</param>
+            /// <param name="rating">The rating.</param>
+            /// <param name="rateCount">The rate count.</param>
+            public LocationModel(Guid id, string address, double rating, int rateCount)
+            {
+                this.Id = id;
+                this.Address = address;
+                this.Rating = rating;
+                this.RateCount = rateCount;
+            }
+
+            /// <summary>
+            /// Initializes a new instance of the <see cref="LocationModel"/> class.
+            /// </summary>
+            public LocationModel()
+            {
+            }
         }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="LocationModel"/> class.
-        /// </summary>
-        public LocationModel()
-        {
-
-        }
+        #endregion Model
     }
-    #endregion 
 }
