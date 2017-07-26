@@ -102,7 +102,8 @@ export class EventSearchComponent implements OnInit {
 				OrderIsAscending: true
             }		
             this.getEvents(this.filter);
-            this.getEventCount(this.filter);
+        //    this.getEventCount(this.filter);
+            this._loaderService.displayLoader(true);
 		}
 		else{
 			this.isAdvancedSearch = true;
@@ -157,7 +158,7 @@ export class EventSearchComponent implements OnInit {
         this.getEvents(this.filter);
 
         if (filterChanged) {
-            this.getEventCount(this.filter);
+      //      this.getEventCount(this.filter);
         }
 	}
 	
@@ -238,18 +239,21 @@ export class EventSearchComponent implements OnInit {
 		this.isAdvancedSearch = !this.isAdvancedSearch;
 	}
 
+    /*
     private getEventCount(filter: IFilter): void {
         this._eventService.getEventCount(filter)
             .subscribe(result => {
                 this.eventCount = result;
             });
     }
+    */
 
 	//calls the http service and gets the events
 	private getEvents(filter: IFilter): void {
 		this._dataServiceSubscription = this._eventService.getEvents(filter)
             .subscribe(result => {
-                this.events = result;
+                this.events = result.data;
+                this.eventCount = result.metaData.TotalItemCount;
                 this._preserveSearchQueryService.searchQuery = null;
                 this._loaderService.displayLoader(false);
             }, error => this.errorMessage = <any>error);

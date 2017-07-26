@@ -1,6 +1,6 @@
 ﻿import { Component, OnInit, ElementRef, NgZone, ViewChild, Output, EventEmitter } from '@angular/core'
 import { FormControl, FormGroup, Validators, ValidatorFn } from '@angular/forms'
-import { Observable } from 'rxjs/Rx'
+import { Observable } from 'rxjs/Observable'
 import { MapsAPILoader } from '@agm/core'
 
 import { endDateBeforeStartDate, uniqueName } from '../validators/validator';

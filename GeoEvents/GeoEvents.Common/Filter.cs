@@ -13,19 +13,19 @@ namespace GeoEvents.Common
         /// Gets or sets the latitude of the filter's location.
         /// </summary>
         /// <value>The latitude.</value>
-        public decimal? ULat { get; set; }
+        public double? ULat { get; set; }
 
         /// <summary>
         /// Gets or sets the longitude of the filter's location.
         /// </summary>
         /// <value>The longitude.</value>
-        public decimal? ULong { get; set; }
+        public double? ULong { get; set; }
 
         /// <summary>
         /// Gets or sets the filter's radius.
         /// </summary>
         /// <value>The radius.</value>
-        public decimal? Radius { get; set; }
+        public double? Radius { get; set; }
 
         /// <summary>
         /// Gets or sets the start time of the filter's timespan.
@@ -49,13 +49,13 @@ namespace GeoEvents.Common
         /// Gets or sets the filter's desired page.
         /// </summary>
         /// <value>The page number.</value>
-        public int? PageNumber { get; set; }
+        public int PageNumber { get; set; }
 
         /// <summary>
         /// Gets or sets the filter's desired number of events on one page.
         /// </summary>
         /// <value>The page size.</value>
-        public int? PageSize { get; set; }
+        public int PageSize { get; set; }
 
         /// <summary>
         /// Gets or sets the filter's search string.
@@ -81,7 +81,7 @@ namespace GeoEvents.Common
         /// <value>
         /// The price.
         /// </value>
-        public decimal? Price { get; set; }
+        public double? Price { get; set; }
 
         /// <summary>
         /// Gets or sets the rating event.
@@ -89,7 +89,7 @@ namespace GeoEvents.Common
         /// <value>
         /// The rating event.
         /// </value>
-        public decimal? RatingEvent { get; set; }
+        public double? RatingEvent { get; set; }
 
         /// <summary>
         /// Gets or sets the custom.
@@ -120,7 +120,7 @@ namespace GeoEvents.Common
         /// <param name="price">The price.</param>
         /// <param name="ratingEvent">The rating event.</param>
         /// <param name="custom">The custom.</param>
-        public Filter(decimal? uLat, decimal? uLong, decimal? radius, DateTime? startTime, DateTime? endTime, int? category, int? pageNumber, int? pageSize, string searchString, string orderBy, bool? orderAscending, decimal? price, decimal? ratingEvent, string custom)
+        public Filter(double? uLat=null, double? uLong=null, double? radius=null, DateTime? startTime=null, DateTime? endTime=null, int? category=0, int pageNumber=1, int pageSize=25, string searchString="", string orderBy="", bool? orderAscending=false, double? price=null, double? ratingEvent=null, string custom="")
         {
             ULat = uLat;
             ULong = uLong;
@@ -136,6 +136,11 @@ namespace GeoEvents.Common
             Price = price;
             RatingEvent = ratingEvent;
             Custom = custom;
+        }
+
+        public Filter()
+        {
+
         }
 
         #endregion Constructors

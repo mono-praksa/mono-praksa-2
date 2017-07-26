@@ -8,7 +8,6 @@ namespace GeoEvents.DAL
         #region Properties
 
         protected IGeoEventsConfiguration configuration { get; private set; }
-        protected NpgsqlConnection connection { get; private set; }
 
         #endregion Properties
 
@@ -21,23 +20,12 @@ namespace GeoEvents.DAL
         public PostgresConnection(IGeoEventsConfiguration configuration)
         {
             this.configuration = configuration;
-            connection = new NpgsqlConnection(configuration.ConnectionString);
         }
 
         #endregion Constructor
 
         #region Methods
 
-        /// <summary>
-        /// Creates the command.
-        /// </summary>
-        /// <returns>
-        /// NpgsqlCommand
-        /// </returns>
-        public NpgsqlCommand CreateCommand()
-        {
-            return connection.CreateCommand();
-        }
 
         /// <summary>
         /// Creates the connection.
@@ -47,6 +35,8 @@ namespace GeoEvents.DAL
         /// </returns>
         public NpgsqlConnection CreateConnection()
         {
+            var connection = new NpgsqlConnection(configuration.ConnectionString);
+
             return connection;
         }
 

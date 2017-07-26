@@ -5,6 +5,7 @@ using GeoEvents.Service.Common;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using X.PagedList;
 
 namespace GeoEvents.Service
 {
@@ -72,9 +73,11 @@ namespace GeoEvents.Service
         /// <returns>
         /// List of events.
         /// </returns>
-        public async Task<IEnumerable<IEvent>> GetEventsAsync(IFilter filter)
+        public async Task<StaticPagedList<IEvent>> GetEventsAsync(IFilter filter)
         {
             IEnumerable<IEvent> events = await Repository.GetEventsAsync(filter);
+
+            int count = await Repository.GetEventCountAsync(filter);
 
             foreach (IEvent evt in events)
             {
@@ -93,20 +96,12 @@ namespace GeoEvents.Service
                 }
             }
 
-            return events;
+            var result = new StaticPagedList<IEvent>(events, filter.PageNumber, filter.PageSize, count);
+
+            return result;
         }
 
-        /// <summary>
-        /// Gets the number of events that satisfy a filter asynchronously.
-        /// </summary>
-        /// <param name="filter">The filter.</param>
-        /// <returns>
-        /// The number.
-        /// </returns>
-        public Task<Int64> GetEventCountAsync(IFilter filter)
-        {
-            return Repository.GetEventCountAsync(filter);
-        }
+        
 
         /// <summary>
         /// Creates an event asynchronously.

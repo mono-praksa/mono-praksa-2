@@ -13,6 +13,8 @@ namespace GeoEvents.WebAPI.Controllers
     [RoutePrefix("api/images")]
     public class ImageController : ApiController
     {
+        #region Properties
+
         /// <summary>
         /// Gets the service.
         /// </summary>
@@ -20,6 +22,7 @@ namespace GeoEvents.WebAPI.Controllers
         /// The service.
         /// </value>
         protected IImageService Service { get; private set; }
+
         /// <summary>
         /// Gets the mapper.
         /// </summary>
@@ -27,6 +30,10 @@ namespace GeoEvents.WebAPI.Controllers
         /// The mapper.
         /// </value>
         protected IMapper Mapper { get; private set; }
+
+        #endregion Properties
+
+        #region Constructor
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ImageController"/> class.
@@ -39,6 +46,10 @@ namespace GeoEvents.WebAPI.Controllers
             this.Mapper = mapper;
         }
 
+        #endregion Constructor
+
+        #region Methods
+
         //async
         /// <summary>
         /// Gets the images asynchronous.
@@ -47,17 +58,20 @@ namespace GeoEvents.WebAPI.Controllers
         /// <returns></returns>
         [HttpGet]
         [Route("get/{eventId}")]
-        public async Task<IEnumerable<ImageModel>> GetImagesAsync(Guid eventId)
+        public async Task<HttpResponseMessage> GetImagesAsync(Guid eventId)
         {
-            return Mapper.Map<IEnumerable<ImageModel>>(await Service.GetImagesAsync(eventId));
+            var result = Mapper.Map<IEnumerable<ImageModel>>(await Service.GetImagesAsync(eventId));
+
+            return Request.CreateResponse(HttpStatusCode.OK, result);
         }
 
-        //async
         /// <summary>
         /// Creates the image asynchronous.
         /// </summary>
         /// <param name="eventId">The event identifier.</param>
-        /// <returns></returns>
+        /// <returns>
+        /// Returns created image
+        /// </returns>
         /// <exception cref="HttpResponseException"></exception>
         [HttpPost]
         [Route("create/{eventId:guid}")]
@@ -65,11 +79,10 @@ namespace GeoEvents.WebAPI.Controllers
         {
             ImageModel img = new ImageModel();
             img.EventId = eventId;
-           
-            
+
             if (!Request.Content.IsMimeMultipartContent())
                 throw new HttpResponseException(HttpStatusCode.UnsupportedMediaType);
-            
+
             var provider = new MultipartMemoryStreamProvider();
 
             // Read the form data.
@@ -84,31 +97,38 @@ namespace GeoEvents.WebAPI.Controllers
             }
             return Request.CreateResponse(HttpStatusCode.OK, "Upload successful");
         }
-    }
 
-    public class ImageModel
-    {
-        /// <summary>
-        /// Gets or sets the identifier.
-        /// </summary>
-        /// <value>
-        /// The identifier.
-        /// </value>
-        public Guid Id { get; set; }
-        /// <summary>
-        /// Gets or sets the event identifier.
-        /// </summary>
-        /// <value>
-        /// The event identifier.
-        /// </value>
-        public Guid EventId { get; set; }
-        /// <summary>
-        /// Gets or sets the content.
-        /// </summary>
-        /// <value>
-        /// The content.
-        /// </value>
-        public byte[] Content { get; set; }
+        #endregion Methods
+
+        #region Model
+
+        public class ImageModel
+        {
+            /// <summary>
+            /// Gets or sets the identifier.
+            /// </summary>
+            /// <value>
+            /// The identifier.
+            /// </value>
+            public Guid Id { get; set; }
+
+            /// <summary>
+            /// Gets or sets the event identifier.
+            /// </summary>
+            /// <value>
+            /// The event identifier.
+            /// </value>
+            public Guid EventId { get; set; }
+
+            /// <summary>
+            /// Gets or sets the content.
+            /// </summary>
+            /// <value>
+            /// The content.
+            /// </value>
+            public byte[] Content { get; set; }
+        }
+
+        #endregion Model
     }
 }
-

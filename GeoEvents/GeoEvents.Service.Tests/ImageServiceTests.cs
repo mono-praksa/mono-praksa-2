@@ -23,7 +23,7 @@ namespace GeoEvents.Service.Tests
 
             var imageService = new ImageService(mockImageRepository.Object);
             var result = await imageService.CreateImageAsync(img);
-            var expected = await new Task<IImage>(() => img);
+            var expected = img;
 
             Assert.Equal(expected, result);
         }
@@ -48,7 +48,7 @@ namespace GeoEvents.Service.Tests
                 .ReturnsAsync(() => repoReturn);
             var imageService = new ImageService(mockImageRepository.Object);
             var result = await imageService.GetImagesAsync(id);
-            var expected = await new Task<List<IImage>>(() => repoReturn);
+            var expected = repoReturn;
 
             Assert.Equal(expected, result);
         }

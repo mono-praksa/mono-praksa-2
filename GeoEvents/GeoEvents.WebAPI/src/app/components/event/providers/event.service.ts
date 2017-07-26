@@ -3,6 +3,8 @@ import { Http, Response, Headers, RequestOptions } from "@angular/http";
 import { Observable } from "rxjs/Observable";
 import "rxjs/add/operator/map";
 import "rxjs/add/operator/catch";
+import 'rxjs/add/observable/throw';
+
 
 import { IEvent } from "../models/event.model";
 import { IFilter } from "../models/filter.model";
@@ -12,11 +14,11 @@ import { IImage } from '../models/image.model';
 export class EventService {
     constructor(private _http: Http) { }
 
-    getEvents(filter: IFilter): Observable<IEvent[]> {
+    getEvents(filter: IFilter): Observable<any> {
         let query = "/api/events/search" + this._makeQueryString(filter);
         //execute http call
         return this._http.get(query)
-            .map((response: Response) => <IEvent[]>response.json())
+            .map((response: Response) => <any>response.json())
             .catch(this.handleError);
     }
 
@@ -46,11 +48,11 @@ export class EventService {
         }
 
         if (filter.StartTime != null && filter.StartTime.toString() != "") {
-            query += '&startTime=' + filter.StartTime.toString().replace(':', 'h');
+            query += '&startTime=' + filter.StartTime.toString();
         }
 
         if (filter.EndTime != null && filter.EndTime.toString() != "") {
-            query += '&endTime=' + filter.EndTime.toString().replace(':', 'h');
+            query += '&endTime=' + filter.EndTime.toString();
         }
 
         if (filter.Price != null && filter.Price >= 0) {

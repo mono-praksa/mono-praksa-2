@@ -45,15 +45,13 @@ namespace GeoEvents.Repository
             LocationEntity location = null;
             LocationEntity NewLocation = new LocationEntity(Guid.NewGuid(), 0, 0, address);
 
-            using (Connection.CreateConnection())
-            using (NpgsqlCommand commandSelect = new NpgsqlCommand(QueryHelper.GetSelectLocationQueryString(), Connection.CreateConnection()))
+            using (var connection = Connection.CreateConnection())
+            using (NpgsqlCommand commandSelect = new NpgsqlCommand(QueryHelper.GetSelectLocationQueryString(), connection))
 
             {
-                commandSelect.Parameters.AddWithValue(QueryHelper.ParAddress, NpgsqlTypes.NpgsqlDbType.Text, address);
-                if (Connection.CreateConnection().FullState == ConnectionState.Closed)
-                {
-                    await Connection.CreateConnection().OpenAsync();
-                }
+                commandSelect.Parameters.AddWithValue(QueryHelper.ParAddress, NpgsqlDbType.Text, address);
+
+                await connection.OpenAsync();
 
                 DbDataReader dr = await commandSelect.ExecuteReaderAsync();
                 if (dr.Read())
@@ -66,18 +64,18 @@ namespace GeoEvents.Repository
                         RateCount = Convert.ToInt32(dr[3])
                     };
                 }
-                Connection.CreateConnection().Close();
+
 
                 if (location == null)
                 {
-                   return await CreateLocationAsync(Mapper.Map<ILocation>(NewLocation));   
+                    return await CreateLocationAsync(Mapper.Map<ILocation>(NewLocation));
                 }
 
                 return await GetLocationByIdAsync(location.Id);
 
 
             }
-         
+
         }
 
         /// <summary>
@@ -91,15 +89,13 @@ namespace GeoEvents.Repository
         {
             LocationEntity location = new LocationEntity();
 
-            using (Connection.CreateConnection())
-            using (NpgsqlCommand command = new NpgsqlCommand(QueryHelper.GetSelectLocationByIdQueryString(), Connection.CreateConnection()))
+            using (var connection = Connection.CreateConnection())
+            using (NpgsqlCommand command = new NpgsqlCommand(QueryHelper.GetSelectLocationByIdQueryString(), connection))
             {
-                command.Parameters.AddWithValue(QueryHelper.ParId, NpgsqlTypes.NpgsqlDbType.Uuid, id);
+                command.Parameters.AddWithValue(QueryHelper.ParId, NpgsqlDbType.Uuid, id);
 
-                if (Connection.CreateConnection().FullState == ConnectionState.Closed)
-                {
-                    await Connection.CreateConnection().OpenAsync();
-                }
+                await connection.OpenAsync();
+
                 DbDataReader dr = await command.ExecuteReaderAsync();
                 if (dr.Read())
                 {
@@ -126,21 +122,18 @@ namespace GeoEvents.Repository
         public async Task<ILocation> CreateLocationAsync(ILocation location)
         {
 
-            using (Connection.CreateConnection())
-            using (NpgsqlCommand command = new NpgsqlCommand(QueryHelper.GetInsertCreateLocationQueryString(), Connection.CreateConnection()))
+            using (var connection = Connection.CreateConnection())
+            using (NpgsqlCommand command = new NpgsqlCommand(QueryHelper.GetInsertCreateLocationQueryString(), connection))
             {
-                if (Connection.CreateConnection().FullState == ConnectionState.Closed)
-                {
-                    await Connection.CreateConnection().OpenAsync();
-                }
-                command.Parameters.AddWithValue(QueryHelper.ParId, NpgsqlTypes.NpgsqlDbType.Uuid, location.Id);
-                command.Parameters.AddWithValue(QueryHelper.ParAddress, NpgsqlTypes.NpgsqlDbType.Text, location.Address);
-                command.Parameters.AddWithValue(QueryHelper.ParRating, NpgsqlTypes.NpgsqlDbType.Double, location.Rating);
-                command.Parameters.AddWithValue(QueryHelper.ParRateCount, NpgsqlTypes.NpgsqlDbType.Double, location.RateCount);
-                await command.ExecuteNonQueryAsync();
-            
+                await connection.OpenAsync();
 
-              return await GetLocationByIdAsync(location.Id);
+                command.Parameters.AddWithValue(QueryHelper.ParId, NpgsqlDbType.Uuid, location.Id);
+                command.Parameters.AddWithValue(QueryHelper.ParAddress, NpgsqlDbType.Text, location.Address);
+                command.Parameters.AddWithValue(QueryHelper.ParRating, NpgsqlDbType.Double, location.Rating);
+                command.Parameters.AddWithValue(QueryHelper.ParRateCount, NpgsqlDbType.Double, location.RateCount);
+                await command.ExecuteNonQueryAsync();
+
+                return await GetLocationByIdAsync(location.Id);
             }
 
         }
@@ -153,36 +146,30 @@ namespace GeoEvents.Repository
         /// <returns>
         /// ILocation
         /// </returns>
-        public async Task<ILocation> UpdateLocationRatingAsync(Guid id, double rating,double currenRating, int rateCount)
+        public async Task<ILocation> UpdateLocationRatingAsync(Guid id, double rating, double currenRating, int rateCount)
         {
             LocationEntity location = new LocationEntity();
 
-            using (Connection.CreateConnection())
-            using (NpgsqlCommand command = new NpgsqlCommand(QueryHelper.GetUpdateLocationRatingQueryString(), Connection.CreateConnection()))
+            using (var connection = Connection.CreateConnection())
+            using (NpgsqlCommand command = new NpgsqlCommand(QueryHelper.GetUpdateLocationRatingQueryString(), connection))
             {
-                if (Connection.CreateConnection().FullState == ConnectionState.Closed)
-                {
-                    await Connection.CreateConnection().OpenAsync();
-                }
+                await connection.OpenAsync();
 
                 double NewRating = 0;
-                int NewRateCount =rateCount + 1;
+                int NewRateCount = rateCount + 1;
 
                 NewRating = (currenRating * rateCount + rating) / NewRateCount;
 
-                command.Parameters.AddWithValue(QueryHelper.ParId, NpgsqlTypes.NpgsqlDbType.Uuid, id);
-                command.Parameters.AddWithValue(QueryHelper.ParRateCount, NpgsqlTypes.NpgsqlDbType.Integer, NewRateCount);
-                command.Parameters.AddWithValue(QueryHelper.ParRating, NpgsqlTypes.NpgsqlDbType.Double, NewRating);
+                command.Parameters.AddWithValue(QueryHelper.ParId, NpgsqlDbType.Uuid, id);
+                command.Parameters.AddWithValue(QueryHelper.ParRateCount, NpgsqlDbType.Integer, NewRateCount);
+                command.Parameters.AddWithValue(QueryHelper.ParRating, NpgsqlDbType.Double, NewRating);
                 await command.ExecuteNonQueryAsync();
-
-                Connection.CreateConnection().Close();
-
 
                 return await GetLocationByIdAsync(id);
 
             }
 
-          
+
         }
 
         #endregion Methods
