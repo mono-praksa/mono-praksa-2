@@ -7,7 +7,7 @@
         Categories:
         <ul *ngIf="event">
             <li *ngFor="let category of event.Categories">
-                {{_categoryService.CategoryEnum[category]}}
+                {{categoryService.CategoryEnum[category]}}
             </li>
         </ul>
         <div *ngIf="event.Custom">
