@@ -2,8 +2,6 @@
 import { Headers, Http, RequestOptions, Response } from "@angular/http";
 import { Observable } from "rxjs/Observable";
 
-import { IEvent } from "../event/shared/models/event.model";
-
 @Injectable()
 export class GeocodingService {
     userApproximateAddress: string = "";

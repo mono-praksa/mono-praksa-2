@@ -5,7 +5,7 @@ import { Observable } from "rxjs/Observable";
 import { EventService } from "../../shared/event.service";
 import { LocationService } from "../../shared/location.service";
 
-import { IEvent } from "../../shared/models/event.model";
+import { Event } from "../../shared/models/event.model";
 
 import { LoaderService } from "../../../shared/loader.service";
 
@@ -15,7 +15,7 @@ import { LoaderService } from "../../../shared/loader.service";
 })
 
 export class EventCreateCustomizeComponent implements OnInit {
-    @Input() createdEvent: IEvent;
+    @Input() createdEvent: Event;
     customAttributeForm: FormGroup;
     @Output() eventEmitter = new EventEmitter();
     key: FormControl;
@@ -61,7 +61,7 @@ export class EventCreateCustomizeComponent implements OnInit {
             this.createdEvent.Custom = JSON.stringify("");
         }
         this.loaderService.displayLoader(true);
-        this.eventService.createEvent(this.createdEvent).subscribe((response: IEvent) => {
+        this.eventService.createEvent(this.createdEvent).subscribe((response: Event) => {
             this.createdEvent = response;
             this.eventEmitter.emit(this.createdEvent);
             this.loaderService.displayLoader(false);

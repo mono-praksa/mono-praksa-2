@@ -4,42 +4,42 @@ import { Observable } from "rxjs/Observable";
 import "rxjs/add/operator/map";
 import "rxjs/add/operator/catch";
 
-import { IEvent } from "./models/event.model";
-import { IFilter } from "./models/filter.model";
-import { IImage } from "./models/image.model";
+import { Event } from "./models/event.model";
+import { Filter } from "./models/filter.model";
+import { Image } from "./models/image.model";
 
 @Injectable()
 export class EventService {
     constructor(private http: Http) { }
 
-    createEvent(event: IEvent): Observable<IEvent> {
+    createEvent(event: Event): Observable<Event> {
         let headers = new Headers({ "Content-Type": "application/json" });
         let options = new RequestOptions({ headers: headers });
         return this.http.post("/api/events/create", JSON.stringify(event), options)
-            .map((response: Response) => <IEvent>response.json())
+            .map((response: Response) => <Event>response.json())
             .catch(this.handleError);
     }
 
-    createImage(image: IImage): Observable<IImage> {
+    createImage(image: Image): Observable<Image> {
         let options = new RequestOptions();
         return this.http.post("/api/images/create/" + image.EventId, image.FormData, options)
             .map((response: Response) => response.json());
     }
 
-    getEventById(eventId: number): Observable<IEvent> {
+    getEventById(eventId: number): Observable<Event> {
         return this.http.get("/api/events/get?eventId=" + eventId)
-            .map((response: Response) => <IEvent>response.json())
+            .map((response: Response) => <Event>response.json())
             .catch(this.handleError);
     }
 
-    getEventCount(filter: IFilter): Observable<number> {
+    getEventCount(filter: Filter): Observable<number> {
         let query = "/api/events/search/count" + this._makeQueryString(filter);
         return this.http.get(query)
             .map((response: Response) => <number>response.json())
             .catch(this.handleError); 
     }
 
-    getEvents(filter: IFilter): Observable < any > {
+    getEvents(filter: Filter): Observable < any > {
         let query = "/api/events/search" + this._makeQueryString(filter);
         //execute http call
         return this.http.get(query)
@@ -47,10 +47,10 @@ export class EventService {
             .catch(this.handleError);
     }
 
-    getImages(id: string): Observable<IImage[]> {
+    getImages(id: string): Observable<Image[]> {
         return this.http.get("/api/images/get/" + id)
             .map((response: Response) => {
-                return <IImage[]>response.json();
+                return <Image[]>response.json();
             }).catch(this.handleError);
     }
 
@@ -59,21 +59,21 @@ export class EventService {
 		return Observable.throw(error.json().error || "Server error");
 	}
 
-    updateRating(eventId: string, rating: number, currentrating: number, ratecount: number): Observable<IEvent> {
+    updateRating(eventId: string, rating: number, currentrating: number, ratecount: number): Observable<Event> {
         return this.http.put("/api/events/update/rating?eventId=" + eventId + "&rating=" + rating + "&currentrating=" + currentrating + "&ratecount=" + ratecount, {})
             .map((response: Response) => {
-                return <IEvent>response.json();
+                return <Event>response.json();
             }).catch(this.handleError);
     }
 
-    updateReservation(eventId: string): Observable<IEvent> {
+    updateReservation(eventId: string): Observable<Event> {
         return this.http.put("/api/events/update/reservation?eventId=" + eventId, {})
             .map((response: Response) => {
-                return <IEvent>response.json();
+                return <Event>response.json();
             }).catch(this.handleError);
     }
 
-    private _makeQueryString(filter: IFilter): string {
+    private _makeQueryString(filter: Filter): string {
         let query = "";
 
         query += "?category=";

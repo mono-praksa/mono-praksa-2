@@ -2,8 +2,7 @@
 import { Headers, Http, RequestOptions, Response } from "@angular/http";
 import { Observable } from "rxjs/Observable";
 
-import { IEvent } from "../../shared/models/event.model";
-import { IImage } from "../../shared/models/image.model";
+import { Event } from "../../shared/models/event.model";
 import { EventService } from "../../shared/event.service";
 
 @Component({
@@ -11,7 +10,7 @@ import { EventService } from "../../shared/event.service";
     templateUrl: "app/event/event-create/event-create-images/event-create-images.component.html"
 })
 export class EventCreateImagesComponent {
-    @Input() customizedEvent: IEvent;
+    @Input() customizedEvent: Event;
     
     private _fileList: FileList;
     private _files: file[];

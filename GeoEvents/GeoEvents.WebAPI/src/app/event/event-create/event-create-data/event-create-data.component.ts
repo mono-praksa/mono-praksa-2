@@ -8,8 +8,8 @@ import { EventService } from "../../shared/event.service";
 import { endDateBeforeStartDate, uniqueName } from "../../shared/validator";
 import { LocationService } from "../../shared/location.service";
 
-import { IEvent } from "../../shared/models/event.model";
-import { ILocation } from "../../shared/models/location.model";
+import { Event } from "../../shared/models/event.model";
+import { Location } from "../../shared/models/location.model";
 
 import { GeocodingService } from "../../../shared/geocoding.service";
 import { LoaderService } from "../../../shared/loader.service";
@@ -35,7 +35,7 @@ export class EventCreateDataComponent implements OnInit {
     price: FormControl;
     start: FormControl;
 
-    private _createdEvent: IEvent;
+    private _createdEvent: Event;
     private _createEventLoading: boolean = false;
     private _isAddressValid: boolean = false;
     private _zoom: number = 12;
@@ -121,7 +121,7 @@ export class EventCreateDataComponent implements OnInit {
             }
         });
 
-        let newEvent : IEvent = {
+        let newEvent : Event = {
             Id: undefined,
             Name: formValues.name,
             Description: formValues.description,
@@ -139,7 +139,7 @@ export class EventCreateDataComponent implements OnInit {
             Custom: undefined,
             LocationId: undefined
         }
-        this.locationService.getLocation(formValues.address).subscribe((res: ILocation) => {
+        this.locationService.getLocation(formValues.address).subscribe((res: Location) => {
             newEvent.LocationId = res.Id;
             this.loaderService.displayLoader(false);
             this.eventEmitter.emit(newEvent);
@@ -203,11 +203,11 @@ export class EventCreateDataComponent implements OnInit {
         this._zoom = theZoom;
     }
 
-    get createdEvent(): IEvent {
+    get createdEvent(): Event {
         return this._createdEvent;
     }
 
-    set createdEvent(theCreatedEvent: IEvent) {
+    set createdEvent(theCreatedEvent: Event) {
         this._createdEvent = theCreatedEvent;
     }
 
