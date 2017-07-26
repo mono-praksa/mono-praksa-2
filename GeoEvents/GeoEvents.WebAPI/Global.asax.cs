@@ -2,6 +2,9 @@
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
+using log4net;
+
+[assembly: log4net.Config.XmlConfigurator()]
 
 namespace GeoEvents.WebAPI
 {
