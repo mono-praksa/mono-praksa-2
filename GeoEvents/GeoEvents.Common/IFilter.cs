@@ -8,19 +8,19 @@ namespace GeoEvents.Common
         /// Gets or sets the latitude of the filter's location.
         /// </summary>
         /// <value>The latitude.</value>
-        decimal? ULat { get; set; }
+        double? ULat { get; set; }
 
         /// <summary>
         /// Gets or sets the longitude of the filter's location.
         /// </summary>
         /// <value>The longitude.</value>
-        decimal? ULong { get; set; }
+        double? ULong { get; set; }
 
         /// <summary>
         /// Gets or sets the filter's radius.
         /// </summary>
         /// <value>The radius.</value>
-        decimal? Radius { get; set; }
+        double? Radius { get; set; }
 
         /// <summary>
         /// Gets or sets the start time of the filter's timespan.
@@ -76,7 +76,7 @@ namespace GeoEvents.Common
         /// <value>
         /// The price.
         /// </value>
-        decimal? Price { get; set; }
+        double? Price { get; set; }
 
         /// <summary>
         /// Gets or sets the rating event.
@@ -84,7 +84,7 @@ namespace GeoEvents.Common
         /// <value>
         /// The rating event.
         /// </value>
-        decimal? RatingEvent { get; set; }
+        double? RatingEvent { get; set; }
 
         /// <summary>
         /// Gets or sets the custom.

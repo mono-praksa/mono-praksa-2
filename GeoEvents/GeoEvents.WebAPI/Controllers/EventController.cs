@@ -44,39 +44,8 @@ namespace GeoEvents.WebAPI.Controllers
 
         [HttpGet]
         [Route("search")]
-        public async Task<HttpResponseMessage> GetEventsAsync(int pageNumber = 1, int pageSize = 25, string orderBy = "", bool orderAscending = false, int category = 0, decimal uLat = 1000M, decimal uLong = 1000M, decimal radius = 0, string startTime = "", string endTime = "", string searchString = "", decimal? price = null, decimal ratingEvent = 0, string custom = "")
+        public async Task<HttpResponseMessage> GetEventsAsync([FromUri] IFilter filter)
         {
-            Filter filter = new Filter(uLat, uLong, radius, null, null, category, pageNumber, pageSize, searchString, orderBy, orderAscending, price, ratingEvent, custom);
-            DateTime dateValue;
-            if (startTime != "")
-            {
-                if (DateTime.TryParse(startTime.Replace('h', ':'), out dateValue))
-                {
-                    filter.StartTime = dateValue;
-                }
-                else
-                {
-                    return Request.CreateResponse(HttpStatusCode.BadRequest, "Incorrect start time format");
-                }
-            }
-            if (endTime != "")
-            {
-                if (DateTime.TryParse(endTime.Replace('h', ':'), out dateValue))
-                {
-                    filter.EndTime = dateValue;
-                }
-                else
-                {
-                    return Request.CreateResponse(HttpStatusCode.BadRequest, "Incorrect end time format");
-                }
-            }
-            if (uLat == 1000M || uLong == 1000M)
-            {
-                filter.ULat = null;
-                filter.ULong = null;
-                filter.Radius = null;
-            }
-
             var result = Mapper.Map<IEnumerable<EventModel>>(await Service.GetEventsAsync(filter));
 
             return Request.CreateResponse(HttpStatusCode.OK, result);
