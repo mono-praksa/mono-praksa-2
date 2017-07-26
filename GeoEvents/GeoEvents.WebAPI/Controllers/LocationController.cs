@@ -14,6 +14,7 @@ namespace GeoEvents.WebAPI.Controllers
     [RoutePrefix("api/locations")]
     public class LocationController : ApiController
     {
+        #region Properties
         /// <summary>
         /// Gets the service.
         /// </summary>
@@ -21,6 +22,7 @@ namespace GeoEvents.WebAPI.Controllers
         /// The service.
         /// </value>
         protected ILocationService Service { get; private set; }
+
         /// <summary>
         /// Gets the mapper.
         /// </summary>
@@ -28,7 +30,9 @@ namespace GeoEvents.WebAPI.Controllers
         /// The mapper.
         /// </value>
         protected IMapper Mapper { get; private set; }
+        #endregion
 
+        #region Constructor
         /// <summary>
         /// Initializes a new instance of the <see cref="LocationController"/> class.
         /// </summary>
@@ -39,13 +43,17 @@ namespace GeoEvents.WebAPI.Controllers
             this.Service = service;
             this.Mapper = mapper;
         }
+        #endregion
 
+        #region Methods
         /// <summary>
         /// Gets the location asynchronous.
         /// </summary>
         /// <param name="address">The address.</param>
         /// <param name="id">The identifier.</param>
-        /// <returns></returns>
+        /// <returns>
+        /// Returns the location
+        /// </returns>
         /// <exception cref="HttpResponseException"></exception>
         [HttpGet]
         [Route("get")]
@@ -75,7 +83,9 @@ namespace GeoEvents.WebAPI.Controllers
         /// <param name="rating">The rating.</param>
         /// <param name="currentRating">The current rating.</param>
         /// <param name="rateCount">The rate count.</param>
-        /// <returns></returns>
+        /// <returns>
+        /// Returns the updated location.
+        /// </returns>
         [HttpPut]
         [Route("update/rating")]
         public async Task<HttpResponseMessage> UpdateRatingAsync(Guid locationId, double rating, double currentRating, int rateCount)
@@ -92,7 +102,9 @@ namespace GeoEvents.WebAPI.Controllers
             }
         }
     }
+    #endregion
 
+    #region Model
     public class LocationModel
     {
         /// <summary>
@@ -102,6 +114,7 @@ namespace GeoEvents.WebAPI.Controllers
         /// The identifier.
         /// </value>
         public Guid Id { get; set; }
+
         /// <summary>
         /// Gets or sets the address.
         /// </summary>
@@ -109,6 +122,7 @@ namespace GeoEvents.WebAPI.Controllers
         /// The address.
         /// </value>
         public string Address { get; set; }
+
         /// <summary>
         /// Gets or sets the rating.
         /// </summary>
@@ -116,6 +130,7 @@ namespace GeoEvents.WebAPI.Controllers
         /// The rating.
         /// </value>
         public double Rating { get; set; }
+
         /// <summary>
         /// Gets or sets the rate count.
         /// </summary>
@@ -147,4 +162,5 @@ namespace GeoEvents.WebAPI.Controllers
 
         }
     }
+    #endregion 
 }

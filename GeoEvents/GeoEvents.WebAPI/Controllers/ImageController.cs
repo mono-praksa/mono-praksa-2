@@ -14,6 +14,7 @@ namespace GeoEvents.WebAPI.Controllers
     [RoutePrefix("api/images")]
     public class ImageController : ApiController
     {
+        #region Properties
         /// <summary>
         /// Gets the service.
         /// </summary>
@@ -28,7 +29,9 @@ namespace GeoEvents.WebAPI.Controllers
         /// The mapper.
         /// </value>
         protected IMapper Mapper { get; private set; }
+        #endregion
 
+        #region Constructor
         /// <summary>
         /// Initializes a new instance of the <see cref="ImageController"/> class.
         /// </summary>
@@ -39,7 +42,9 @@ namespace GeoEvents.WebAPI.Controllers
             this.Service = service;
             this.Mapper = mapper;
         }
+        #endregion
 
+        #region Methods
         //async
         /// <summary>
         /// Gets the images asynchronous.
@@ -55,12 +60,13 @@ namespace GeoEvents.WebAPI.Controllers
             return Request.CreateResponse(HttpStatusCode.OK, result);
         }
 
-        //async
         /// <summary>
         /// Creates the image asynchronous.
         /// </summary>
         /// <param name="eventId">The event identifier.</param>
-        /// <returns></returns>
+        /// <returns>
+        /// Returns created image
+        /// </returns>
         /// <exception cref="HttpResponseException"></exception>
         [HttpPost]
         [Route("create/{eventId:guid}")]
@@ -68,11 +74,11 @@ namespace GeoEvents.WebAPI.Controllers
         {
             ImageModel img = new ImageModel();
             img.EventId = eventId;
-           
-            
+
+
             if (!Request.Content.IsMimeMultipartContent())
                 throw new HttpResponseException(HttpStatusCode.UnsupportedMediaType);
-            
+
             var provider = new MultipartMemoryStreamProvider();
 
             // Read the form data.
@@ -88,7 +94,9 @@ namespace GeoEvents.WebAPI.Controllers
             return Request.CreateResponse(HttpStatusCode.OK, "Upload successful");
         }
     }
+    #endregion
 
+    #region Model
     public class ImageModel
     {
         /// <summary>
@@ -113,5 +121,6 @@ namespace GeoEvents.WebAPI.Controllers
         /// </value>
         public byte[] Content { get; set; }
     }
+    #endregion
 }
 
