@@ -1,12 +1,12 @@
-﻿import { Injectable } from '@angular/core'
-import { Resolve, ActivatedRouteSnapshot, Router } from '@angular/router'
-import { EventService } from './event.service'
-import { Observable } from 'rxjs/Observable'
+﻿import { Injectable } from "@angular/core";
+import { ActivatedRouteSnapshot, Resolve, Router } from "@angular/router";
+import { Observable } from "rxjs/Observable";
 
-import { IEvent } from '../models/event.model'
+import { Event } from "../shared/models/event.model";
+import { EventService } from "../shared/event.service";
 
 @Injectable()
-export class EventDetailResolverService implements Resolve<IEvent> {
+export class EventDetailResolverService implements Resolve<Event> {
     constructor(private eventService: EventService, private router: Router) { }
 
     resolve(route: ActivatedRouteSnapshot) {

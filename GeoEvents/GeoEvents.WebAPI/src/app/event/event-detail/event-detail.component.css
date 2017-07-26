@@ -9,6 +9,15 @@
         float:left;
     }
 
+    .custom-display {
+        float: left;
+        padding-right: 10px;
+    }
+
+    .custom-clear {
+        clear: left;
+    }
+
     .rating:not(:checked) > input {
         position:absolute;
         top:-9999px;

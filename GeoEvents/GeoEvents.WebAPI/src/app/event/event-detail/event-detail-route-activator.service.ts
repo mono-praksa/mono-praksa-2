@@ -1,8 +1,9 @@
-﻿import { Injectable } from "@angular/core"
-import { Router, CanActivate, ActivatedRouteSnapshot } from '@angular/router'
-import { EventService } from './event.service'
-import { IEvent } from '../models/event.model'
-import { Observable } from 'rxjs/Observable'
+﻿import { Injectable } from "@angular/core";
+import { ActivatedRouteSnapshot, CanActivate, Router } from "@angular/router";
+import { Observable } from "rxjs/Observable";
+
+import { Event } from "../shared/models/event.model";
+import { EventService } from "../shared/event.service";
 
 @Injectable()
 export class EventDetailRouteActivatorService implements CanActivate {
@@ -10,14 +11,14 @@ export class EventDetailRouteActivatorService implements CanActivate {
 
     canActivate(route: ActivatedRouteSnapshot) {
         if (!this.isGuid(route.params.eventId)) {
-            this.router.navigate(['../../../404']);
+            this.router.navigate(["../../../404"]);
         }
         
-        this.eventService.getEventById(route.params.eventId).subscribe((event: IEvent) => {
+        this.eventService.getEventById(route.params.eventId).subscribe((event: Event) => {
             if (event.Id === "00000000-0000-0000-0000-000000000000") {
-                this.router.navigate(['../../../404']);
+                this.router.navigate(["../../../404"]);
             } else {
-                this.router.routerState.root.data['event'] = event;
+                this.router.routerState.root.data["event"] = event;
             }
         })
         return true;

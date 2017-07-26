@@ -23,7 +23,7 @@
                 </ul>
             </div>
         </div>
-        <div style="float:left; padding-right: 10px;">
+        <div class="custom-display">
             <h4>Rating: {{event?.Rating | number:'1.2-2'}}</h4>
         </div>
         <div>
@@ -41,10 +41,10 @@
             </fieldset>
         </div>
       
-        <div style="clear:left">
+        <div class="custom-clear">
             <h4>RateCount: {{event?.RateCount}}</h4>
         </div>
-        <div style="float: left; padding-right: 10px;">
+        <div class="custom-display">
             <h4>Reserved/Capacity: {{event?.Reserved}}/{{event?.Capacity}}</h4>
         </div>
         <div>
@@ -52,7 +52,7 @@
         </div>
     </div>
     <h3>Images</h3>
-    <span *ngIf="getImagesLoading">Loading... <i class="fa fa-spinner fa-spin" style="font-size:24px"></i></span>
+    <span *ngIf="getImagesLoading">Loading... <i class="fa fa-spinner fa-spin"></i></span>
     <div *ngIf="!getImagesLoading && images.length === 0">
         <h4>No images for this event...</h4>
     </div>
@@ -78,11 +78,11 @@
 </div>
 <div class="col-md-5" *ngIf="location">
     <h4>Location: {{location.Address}}</h4>
-    <div style="float:left; padding-right: 10px;">
+    <div class="custom-display">
         <h4>Location Rating: {{location.Rating | number:'1.2-2'}}</h4>
     </div>
 
-    <div style="clear:left">
+    <div class="custom-clear">
         <h4>Location RateCount: {{location.RateCount}}</h4>
     </div>
     <div>

@@ -1,18 +1,18 @@
-﻿import { Component, Output, EventEmitter, Input } from '@angular/core';
-import { DatePipe } from '@angular/common';
+﻿import { Component, EventEmitter, Input, Output } from "@angular/core";
+import { DatePipe } from "@angular/common";
 
-import { IEvent } from '../models/event.model';
+import { Event } from "../shared/models/event.model";
 
 @Component({
-    templateUrl:'app/components/event/views/event-search-list.component.html',
-    selector: 'display-list'
+    selector: "display-list",
+    templateUrl:"app/components/event/views/event-search-list.component.html"
 })
 
 export class EventListComponent {
-    @Input() events: IEvent[];
     @Output() event = new EventEmitter();
+    @Input() events: Event[];
 
-    eventDetails(evt: IEvent) {
+    eventDetails(evt: Event) {
         this.event.emit(evt);
     }
 }

@@ -1,0 +1,13 @@
+﻿.advanced-search {
+    height: 34px; display: flex; align-items: flex-end;
+}
+
+.map-toggle {
+    display: flex; justify-items: flex-end;
+}
+
+.clickable {
+    cursor: pointer;
+}
+
+

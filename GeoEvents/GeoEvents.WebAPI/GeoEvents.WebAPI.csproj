@@ -322,8 +322,9 @@
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
-    <Content Include="src\app\assets\images\elephant-303652.svg" />
     <Content Include="Scripts\markerclusterer.js" />
+    <Content Include="src\app\assets\images\elephant-acid-green_480.png" />
+    <Content Include="src\app\error\error-404.component.html" />
     <Content Include="src\app\event\event-create\event-create-customize\event-create-customize.component.html" />
     <Content Include="src\app\event\event-create\event-create-data\event-create-data.component.css" />
     <Content Include="src\app\event\event-create\event-create-data\event-create-data.component.html" />
@@ -335,6 +336,7 @@
     <Content Include="src\app\event\event-search\event-search-list.component.html" />
     <Content Include="src\app\event\event-search\event-search-map.component.css" />
     <Content Include="src\app\event\event-search\event-search-map.component.html" />
+    <Content Include="src\app\event\event-search\event-search.component.css" />
     <Content Include="src\app\event\event-search\event-search.component.html" />
     <Content Include="src\app\home\home.component.html" />
     <Content Include="src\app\shared\navbar\navbar.component.html" />

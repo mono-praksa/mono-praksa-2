@@ -23,8 +23,7 @@ export class EventService {
     createImage(image: IImage): Observable<IImage> {
         let options = new RequestOptions();
         return this.http.post("/api/images/create/" + image.EventId, image.FormData, options)
-            .map((response: Response) => response.json())
-            .catch(this.handleError);
+            .map((response: Response) => response.json());
     }
 
     getEventById(eventId: number): Observable<IEvent> {
@@ -40,11 +39,11 @@ export class EventService {
             .catch(this.handleError); 
     }
 
-    getEvents(filter: IFilter): Observable<IEvent[]> {
+    getEvents(filter: IFilter): Observable < any > {
         let query = "/api/events/search" + this._makeQueryString(filter);
         //execute http call
         return this.http.get(query)
-            .map((response: Response) => <IEvent[]>response.json())
+            .map((response: Response) => <any>response.json())
             .catch(this.handleError);
     }
 
