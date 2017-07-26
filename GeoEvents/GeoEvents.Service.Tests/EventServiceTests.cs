@@ -16,11 +16,10 @@ namespace GeoEvents.Service.Tests
         public async Task CreateEventReturnsEvent()
         {
             var mockEventRepository = new Mock<IEventRepository>();
-            var evt = new Event { Id = new Guid("11112222-3333-4444-5555-666677778888"), Name = "TestEvent",
+            var evt = new Event { Id = new Guid(), Name = "TestEvent",
                 Description = "Testni opis", StartTime = new DateTime(2017, 7, 6), EndTime = new DateTime(2017, 7, 7),
-                Latitude = 40.2, Longitude = 23.1, Categories = new List<int>() { 1, 4 }, Category = 5, Price = 12,
-                Rating = 3.4,RateCount=10,Custom="Custom atributes",Capacity=120,Reserved=20,
-                LocationId = new Guid("88887777-3333-4444-5555-666611112222")
+                Latitude = 40.2, Longitude = 23.1, Categories = new List<int>() { 1, 4 }, Price = 12,
+                Custom ="Custom atributes",Capacity=120, LocationId = new Guid("88887777-3333-4444-5555-666611112222")
             };
 
             mockEventRepository
@@ -29,14 +28,29 @@ namespace GeoEvents.Service.Tests
 
             var eventService = new EventService(mockEventRepository.Object);
             var result = await eventService.CreateEventAsync(evt);
-            var expected = await new Task<IEvent>(() => new Event { Id = new Guid("11112222-3333-4444-5555-666677778888"), Name = "TestEvent",
+            var expected = new Event { Id = result.Id, Name = "TestEvent",
                 Description = "Testni opis", StartTime = new DateTime(2017, 7, 6), EndTime = new DateTime(2017, 7, 7),
                 Latitude = 40.2, Longitude = 23.1, Categories = new List<int>() { 1, 4 }, Category = 5, Price = 12,
-                Rating = 3.4, RateCount = 10, Custom = "Custom atributes", Capacity = 120, Reserved = 20,
+                Rating = 0, RateCount = 0, Custom = "Custom atributes", Capacity = 120, Reserved = 0,
                 LocationId = new Guid("88887777-3333-4444-5555-666611112222")
-            });
+            };
 
-            Assert.Equal(expected, result);
+            Assert.Equal(expected.Id, result.Id);
+            Assert.Equal(expected.Name, result.Name);
+            Assert.Equal(expected.Description, result.Description);
+            Assert.Equal(expected.Capacity, result.Capacity);
+            Assert.Equal(expected.Categories, result.Categories);
+            Assert.Equal(expected.Category, result.Category);
+            Assert.Equal(expected.Custom, result.Custom);
+            Assert.Equal(expected.EndTime, result.EndTime);
+            Assert.Equal(expected.Latitude, result.Latitude);
+            Assert.Equal(expected.LocationId, result.LocationId);
+            Assert.Equal(expected.Longitude, result.Longitude);
+            Assert.Equal(expected.Price, result.Price);
+            Assert.Equal(expected.RateCount, result.RateCount);
+            Assert.Equal(expected.Rating, result.Rating);
+            Assert.Equal(expected.Reserved, result.Reserved);
+            Assert.Equal(expected.StartTime, result.StartTime);
         }
 
         [Fact]
@@ -71,9 +85,8 @@ namespace GeoEvents.Service.Tests
                 .ReturnsAsync(() => db);
             var eventService = new EventService(mockEventRepository.Object);
             var result = await eventService.GetEventsAsync(filter.Object);
-            var expected = await new Task<List<IEvent>>(() => expectedDb);
 
-            Assert.Equal(expected, result);
+            Assert.Equal(expectedDb, result);
         }
 
         [Fact]
@@ -89,7 +102,7 @@ namespace GeoEvents.Service.Tests
 
             var eventService = new EventService(mockEventRepository.Object);
             var result = await eventService.GetEventCountAsync(filter.Object);
-            var expected = await new Task<int>(() => repoReturn);
+            var expected = repoReturn;
 
             Assert.Equal(expected, result);
         }

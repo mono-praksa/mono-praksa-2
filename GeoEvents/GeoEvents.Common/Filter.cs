@@ -138,6 +138,11 @@ namespace GeoEvents.Common
             Custom = custom;
         }
 
+        public Filter()
+        {
+
+        }
+
         #endregion Constructors
     }
 }
