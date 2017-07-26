@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
 using System.Threading.Tasks;
+using X.PagedList;
 
 namespace GeoEvents.Repository
 {
@@ -46,9 +47,9 @@ namespace GeoEvents.Repository
         {
             EventEntity evtR = new EventEntity();
 
-            using (Connection.CreateConnection())
-            using (NpgsqlCommand commandInsert = new NpgsqlCommand(QueryHelper.GetInsertEventQueryString(), Connection.CreateConnection()))
-            using (NpgsqlCommand commandSelect = new NpgsqlCommand(QueryHelper.GetSelectEventByIdQueryString(), Connection.CreateConnection()))
+            using (var connection = Connection.CreateConnection())
+            using (NpgsqlCommand commandInsert = new NpgsqlCommand(QueryHelper.GetInsertEventQueryString(), connection))
+            using (NpgsqlCommand commandSelect = new NpgsqlCommand(QueryHelper.GetSelectEventByIdQueryString(), connection))
             {
                 commandInsert.Parameters.AddWithValue(QueryHelper.ParId, NpgsqlDbType.Uuid, evt.Id);
                 commandInsert.Parameters.AddWithValue(QueryHelper.ParCategory, NpgsqlDbType.Integer, evt.Category);
@@ -66,10 +67,9 @@ namespace GeoEvents.Repository
                 commandInsert.Parameters.AddWithValue(QueryHelper.ParLocationId, NpgsqlDbType.Uuid, evt.LocationId);
                 commandInsert.Parameters.AddWithValue(QueryHelper.ParCustom, NpgsqlDbType.Jsonb, evt.Custom);
 
-                if (Connection.CreateConnection().FullState == ConnectionState.Closed)
-                {
-                    await Connection.CreateConnection().OpenAsync();
-                }
+
+                await connection.OpenAsync();
+
                 await commandInsert.ExecuteNonQueryAsync();
 
                 commandSelect.Parameters.AddWithValue(QueryHelper.ParEventId, NpgsqlDbType.Uuid, evt.Id);
@@ -112,38 +112,41 @@ namespace GeoEvents.Repository
             EventEntity tmp;
             List<IEvent> SelectEvents = new List<IEvent>();
 
-            using (Connection.CreateConnection())
-            using (NpgsqlCommand command = new NpgsqlCommand(QueryHelper.GetSelectEventQueryString(filter), Connection.CreateConnection()))
+            using (var connection = Connection.CreateConnection())
             {
-                SetParametersSearchEvents(filter, command);
-                if (Connection.CreateConnection().FullState == ConnectionState.Closed)
+                await connection.OpenAsync();
+
+                using (NpgsqlCommand command = new NpgsqlCommand(QueryHelper.GetSelectEventQueryString(filter), connection))
                 {
-                    await Connection.CreateConnection().OpenAsync();
-                }
-                DbDataReader dr = await command.ExecuteReaderAsync();
-                while (dr.Read())
-                {
-                    tmp = new EventEntity
+                    SetParametersSearchEvents(filter, command);
+
+                    DbDataReader dr = await command.ExecuteReaderAsync();
+                    while (dr.Read())
                     {
-                        Id = new Guid(dr[0].ToString()),
-                        Name = dr[1].ToString(),
-                        Description = dr[2].ToString(),
-                        Category = Convert.ToInt32(dr[3]),
-                        Latitude = Convert.ToDouble(dr[4]),
-                        Longitude = Convert.ToDouble(dr[5]),
-                        StartTime = Convert.ToDateTime(dr[6]),
-                        EndTime = Convert.ToDateTime(dr[7]),
-                        Rating = Convert.ToDouble(dr[8]),
-                        RateCount = Convert.ToInt32(dr[9]),
-                        Price = Convert.ToDouble(dr[10]),
-                        Capacity = Convert.ToInt32(dr[11]),
-                        Reserved = Convert.ToInt32(dr[12]),
-                        Custom = dr[13].ToString(),
-                        LocationId = new Guid(dr[14].ToString())
-                    };
-                    SelectEvents.Add(Mapper.Map<IEvent>(tmp));
+                        tmp = new EventEntity
+                        {
+                            Id = new Guid(dr[0].ToString()),
+                            Name = dr[1].ToString(),
+                            Description = dr[2].ToString(),
+                            Category = Convert.ToInt32(dr[3]),
+                            Latitude = Convert.ToDouble(dr[4]),
+                            Longitude = Convert.ToDouble(dr[5]),
+                            StartTime = Convert.ToDateTime(dr[6]),
+                            EndTime = Convert.ToDateTime(dr[7]),
+                            Rating = Convert.ToDouble(dr[8]),
+                            RateCount = Convert.ToInt32(dr[9]),
+                            Price = Convert.ToDouble(dr[10]),
+                            Capacity = Convert.ToInt32(dr[11]),
+                            Reserved = Convert.ToInt32(dr[12]),
+                            Custom = dr[13].ToString(),
+                            LocationId = new Guid(dr[14].ToString())
+                        };
+                        SelectEvents.Add(Mapper.Map<IEvent>(tmp));
+                    }
                 }
+
             }
+
             return SelectEvents;
         }
 
@@ -154,22 +157,22 @@ namespace GeoEvents.Repository
         /// <returns>
         /// number of events .
         /// </returns>
-        public async Task<Int64> GetEventCountAsync(IFilter filter)
+        public async Task<int> GetEventCountAsync(IFilter filter)
         {
-            Int64 Count;
-            using (Connection.CreateConnection())
-            using (NpgsqlCommand command = new NpgsqlCommand(QueryHelper.GetSelectCountEventQueryString(filter), Connection.CreateConnection()))
+            int count;
+            using (var connection = Connection.CreateConnection())
             {
-                SetParametersSearchEvents(filter, command);
+                await connection.OpenAsync();
 
-                if (Connection.CreateConnection().FullState == ConnectionState.Closed)
+                using (NpgsqlCommand command = new NpgsqlCommand(QueryHelper.GetSelectCountEventQueryString(filter), connection))
                 {
-                    await Connection.CreateConnection().OpenAsync();
+                    SetParametersSearchEvents(filter, command);
+                    object dr = await command.ExecuteScalarAsync();
+                    count = Convert.ToInt32(dr);
                 }
-                object dr = await command.ExecuteScalarAsync();
-                Count = Convert.ToInt64(dr);
             }
-            return Count;
+
+            return count;
         }
 
         /// <summary>
@@ -239,11 +242,11 @@ namespace GeoEvents.Repository
         {
             EventEntity evtR = new EventEntity();
 
-            using (Connection.CreateConnection())
-            using (NpgsqlCommand commandUpdateRating = new NpgsqlCommand(QueryHelper.GetsInsertUpdateRatingQueryString(), Connection.CreateConnection()))
-            using (NpgsqlCommand commandSelectUpdated = new NpgsqlCommand(QueryHelper.GetSelectEventByIdQueryString(), Connection.CreateConnection()))
+            using (var connection = Connection.CreateConnection())
+            using (NpgsqlCommand commandUpdateRating = new NpgsqlCommand(QueryHelper.GetsInsertUpdateRatingQueryString(), connection))
+            using (NpgsqlCommand commandSelectUpdated = new NpgsqlCommand(QueryHelper.GetSelectEventByIdQueryString(), connection))
             {
-                await Connection.CreateConnection().OpenAsync();
+                await connection.OpenAsync();
 
                 int NewRateCount = RateCount + 1;
                 double NewRating = (RateCount * CurrentRating + rating) / Convert.ToDouble(NewRateCount);
@@ -295,14 +298,14 @@ namespace GeoEvents.Repository
             int parReserved = 0;
             EventEntity evtR = new EventEntity();
 
-            using (Connection.CreateConnection())
-            using (NpgsqlCommand commandGetReserved = new NpgsqlCommand(QueryHelper.GetSelectCurrentReservationQueryString(), Connection.CreateConnection()))
-            using (NpgsqlCommand commandUpdate = new NpgsqlCommand(QueryHelper.GetInsertUpdateReservationQueryString(), Connection.CreateConnection()))
-            using (NpgsqlCommand commandSelect = new NpgsqlCommand(QueryHelper.GetSelectEventByIdQueryString(), Connection.CreateConnection()))
+            using (var connection = Connection.CreateConnection())
+            using (NpgsqlCommand commandGetReserved = new NpgsqlCommand(QueryHelper.GetSelectCurrentReservationQueryString(), connection))
+            using (NpgsqlCommand commandUpdate = new NpgsqlCommand(QueryHelper.GetInsertUpdateReservationQueryString(), connection))
+            using (NpgsqlCommand commandSelect = new NpgsqlCommand(QueryHelper.GetSelectEventByIdQueryString(), connection))
             {
                 commandGetReserved.Parameters.AddWithValue(QueryHelper.ParEventId, NpgsqlDbType.Uuid, eventId);
 
-                await Connection.CreateConnection().OpenAsync();
+                await connection.OpenAsync();
 
                 object reservedObj = await commandGetReserved.ExecuteScalarAsync();
                 parReserved = Convert.ToInt32(reservedObj);
@@ -352,13 +355,11 @@ namespace GeoEvents.Repository
         {
             EventEntity evtR = new EventEntity();
 
-            using (Connection.CreateConnection())
-            using (NpgsqlCommand commandSelect = new NpgsqlCommand(QueryHelper.GetSelectEventByIdQueryString(), Connection.CreateConnection()))
+            using (var connection = Connection.CreateConnection())
+            using (NpgsqlCommand commandSelect = new NpgsqlCommand(QueryHelper.GetSelectEventByIdQueryString(), connection))
             {
-                if (Connection.CreateConnection().FullState == ConnectionState.Closed)
-                {
-                    await Connection.CreateConnection().OpenAsync();
-                }
+
+                await connection.OpenAsync();
 
                 commandSelect.Parameters.AddWithValue(QueryHelper.ParEventId, NpgsqlDbType.Uuid, eventId);
 
