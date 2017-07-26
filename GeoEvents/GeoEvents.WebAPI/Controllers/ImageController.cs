@@ -13,9 +13,26 @@ namespace GeoEvents.WebAPI.Controllers
     [RoutePrefix("api/images")]
     public class ImageController : ApiController
     {
+        /// <summary>
+        /// Gets the service.
+        /// </summary>
+        /// <value>
+        /// The service.
+        /// </value>
         protected IImageService Service { get; private set; }
+        /// <summary>
+        /// Gets the mapper.
+        /// </summary>
+        /// <value>
+        /// The mapper.
+        /// </value>
         protected IMapper Mapper { get; private set; }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ImageController"/> class.
+        /// </summary>
+        /// <param name="service">The service.</param>
+        /// <param name="mapper">The mapper.</param>
         public ImageController(IImageService service, IMapper mapper)
         {
             this.Service = service;
@@ -23,6 +40,11 @@ namespace GeoEvents.WebAPI.Controllers
         }
 
         //async
+        /// <summary>
+        /// Gets the images asynchronous.
+        /// </summary>
+        /// <param name="eventId">The event identifier.</param>
+        /// <returns></returns>
         [HttpGet]
         [Route("get/{eventId}")]
         public async Task<IEnumerable<ImageModel>> GetImagesAsync(Guid eventId)
@@ -31,6 +53,12 @@ namespace GeoEvents.WebAPI.Controllers
         }
 
         //async
+        /// <summary>
+        /// Creates the image asynchronous.
+        /// </summary>
+        /// <param name="eventId">The event identifier.</param>
+        /// <returns></returns>
+        /// <exception cref="HttpResponseException"></exception>
         [HttpPost]
         [Route("create/{eventId:guid}")]
         public async Task<HttpResponseMessage> CreateImageAsync(Guid eventId)
@@ -60,8 +88,26 @@ namespace GeoEvents.WebAPI.Controllers
 
     public class ImageModel
     {
+        /// <summary>
+        /// Gets or sets the identifier.
+        /// </summary>
+        /// <value>
+        /// The identifier.
+        /// </value>
         public Guid Id { get; set; }
+        /// <summary>
+        /// Gets or sets the event identifier.
+        /// </summary>
+        /// <value>
+        /// The event identifier.
+        /// </value>
         public Guid EventId { get; set; }
+        /// <summary>
+        /// Gets or sets the content.
+        /// </summary>
+        /// <value>
+        /// The content.
+        /// </value>
         public byte[] Content { get; set; }
     }
 }
