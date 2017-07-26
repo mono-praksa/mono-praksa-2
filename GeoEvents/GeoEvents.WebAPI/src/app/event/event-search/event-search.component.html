@@ -92,8 +92,8 @@
 						<label for="categoriesWrapper">Select Categories</label>
 						<div id="categoriesWrapper">
 							<div class="row control-label">
-                                <label class="col-xs-6" *ngFor="let category of _categoryService.keys()">
-                                    <input type="checkbox" value="{{category}}" (change)="updateCategories(category)" /> {{_categoryService.CategoryEnum[category]}}
+                                <label class="col-xs-6" *ngFor="let category of categoryService.keys()">
+                                    <input type="checkbox" value="{{category}}" (change)="updateCategories(category)" /> {{categoryService.CategoryEnum[category]}}
                                 </label>
 							</div>
 						</div>

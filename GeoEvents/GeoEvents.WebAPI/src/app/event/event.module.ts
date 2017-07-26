@@ -2,7 +2,6 @@ import { AgmCoreModule } from "@agm/core";
 import { CommonModule, DecimalPipe } from "@angular/common";
 import { NgModule } from "@angular/core";
 import { ReactiveFormsModule } from "@angular/forms";
-import { BrowserModule } from "@angular/platform-browser";
 import { RouterModule } from "@angular/router";
 import { NguiDatetimePickerModule } from "@ngui/datetime-picker";
 import { PaginatorModule } from "primeng/primeng";
@@ -32,7 +31,6 @@ import { PreserveSearchQueryService } from "../shared/preserve-search-query.serv
 			apiKey: "AIzaSyDHKcbmM0jpW7BOet42_S92KJSr5PYKc5w",
 			libraries: ["places"]
         }),
-		BrowserModule,
 		CommonModule,
 		EventRoutingModule,
 		NguiDatetimePickerModule,
