@@ -12,7 +12,7 @@ enum CategoryEnum {
 
 @Injectable()
 export class CategoryService {
-    categories: ICategoryElement[] = [];
+    categories: CategoryElement[] = [];
     CategoryEnum = CategoryEnum;
 
     buildCategories(checkLast: boolean): void {
@@ -35,7 +35,7 @@ export class CategoryService {
     }
 }
 
-interface ICategoryElement {
-    id: number,
-    checked: boolean
+class CategoryElement {
+    checked: boolean;
+    id: number;
 }

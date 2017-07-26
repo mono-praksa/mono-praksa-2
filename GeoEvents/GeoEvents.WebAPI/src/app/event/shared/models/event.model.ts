@@ -1,23 +1,23 @@
-﻿export interface IEvent {
-    Id: string,
-    Name: string,
-    Description: string,
-    StartTime: Date,
-    EndTime: Date,
-    Latitude: number,
-    Longitude: number,
-    Categories: number[],
-    Price: number,
-    Capacity: number,
-    Reserved: number,
-    Rating: number,
-    RateCount: number,
-    CustomModel: CustomAttribute[],
-    Custom: string,
-    LocationId: string
+﻿export class Event {
+    Capacity: number;
+    Categories: number[];
+    Custom: string;
+    CustomModel: CustomAttribute[];
+    Description: string;
+    EndTime: Date;
+    Id: string;
+    Latitude: number;
+    LocationId: string;
+    Longitude: number;
+    Name: string;
+    Price: number;
+    RateCount: number;
+    Rating: number;
+    Reserved: number;
+    StartTime: Date;
 }
 
-export interface CustomAttribute {
-    key: string,
-    values: string[]
+export class CustomAttribute {
+    key: string;
+    values: string[];
 }

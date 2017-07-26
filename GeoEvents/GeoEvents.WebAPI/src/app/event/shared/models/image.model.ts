@@ -1,6 +1,6 @@
-﻿export interface IImage {
-    Id: string,
-    EventId: string,
-    Content?: string,
-    FormData?: FormData
+﻿export class Image {
+    Id: string;
+    EventId: string;
+    FormData?: FormData;
+    Content?: string;
 }
