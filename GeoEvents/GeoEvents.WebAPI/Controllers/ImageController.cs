@@ -3,6 +3,7 @@ using GeoEvents.Model.Common;
 using GeoEvents.Service.Common;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -47,9 +48,11 @@ namespace GeoEvents.WebAPI.Controllers
         /// <returns></returns>
         [HttpGet]
         [Route("get/{eventId}")]
-        public async Task<IEnumerable<ImageModel>> GetImagesAsync(Guid eventId)
+        public async Task<HttpResponseMessage> GetImagesAsync(Guid eventId)
         {
-            return Mapper.Map<IEnumerable<ImageModel>>(await Service.GetImagesAsync(eventId));
+            var result = Mapper.Map<IEnumerable<ImageModel>>(await Service.GetImagesAsync(eventId));
+
+            return Request.CreateResponse(HttpStatusCode.OK, result);
         }
 
         //async

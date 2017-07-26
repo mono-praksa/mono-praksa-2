@@ -5,6 +5,7 @@ using GeoEvents.Service.Common;
 using System;
 using System.Collections.Generic;
 using System.Net;
+using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
 
@@ -48,19 +49,21 @@ namespace GeoEvents.WebAPI.Controllers
         /// <exception cref="HttpResponseException"></exception>
         [HttpGet]
         [Route("get")]
-        public async Task<LocationModel> GetLocationAsync(string address = "", string id = "")
+        public async Task<HttpResponseMessage> GetLocationAsync(string address = "", string id = "")
         {
             if(address != "" && id == "")
             {
-                return Mapper.Map<LocationModel>(await Service.GetLocationAsync(address));
+                var result = Mapper.Map<LocationModel>(await Service.GetLocationAsync(address));
+                return Request.CreateResponse(HttpStatusCode.OK, result);
             }
             else if(address == "" && id != "")
             {
-                return Mapper.Map<LocationModel>(await Service.GetLocationByIdAsync(new Guid(id)));
+                var result = Mapper.Map<LocationModel>(await Service.GetLocationByIdAsync(new Guid(id)));
+                return Request.CreateResponse(HttpStatusCode.OK, result);
             }
             else
             {
-                throw new HttpResponseException(HttpStatusCode.BadRequest);
+                return Request.CreateResponse(HttpStatusCode.BadRequest, "invalid adress and/or id");
             }
             
         }
@@ -75,9 +78,18 @@ namespace GeoEvents.WebAPI.Controllers
         /// <returns></returns>
         [HttpPut]
         [Route("update/rating")]
-        public Task<ILocation> UpdateRatingAsync(Guid locationId, double rating, double currentRating, int rateCount)
+        public async Task<HttpResponseMessage> UpdateRatingAsync(Guid locationId, double rating, double currentRating, int rateCount)
         {
-            return Service.UpdateLocationRatingAsync(locationId, rating, currentRating, rateCount);
+            var result =  await Service.UpdateLocationRatingAsync(locationId, rating, currentRating, rateCount);
+
+            if(result.RateCount == rateCount +1)
+            {
+                return Request.CreateResponse(HttpStatusCode.OK, result);
+            }
+            else
+            {
+                return Request.CreateResponse(HttpStatusCode.InternalServerError);
+            }
         }
     }
 

@@ -103,6 +103,7 @@ export class EventSearchComponent implements OnInit {
             }		
             this.getEvents(this.filter);
             this.getEventCount(this.filter);
+            this._loaderService.displayLoader(true);
 		}
 		else{
 			this.isAdvancedSearch = true;
