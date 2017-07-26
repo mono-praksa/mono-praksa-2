@@ -157,7 +157,7 @@ namespace GeoEvents.Repository
         /// <returns>
         /// number of events .
         /// </returns>
-        public async Task<int> GetEventCountAsync(IFilter filter)
+        public async Task<Int64> GetEventCountAsync(IFilter filter)
         {
             int count;
             using (var connection = Connection.CreateConnection())

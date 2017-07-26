@@ -42,7 +42,7 @@ namespace GeoEvents.Repository.Common
         /// <returns>
         /// number of events .
         /// </returns>
-        Task<int> GetEventCountAsync(IFilter filter);
+        Task<Int64> GetEventCountAsync(IFilter filter);
 
         /// <summary>
         /// Updates the reservation asynchronous.
