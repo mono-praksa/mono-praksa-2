@@ -101,17 +101,7 @@ namespace GeoEvents.Service
             return result;
         }
 
-        /// <summary>
-        /// Gets the number of events that satisfy a filter asynchronously.
-        /// </summary>
-        /// <param name="filter">The filter.</param>
-        /// <returns>
-        /// The number.
-        /// </returns>
-        public Task<int> GetEventCountAsync(IFilter filter)
-        {
-            return Repository.GetEventCountAsync(filter);
-        }
+        
 
         /// <summary>
         /// Creates an event asynchronously.

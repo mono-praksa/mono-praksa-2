@@ -89,22 +89,22 @@ namespace GeoEvents.Service.Tests
             Assert.Equal(expectedDb, result);
         }
 
-        [Fact]
-        public async Task GetEventCountReturnsCount()
-        {
-            var filter = new Mock<IFilter>();
-            var repoReturn = 7;
+        //[Fact]
+        //public async Task GetEventCountReturnsCount()
+        //{
+        //    var filter = new Mock<IFilter>();
+        //    var repoReturn = 7;
 
-            var mockEventRepository = new Mock<IEventRepository>();
-            mockEventRepository
-                .Setup(er => er.GetEventCountAsync(filter.Object))
-                .ReturnsAsync(() => repoReturn);
+        //    var mockEventRepository = new Mock<IEventRepository>();
+        //    mockEventRepository
+        //        .Setup(er => er.GetEventCountAsync(filter.Object))
+        //        .ReturnsAsync(() => repoReturn);
 
-            var eventService = new EventService(mockEventRepository.Object);
-            var result = await eventService.GetEventCountAsync(filter.Object);
-            var expected = repoReturn;
+        //    var eventService = new EventService(mockEventRepository.Object);
+        //    var result = await eventService.GetEventCountAsync(filter.Object);
+        //    var expected = repoReturn;
 
-            Assert.Equal(expected, result);
-        }
+        //    Assert.Equal(expected, result);
+        //}
     }
 }

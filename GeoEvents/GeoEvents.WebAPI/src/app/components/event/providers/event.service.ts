@@ -12,11 +12,11 @@ import { IImage } from '../models/image.model';
 export class EventService {
     constructor(private _http: Http) { }
 
-    getEvents(filter: IFilter): Observable<IEvent[]> {
+    getEvents(filter: IFilter): Observable<any> {
         let query = "/api/events/search" + this._makeQueryString(filter);
         //execute http call
         return this._http.get(query)
-            .map((response: Response) => <IEvent[]>response.json())
+            .map((response: Response) => <any>response.json())
             .catch(this.handleError);
     }
 

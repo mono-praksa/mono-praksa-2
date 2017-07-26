@@ -30,12 +30,6 @@ namespace GeoEvents.Service.Common
         /// </returns>
         Task<StaticPagedList<IEvent>> GetEventsAsync(IFilter filter);
 
-        /// <summary>
-        /// Gets the number of events that satisfy a filter asynchronously.
-        /// </summary>
-        /// <param name="filter">The filter.</param>
-        /// <returns></returns>
-        Task<int> GetEventCountAsync(IFilter filter);
 
         /// <summary>
         /// Creates an event asynchronously.
