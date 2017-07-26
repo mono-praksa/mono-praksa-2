@@ -1,35 +1,36 @@
-﻿import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core'
-import { FormControl, FormGroup, Validators } from '@angular/forms'
-import { Observable } from 'rxjs/Observable'
+﻿import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
+import { FormControl, FormGroup, Validators } from "@angular/forms";
+import { Observable } from "rxjs/Observable";
 
-import { IEvent } from '../models/event.model'
+import { EventService } from "../../shared/event.service";
+import { LocationService } from "../../shared/location.service";
 
-import { LoaderService } from '../../../shared/loader.service'
-import { EventService } from '../providers/event.service'
-import { LocationService } from '../providers/location.service'
+import { IEvent } from "../../shared/models/event.model";
+
+import { LoaderService } from "../../../shared/loader.service";
 
 @Component({
-    selector: 'create-customize',
-    templateUrl: "app/components/event/views/event-create-customize.component.html"
+    selector: "create-customize",
+    templateUrl: "app/event/event-create/event-create-customize/event-create-customize.component.html"
 })
 
 export class EventCreateCustomizeComponent implements OnInit {
+    @Input() createdEvent: IEvent;
+    customAttributeForm: FormGroup;
+    @Output() eventEmitter = new EventEmitter();
     key: FormControl;
     value: FormControl;
-    customAttributeForm: FormGroup;
 
-    @Input() createdEvent: IEvent;
-    @Output() eventEmitter = new EventEmitter();
     private _createEventLoading: boolean = false;
 
     constructor(
-        private _loaderService: LoaderService,
-        private _eventService: EventService,
-        private _locationService: LocationService
+        private loaderService: LoaderService,
+        private locationService: LocationService,
+        private eventService: EventService
     ) { }
 
     ngOnInit() : void {
-        this._loaderService.loaderStatus.subscribe((value: boolean) => {
+        this.loaderService.loaderStatus.subscribe((value: boolean) => {
             this.createEventLoading = value;
         });
 
@@ -59,26 +60,21 @@ export class EventCreateCustomizeComponent implements OnInit {
         if (!this.createdEvent.Custom) {
             this.createdEvent.Custom = JSON.stringify("");
         }
-        this._loaderService.displayLoader(true);
-        this._eventService.createEvent(this.createdEvent).subscribe((response: IEvent) => {
+        this.loaderService.displayLoader(true);
+        this.eventService.createEvent(this.createdEvent).subscribe((response: IEvent) => {
             this.createdEvent = response;
             this.eventEmitter.emit(this.createdEvent);
-            this._loaderService.displayLoader(false);
+            this.loaderService.displayLoader(false);
         });
     }
 
     private buildForm(): void {
-        this.key = new FormControl('', Validators.required);
-        this.value = new FormControl('', Validators.required);
+        this.key = new FormControl("", Validators.required);
+        this.value = new FormControl("", Validators.required);
         this.customAttributeForm = new FormGroup({
             key: this.key,
             value: this.value
         });
-    }
-
-    private resetValueControl(): void {
-        this.customAttributeForm.controls["value"].setValue('');
-        this.customAttributeForm.controls["value"].markAsUntouched();
     }
 
     private removeKey(keyIndex: number): void {
@@ -95,11 +91,16 @@ export class EventCreateCustomizeComponent implements OnInit {
         }
     }
 
+    private resetValueControl(): void {
+        this.customAttributeForm.controls["value"].setValue("");
+        this.customAttributeForm.controls["value"].markAsUntouched();
+    }
+
     get createEventLoading(): boolean {
         return this._createEventLoading;
     }
 
     set createEventLoading(isCreatingEvent: boolean) {
         this._createEventLoading = isCreatingEvent;
-    }    
+    }
 }

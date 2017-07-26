@@ -1,8 +1,8 @@
-import { Component } from '@angular/core';
+import { Component } from "@angular/core";
 import { ReactiveFormsModule } from "@angular/forms";
 
 @Component({
-  selector: 'geo-events',
+  selector: "geo-events",
   template: `
     <nav-bar></nav-bar>
     <div class="container">

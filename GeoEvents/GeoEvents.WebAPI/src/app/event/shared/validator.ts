@@ -1,4 +1,4 @@
-﻿import { FormGroup, FormControl } from '@angular/forms'
+﻿import { FormControl, FormGroup } from "@angular/forms"
 
 function stringToDateArray(_date: string, _format: string, _delimiter: string) {
     var formatLowerCase = _format.toLowerCase();
@@ -58,10 +58,10 @@ export function endDateBeforeStartDate(startKey: string, endKey: string) {
             var endDate = endTimeDate[0];
             var endTime = endTimeDate[1];
 
-            var startDateComponents = stringToDateArray(startDate, "yyyy-mm-dd", '-');
-            var startTimeComponents = stringToTimeArray(startTime, "hh:mm", ':');
-            var endDateComponents = stringToDateArray(endDate, "yyyy-mm-dd", '-');
-            var endTimeComponents = stringToTimeArray(endTime, "hh:mm", ':');
+            var startDateComponents = stringToDateArray(startDate, "yyyy-mm-dd", "-");
+            var startTimeComponents = stringToTimeArray(startTime, "hh:mm", ":");
+            var endDateComponents = stringToDateArray(endDate, "yyyy-mm-dd", "-");
+            var endTimeComponents = stringToTimeArray(endTime, "hh:mm", ":");
 
             var startDateTime = new Date(startDateComponents[0], startDateComponents[1] - 1, startDateComponents[2], startTimeComponents[0], startTimeComponents[1]);
             var endDateTime = new Date(endDateComponents[0], endDateComponents[1] - 1, endDateComponents[2], endTimeComponents[0], endTimeComponents[1]);
@@ -99,7 +99,7 @@ export function uniqueName(names: string[]){
         if (names.some(function (name) {
             return name == control.value
         })) {
-            return { 'uniqueName': 'invalid' }
+            return { "uniqueName": "invalid" }
         }
         return null
     }

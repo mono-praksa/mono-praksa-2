@@ -1,65 +1,64 @@
+import { AgmCoreModule } from "@agm/core";
+import { CommonModule, DecimalPipe } from "@angular/common";
 import { NgModule } from "@angular/core";
-import { RouterModule } from "@angular/router";
 import { ReactiveFormsModule } from "@angular/forms";
+import { BrowserModule } from "@angular/platform-browser";
+import { RouterModule } from "@angular/router";
+import { NguiDatetimePickerModule } from "@ngui/datetime-picker";
+import { PaginatorModule } from "primeng/primeng";
+
+import { EventCreateComponent } from "./event-create/event-create.component";
+import { EventCreateDataComponent } from "./event-create/event-create-data/event-create-data.component";
+import { EventCreateCustomizeComponent } from "./event-create/event-create-customize/event-create-customize.component";
+import { EventCreateImagesComponent } from "./event-create/event-create-images/event-create-images.component";
+import { EventDetailComponent } from "./event-detail/event-detail.component";
 import { EventRoutingModule } from "./event-routing.module";
-import { NguiDatetimePickerModule } from '@ngui/datetime-picker';
-import { AgmCoreModule } from '@agm/core';
-import { CommonModule } from '@angular/common';
-import { BrowserModule } from '@angular/platform-browser';
-import { PaginatorModule } from 'primeng/primeng';
+import { EventSearchComponent } from "./event-search/event-search.component";
+import { EventListComponent } from "./event-search/event-search-list.component";
+import { EventMapComponent } from "./event-search/event-search-map.component";
 
-import { EventSearchComponent } from "./components/event-search.component";
-import { EventListComponent } from "./components/event-search-list.component";
-import { EventMapComponent } from "./components/event-search-map.component";
-import { EventCreateComponent } from "./components/event-create.component";
-import { EventCreateImagesComponent } from "./components/event-create-images.component";
-import { EventCreateDataComponent } from "./components/event-create-data.component";
-import { EventCreateCustomizeComponent } from './components/event-create-customize.component';
-import { EventDetailComponent } from "./components/event-detail.component";
+import { EventDetailResolverService } from "./event-detail/event-detail-resolver.service";
+import { EventDetailRouteActivatorService } from "./event-detail/event-detail-route-activator.service";
+import { CategoryService } from "./shared/category.service";
+import { EventService } from "./shared/event.service";
+import { LocationService } from "./shared/location.service";
 
-import { EventService } from "./providers/event.service";
-import { LocationService } from './providers/location.service';
-import { PreserveSearchQueryService } from "../../shared/preserve-search-query.service";
-import { GeocodingService } from '../../shared/geocoding.service';
-import { EventDetailRouteActivatorService } from './providers/event-detail-route-activator.service';
-import { EventDetailResolverService } from './providers/event-detail-resolver.service';
-import { CategoryService } from './providers/category.service';
-
-import { DecimalPipe } from '@angular/common';
+import { GeocodingService } from "../shared/geocoding.service";
+import { PreserveSearchQueryService } from "../shared/preserve-search-query.service";
 
 @NgModule({
     imports: [
-		EventRoutingModule,
-		ReactiveFormsModule,
-		NguiDatetimePickerModule,
-		CommonModule,
-		BrowserModule,
 		AgmCoreModule.forRoot({
-			apiKey: 'AIzaSyDHKcbmM0jpW7BOet42_S92KJSr5PYKc5w',
-			libraries: ['places']
+			apiKey: "AIzaSyDHKcbmM0jpW7BOet42_S92KJSr5PYKc5w",
+			libraries: ["places"]
         }),
-        PaginatorModule
+		BrowserModule,
+		CommonModule,
+		EventRoutingModule,
+		NguiDatetimePickerModule,
+        PaginatorModule,
+		ReactiveFormsModule
     ],
 
     declarations: [
-		EventSearchComponent,
+		EventCreateComponent,
+        EventCreateCustomizeComponent,
+        EventCreateDataComponent,
+		EventCreateImagesComponent,
+		EventDetailComponent,
 		EventListComponent,
 		EventMapComponent,
-		EventCreateComponent,
-		EventCreateImagesComponent,
-        EventCreateDataComponent,
-        EventCreateCustomizeComponent,
-		EventDetailComponent
+		EventSearchComponent
 	],
 	
 	providers: [ 
-        EventService,
-        LocationService,
-        PreserveSearchQueryService,
-        GeocodingService,
-        EventDetailRouteActivatorService,
+        CategoryService,
         EventDetailResolverService,
-        CategoryService
+        EventDetailRouteActivatorService,
+        EventService,
+        GeocodingService,
+        LocationService,
+        PreserveSearchQueryService
 	]
 })
 export class EventModule { }

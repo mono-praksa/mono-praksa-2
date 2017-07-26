@@ -1,11 +1,11 @@
 import { NgModule } from "@angular/core";
 import { RouterModule } from "@angular/router";
 
-import { EventSearchComponent } from "./components/event-search.component";
-import { EventCreateComponent } from "./components/event-create.component";
-import { EventDetailComponent } from './components/event-detail.component';
-import { EventDetailRouteActivatorService } from './providers/event-detail-route-activator.service';
-import { EventDetailResolverService } from './providers/event-detail-resolver.service'
+import { EventCreateComponent } from "./event-create/event-create.component";
+import { EventDetailComponent } from "./event-detail/event-detail.component";
+import { EventDetailResolverService } from "./event-detail/event-detail-resolver.service"
+import { EventDetailRouteActivatorService } from "./event-detail/event-detail-route-activator.service";
+import { EventSearchComponent } from "./event-search/event-search.component";
 
 @NgModule({
 	imports: [

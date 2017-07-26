@@ -1,4 +1,4 @@
-﻿import { Injectable } from '@angular/core';
+﻿import { Injectable } from "@angular/core";
 
 enum CategoryEnum {
     Music = 1,
@@ -12,8 +12,8 @@ enum CategoryEnum {
 
 @Injectable()
 export class CategoryService {
-    CategoryEnum = CategoryEnum;
     categories: ICategoryElement[] = [];
+    CategoryEnum = CategoryEnum;
 
     buildCategories(checkLast: boolean): void {
         this.categories = [];

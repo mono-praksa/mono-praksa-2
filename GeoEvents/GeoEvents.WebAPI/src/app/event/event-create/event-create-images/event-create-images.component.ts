@@ -1,26 +1,26 @@
-﻿import { Component, Input } from '@angular/core'
-import { Http, RequestOptions, Headers, Response } from '@angular/http'
-import { Observable } from 'rxjs/Observable'
-import { IEvent } from '../models/event.model'
-import { IImage } from '../models/image.model'
-import { EventService } from '../providers/event.service'
+﻿import { Component, Input } from "@angular/core";
+import { Headers, Http, RequestOptions, Response } from "@angular/http";
+import { Observable } from "rxjs/Observable";
+
+import { IEvent } from "../../shared/models/event.model";
+import { IImage } from "../../shared/models/image.model";
+import { EventService } from "../../shared/event.service";
 
 @Component({
     selector: "create-images",
-    templateUrl: "app/components/event/views/event-create-images.component.html"
+    templateUrl: "app/event/event-create/event-create-images/event-create-images.component.html"
 })
 export class EventCreateImagesComponent {
     @Input() customizedEvent: IEvent;
-
-    private _files: file[];
-    private _uploadedFiles: string[] = [];
-    private _formData: FormData;
+    
     private _fileList: FileList;
+    private _files: file[];
+    private _formData: FormData;
+    private _uploadedFiles: string[] = [];
 
-    constructor(private _eventService: EventService) { }
+    constructor(private eventService: EventService) { }
 
     onChange(fileInput: any) {
-
         this.fileList = fileInput.target.files;
         let filesTmp = [].slice.call(this.fileList);
 
@@ -41,7 +41,7 @@ export class EventCreateImagesComponent {
             this.files[i].uploading = true;
             this.formData.append("name" + i, this.fileList[i], this.fileList[i].name);
 
-            this._eventService.createImage({
+            this.eventService.createImage({
                 Id: undefined,
                 EventId: this.customizedEvent.Id,
                 FormData: this.formData
@@ -56,6 +56,7 @@ export class EventCreateImagesComponent {
             this.formData = new FormData();
         })
     }
+
     uploadingFilter() {
         if (this.files) {
             return this.files.filter((file) => {
@@ -96,7 +97,9 @@ export class EventCreateImagesComponent {
         return this._formData;
     }
 
-    set formData(value: FormData) { this._formData = value; }
+    set formData(value: FormData) { 
+        this._formData = value; 
+    }
 }
 
 interface file {

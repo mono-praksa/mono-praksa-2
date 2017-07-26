@@ -1,9 +1,9 @@
-﻿import { Component } from '@angular/core'
-import { IEvent } from '../models/event.model'
+﻿import { Component } from "@angular/core";
+import { IEvent } from "../shared/models/event.model";
 
 @Component({
-    templateUrl: "app/components/event/views/event-create.component.html",
-    styleUrls: ['app/components/event/views/event-create.component.css']
+    templateUrl: "app/event/event-create/event-create.component.html",
+    styleUrls: ["app/event/event-create/event-create.component.css"]
 })
 export class EventCreateComponent {
     createdEvent: IEvent;
