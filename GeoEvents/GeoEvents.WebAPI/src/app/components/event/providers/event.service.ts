@@ -3,6 +3,8 @@ import { Http, Response, Headers, RequestOptions } from "@angular/http";
 import { Observable } from "rxjs/Observable";
 import "rxjs/add/operator/map";
 import "rxjs/add/operator/catch";
+import 'rxjs/add/observable/throw';
+
 
 import { IEvent } from "../models/event.model";
 import { IFilter } from "../models/filter.model";

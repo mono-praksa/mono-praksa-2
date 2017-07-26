@@ -34,7 +34,7 @@ namespace GeoEvents.WebAPI.Controllers
 
             if (result.Id == new Guid())
             {
-                return Request.CreateResponse(HttpStatusCode.InternalServerError, "failed to create the event");
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, "failed to create the event");
             }
             else
             {
@@ -68,8 +68,9 @@ namespace GeoEvents.WebAPI.Controllers
             }
             else
             {
-                return Request.CreateResponse(HttpStatusCode.BadRequest, "invalid guid");
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "invalid guid");
             }
+
             var result = Mapper.Map<EventModel>(await Service.GetEventByIdAsync(eventIdGuid));
 
             if (result.Id == eventIdGuid)
@@ -78,7 +79,7 @@ namespace GeoEvents.WebAPI.Controllers
             }
             else
             {
-                return Request.CreateResponse(HttpStatusCode.NotFound, "could not find an event with the requested id");
+                return Request.CreateErrorResponse(HttpStatusCode.NotFound, "could not find an event with the requested id");
             }
         }
 
@@ -94,7 +95,7 @@ namespace GeoEvents.WebAPI.Controllers
             }
             else
             {
-                return Request.CreateResponse(HttpStatusCode.InternalServerError, "failed to update rating");
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, "failed to update rating");
             }
         }
 

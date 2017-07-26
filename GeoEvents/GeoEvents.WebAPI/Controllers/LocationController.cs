@@ -63,7 +63,7 @@ namespace GeoEvents.WebAPI.Controllers
             }
             else
             {
-                return Request.CreateResponse(HttpStatusCode.BadRequest, "invalid adress and/or id");
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "invalid adress and/or id");
             }
             
         }
@@ -88,7 +88,7 @@ namespace GeoEvents.WebAPI.Controllers
             }
             else
             {
-                return Request.CreateResponse(HttpStatusCode.InternalServerError);
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, "failed to update rating");
             }
         }
     }
