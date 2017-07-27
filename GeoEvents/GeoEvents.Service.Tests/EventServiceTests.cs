@@ -53,41 +53,41 @@ namespace GeoEvents.Service.Tests
             Assert.Equal(expected.StartTime, result.StartTime);
         }
 
-        [Fact]
-        public async Task GetEventsReturnsEvents()
-        {
-            var filter = new Mock<Filter>();
-            var db = new List<IEvent>();
-            var evt1 = new Event { Id = Guid.NewGuid(), Category = 10, Name = "Test1", Description = "Testt1", Latitude = 10.1, Longitude = 10.2, StartTime = new DateTime(), EndTime = new DateTime(),Price=10.1,Capacity=101,Rating=3.1,RateCount=11,Reserved=11,Custom="11",LocationId = Guid.NewGuid()};
-            var evt2 = new Event { Id = Guid.NewGuid(), Category = 3, Name = "Test2", Description = "Testt2", Latitude = 10.2, Longitude = 10.3, StartTime = new DateTime(), EndTime = new DateTime(), Price = 10.2, Capacity = 102, Rating = 3.2, RateCount = 12, Reserved = 12, Custom = "12", LocationId = Guid.NewGuid() };
-            var evt3 = new Event { Id = Guid.NewGuid(), Category = 0, Name = "Test3", Description = "Testt3", Latitude = 10.3, Longitude = 10.4, StartTime = new DateTime(), EndTime = new DateTime(), Price = 10.3, Capacity = 103, Rating = 3.3, RateCount = 13, Reserved = 13, Custom = "13", LocationId = Guid.NewGuid() };
-            var evt4 = new Event { Id = Guid.NewGuid(), Category = 5, Name = "Test4", Description = "Testt4", Latitude = 10.4, Longitude = 10.5, StartTime = new DateTime(), EndTime = new DateTime(), Price = 10.4, Capacity = 104, Rating = 3.4, RateCount = 14, Reserved = 14, Custom = "14", LocationId = Guid.NewGuid() };
+        //[Fact]
+        //public async Task GetEventsReturnsEvents()
+        //{
+        //    var filter = new Mock<Filter>();
+        //    var db = new List<IEvent>();
+        //    var evt1 = new Event { Id = Guid.NewGuid(), Category = 10, Name = "Test1", Description = "Testt1", Latitude = 10.1, Longitude = 10.2, StartTime = new DateTime(), EndTime = new DateTime(),Price=10.1,Capacity=101,Rating=3.1,RateCount=11,Reserved=11,Custom="11",LocationId = Guid.NewGuid()};
+        //    var evt2 = new Event { Id = Guid.NewGuid(), Category = 3, Name = "Test2", Description = "Testt2", Latitude = 10.2, Longitude = 10.3, StartTime = new DateTime(), EndTime = new DateTime(), Price = 10.2, Capacity = 102, Rating = 3.2, RateCount = 12, Reserved = 12, Custom = "12", LocationId = Guid.NewGuid() };
+        //    var evt3 = new Event { Id = Guid.NewGuid(), Category = 0, Name = "Test3", Description = "Testt3", Latitude = 10.3, Longitude = 10.4, StartTime = new DateTime(), EndTime = new DateTime(), Price = 10.3, Capacity = 103, Rating = 3.3, RateCount = 13, Reserved = 13, Custom = "13", LocationId = Guid.NewGuid() };
+        //    var evt4 = new Event { Id = Guid.NewGuid(), Category = 5, Name = "Test4", Description = "Testt4", Latitude = 10.4, Longitude = 10.5, StartTime = new DateTime(), EndTime = new DateTime(), Price = 10.4, Capacity = 104, Rating = 3.4, RateCount = 14, Reserved = 14, Custom = "14", LocationId = Guid.NewGuid() };
 
-            db.Add(evt1);
-            db.Add(evt2);
-            db.Add(evt3);
-            db.Add(evt4);
+        //    db.Add(evt1);
+        //    db.Add(evt2);
+        //    db.Add(evt3);
+        //    db.Add(evt4);
 
-            var expectedDb = new List<IEvent>();
-            evt1.Categories = new List<int>() { 2, 8 };
-            evt2.Categories = new List<int>() { 1, 2 };
-            evt3.Categories = new List<int>();
-            evt4.Categories = new List<int>() { 1, 4 };
+        //    var expectedDb = new List<IEvent>();
+        //    evt1.Categories = new List<int>() { 2, 8 };
+        //    evt2.Categories = new List<int>() { 1, 2 };
+        //    evt3.Categories = new List<int>();
+        //    evt4.Categories = new List<int>() { 1, 4 };
 
-            expectedDb.Add(evt1);
-            expectedDb.Add(evt2);
-            expectedDb.Add(evt3);
-            expectedDb.Add(evt4);
+        //    expectedDb.Add(evt1);
+        //    expectedDb.Add(evt2);
+        //    expectedDb.Add(evt3);
+        //    expectedDb.Add(evt4);
 
-            var mockEventRepository = new Mock<IEventRepository>();
-            mockEventRepository
-                .Setup(er => er.GetEventsAsync(filter.Object))
-                .ReturnsAsync(() => db);
-            var eventService = new EventService(mockEventRepository.Object);
-            var result = await eventService.GetEventsAsync(filter.Object);
+        //    var mockEventRepository = new Mock<IEventRepository>();
+        //    mockEventRepository
+        //        .Setup(er => er.GetEventsAsync(filter.Object))
+        //        .ReturnsAsync(() => db);
+        //    var eventService = new EventService(mockEventRepository.Object);
+        //    var result = await eventService.GetEventsAsync(filter.Object);
 
-            Assert.Equal(expectedDb, result);
-        }
+        //    Assert.Equal(expectedDb, result);
+        //}
 
         //[Fact]
         //public async Task GetEventCountReturnsCount()

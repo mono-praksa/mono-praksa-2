@@ -75,11 +75,10 @@ namespace GeoEvents.Service
         /// </returns>
         public async Task<StaticPagedList<IEvent>> GetEventsAsync(IFilter filter)
         {
-            IEnumerable<IEvent> events = await Repository.GetEventsAsync(filter);
+            StaticPagedList<IEvent> result = await Repository.GetEventsAsync(filter);
 
-            int count = await Repository.GetEventCountAsync(filter);
 
-            foreach (IEvent evt in events)
+            foreach (IEvent evt in result)
             {
                 int mult = 1;
                 evt.Categories = new List<int>();
@@ -96,7 +95,6 @@ namespace GeoEvents.Service
                 }
             }
 
-            var result = new StaticPagedList<IEvent>(events, filter.PageNumber, filter.PageSize, count);
 
             return result;
         }

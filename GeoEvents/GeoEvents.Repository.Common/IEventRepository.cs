@@ -3,6 +3,7 @@ using GeoEvents.Model.Common;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using X.PagedList;
 
 namespace GeoEvents.Repository.Common
 {
@@ -24,7 +25,7 @@ namespace GeoEvents.Repository.Common
         /// <returns>
         /// Created event (IEvent)
         /// </returns>
-        Task<IEnumerable<IEvent>> GetEventsAsync(IFilter filter);
+        Task<StaticPagedList<IEvent>> GetEventsAsync(IFilter filter);
 
         /// <summary>
         /// Gets filtered Events asynchronously.
@@ -34,15 +35,6 @@ namespace GeoEvents.Repository.Common
         /// list of Events.
         /// </returns>
         Task<IEvent> CreateEventAsync(IEvent evt);
-
-        /// <summary>
-        /// Get event count asynchronously.
-        /// </summary>
-        /// <param name="filter"></param>
-        /// <returns>
-        /// number of events .
-        /// </returns>
-        Task<int> GetEventCountAsync(IFilter filter);
 
         /// <summary>
         /// Updates the reservation asynchronous.
