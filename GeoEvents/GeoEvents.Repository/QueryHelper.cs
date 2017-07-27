@@ -158,7 +158,7 @@ namespace GeoEvents.Repository
             }
 
             ///Adding searcstring filter in queri if there is searchstring
-            if (!String.IsNullOrWhiteSpace(filter.SearchString))
+            if (!string.IsNullOrWhiteSpace(filter.SearchString))
             {
                 selectString = ConditionValidation(selectString);
 
@@ -178,7 +178,7 @@ namespace GeoEvents.Repository
             }
 
             /// adding custom search
-            if (!String.IsNullOrWhiteSpace(filter.Custom))
+            if (!string.IsNullOrWhiteSpace(filter.Custom))
             {
                 selectString = ConditionValidation(selectString);
 
@@ -197,7 +197,7 @@ namespace GeoEvents.Repository
         /// </returns>
         public static string GetSelectEventByIdQueryString()
         {
-            return String.Format("SELECT * FROM {0} WHERE {1}={2}", TableNameEventQ, TableNameEventIdQ, ParEventId);
+            return string.Format("SELECT * FROM {0} WHERE {1}={2}", TableNameEventQ, TableNameEventIdQ, ParEventId);
         }
 
         /// <summary>
@@ -208,7 +208,7 @@ namespace GeoEvents.Repository
         /// </returns>
         public static string GetSelectFromEventRatingQueryString()
         {
-            return String.Format("SELECT rating,ratecount FROM {0} WHERE {1}={2}", TableNameEventQ, TableNameEventIdQ, ParEventId);
+            return string.Format("SELECT rating,ratecount FROM {0} WHERE {1}={2}", TableNameEventQ, TableNameEventIdQ, ParEventId);
         }
 
         /// <summary>
@@ -291,7 +291,7 @@ namespace GeoEvents.Repository
             //}
 
             ///Adding searcstring filter in queri if there is searchstring
-            if (!String.IsNullOrWhiteSpace(filter.SearchString))
+            if (!string.IsNullOrWhiteSpace(filter.SearchString))
             {
                 selectString = ConditionValidation(selectString);
 
@@ -309,7 +309,7 @@ namespace GeoEvents.Repository
             }
 
             /// adding custom search
-            if (!String.IsNullOrWhiteSpace(filter.Custom))
+            if (!string.IsNullOrWhiteSpace(filter.Custom))
             {
                 selectString = ConditionValidation(selectString);
 
@@ -357,7 +357,7 @@ namespace GeoEvents.Repository
                     break;
             }
 
-            if (filter.OrderAscending == true && String.IsNullOrEmpty(filter.OrderBy) == false)
+            if (filter.OrderAscending == true && string.IsNullOrEmpty(filter.OrderBy) == false)
             {
                 selectString.Append(" asc ");
             }
@@ -378,7 +378,7 @@ namespace GeoEvents.Repository
         /// <returns>Query string</returns>
         public static string GetInsertEventQueryString()
         {   
-         return String.Format("INSERT INTO {0} VALUES ({1}, {2}, {3}, {4}, {5}, {6}, {7}, {8}, {9}, {10}, {11}, {12}, {13}, {14}, {15})",
+         return string.Format("INSERT INTO {0} VALUES ({1}, {2}, {3}, {4}, {5}, {6}, {7}, {8}, {9}, {10}, {11}, {12}, {13}, {14}, {15})",
                 TableNameEventQ, ParId, ParName, ParDescription, ParCategory, ParLatitude, ParLongitude,
                 ParStartTime, ParEndTime, ParRating, ParRateCount, ParPrice, ParCapacity, ParReserved,
                 ParCustom, ParLocationId);
@@ -390,7 +390,7 @@ namespace GeoEvents.Repository
         /// <returns>Query string</returns>
         public static string GetSelectImagesQueryString()
         {
-            return String.Format(" SELECT * FROM {0} WHERE ({1}={2}.{3})",
+            return string.Format(" SELECT * FROM {0} WHERE ({1}={2}.{3})",
                 TableNameImagesQ, ParEventId, TableNameImagesQ, EventIdQ);
         }
 
@@ -400,7 +400,7 @@ namespace GeoEvents.Repository
         /// <returns>guery string</returns>
         public static string GetInsertImagesQueryString()
         {
-            return String.Format(" INSERT INTO {0} VALUES({1},{2},{3}) ",
+            return string.Format(" INSERT INTO {0} VALUES({1},{2},{3}) ",
                 TableNameImagesQ, ParId, ParContent, ParEventId);
         }
 
@@ -410,7 +410,7 @@ namespace GeoEvents.Repository
         /// <returns></returns>
         public static string GetSelectImageQueryString()
         {
-            return String.Format(" SELECT * FROM {0} WHERE {1}.{2}={3} ",
+            return string.Format(" SELECT * FROM {0} WHERE {1}.{2}={3} ",
                 TableNameImagesQ, TableNameImagesQ, IdQ, ParId);
         }
 
@@ -422,7 +422,7 @@ namespace GeoEvents.Repository
         /// </returns>
         public static string GetSelectUpdateRatingQueryString()
         {
-            return String.Format("SELECT {0},{1},{2},{3} FROM {4} WHERE {5}={6}",
+            return string.Format("SELECT {0},{1},{2},{3} FROM {4} WHERE {5}={6}",
                 RatingQ, RateCountQ, LatQ, LongQ, TableNameEventQ, TableNameEventIdQ, ParEventId);
         }
 
@@ -434,7 +434,7 @@ namespace GeoEvents.Repository
         /// </returns>
         public static string GetsInsertUpdateRatingQueryString()
         {
-            return String.Format("UPDATE {0} SET {1}={2} , {3}={4} WHERE {5}={6}",
+            return string.Format("UPDATE {0} SET {1}={2} , {3}={4} WHERE {5}={6}",
                 TableNameEventQ, RatingQ, ParRating, RateCountQ, ParRateCount, TableNameEventIdQ, ParEventId);
         }
 
@@ -446,7 +446,7 @@ namespace GeoEvents.Repository
         /// </returns>
         public static string GetSelectCurrentReservationQueryString()
         {
-            return String.Format("SELECT {0} FROM {1} WHERE {2}={3}",
+            return string.Format("SELECT {0} FROM {1} WHERE {2}={3}",
                 ReservedQ, TableNameEventQ, TableNameEventIdQ, ParEventId);
         }
 
@@ -458,7 +458,7 @@ namespace GeoEvents.Repository
         /// </returns>
         public static string GetInsertUpdateReservationQueryString()
         {
-            return String.Format("UPDATE {0} SET {1}={2} WHERE {3}={4}",
+            return string.Format("UPDATE {0} SET {1}={2} WHERE {3}={4}",
                 TableNameEventQ, ReservedQ, ParReserved, TableNameEventIdQ, ParEventId);
         }
 
@@ -470,7 +470,7 @@ namespace GeoEvents.Repository
         /// </returns>
         public static string GetSelectLocationQueryString()
         {
-            return String.Format("SELECT * FROM {0} WHERE {1}={2}", TableNameLocationQ, AddressQ, ParAddress);
+            return string.Format("SELECT * FROM {0} WHERE {1}={2}", TableNameLocationQ, AddressQ, ParAddress);
         }
 
         /// <summary>
@@ -481,7 +481,7 @@ namespace GeoEvents.Repository
         /// </returns>
         public static string GetSelectLocationByIdQueryString()
         {
-            return String.Format("SELECT * FROM {0} WHERE {1}={2}", TableNameLocationQ, IdQ, ParId);
+            return string.Format("SELECT * FROM {0} WHERE {1}={2}", TableNameLocationQ, IdQ, ParId);
         }
 
         /// <summary>
@@ -492,7 +492,7 @@ namespace GeoEvents.Repository
         /// </returns>
         public static string GetInsertCreateLocationQueryString()
         {
-            return String.Format("INSERT INTO {0} VALUES ({1},{2},{3},{4})",
+            return string.Format("INSERT INTO {0} VALUES ({1},{2},{3},{4})",
                 TableNameLocationQ, ParId, ParAddress, ParRating, ParRateCount);
         }
 
@@ -504,11 +504,33 @@ namespace GeoEvents.Repository
         /// </returns>
         public static string GetUpdateLocationRatingQueryString()
         {
-            return String.Format("UPDATE {0} SET {1}={2},{3}={4} WHERE  {5}={6} ",
+            return string.Format("UPDATE {0} SET {1}={2},{3}={4} WHERE  {5}={6} ",
                 TableNameLocationQ, RatingQ, ParRating, RateCountQ,
                 ParRateCount, IdQ, ParId);
         }
 
+
+        /// <summary>
+        /// Get Insert Logger Query string
+        /// </summary>
+        /// <returns>
+        /// string
+        /// </returns>
+        public static string GetInsertLoggerQueryString()
+        {
+
+            return string.Format("insert into logs values(@app_name,@thread,@level,@location,@message,@exception,@log_date)");
+            // (app_name, thread, level, location, message, log_date, exception)
+        }
+
+
+        /// <summary>
+        /// Condition validation 
+        /// </summary>
+        /// <param name="selectString"></param>
+        /// <returns>
+        /// StringBuilder
+        /// </returns>
         private static StringBuilder ConditionValidation(StringBuilder selectString)
         {
             if (isNotFirst)
