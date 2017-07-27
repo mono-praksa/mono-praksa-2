@@ -1,7 +1,8 @@
-﻿import { Component, EventEmitter, Input, Output } from "@angular/core";
+﻿import { Component, Input } from "@angular/core";
 import { DatePipe } from "@angular/common";
 
 import { Event } from "../shared/models/event.model";
+import { Filter } from "../shared/models/filter.model";
 
 @Component({
     selector: "display-list",
@@ -9,10 +10,11 @@ import { Event } from "../shared/models/event.model";
 })
 
 export class EventListComponent {
-    @Output() event = new EventEmitter();
     @Input() events: Event[];
+    @Input() filter: Filter;
 
-    eventDetails(evt: Event) {
-        this.event.emit(evt);
+    private onPageChange(event: any) {
+        this.filter.PageNumber = event.page + 1;
+        this.getEvents(filter);
     }
 }

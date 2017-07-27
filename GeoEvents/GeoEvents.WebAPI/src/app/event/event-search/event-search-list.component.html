@@ -18,3 +18,4 @@
 		</tbody>
 	</table>
 </div>
+<p-paginator [rows]="filter.PageSize" *ngIf="this.eventCount" [totalRecords]="this.eventCount" (onPageChange)="onPageChange($event)"></p-paginator>

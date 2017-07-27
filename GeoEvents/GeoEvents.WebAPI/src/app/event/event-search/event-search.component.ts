@@ -183,10 +183,6 @@ export class EventSearchComponent implements OnInit {
         return cat;
 	}
 
-    private onPageChange(event: any) {
-        this.onSubmit(this.filterForm.value, event.page + 1, false);
-    }
-
 	//submits
     private onSubmit(formValues: any, pageNumber: number = 1, filterChanged: boolean = true): void {
         this.loaderService.displayLoader(true);
