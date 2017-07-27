@@ -1,7 +1,8 @@
 ﻿<div>
-    <agm-map [latitude]="latitude" [longitude]="longitude" [zoom]="getZoom()">
-        <div *ngFor="let marker of markers">
-            <agm-marker *ngIf="marker.Count > 0" [latitude]="marker.Latitude" [longitude]="marker.Longitude"></agm-marker>
+    <agm-map [latitude]="latitude" [longitude]="longitude" [zoom]="zoom">
+        <div *ngFor="let mapPoints of mapPoints">
+            <agm-marker *ngIf="mapPoint.Count === 1" [latitude]="mapPoint.Lat" [longitude]="mapPoint.Long"></agm-marker>
+            <agm-marker *ngIf="mapPoint.Count > 1" [latitude]="mapPoint.Lat" [longitude]="mapPoint.Long"></agm-marker>
         </div>
     </agm-map>
 </div>
