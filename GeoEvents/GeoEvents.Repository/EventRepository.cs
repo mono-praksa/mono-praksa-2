@@ -164,7 +164,7 @@ namespace GeoEvents.Repository
         /// <param name="command"></param>
         private void SetParametersSearchEvents(IFilter filter, NpgsqlCommand command)
         {
-            if (filter.ULat != null)
+             if (filter.ULat != null)
             {
                 command.Parameters.AddWithValue(QueryHelper.ParLatitude, NpgsqlDbType.Double, filter.ULat);
             }
@@ -175,14 +175,6 @@ namespace GeoEvents.Repository
             if (filter.Radius != null)
             {
                 command.Parameters.AddWithValue(QueryHelper.ParRadius, NpgsqlDbType.Double, filter.Radius * 1000);
-            }
-            if (filter.StartTime != null)
-            {
-                command.Parameters.AddWithValue(QueryHelper.ParUserStartTime, NpgsqlDbType.Timestamp, filter.StartTime);
-            }
-            if (filter.EndTime != null)
-            {
-                command.Parameters.AddWithValue(QueryHelper.ParUserEndTime, NpgsqlDbType.Timestamp, filter.EndTime);
             }
             if (filter.Category != null)
             {
@@ -208,6 +200,9 @@ namespace GeoEvents.Repository
             {
                 command.Parameters.AddWithValue(QueryHelper.ParCustom, NpgsqlDbType.Jsonb, filter.Custom);
             }
+            command.Parameters.AddWithValue(QueryHelper.ParUserStartTime, NpgsqlDbType.Timestamp, filter.StartTime);
+            command.Parameters.AddWithValue(QueryHelper.ParUserEndTime, NpgsqlDbType.Timestamp, filter.EndTime);
+
         }
 
         /// <summary>

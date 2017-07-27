@@ -259,7 +259,7 @@ namespace GeoEvents.Repository
             }
 
             ///Adding Rating Event filter query if there is rating event
-            if (filter.RatingEvent != 0)
+            if (filter.RatingEvent != null)
             {
                 selectString = ConditionValidation(selectString);
 
@@ -268,27 +268,27 @@ namespace GeoEvents.Repository
             }
 
             /// Adding Time filter query if there is time in filter
-            if (filter.EndTime > DefaulTime && filter.StartTime > DefaulTime)
-            {
+            //if (filter.EndTime > DefaulTime && filter.StartTime > DefaulTime)
+            //{
                 selectString = ConditionValidation(selectString);
 
                 selectString.AppendFormat(" (({0},{1}) OVERLAPS ({2},{3})) ",
                     ParUserStartTime, ParUserEndTime, TableNameEventStartTimeQ, TableNameEventEndTimeQ);
-            }
-            else if (filter.EndTime == null && filter.StartTime > DefaulTime)
-            {
-                selectString = ConditionValidation(selectString);
+            //}
+            //else if (filter.EndTime == null && filter.StartTime > DefaulTime)
+            //{
+            //    selectString = ConditionValidation(selectString);
 
-                selectString.AppendFormat(" ({0}<{1}) ",
-                    ParUserStartTime, TableNameEventEndTimeQ);
-            }
-            else if (filter.EndTime > DefaulTime && filter.StartTime == null)
-            {
-                selectString = ConditionValidation(selectString);
+            //    selectString.AppendFormat(" ({0}<{1}) ",
+            //        ParUserStartTime, TableNameEventEndTimeQ);
+            //}
+            //else if (filter.EndTime > DefaulTime && filter.StartTime == null)
+            //{
+            //    selectString = ConditionValidation(selectString);
 
-                selectString.AppendFormat(" ({0}>{1}) ",
-                    ParUserEndTime, TableNameEventStartTimeQ);
-            }
+            //    selectString.AppendFormat(" ({0}>{1}) ",
+            //        ParUserEndTime, TableNameEventStartTimeQ);
+            //}
 
             ///Adding searcstring filter in queri if there is searchstring
             if (!String.IsNullOrWhiteSpace(filter.SearchString))

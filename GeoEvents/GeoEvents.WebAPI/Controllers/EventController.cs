@@ -88,6 +88,14 @@ namespace GeoEvents.WebAPI.Controllers
         [Route("search")]
         public async Task<HttpResponseMessage> GetEventsAsync([FromUri] FilterModel filter)
         {
+            if (filter.StartTime == null)
+            {
+                filter.StartTime = DateTime.Now;
+            }
+            if (filter.EndTime == null)
+            {
+                filter.EndTime = DateTime.MaxValue;
+            }
             var result = await Service.GetEventsAsync(filter);
 
             var temp = Mapper.Map<IEnumerable<IEvent>, IEnumerable<EventModel>>(result);
