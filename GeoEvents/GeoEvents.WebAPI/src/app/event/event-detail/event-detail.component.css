@@ -1,4 +1,4 @@
-﻿.carousel, :host /deep/ img, :host /deep/ svg {
+﻿.carousel, :host /deep/ .carousel-inner .item img, :host /deep/ .carousel-inner .item svg {
         width: 640px;
         max-width: 640px;
         height: 480px;
