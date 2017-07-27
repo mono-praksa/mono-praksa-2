@@ -1,21 +1,44 @@
-﻿<div class="table-resposnive">
-	<table class="table table-striped">
-		<thead>
-			<tr>
-				<th class="col-md-2">Name</th>
-				<th class="col-md-2">Start Time</th>
-				<th class="col-md-2">End Time</th>
-				<th class="col-md-6">Description</th>
-			</tr>
-		</thead>
-		<tbody>
-			<tr *ngFor="let evt of events">
-                <th class="col-md-2"><a [routerLink]="evt.Id"><small>{{evt.Name}}</small></a></th>
-				<th class="col-md-2"><small>{{evt.StartTime | date: 'MMMM d, y, HH:mm'}}</small></th>
-				<th class="col-md-2"><small>{{evt.EndTime | date: 'MMMM d, y, HH:mm'}}</small></th>
-				<th class="col-md-6"><small>{{evt.Description}}</small></th>
-			</tr>
-		</tbody>
-	</table>
+﻿<div align="center">
+    <i class="fa-spin-lg fa fa-spinner fa-spin" *ngIf="searchEventLoading"></i>
 </div>
-<p-paginator [rows]="filter.PageSize" *ngIf="this.eventCount" [totalRecords]="this.eventCount" (onPageChange)="onPageChange($event)"></p-paginator>
+<div>
+    <div *ngIf="this.events" class="row" align="right">
+        <div class="col-sm-7">
+        </div>
+        <div class="col-sm-3">
+            <select (change)="getEventsOrderChanged($event.target.value)" class="form-control">
+                <option value="Name">Name</option>
+                <option value="RatingEvent">Event Rating</option>
+                <option value="RatingLocation">Location Rating</option>
+                <option *ngIf="filter.ULat" value="Distance">Distance</option>
+                <option value="StartTime">Start time</option>
+                <option value="EndTime">End time</option>
+            </select>
+        </div>
+        <div>
+            <input type="checkbox" id="ascendingCheckbox" checked (change)="getEventsAscendingChanged()" /> Ascending Order?
+        </div>
+        <hr />
+    </div>
+        <div class="table-resposnive">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th class="col-md-2">Name</th>
+                        <th class="col-md-2">Start Time</th>
+                        <th class="col-md-2">End Time</th>
+                        <th class="col-md-6">Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let evt of events">
+                        <th class="col-md-2"><a [routerLink]="evt.Id"><small>{{evt.Name}}</small></a></th>
+                        <th class="col-md-2"><small>{{evt.StartTime | date: 'MMMM d, y, HH:mm'}}</small></th>
+                        <th class="col-md-2"><small>{{evt.EndTime | date: 'MMMM d, y, HH:mm'}}</small></th>
+                        <th class="col-md-6"><small>{{evt.Description}}</small></th>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    <p-paginator [rows]="filter.PageSize" *ngIf="this.eventCount" [totalRecords]="this.eventCount" (onPageChange)="onPageChange($event)"></p-paginator>
+</div>

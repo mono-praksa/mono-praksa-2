@@ -4,6 +4,7 @@ import { Router } from "@angular/router";
 import { Observable } from "rxjs/Observable";
 
 import { Event } from "../shared/models/event.model";
+import { Filter } from "../shared/models/filter.model";
 
 
 declare var google: any;
@@ -17,6 +18,7 @@ var MarkerClusterer = require("../../../../Scripts/markerclusterer.js");
 
 export class EventMapComponent implements OnInit, OnChanges {
     @Input() events: Event[];
+    @Input() filter: Filter;
     googleMarkers: any;
     @Input() latitude: number;
     @Input() longitude: number;

@@ -33,14 +33,14 @@ export class EventService {
     }
 
     getEventCount(filter: Filter): Observable<number> {
-        let query = "/api/events/search/count" + this._makeQueryString(filter);
+        let query = "/api/events/search/count" + this.makeQueryString(filter);
         return this.http.get(query)
             .map((response: Response) => <number>response.json())
             .catch(this.handleError); 
     }
 
     getEvents(filter: Filter): Observable < any > {
-        let query = "/api/events/search" + this._makeQueryString(filter);
+        let query = "/api/events/search" + this.makeQueryString(filter);
         //execute http call
         return this.http.get(query)
             .map((response: Response) => <any>response.json())
@@ -73,7 +73,7 @@ export class EventService {
             }).catch(this.handleError);
     }
 
-    private _makeQueryString(filter: Filter): string {
+    private makeQueryString(filter: Filter): string {
         let query = "";
 
         query += "?category=";
