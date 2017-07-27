@@ -1,0 +1,61 @@
+﻿.carousel, :host /deep/ img, :host /deep/ svg {
+        width: 640px;
+        max-width: 640px;
+        height: 480px;
+        max-height: 480px;
+    }
+
+    .rating {
+        float:left;
+    }
+
+    .custom-display {
+        float: left;
+        padding-right: 10px;
+    }
+
+    .custom-clear {
+        clear: left;
+    }
+
+    .rating:not(:checked) > input {
+        position:absolute;
+        top:-9999px;
+        clip:rect(0,0,0,0);
+    }
+
+    .rating:not(:checked) > label {
+        float:right;
+        width:1em;
+        padding:0.1em;
+        overflow:hidden;
+        white-space:nowrap;
+        cursor:pointer;
+        font-size:200%;
+        line-height:1.2;
+        color:#ddd;
+    }
+
+    .rating:not(:checked) > label:before {
+        content: '★ ';
+    }
+
+    .rating > input:checked ~ label {
+        color: #f70;
+    }
+
+    .notrated:not(:checked) > label:hover,
+    .notrated:not(:checked) > label:hover ~ label {
+        color: gold;
+    }
+
+
+    .notrated > input:checked ~ label:hover,
+    .notrated > input:checked ~ label:hover ~ label,
+    .notrated > label:hover ~ input:checked ~ label {
+        color: #ea0;
+    }
+
+    agm-map {
+    height: 300px;
+}

@@ -1,0 +1,161 @@
+<div *ngIf="!this.isDetailMode">
+	<div>
+		<form [formGroup]="filterForm" (ngSubmit)="onSubmit(filterForm.value)" autocomplete="off" novalidate>		
+			<div class="row">
+				<div class="col-sm-4" align="right">
+					<input type="text" formControlName="searchString" class="form-control" id="searchString" placeholder="Search..." />
+				</div>
+				<div class="col-sm-1">
+					<div>
+						<button type="submit" class="btn btn-primary" [disabled]="filterForm.invalid">Search</button>
+					</div>
+				</div>
+				<div class="col-sm-4 advanced-search">
+					<div>
+						<a routerlink="" *ngIf=!isAdvancedSearch (click)="toggleAdvancedSearch()" class="clickable">Show filters</a>
+                        <a routerlink="" *ngIf=isAdvancedSearch (click)="toggleAdvancedSearch()" class="clickable">Hide filters</a>
+					</div>
+				</div>
+				<div class="col-sm-2 map-toggle">
+					<div>
+						<button type="button" *ngIf="!isMapMode" class="btn btn-primary" (click)="this.toggleMapMode()" >Show map</button>
+                        <button type="button" *ngIf="isMapMode" class="btn btn-primary" (click)="this.toggleMapMode()">Hide map</button>
+					</div>
+				</div>	
+			</div>
+			<div [hidden]="!this.isAdvancedSearch">
+				<br/>
+				<div class="row">
+				
+					<div class="col-md-2">
+						<div class="form-group" [ngClass]="{'has-error': start.touched && filterForm.hasError('endDateBeforeStartDate')}">
+                            <label for="start">Start Time</label>
+                            <div [ngClass]="{'input-group': start.value != ''}">
+							    <input formControlName="start" ngui-datetime-picker [close-on-select]="true" class="form-control input-sm clickable" id="start" placeholder="Start Date" readonly />
+                                <span *ngIf="start.value!=''" class="input-group-addon clickable"  (click)="clearStartTime()">X</span>
+                            </div>
+                        </div>
+                        <div class="form-group" [ngClass]="{'has-error': end.touched && filterForm.hasError('endDateBeforeStartDate')}">
+                            <label for="end">End Time</label>
+                            <div [ngClass]="{'input-group': end.value != ''}">
+                                <input formControlName="end" ngui-datetime-picker [close-on-select]="true" class="form-control input-sm clickable" id="end" placeholder="End Date" readonly />
+                                <span *ngIf="end.value!=''" class="input-group-addon clickable" (click)="clearEndTime()">X</span>
+                            </div>
+                        </div>
+                        <span class="help-block" *ngIf="end.touched && filterForm.hasError('endDateBeforeStartDate')">End date must be after start date!</span>
+					</div>
+					
+					<div class="col-md-2">
+						<div>
+                            <div class="form-group" [ngClass]="{'has-error': (address.touched || radius.touched) && filterForm.hasError('needBothOrNeitherOfAddressAndRadius')}">
+								<label for="address">Address</label>
+								<div [ngClass]="{'input-group': isAddressValid}">
+									<input type="text" formControlName="address" class="form-control input-sm" id="address" placeholder="Address..." #search [readonly]="isAddressValid"/>
+									<span *ngIf="isAddressValid" class="input-group-addon" (click)="clearLocation()">X</span>
+								</div>
+							</div>
+                            <div class="form-group" [ngClass]="{'has-error': radius.touched && radius.invalid || (address.touched || radius.touched) && filterForm.hasError('needBothOrNeitherOfAddressAndRadius')}">
+                                <label for="radius">Radius</label>                                
+                                <div class="input-group">
+                                    <input type="text" formControlName="radius" class="form-control input-sm" id="radius" placeholder="Radius" />
+                                    <span class="input-group-addon">km</span>
+                                </div>
+                                <span *ngIf="(address.touched || radius.touched ) && filterForm.hasError('needBothOrNeitherOfAddressAndRadius')" class="help-block">
+                                    *Please enter both an address and a radius or neither!
+                                </span>
+                                <span *ngIf="radius.touched && radius.invalid" class="help-block">*Please enter a valid radius!</span>
+                            </div>
+							<div>
+								<a routerlink="" class="clickable" (click)="setCurrentPosition()">Set to current location</a>
+							</div>
+                        </div>
+					</div>
+					
+                    <div class="col-md-2">
+                        <div class="form-group" [ngClass]="{'has-error': price.touched && price.invalid}">
+                            <label for="price">Max. Price</label>
+                            <div class="input-group">
+                                <span class="input-group-addon">$</span>
+                                <input type="text" formControlName="price" class="form-control input-sm" id="price" placeholder="0" />
+                            </div>
+                            <span *ngIf="price.touched && price.invalid" class="help-block">*Please enter a valid ammount!</span>
+                        </div>
+
+                        <div class="form-group" [ngClass]="{'has-error': rating.touched && rating.invalid}">
+                            <label for="rating">Min. Rating</label>
+                            <input type="text" formControlName="rating" class="form-control input-sm" id="rating" placeholder="(1-5)" />
+                            <span class="help-block" *ngIf="rating.touched && rating.invalid">*Enter a decimal number between 1 and 5!</span>
+                        </div>
+                    </div>
+					
+					<div class="col-md-4">
+						<label for="categoriesWrapper">Select Categories</label>
+						<div id="categoriesWrapper">
+							<div class="row control-label">
+                                <label class="col-xs-6" *ngFor="let category of categoryService.keys()">
+                                    <input type="checkbox" value="{{category}}" (change)="updateCategories(category)" /> {{categoryService.CategoryEnum[category]}}
+                                </label>
+							</div>
+						</div>
+					</div>
+					
+                    <div class="col-md-2">
+                        <div class="form-group">
+                            <label for="customCategoryName">Custom Category</label>
+                            <div>
+                                <input type="text" formControlName="customCategoryName" class="form-control input-sm" id="customCategoryName" placeholder="Custom Category" />
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="customCategoryValue">Value</label>
+							<div>
+								<input type="text" formControlName="customCategoryValue" class="form-control input-sm" id="customCategoryValue" placeholder="Value" />
+							</div>
+                        </div>
+                    </div>
+					
+				</div>
+			</div>
+            <div [hidden]="!this.isAdvancedSearch" align="right">
+				<button type="submit" class="btn btn-primary" [disabled]="filterForm.invalid">Search</button>
+			</div>
+		</form>
+	</div>
+    <hr />
+	<div>
+		<div align="center">
+			<i class="fa-spin-lg fa fa-spinner fa-spin" *ngIf="searchEventLoading"></i>
+		</div>
+		<div *ngIf="!this.isMapMode">
+			<div *ngIf="this.events" class="row" align="right">
+				<div class="col-sm-7"></div>
+				<div class="col-sm-3">
+					<select (change)="getEventsOrderChanged($event.target.value)" class="form-control">
+						<option value="Name">Name</option>
+                        <option value="RatingEvent">Event Rating</option>
+                        <option value="RatingLocation">Location Rating</option>
+						<option *ngIf="filter.ULat" value="Distance">Distance</option>
+						<option value="StartTime">Start time</option>
+						<option value="EndTime">End time</option>
+					</select>
+				</div>
+				<div>
+					<input type="checkbox" id="ascendingCheckbox" checked (change)="getEventsAscendingChanged()"/> Ascending Order?
+				</div>
+				<hr/>
+			</div>
+			<div *ngIf="this.events">
+				<display-list (event)="enterDetailMode($event)" [events]="this.events"></display-list>
+			</div>
+			<div *ngIf="this.events">
+                <p-paginator [rows]="filter.PageSize" *ngIf="this.eventCount" [totalRecords]="this.eventCount" (onPageChange)="onPageChange($event)"></p-paginator>
+			</div>
+		</div>
+		<display-map [latitude]="latitude.value" [longitude]="longitude.value" *ngIf="this.isMapMode" (event)="enterDetailMode($event)" [events]="this.events"></display-map>
+	</div>
+</div>
+
+<div *ngIf="userApproximateAddress!=''">
+    <span class="text-info">Your address: {{userApproximateAddress}}</span> <span class="text-muted">(Reported by this computer)</span>
+</div>

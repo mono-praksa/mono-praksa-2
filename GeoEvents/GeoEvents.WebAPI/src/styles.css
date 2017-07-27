@@ -17,3 +17,7 @@ input[type=text] {
     background-color: #eaf6fb;
     color: dark-gray;
 }
+
+.fa-spin-lg.fa {
+    font-size: 24px;
+}

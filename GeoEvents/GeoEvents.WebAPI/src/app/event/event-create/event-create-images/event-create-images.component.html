@@ -1,0 +1,39 @@
+﻿<h2>(Optional) Uploading images for event {{customizedEvent?.Name}}</h2>
+<div id="form-group">
+    <label for="file" class="control-label">File</label>
+    <div class="input-group">
+        <label class="input-group-btn">
+            <span class="btn btn-primary" >
+                Browse&hellip; <input type="file"
+                                      style="display: none;" multiple 
+                                      (change)="onChange($event)"
+                                      accept="image/*"
+                                      />
+            </span>
+        </label>
+        <input type="text" *ngIf="!files || files.length == 0" class="form-control" readonly value="No files selected" />
+        <input type="text" *ngIf="files && files?.length > 0" class="form-control" readonly value="{{files.length}} files selected" />
+    </div>
+    <div *ngIf="files">
+        <ul>
+            <li *ngFor="let file of files">
+                {{file.name}} 
+                <span *ngIf="file.error">There was an error while uploading this file!</span>
+                <i class="fa fa-spinner fa-spin fa-spin-lg" *ngIf="file.uploading"></i>
+            </li>
+        </ul>
+        <input type="button" value="Upload" (click)="upload()" class="btn btn-primary" [disabled]="uploadingFilter()"/>
+        <div *ngIf="uploadedFiles.length > 0">
+            <p>Uploaded Files:</p>
+            <ul>
+                <li *ngFor="let file of uploadedFiles">
+                    {{file}}
+                </li>
+            </ul>
+        </div>
+    </div>
+    <span *ngIf="uploadingFilter()">Uploading <i class="fa fa-spinner fa-spin fa-spin-lg" ></i></span>
+    <div style="width:100%; text-align:right; padding-top:10px"> 
+        <button style="width:85px" class="btn btn-primary" [routerLink]="['/event/search/', customizedEvent.Id]"> Finish </button> 
+    </div>
+</div>

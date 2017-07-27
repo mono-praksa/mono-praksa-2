@@ -1,0 +1,80 @@
+﻿<form [formGroup]="eventForm" (ngSubmit)="createEvent(eventForm.value)" autocomplete="off" novalidate>
+    <h2>Create Event</h2>
+    <div class="form-group" [ngClass]="{'has-error': name.touched && name.invalid, 'has-success': name.touched && !name.invalid}">
+        <label for="name" class="control-label">Name</label>
+        <input type="text" formControlName="name" class="form-control" id="name" placeholder="Name..." required>
+        <span class="help-block" *ngIf="name.touched && name.invalid">Required!</span>
+    </div>
+    <div class="form-group" [ngClass]="{'has-error': description.touched && description.invalid, 'has-success': description.touched && !description.invalid}">
+        <label for="description" class="control-label">Description</label>
+        <textarea formControlName="description" class="form-control" id="description" placeholder="Description..." required></textarea>
+        <span class="help-block" *ngIf="description.touched && description.invalid">Required!</span>
+    </div>
+    <div class="form-group">
+        <fieldset>
+            <legend>
+                Date & Time
+            </legend>
+            <div class="row">
+                <div class="col-md-6" [ngClass]="{'has-error': start.touched && start.invalid, 'has-success': start.touched && !start.invalid}">
+                    <label for="start" class="control-label">Start</label>
+                    <input formControlName="start" ngui-datetime-picker [close-on-select]="false" class="form-control" id="start" placeholder="Click to enter date and time" required readonly style="cursor: pointer;" />
+                    <span class="help-block" *ngIf="start.touched && start.invalid">Required!</span>
+                </div>
+                <div class="col-md-6" [ngClass]="{'has-error': end.touched && (end.invalid || eventForm.hasError('endDateBeforeStartDate')), 'has-success': end.touched && !(end.invalid || eventForm.hasError('endDateBeforeStartDate'))}">
+                    <label for="end" class="control-label">End</label>
+                    <input formControlName="end" ngui-datetime-picker [close-on-select]="false" class="form-control" id="end" placeholder="Click to enter date and time" required readonly style="cursor: pointer;" (change)="checkStartTime()" />
+                    <span class="help-block" *ngIf="end.touched && end.invalid">Required!</span>
+                    <span class="help-block" *ngIf="end.touched && eventForm.hasError('endDateBeforeStartDate')">End date must be after start date!</span>
+                </div>
+            </div>
+        </fieldset>
+    </div>
+    <div class="form-group" [ngClass]="{'has-error': isAllUnchecked(), 'has-success': !isAllUnchecked()}">
+        <fieldset>
+            <legend class="control-label">
+                Categories
+            </legend>
+            <div class="row control-label">
+                <label class="col-md-3" *ngFor="let category of categoryService.keys()">
+                    <input type="checkbox" value="{{category}}" (change)="updateCategories(category)" *ngIf="categoryService.CategoryEnum[category]!='Miscellaneous'" />
+                    <input type="checkbox" value="{{category}}" (change)="updateCategories(category)" *ngIf="categoryService.CategoryEnum[category]=='Miscellaneous'" checked/> {{categoryService.CategoryEnum[category]}}
+                </label>
+            </div>
+            <span class="help-block" *ngIf="isAllUnchecked()">Please check at least one category!</span>
+        </fieldset>
+    </div>
+    <div class="form-group" [ngClass]="{'has-error': address.touched && address.invalid, 'has-success': address.touched && address.valid}">
+        <label for="address">Address</label>
+        <div [ngClass]="{'input-group': isAddressValid}">
+            <input type="text" class="form-control" formControlName="address" id="address" placeholder="Address..." #search [readonly]="isAddressValid" />
+            <span *ngIf="isAddressValid" class="input-group-addon" (click)="clearLocation()">X</span>
+        </div>
+        <span class="help-block" *ngIf="address.touched && address.invalid">Required!</span>
+        <button type="button" class="btn btn-link" (click)="setCurrentPosition()">Set to current location</button>
+        <div *ngIf="isAddressValid">
+            <agm-map [latitude]="latitude.value" [longitude]="longitude.value" [scrollwheel]="true" [zoom]="zoom" (mapClick)="markerUpdated($event)">
+                <agm-marker [latitude]="latitude.value" [longitude]="longitude.value" [markerDraggable]="true" (dragEnd)="markerUpdated($event)"></agm-marker>
+            </agm-map>
+        </div>
+    </div>
+    <div class="form-group" [ngClass]="{'has-error': price.touched && price.invalid, 'has-success': price.touched && !price.invalid}">
+        <label for="price">Price</label>
+        <div class="input-group">
+            <span class="input-group-addon">$</span>
+            <input type="text" class="form-control" formControlName="price" id="price" placeholder="Price..." required />
+        </div>
+        <span class="help-block" *ngIf="price.touched && price.hasError('required')">Required!</span>
+        <span class="help-block" *ngIf="price.touched && price.hasError('pattern')">Please enter a valid price!</span>
+    </div>
+    <div class="form-group" [ngClass]="{'has-error': capacity.touched && capacity.invalid, 'has-success': capacity.touched && !capacity.invalid}">
+        <label for="capacity">Capacity</label>
+        <input type="text" class="form-control" formControlName="capacity" id="capacity" placeholder="Capacity..." required />
+        <span class="help-block" *ngIf="capacity.touched && capacity.hasError('required')">Required!</span>
+        <span class="help-block" *ngIf="capacity.touched && capacity.hasError('pattern')">Please enter a valid capacity!</span>
+    </div>
+    <div>
+        <button type="submit" class="btn btn-default" [disabled]="eventForm.invalid || isAllUnchecked() || createEventLoading">Submit</button>
+        <i class="fa fa-spinner fa-spin fa-spin-lg" *ngIf="createEventLoading"></i>
+    </div>
+</form>
