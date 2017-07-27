@@ -175,6 +175,35 @@ namespace GeoEvents.WebAPI.Controllers
             return Request.CreateResponse(HttpStatusCode.OK, result);
         }
 
+        /// <summary>
+        /// Gets the clustered events used for map view.
+        /// </summary>
+        /// <param name="filter">Filter used for retrieving the events from the database.</param>
+        /// <param name="clusteringFilter">Filter used for clustering</param>
+        /// <returns>Clustered events</returns>
+        [HttpGet]
+        [Route("get/clustered")]
+        public async Task<HttpResponseMessage> GetEventsClusteredAsync([FromUri] FilterModel filter, [FromUri] ClusteringFilter clusteringFilter)
+        {
+            if(filter.ULat == null || filter.ULong == null)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "incorrect filter coordinates. filter coordinates are required");
+            }
+            if(filter.Radius == null || filter.Radius == 0)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "incorrect filter radius. radius is required. radius must be larger that zero");
+            }
+
+            var result = await Service.GetClusteredEventsAsync(filter, clusteringFilter);
+
+            if(result == null)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, "sorry :(");
+            }
+
+            return Request.CreateResponse(HttpStatusCode.OK, result);
+        }
+
         #endregion Methods
 
         #region Model

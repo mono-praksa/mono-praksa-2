@@ -1,5 +1,6 @@
 ﻿using GeoEvents.Common;
 using GeoEvents.Model.Common;
+using GoogleMaps.Net.Clustering.Data.Geometry;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -30,7 +31,6 @@ namespace GeoEvents.Service.Common
         /// </returns>
         Task<StaticPagedList<IEvent>> GetEventsAsync(IFilter filter);
 
-
         /// <summary>
         /// Creates an event asynchronously.
         /// </summary>
@@ -52,6 +52,15 @@ namespace GeoEvents.Service.Common
         /// <param name="Rating">The rating.</param>
         /// <returns></returns>
         Task<IEvent> UpdateRatingAsync(Guid eventId, double rating, double CurrentRating, int RateCount);
+
+        /// <summary>
+        /// Gets the events in the form of Map points (markers and/or clusters).
+        /// Does not use caching but can be modified to cache the results from the database.
+        /// </summary>
+        /// <param name="filter">Filter used for retrieving events from the database.</param>
+        /// <param name="clusteringFilter">Filter used for clustering the markers.</param>
+        /// <returns>List of Map points.</returns>
+        Task<IList<MapPoint>> GetClusteredEventsAsync(IFilter filter, IClusteringFIlter clusteringFilter);
 
         #endregion Methods
     }

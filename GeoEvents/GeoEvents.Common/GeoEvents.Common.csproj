@@ -52,8 +52,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ClusteringFilter.cs" />
     <Compile Include="DIModule.cs" />
     <Compile Include="Filter.cs" />
+    <Compile Include="IClusteringFIlter.cs" />
     <Compile Include="IFilter.cs" />
     <Compile Include="IGeoEventsConfiguration.cs" />
     <Compile Include="IPostgresConnection.cs" />

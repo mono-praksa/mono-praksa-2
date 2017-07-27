@@ -4,8 +4,13 @@ using GeoEvents.Repository.Common;
 using GeoEvents.Service.Common;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using X.PagedList;
+using GoogleMaps.Net.Clustering.Data.Geometry;
+using GoogleMaps.Net.Clustering.Infrastructure;
+using GoogleMaps.Net.Clustering.Services;
+using GoogleMaps.Net.Clustering.Data.Params;
 
 namespace GeoEvents.Service
 {
@@ -24,6 +29,7 @@ namespace GeoEvents.Service
         /// The repository.
         /// </value>
         protected IEventRepository Repository { get; private set; }
+ 
 
         #endregion Properties
 
@@ -99,8 +105,6 @@ namespace GeoEvents.Service
             return result;
         }
 
-        
-
         /// <summary>
         /// Creates an event asynchronously.
         /// </summary>
@@ -145,5 +149,60 @@ namespace GeoEvents.Service
         }
 
         #endregion Methods
+
+        #region Clustering
+
+        /// <summary>
+        /// Gets the events in the form of Map points (markers and/or clusters).
+        /// Does not use caching but can be modified to cache the results from the database.
+        /// </summary>
+        /// <param name="filter">Filter used for retrieving events from the database.</param>
+        /// <param name="clusteringFilter">Filter used for clustering the markers.</param>
+        /// <returns>List of Map points.</returns>
+        public async Task<IList<MapPoint>> GetClusteredEventsAsync(IFilter filter, IClusteringFIlter clusteringFilter )
+        {
+            var points = await GetClusterPointCollection(filter);
+
+            var mapService = new ClusterService(points);
+            var input = new GetMarkersParams()
+            {
+                NorthEastLatitude = clusteringFilter.NELatitude,
+                NorthEastLongitude = clusteringFilter.NELongitude,
+                SouthWestLatitude = clusteringFilter.SWLatitude,
+                SouthWestLongitude = clusteringFilter.SWLongitude,
+                ZoomLevel = clusteringFilter.ZoomLevel
+            };
+
+            var markers = mapService.GetClusterMarkers(input);
+
+            return markers.Markers;
+        }
+
+        /// <summary>
+        /// Calls the repository and gets the events from the database using the filter
+        /// Then it maps these events into a pointCollection object
+        /// </summary>
+        /// <param name="filter">Filter that will be used to retrieve data from the database if needed</param>
+        /// <returns>The PointCollection</returns>
+        private async Task<PointCollection> GetClusterPointCollection(IFilter filter)
+        {
+            var points = new PointCollection();
+
+            //get list of events from the database. filter is modified in a way it will recieve all pages at once.
+            filter.PageNumber = -1;
+            StaticPagedList<IEvent> dataBaseResult = await Repository.GetEventsAsync(filter);
+            List<IEvent> dbResults = dataBaseResult.ToList();
+            
+            //map the location, name and id properties
+            var mapPoints = dbResults.Select(p => new MapPoint() { X = p.Longitude, Y = p.Latitude, Data = p.Id, Name = p.Name }).ToList();
+            
+            //set the map points. caching is not used so timespan is 0...
+            points.Set(mapPoints, TimeSpan.MinValue, null);
+
+            //return the points
+            return points;
+        }
+
+        #endregion
     }
 }
