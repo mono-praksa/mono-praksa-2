@@ -1,16 +1,16 @@
 import { Component, DoCheck, ElementRef, NgZone, OnInit, ViewChild } from "@angular/core";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
+import { ActivatedRoute } from "@angular/router";
 import { MapsAPILoader } from "@agm/core";
 import { Subscription } from "rxjs/Subscription";
 
 import { CategoryService } from "../shared/category.service";
 import { CustomAttribute, Event } from "../shared/models/event.model";
-import { endDateBeforeStartDate, needBothOrNeitherOfAddressAndRadius } from "..//shared/validator";
+import { endDateBeforeStartDate, needBothOrNeitherOfAddressAndRadius } from "../shared/validator";
 import { EventService } from "../shared/event.service";
 import { Filter } from "../shared/models/filter.model";
 import { GeocodingService } from "../../shared/geocoding.service";
 import { LoaderService } from "../../shared/loader.service";
-import { PreserveSearchQueryService } from "../../shared/preserve-search-query.service";
 
 @Component({
     styleUrls: ["./event-search.component.css"],
@@ -51,7 +51,7 @@ export class EventSearchComponent implements OnInit {
         private loaderService: LoaderService,
         private mapsAPILoader: MapsAPILoader,
         private ngZone: NgZone,
-        private preserveSearchQueryService: PreserveSearchQueryService
+        private route: ActivatedRoute
     ) {
 		this.createForm();
 	}
@@ -70,22 +70,19 @@ export class EventSearchComponent implements OnInit {
             this.searchEventLoading = value;
         });
 
-        //checking if this service has any params inside, used when redirected from searching in home component
-		//if there are params, user likely selected the search button on the home component
-		//if there are not any params, user likely clicked on the advanced search button, or redirected from somewhere else.
-		if(this.preserveSearchQueryService.searchQuery != null){
-			this.filter = {
-				ULat: null,
-				ULong: null,
+        if (this.route.snapshot.queryParams['searchString']) {
+            this.filter = {
+				ULat: undefined,
+                ULong: undefined,
 				Radius: 0,
-				StartTime: null,
-				EndTime: null,
+                StartTime: undefined,
+                EndTime: undefined,
                 Category: 0,
-                Price: null,
-                RatingEvent: null,
-                SearchString: this.preserveSearchQueryService.searchQuery,
-                Custom: null,
-				
+                Price: undefined,
+                RatingEvent: undefined,
+                SearchString: this.route.snapshot.queryParams['q'],
+                Custom: undefined,
+
 				PageNumber: 1,
 				PageSize: 25,
 				OrderByString: "Name",
@@ -151,7 +148,7 @@ export class EventSearchComponent implements OnInit {
             .subscribe(result => {
                 this.events = result.data;
                 this.eventCount = result.metaData.TotalItemCount;
-                this.preserveSearchQueryService.searchQuery = null;
+                //this.preserveSearchQueryService.searchQuery = null;
                 this.loaderService.displayLoader(false);
             }, error => this.errorMessage = <any>error);
 	}
