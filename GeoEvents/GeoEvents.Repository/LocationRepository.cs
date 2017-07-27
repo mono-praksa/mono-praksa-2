@@ -34,11 +34,11 @@ namespace GeoEvents.Repository
         #region Methods
 
         /// <summary>
-        /// Getslocation or creates if there is non  asynchronous.
+        /// Gets the location by adress or craetes it if it's not found asynchronously.
         /// </summary>
-        /// <param name="address"></param>
+        /// <param name="address">Adress of the location to be retrieved or created.</param>
         /// <returns>
-        /// ILocation
+        /// The location.
         /// </returns>
         public async Task<ILocation> GetLocationAsync(string address)
         {
@@ -79,11 +79,11 @@ namespace GeoEvents.Repository
         }
 
         /// <summary>
-        /// Get Location by Id
+        /// Get Location by Id asynchronously.
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="id">Identifier of the location to be retrieved.</param>
         /// <returns>
-        /// ILocation
+        /// The location.
         /// </returns>
         public async Task<ILocation> GetLocationByIdAsync(Guid id)
         {
@@ -113,11 +113,11 @@ namespace GeoEvents.Repository
         }
 
         /// <summary>
-        /// Create Location asynchronous
+        /// Creates Location asynchronously.
         /// </summary>
-        /// <param name="location"></param>
+        /// <param name="location">Location that will be created.</param>
         /// <returns>
-        /// ILocation
+        /// The created location.
         /// </returns>
         public async Task<ILocation> CreateLocationAsync(ILocation location)
         {
@@ -139,12 +139,14 @@ namespace GeoEvents.Repository
         }
 
         /// <summary>
-        /// Get Location by Id
+        /// Update rating of the location asynchronously.
         /// </summary>
-        /// <param name="id"></param>
-        /// <param name="rating"></param>
+        /// <param name="id">Identifier of the location to have it's rating updated</param>
+        /// <param name="rating">Rating from the user input(1-5)</param>
+        /// <param name="currentRating">Current rating of the location</param>
+        /// <param name="rateCount">Current rate count of the location. will be increased by 1</param>
         /// <returns>
-        /// ILocation
+        /// The updated location.
         /// </returns>
         public async Task<ILocation> UpdateLocationRatingAsync(Guid id, double rating, double currenRating, int rateCount)
         {

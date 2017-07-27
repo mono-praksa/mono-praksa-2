@@ -53,11 +53,11 @@ namespace GeoEvents.WebAPI.Controllers
         #region Methods
 
         /// <summary>
-        /// Creates the event.
+        /// Creates the event asynchronously.
         /// </summary>
-        /// <param name="evt">The event.</param>
+        /// <param name="evt">The event to be created.</param>
         /// <returns>
-        /// Returns the created event
+        /// Returns the created event.
         /// </returns>
         [HttpPost]
         [Route("create")]
@@ -78,11 +78,11 @@ namespace GeoEvents.WebAPI.Controllers
         }
 
         /// <summary>
-        /// Gets the events asynchronous.
+        /// Gets the events asynchronously.
         /// </summary>
         /// <param name="filter">The filter.</param>
         /// <returns>
-        /// Returns StaticPagedList of events
+        /// Returns StaticPagedList of events.
         /// </returns>
         [HttpGet]
         [Route("search")]
@@ -100,11 +100,11 @@ namespace GeoEvents.WebAPI.Controllers
         }
 
         /// <summary>
-        /// Gets the event by identifier asynchronous.
+        /// Gets the event by identifier asynchronously.
         /// </summary>
-        /// <param name="eventId">The event identifier.</param>
+        /// <param name="eventId">Identifier of the event to be retrieved.</param>
         /// <returns>
-        /// Returns the event
+        /// Returns the event.
         /// </returns>
         [HttpGet]
         [Route("get")]
@@ -133,12 +133,12 @@ namespace GeoEvents.WebAPI.Controllers
         }
 
         /// <summary>
-        /// Updates the rating asynchronous.
+        /// Updates the event rating asynchronously.
         /// </summary>
-        /// <param name="eventId">The event identifier.</param>
-        /// <param name="rating">The rating.</param>
-        /// <param name="CurrentRating">The current rating.</param>
-        /// <param name="RateCount">The rate count.</param>
+        /// <param name="eventId">Identifier of the event which will have it's rating updated.</param>
+        /// <param name="rating">Rating of the event that the user submitted(1-5)</param>
+        /// <param name="CurrentRating">Current event rating</param>
+        /// <param name="RateCount">Current rate count which will be increased by 1 each time function is called.</param>
         /// <returns>
         /// Returns the updated event
         /// </returns>
@@ -159,11 +159,12 @@ namespace GeoEvents.WebAPI.Controllers
         }
 
         /// <summary>
-        /// Updates the reservation asynchronous.
+        /// Updates the reservation asynchronously.
+        /// Each time this function is called number of reserved spaces increases by 1.
         /// </summary>
-        /// <param name="eventId">The event identifier.</param>
+        /// <param name="eventId">Identifier of the event which will have it's reservation updated</param>
         /// <returns>
-        /// Returns the updated event
+        /// Returns the updated event.
         /// </returns>
         [HttpPut]
         [Route("update/reservation")]

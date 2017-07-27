@@ -34,11 +34,11 @@ namespace GeoEvents.Repository
         #region Methods
 
         /// <summary>
-        /// Creates Image asynchronously.
+        /// Creates an image for an event asynchronously.
         /// </summary>
-        /// <param name="img"></param>
+        /// <param name="img">Image that will be created</param>
         /// <returns>
-        /// return Created image (IEvent)
+        /// Returns the Created image
         /// </returns>
         public async Task<IImage> CreateImageAsync(IImage img)
         {
@@ -75,11 +75,11 @@ namespace GeoEvents.Repository
         }
 
         /// <summary>
-        /// Gets Images asynchronously.
+        /// Gets Images for an event asynchronously.
         /// </summary>
-        /// <param name="eventID"></param>
+        /// <param name="eventID">Identifier of the event which will have it's images retrieved.</param>
         /// <returns>
-        /// list of Images.
+        /// List of Images for an event.
         /// </returns>
         public async Task<IEnumerable<IImage>> GetImagesAsync(Guid eventID)
         {
