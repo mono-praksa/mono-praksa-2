@@ -35,10 +35,10 @@ export class EventCreateDataComponent implements OnInit {
     price: FormControl;
     start: FormControl;
 
-    private _createdEvent: Event;
-    private _createEventLoading: boolean = false;
-    private _isAddressValid: boolean = false;
-    private _zoom: number = 12;
+    private createdEvent: Event;
+    private createEventLoading: boolean = false;
+    private isAddressValid: boolean = false;
+    private zoom: number = 12;
 
     constructor(
         private categoryService: CategoryService,
@@ -149,8 +149,8 @@ export class EventCreateDataComponent implements OnInit {
     clearLocation(): void {
         this.isAddressValid = false;
         this.eventForm.controls["address"].setValue("");
-        this.eventForm.controls["latitude"].setValue(null);
-        this.eventForm.controls["longitude"].setValue(null);
+        this.eventForm.controls["latitude"].setValue(undefined);
+        this.eventForm.controls["longitude"].setValue(undefined);
     }
 
     isAllUnchecked(): boolean {
@@ -193,38 +193,6 @@ export class EventCreateDataComponent implements OnInit {
                 });
             });
         }
-    }
-
-    get zoom(): number {
-        return this._zoom;
-    }
-
-    set zoom(theZoom: number) {
-        this._zoom = theZoom;
-    }
-
-    get createdEvent(): Event {
-        return this._createdEvent;
-    }
-
-    set createdEvent(theCreatedEvent: Event) {
-        this._createdEvent = theCreatedEvent;
-    }
-
-    get isAddressValid(): boolean {
-        return this._isAddressValid;
-    }
-
-    set isAddressValid(isAddressValid: boolean) {
-        this._isAddressValid = isAddressValid;
-    }
-
-    get createEventLoading(): boolean {
-        return this._createEventLoading;
-    }
-
-    set createEventLoading(isCreatingEvent: boolean) {
-        this._createEventLoading = isCreatingEvent;
     }
 }
 
