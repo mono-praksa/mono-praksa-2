@@ -21,6 +21,7 @@ import { LoaderService } from "../../../shared/loader.service";
 })
 export class EventCreateDataComponent implements OnInit {
     @Output() eventEmitter = new EventEmitter();
+    recurring: string = "none";
     @ViewChild("search") searchElementRef: ElementRef;
 
     address: FormControl;
@@ -32,8 +33,14 @@ export class EventCreateDataComponent implements OnInit {
     latitude: FormControl;
     longitude: FormControl;
     name: FormControl;
+    occurence: FormControl;
     price: FormControl;
     start: FormControl;
+
+    // FormControls for recurring
+    repeatCount: FormControl;
+    repeatEvery: FormControl;
+    repeatOn: FormControl;
 
     private createdEvent: Event;
     private createEventLoading: boolean = false;
@@ -42,7 +49,6 @@ export class EventCreateDataComponent implements OnInit {
 
     constructor(
         private categoryService: CategoryService,
-        private eventService: EventService,
         private geocodingService: GeocodingService,
         private loaderService: LoaderService,
         private locationService: LocationService,
@@ -89,26 +95,38 @@ export class EventCreateDataComponent implements OnInit {
     }
 
     private buildForm(): void {
-        this.name = new FormControl("", Validators.required);
-        this.description = new FormControl("", Validators.required);
-        this.start = new FormControl("", Validators.required);
-        this.end = new FormControl("", Validators.required);
-        this.price = new FormControl("", [Validators.required, Validators.pattern(/^[0-9]+(\.\d{1,2})?$/)]);
-        this.capacity = new FormControl("", [Validators.required, Validators.pattern(/^[1-9][0-9]*$/)]);
         this.address = new FormControl("", Validators.required);
+        this.capacity = new FormControl("", [Validators.required, Validators.pattern(/^[1-9][0-9]*$/)]);
+        this.description = new FormControl("", Validators.required);
+        this.end = new FormControl("", Validators.required);
         this.latitude = new FormControl("", Validators.required);
         this.longitude = new FormControl("", Validators.required);
+        this.name = new FormControl("", Validators.required);
+        this.occurence = new FormControl("none");
+        this.price = new FormControl("", [Validators.required, Validators.pattern(/^[0-9]+(\.\d{1,2})?$/)]);
+        this.start = new FormControl("", Validators.required);
+
+        // FormControls for reccuring
+        this.repeatCount = new FormControl(0);
+        this.repeatEvery = new FormControl(1);
+        this.repeatOn = new FormControl("");
 
         this.eventForm = new FormGroup({
-            name: this.name,
-            description: this.description,
-            start: this.start,
-            end: this.end,
-            price: this.price,
-            capacity: this.capacity,
             address: this.address,
+            capacity: this.capacity,
+            description: this.description,
+            end: this.end,
             latitude: this.latitude,
-            longitude: this.longitude
+            longitude: this.longitude,
+            name: this.name,
+            price: this.price,
+            start: this.start,
+            occurence: this.occurence,
+
+            // FormControls for reccuring
+            repeatCount: this.repeatCount,
+            repeatEvery: this.repeatEvery,
+            repeatOn: this.repeatOn
         }, endDateBeforeStartDate("start", "end"));
     }
 
@@ -122,22 +140,28 @@ export class EventCreateDataComponent implements OnInit {
         });
 
         let newEvent : Event = {
-            Id: undefined,
-            Name: formValues.name,
-            Description: formValues.description,
-            StartTime: formValues.start,
-            EndTime: formValues.end,
-            Latitude: formValues.latitude,
-            Longitude: formValues.longitude,
-            Categories: chosenCategories,
-            Price: formValues.price,
             Capacity: formValues.capacity,
-            Reserved: undefined,
-            Rating: undefined,
-            RateCount: undefined,
-            CustomModel: undefined,
+            Categories: chosenCategories,
             Custom: undefined,
-            LocationId: undefined
+            CustomModel: undefined,
+            Description: formValues.description,
+            EndTime: formValues.end,
+            Name: formValues.name,
+            Id: undefined,
+            Latitude: formValues.latitude,
+            LocationId: undefined,
+            Longitude: formValues.longitude,
+            Occurence: formValues.occurence,
+            Price: formValues.price,
+            RateCount: undefined,
+            Rating: undefined,
+            Reserved: undefined,
+            StartTime: formValues.start,
+
+            // attributes for reccuring events
+            RepeatCount: formValues.repeatCount,
+            RepeatEvery: formValues.repeatEvery,
+            RepeatOn: formValues.repeatOn
         }
         this.locationService.getLocation(formValues.address).subscribe((res: Location) => {
             newEvent.LocationId = res.Id;
@@ -151,6 +175,27 @@ export class EventCreateDataComponent implements OnInit {
         this.eventForm.controls["address"].setValue("");
         this.eventForm.controls["latitude"].setValue(undefined);
         this.eventForm.controls["longitude"].setValue(undefined);
+    }
+
+    // when user writes number in inputs in "end of repeating"
+    endOfRepeatingBlured(value: number = undefined) {
+        if (value) {
+            this.repeatCount.setValue(+value);
+        } else {
+            this.repeatCount.setValue(0);
+        }
+    }
+
+    // disabling and enabling inputs in "end of repeating" part and deleting their contents
+    endOfRepeatingChanged(containerOfElements: any[]) {
+        for (let con of containerOfElements) {
+            if (con.disable) {
+                con.element.disabled = "disabled";
+                con.element.value = "";
+            } else {
+                con.element.disabled = "";
+            }
+        }
     }
 
     isAllUnchecked(): boolean {
@@ -169,6 +214,19 @@ export class EventCreateDataComponent implements OnInit {
         this.geocodingService.getAddress(this.eventForm.controls["latitude"].value, this.eventForm.controls["longitude"].value).subscribe(response => {
             this.eventForm.controls["address"].setValue(response);
         });
+    }
+
+    recurringChanged(value: string) {
+        this.recurring = value;
+
+        if (value == 'daily') {
+
+        }
+    }
+
+    // returns array of numbers: [1..n]
+    range(n: number): number[] {
+        return Array.from(Array(n + 1).keys()).slice(1);
     }
 
     updateCategories(category: number): void {
