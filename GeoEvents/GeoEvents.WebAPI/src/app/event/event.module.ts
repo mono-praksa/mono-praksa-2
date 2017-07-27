@@ -23,7 +23,6 @@ import { EventService } from "./shared/event.service";
 import { LocationService } from "./shared/location.service";
 
 import { GeocodingService } from "../shared/geocoding.service";
-import { PreserveSearchQueryService } from "../shared/preserve-search-query.service";
 
 @NgModule({
     imports: [
@@ -55,8 +54,7 @@ import { PreserveSearchQueryService } from "../shared/preserve-search-query.serv
         EventDetailRouteActivatorService,
         EventService,
         GeocodingService,
-        LocationService,
-        PreserveSearchQueryService
+        LocationService
 	]
 })
 export class EventModule { }
