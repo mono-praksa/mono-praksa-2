@@ -125,7 +125,7 @@
     <hr />
 	<div>
 		<display-list [filter]="this.filter" *ngIf="!this.isMapMode && this.filter"></display-list>
-		<display-map [latitude]="latitude.value" [longitude]="longitude.value" [filter]="this.filter" *ngIf="this.isMapMode"></display-map>
+		<display-map [filter]="this.filter" *ngIf="this.isMapMode"></display-map>
 	</div>
 </div>
 

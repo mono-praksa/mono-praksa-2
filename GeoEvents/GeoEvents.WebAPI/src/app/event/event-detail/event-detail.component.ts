@@ -24,8 +24,6 @@ export class EventDetailComponent implements OnInit {
     eventForm: FormGroup;
     hasRated: boolean = false;
     rating: number;
-    @ViewChild("search") searchElementRef: ElementRef;
-    @ViewChild("userRate") userRateElement: ElementRef;
 
     private event: Event;
     private getImagesLoading: boolean = false;
@@ -117,10 +115,6 @@ export class EventDetailComponent implements OnInit {
                     this.location.RateCount = response.RateCount;
                 });
         }
-    }
-
-    rateChange(slider: any) {
-        this.userRateElement.nativeElement.innerHTML = slider.value;
     }
 
     reserve() {
