@@ -19,7 +19,6 @@ export class HomeComponent implements OnInit {
     }
 
     onSearch(formValues: any) {
-        //this.preserveSearchQueryService.searchQuery = formValues.searchTerm;
         this.router.navigate(["event/search"], { queryParams: { searchString: formValues.searchTerm } });
 	}
 }

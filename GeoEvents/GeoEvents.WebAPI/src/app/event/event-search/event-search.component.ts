@@ -43,7 +43,6 @@ export class EventSearchComponent implements OnInit {
     private searchEventLoading: boolean = false;
     private userApproximateAddress: string = "";
 
-    //constructor
     constructor(
         private categoryService: CategoryService,
         private eventService: EventService,
@@ -69,8 +68,10 @@ export class EventSearchComponent implements OnInit {
         this.loaderService.loaderStatus.subscribe((value: boolean) => {
             this.searchEventLoading = value;
         });
-
-        if (this.route.snapshot.queryParams['searchString']) {
+        
+        if (this.route.snapshot.queryParams["searchString"]) {
+            this.loaderService.displayLoader(true);
+            this.searchString.setValue(this.route.snapshot.queryParams["searchString"]);
             this.filter = {
 				ULat: undefined,
                 ULong: undefined,
@@ -80,14 +81,14 @@ export class EventSearchComponent implements OnInit {
                 Category: 0,
                 Price: undefined,
                 RatingEvent: undefined,
-                SearchString: this.route.snapshot.queryParams['q'],
+                SearchString: this.route.snapshot.queryParams["searchString"],
                 Custom: undefined,
 
 				PageNumber: 1,
 				PageSize: 25,
 				OrderByString: "Name",
 				OrderIsAscending: true
-            }		
+            }
             this.getEvents(this.filter);
 		}
 		else{
@@ -148,7 +149,6 @@ export class EventSearchComponent implements OnInit {
             .subscribe(result => {
                 this.events = result.data;
                 this.eventCount = result.metaData.TotalItemCount;
-                //this.preserveSearchQueryService.searchQuery = null;
                 this.loaderService.displayLoader(false);
             }, error => this.errorMessage = <any>error);
 	}
