@@ -63,6 +63,21 @@ namespace GeoEvents.Service
                 mult *= 2;
                 cat = cat >> 1;
             }
+            int repeaton = evt.RepeatOn;
+            mult = 1;
+            if (repeaton != 0)
+            {
+                while (repeaton > 0)
+                {
+                    int mod = repeaton % 2;
+                    if (mod == 1)
+                    {
+                        evt.RepeatOnList.Add(mult);
+                    }
+                    mult *= 2;
+                    repeaton = repeaton >> 1;
+                }
+            }
             return evt;
         }
 
@@ -93,13 +108,28 @@ namespace GeoEvents.Service
                     mult *= 2;
                     cat = cat >> 1;
                 }
+                int repeaton = evt.RepeatOn;
+                mult = 1;
+                if (repeaton != 0)
+                {
+                    while (repeaton > 0)
+                    {
+                        int mod = repeaton % 2;
+                        if (mod == 1)
+                        {
+                            evt.RepeatOnList.Add(mult);
+                        }
+                        mult *= 2;
+                        repeaton = repeaton >> 1;
+                    }
+                }
             }
 
 
             return result;
         }
 
-        
+
 
         /// <summary>
         /// Creates an event asynchronously.
@@ -116,20 +146,22 @@ namespace GeoEvents.Service
             {
                 evt.Category += evt.Categories[i];
             }
-            evt.RepeatOn = 0;
-            for (int i=0; i<evt.RepeatOnList.Count; i++)
-            {
-                evt.RepeatOn += evt.RepeatOnList[i];
-            }
             evt.Reserved = 0;
             evt.Rating = 0;
             evt.RateCount = 0;
+            evt.RepeatOn = 0;
             if (String.IsNullOrEmpty(evt.Occurrence))
             {
                 evt.Occurrence = "none";
-                evt.RepeatEvery = null;
-                evt.RepeatOn = null;
-                evt.RepeatCount = null;
+                evt.RepeatEvery = 0;
+                evt.RepeatCount = 0;
+            }
+            else
+            {
+                for (int i = 0; i < evt.RepeatOnList.Count; i++)
+                {
+                    evt.RepeatOn += evt.RepeatOnList[i];
+                }
             }
 
             return Repository.CreateEventAsync(evt);

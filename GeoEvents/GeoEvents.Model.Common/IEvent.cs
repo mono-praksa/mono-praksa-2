@@ -149,7 +149,7 @@ namespace GeoEvents.Model.Common
         /// <value>
         /// The repeat every.
         /// </value>
-        int? RepeatEvery { get; set; }
+        int RepeatEvery { get; set; }
 
         /// <summary>
         /// Gets or sets the repeat on.
@@ -157,7 +157,7 @@ namespace GeoEvents.Model.Common
         /// <value>
         /// The repeat on.
         /// </value>
-        int? RepeatOn { get; set; }
+        int RepeatOn { get; set; }
 
         /// <summary>
         /// Gets or sets the repeat count.
@@ -165,7 +165,7 @@ namespace GeoEvents.Model.Common
         /// <value>
         /// The repeat count.
         /// </value>
-        int? RepeatCount { get; set; }
+        int RepeatCount { get; set; }
 
         /// <summary>
         /// Gets or sets the repeat on list.
