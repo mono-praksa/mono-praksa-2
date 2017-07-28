@@ -157,7 +157,7 @@ namespace GeoEvents.Repository
                         RepeatOn = Convert.ToInt32(dr[16]),
                         RepeatCount = Convert.ToInt32(dr[17]),
 
-                        LocationId = new Guid(dr[14].ToString())
+                        LocationId = new Guid(dr[18].ToString())
                     };
                     SelectEvents.Add(Mapper.Map<IEvent>(tmp));
                 }
