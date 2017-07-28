@@ -152,6 +152,8 @@ namespace GeoEvents.Service
 
         #region Clustering
 
+        
+
         /// <summary>
         /// Gets the events in the form of Map points (markers and/or clusters).
         /// Does not use caching but can be modified to cache the results from the database.
@@ -161,7 +163,10 @@ namespace GeoEvents.Service
         /// <returns>List of Map points.</returns>
         public async Task<IList<MapPoint>> GetClusteredEventsAsync(IFilter filter, IClusteringFIlter clusteringFilter )
         {
-            var points = await GetClusterPointCollection(filter);
+            var fff = new MapPoint();
+
+            string cachekey = "CACHEKEY";
+            var points = await GetClusterPointCollection(filter, cachekey);
 
             var mapService = new ClusterService(points);
             var input = new GetMarkersParams()
@@ -170,10 +175,11 @@ namespace GeoEvents.Service
                 NorthEastLongitude = clusteringFilter.NELongitude,
                 SouthWestLatitude = clusteringFilter.SWLatitude,
                 SouthWestLongitude = clusteringFilter.SWLongitude,
-                ZoomLevel = clusteringFilter.ZoomLevel
+                ZoomLevel = clusteringFilter.ZoomLevel,
+                PointType = cachekey
             };
-
-            var markers = mapService.GetClusterMarkers(input);
+            //"MapService says: exception Object reference not set to an instance of an object."
+            var markers = mapService.GetClusterMarkers(input);           
 
             return markers.Markers;
         }
@@ -184,9 +190,12 @@ namespace GeoEvents.Service
         /// </summary>
         /// <param name="filter">Filter that will be used to retrieve data from the database if needed</param>
         /// <returns>The PointCollection</returns>
-        private async Task<PointCollection> GetClusterPointCollection(IFilter filter)
+        private async Task<PointCollection> GetClusterPointCollection(IFilter filter, string cachekey)
         {
             var points = new PointCollection();
+
+            if (points.Exists(cachekey))
+                return points;
 
             //get list of events from the database. filter is modified in a way it will recieve all pages at once.
             filter.PageNumber = -1;
@@ -194,10 +203,11 @@ namespace GeoEvents.Service
             List<IEvent> dbResults = dataBaseResult.ToList();
             
             //map the location, name and id properties
-            var mapPoints = dbResults.Select(p => new MapPoint() { X = p.Longitude, Y = p.Latitude, Data = p.Id, Name = p.Name }).ToList();
+            var mapPoints = dbResults.Select(p => new MapPoint() { X = p.Longitude, Y = p.Latitude, Name = p.Name, Data = p.Id.ToString() }).ToList();
             
-            //set the map points. caching is not used so timespan is 0...
-            points.Set(mapPoints, TimeSpan.MinValue, null);
+            //i tried setting the cacheKey to null and timespan to zero to avoid caching
+            //but it does not work that way.
+            points.Add(mapPoints, TimeSpan.FromSeconds(3000), cachekey);
 
             //return the points
             return points;

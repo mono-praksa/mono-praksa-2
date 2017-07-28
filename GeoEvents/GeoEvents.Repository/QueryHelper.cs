@@ -222,12 +222,12 @@ namespace GeoEvents.Repository
         {
             StringBuilder selectString = new StringBuilder();
 
-            if (filter.OrderBy == "Distance" && filter.ULat != null && filter.ULong != null)
+            if (filter.OrderBy == "Distance" && filter.ULat != null && filter.ULong != null && filter.PageNumber != -1)
             {
                 selectString.AppendFormat("SELECT *, earth_distance(ll_to_earth({0},{1}), ll_to_earth({2},{3})) as distance from {4} WHERE ",
                     ParLatitude, ParLongitude, TableNameEventLatQ, TableNameEventLongQ, TableNameEventQ);
             }
-            else if(filter.OrderBy == "RatingLocation")
+            else if(filter.OrderBy == "RatingLocation" && filter.PageNumber != -1)
             {
                 selectString.AppendFormat("SELECT * FROM {0} INNER JOIN {1} ON ({2} = {3}) ",
                     TableNameEventQ, TableNameLocationQ, TableNameEventLocationIdQ, TableNameLocationIdQ);
@@ -319,56 +319,57 @@ namespace GeoEvents.Repository
 
             ///ORDERING orderby orderAscend
             ///
-
-            switch (filter.OrderBy)
+            if (filter.PageNumber != -1)
             {
-                case "Name":
-                    selectString.AppendFormat(" order by {0} ",
-                        TableNameEventNameQ);
-                    break;
+                switch (filter.OrderBy)
+                {
+                    case "Name":
+                        selectString.AppendFormat(" order by {0} ",
+                            TableNameEventNameQ);
+                        break;
 
-                case "StartTime":
-                    selectString.AppendFormat(" order by {0} ",
-                        TableNameEventStartTimeQ);
-                    break;
+                    case "StartTime":
+                        selectString.AppendFormat(" order by {0} ",
+                            TableNameEventStartTimeQ);
+                        break;
 
-                case "EndTime":
-                    selectString.AppendFormat(" order by {0} ",
-                        TableNameEventEndTimeQ);
-                    break;
+                    case "EndTime":
+                        selectString.AppendFormat(" order by {0} ",
+                            TableNameEventEndTimeQ);
+                        break;
 
-                case "Distance":
-                    selectString.Append(" order by distance ");
-                    break;
+                    case "Distance":
+                        selectString.Append(" order by distance ");
+                        break;
 
-                case "Price":
-                    selectString.AppendFormat(" order by {0} ",
-                        TableNameEventPriceQ);
-                    break;
+                    case "Price":
+                        selectString.AppendFormat(" order by {0} ",
+                            TableNameEventPriceQ);
+                        break;
 
-                case "RatingEvent":
-                    selectString.AppendFormat(" order by {0} ",
-                        TableNameEventRatingQ);
-                    break;
+                    case "RatingEvent":
+                        selectString.AppendFormat(" order by {0} ",
+                            TableNameEventRatingQ);
+                        break;
 
-                case "RatingLocation":
-                    selectString.AppendFormat(" order by {0} ",
-                        TableNameLocationRatingQ);
-                    break;
+                    case "RatingLocation":
+                        selectString.AppendFormat(" order by {0} ",
+                            TableNameLocationRatingQ);
+                        break;
+                }
+
+                if (filter.OrderAscending == true && String.IsNullOrEmpty(filter.OrderBy) == false)
+                {
+                    selectString.Append(" asc ");
+                }
+                else
+                {
+                    selectString.Append(" desc ");
+                }
+
+                selectString.AppendFormat(" LIMIT({0}) OFFSET ({1}) ",
+                    filter.PageSize.ToString(), ((filter.PageNumber - 1) * filter.PageSize).ToString());
             }
-
-            if (filter.OrderAscending == true && String.IsNullOrEmpty(filter.OrderBy) == false)
-            {
-                selectString.Append(" asc ");
-            }
-            else
-            {
-                selectString.Append(" desc ");
-            }
-
-            selectString.AppendFormat(" LIMIT({0}) OFFSET ({1}) ",
-                filter.PageSize.ToString(), ((filter.PageNumber - 1) * filter.PageSize).ToString());
-
             return selectString.ToString();
         }
 

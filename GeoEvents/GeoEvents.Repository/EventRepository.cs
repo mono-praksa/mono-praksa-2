@@ -149,7 +149,10 @@ namespace GeoEvents.Repository
                 SetParametersSearchEvents(filter, commandCount);
                 object sc = await commandCount.ExecuteScalarAsync();
                 count = Convert.ToInt32(sc);
-
+                if(filter.PageNumber == -1)
+                {
+                    filter.PageNumber = 1;
+                }
                 result = new StaticPagedList<IEvent>(SelectEvents, filter.PageNumber, filter.PageSize, count);
             }
             return result;
