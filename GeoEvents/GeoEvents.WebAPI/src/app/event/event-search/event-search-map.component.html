@@ -1,5 +1,5 @@
 ﻿<div>
-    <agm-map [latitude]="latitude" [longitude]="longitude" [zoom]="zoom">
+    <agm-map [latitude]="latitude" [longitude]="longitude" [zoom]="initialZoom" (boundsChange)="onBoundsChange($event)" (zoomChange)="onZoomChange($event)" (idle)="getEvents()">
         <div *ngFor="let mapPoint of mapPoints">
             <agm-marker *ngIf="mapPoint.Count === 1" [title]="mapPoint.Name" [iconUrl]="getIconUrl(mapPoint.Count)" [latitude]="mapPoint.Y" [longitude]="mapPoint.X">
                 <agm-info-window>

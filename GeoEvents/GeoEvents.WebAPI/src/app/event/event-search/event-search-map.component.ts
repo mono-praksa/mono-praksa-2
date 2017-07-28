@@ -1,6 +1,6 @@
 ﻿﻿import { Component, EventEmitter, Input, OnChanges, OnInit, Output, ViewChild } from "@angular/core";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
-import { MapsAPILoader } from "@agm/core";
+import { LatLngBounds, MapsAPILoader } from "@agm/core";
 import { Router } from "@angular/router";
 import { Observable } from "rxjs/Observable";
 
@@ -23,7 +23,7 @@ export class EventMapComponent implements OnChanges, OnInit {
     private latitude: number;
     private longitude: number;
     private mapPoints: MapPoint[];
-    private zoom: number = 3;
+    private initialZoom: number = 1;
 
     constructor(private router: Router, private eventService: EventService) {
 
@@ -31,33 +31,22 @@ export class EventMapComponent implements OnChanges, OnInit {
 
     ngOnChanges() {
         if (this.filter) {
-            this.clusteringFilter = {
-                NELatitude: 50.5,
-                NELongitude: 50.5,
-                SWLatitude: 10.2,
-                SWLongitude: 10.2,
-                ZoomLevel: 4
-            }
-            this.eventService.getEventsClustered(this.filter, this.clusteringFilter).subscribe((response: MapPoint[]) => {
-                this.mapPoints = response;
-            })
+            this.getEvents();
         }
     }
 
     ngOnInit() {
+        this.clusteringFilter = {
+            NELatitude: undefined,
+            NELongitude: undefined,
+            SWLatitude: undefined,
+            SWLongitude: undefined,
+            ZoomLevel: undefined
+        }
         this.initMap();
         if (this.filter) {
-            this.clusteringFilter = {
-                NELatitude: 50.5,
-                NELongitude: 50.5,
-                SWLatitude: 10.2,
-                SWLongitude: 10.2,
-                ZoomLevel: 4
-            }
-            this.eventService.getEventsClustered(this.filter, this.clusteringFilter).subscribe((response: MapPoint[]) => {
-                this.mapPoints = response;
-            })
-        }        
+            this.getEvents();
+        }
     }
 
     private displayEvent(evt: Event): void {
@@ -65,24 +54,31 @@ export class EventMapComponent implements OnChanges, OnInit {
         this.router.navigate([routeUrl]);
     }
 
+    private getEvents(): void {
+        console.log("getEvents");
+        this.eventService.getEventsClustered(this.filter, this.clusteringFilter).subscribe((response: MapPoint[]) => {
+            this.mapPoints = response;
+        })
+    }
+
     private getIconUrl(count: number): string {
         if (count === 1) {
-            return "../../assets/images/pin.png";
+            return "app/assets/images/pin.png";
         }
         else if (count < 10) {
-            return "../../assets/images/m1.png";
+            return "app/assets/images/m1.png";
         }
         else if (count < 30) {
-            return "../../assets/images/m2.png";
+            return "app/assets/images/m2.png";
         }
         else if (count < 100) {
-            return "../../assets/images/m3.png";
+            return "app/assets/images/m3.png";
         }
         else if (count < 500) {
-            return "../../assets/images/m4.png";
+            return "app/assets/images/m4.png";
         }
         else if (count >= 500) {
-            return "../../assets/images/m5.png";
+            return "app/assets/images/m5.png";
         }
         else {
             return "";
@@ -91,31 +87,42 @@ export class EventMapComponent implements OnChanges, OnInit {
 
     private getZoom(radius: number): number {
         if (radius) {
-            return (16 - Math.log(radius / 500) / Math.log(2));
+            return Math.ceil((16 - Math.log(radius * 2) / Math.log(2)));
         }
         else {
-            return 3;
+            return 1;
         }
     }
 
     private initMap(): void {
-        //this sets the latitude and longitude form input
         if (this.filter) {
             this.latitude = this.filter.ULat;
             this.longitude = this.filter.ULong;
-            this.zoom = this.getZoom(this.filter.Radius);
-        }
-        if (this.mapPoints && this.mapPoints.length > 0 && !this.latitude) {
-            this.latitude = this.mapPoints[0].Y;
-            this.longitude = this.mapPoints[0].X;
+            this.initialZoom = this.getZoom(this.filter.Radius);
         }
         else {
             this.latitude = 0;
             this.longitude = 0;
+            this.initialZoom = this.getZoom(undefined);
         }
     }
 
     private markerClick(event: any): void {
         console.log(event);
+    }
+
+    private onBoundsChange(bounds: LatLngBounds): void {
+        console.log("onBoundsChange");
+        var ne = bounds.getNorthEast();
+        var sw = bounds.getSouthWest();
+        this.clusteringFilter.NELatitude = ne.lat();
+        this.clusteringFilter.NELongitude = ne.lng();
+        this.clusteringFilter.SWLatitude = sw.lat();
+        this.clusteringFilter.SWLongitude = sw.lng();
+    }
+
+    private onZoomChange(zoom: number): void {
+        console.log("onZoomChange");
+        this.clusteringFilter.ZoomLevel = zoom;
     }
 }

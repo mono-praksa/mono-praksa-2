@@ -164,7 +164,7 @@ namespace GeoEvents.Service
         public async Task<IList<MapPoint>> GetClusteredEventsAsync(IFilter filter, IClusteringFIlter clusteringFilter )
         {
             var fff = new MapPoint();
-            string cachekey = filter.ULat.ToString()+filter.ULong.ToString()+filter.Radius.ToString()+filter.Category.ToString()+filter.Custom+filter.StartTime.ToString()+filter.EndTime.ToString()+filter.Price.ToString()+filter.RatingEvent.ToString()+filter.SearchString;
+            string cachekey = filter.ULat.ToString() + filter.ULong.ToString() + filter.Radius.ToString() + filter.Category.ToString() + filter.Custom + filter.StartTime.ToString() + filter.EndTime.ToString() + filter.Price.ToString() + filter.RatingEvent.ToString() + filter.SearchString;
             var points = await GetClusterPointCollection(filter, cachekey);
 
             var mapService = new ClusterService(points);
@@ -198,15 +198,14 @@ namespace GeoEvents.Service
 
             //get list of events from the database. filter is modified in a way it will recieve all pages at once.
             filter.PageNumber = -1;
-            StaticPagedList<IEvent> dataBaseResult = await Repository.GetEventsAsync(filter);
-            List<IEvent> dbResults = dataBaseResult.ToList();
+            List<IEvent> dataBaseResult = await Repository.GetAllEventsAsync(filter);
             
             //map the location, name and id properties
-            var mapPoints = dbResults.Select(p => new MapPoint() { X = p.Longitude, Y = p.Latitude, Name = p.Name, Data = p.Id.ToString() }).ToList();
+            var mapPoints = dataBaseResult.Select(p => new MapPoint() { X = p.Longitude, Y = p.Latitude, Name = p.Name, Data = p.Id.ToString() }).ToList();
             
             //i tried setting the cacheKey to null and timespan to zero to avoid caching
             //but it does not work that way.
-            points.Add(mapPoints, TimeSpan.FromSeconds(3000), cachekey);
+            points.Add(mapPoints, TimeSpan.FromSeconds(300), cachekey);
 
             //return the points
             return points;

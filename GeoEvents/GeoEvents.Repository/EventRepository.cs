@@ -149,16 +149,50 @@ namespace GeoEvents.Repository
                 SetParametersSearchEvents(filter, commandCount);
                 object sc = await commandCount.ExecuteScalarAsync();
                 count = Convert.ToInt32(sc);
-                if(filter.PageNumber == -1)
-                {
-                    filter.PageNumber = 1;
-                }
                 result = new StaticPagedList<IEvent>(SelectEvents, filter.PageNumber, filter.PageSize, count);
             }
             return result;
         }
 
+        public async Task<List<IEvent>> GetAllEventsAsync(IFilter filter)
+        {
+            EventEntity tmp;
+            List<IEvent> SelectEvents = new List<IEvent>();
 
+            using (var connection = Connection.CreateConnection())
+            using (NpgsqlCommand commandSelect = new NpgsqlCommand(QueryHelper.GetSelectAllEventsQueryString(filter), connection))
+            {
+                await connection.OpenAsync();
+                SetParametersSearchEvents(filter, commandSelect);
+                DbDataReader dr = await commandSelect.ExecuteReaderAsync();
+
+                while (dr.Read())
+                {
+                    tmp = new EventEntity
+                    {
+                        Id = new Guid(dr[0].ToString()),
+                        Name = dr[1].ToString(),
+                        Description = dr[2].ToString(),
+                        Category = Convert.ToInt32(dr[3]),
+                        Latitude = Convert.ToDouble(dr[4]),
+                        Longitude = Convert.ToDouble(dr[5]),
+                        StartTime = Convert.ToDateTime(dr[6]),
+                        EndTime = Convert.ToDateTime(dr[7]),
+                        Rating = Convert.ToDouble(dr[8]),
+                        RateCount = Convert.ToInt32(dr[9]),
+                        Price = Convert.ToDouble(dr[10]),
+                        Capacity = Convert.ToInt32(dr[11]),
+                        Reserved = Convert.ToInt32(dr[12]),
+                        Custom = dr[13].ToString(),
+                        LocationId = new Guid(dr[14].ToString())
+                    };
+                    SelectEvents.Add(Mapper.Map<IEvent>(tmp));
+                }
+                dr.Close();
+                
+            }
+            return SelectEvents;
+        }
 
         /// <summary>
         /// Sets Parameters of NpgsqlCommand by Filter

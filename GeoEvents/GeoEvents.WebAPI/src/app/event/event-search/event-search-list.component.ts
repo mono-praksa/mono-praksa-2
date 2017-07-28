@@ -1,4 +1,4 @@
-﻿import { Component, Input, OnInit } from "@angular/core";
+﻿import { Component, Input, OnChanges, OnInit } from "@angular/core";
 import { DatePipe } from "@angular/common";
 import { MapsAPILoader } from "@agm/core";
 import { Subscription } from "rxjs/Subscription";
@@ -13,7 +13,7 @@ import { LoaderService } from "../../shared/loader.service";
     templateUrl:"app/event/event-search/event-search-list.component.html"
 })
 
-export class EventListComponent implements OnInit {
+export class EventListComponent implements OnChanges, OnInit {
     @Input() events: Event[];
     @Input() filter: Filter;
 
@@ -24,6 +24,10 @@ export class EventListComponent implements OnInit {
 
     constructor(private eventService: EventService, private loaderService: LoaderService) {
 
+    }
+
+    ngOnChanges() {
+        this.getEvents(this.filter);
     }
 
     ngOnInit() {
