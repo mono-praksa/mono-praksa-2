@@ -90,4 +90,8 @@ export class EventMapComponent implements OnChanges, OnInit {
             this.longitude = 0;
         }
     }
+
+    private markerClick(event: any): void {
+        console.log(event);
+    }
 }

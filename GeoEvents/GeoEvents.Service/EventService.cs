@@ -164,8 +164,7 @@ namespace GeoEvents.Service
         public async Task<IList<MapPoint>> GetClusteredEventsAsync(IFilter filter, IClusteringFIlter clusteringFilter )
         {
             var fff = new MapPoint();
-
-            string cachekey = "CACHEKEY";
+            string cachekey = filter.ULat.ToString()+filter.ULong.ToString()+filter.Radius.ToString()+filter.Category.ToString()+filter.Custom+filter.StartTime.ToString()+filter.EndTime.ToString()+filter.Price.ToString()+filter.RatingEvent.ToString()+filter.SearchString;
             var points = await GetClusterPointCollection(filter, cachekey);
 
             var mapService = new ClusterService(points);

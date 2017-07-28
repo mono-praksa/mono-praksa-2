@@ -9,9 +9,11 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
 using X.PagedList;
+using System.Runtime.Serialization;
 
 namespace GeoEvents.WebAPI.Controllers
 {
+
     [RoutePrefix("api/events")]
     public class EventController : ApiController
     {
@@ -202,12 +204,32 @@ namespace GeoEvents.WebAPI.Controllers
                 return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, "sorry :(");
             }
 
-            return Request.CreateResponse(HttpStatusCode.OK, result);
+            IList<MyMarker> test = Mapper.Map<IList<GoogleMaps.Net.Clustering.Data.Geometry.MapPoint>, IList<MyMarker>>(result);
+            
+            return Request.CreateResponse(HttpStatusCode.OK, test);
         }
 
         #endregion Methods
 
         #region Model
+
+        [Serializable]
+        public class MyMarker : GoogleMaps.Net.Clustering.Data.Geometry.MapPoint
+        {
+            public override void GetObjectData(SerializationInfo info, StreamingContext ctxt)
+            {
+                info.AddValue("MarkerId", this.MarkerId);
+                info.AddValue("MarkerType", this.MarkerType);
+                info.AddValue("X", this.X);
+                info.AddValue("Y", this.Y);
+                info.AddValue("Count", this.Count);
+                if (this.Count == 1)
+                {
+                    info.AddValue("Name", this.Name);
+                    info.AddValue("Data", this.Data);
+                }
+            }
+        }
 
         public class EventModel
         {

@@ -11,6 +11,7 @@ namespace GeoEvents.WebAPI.App_Start
             CreateMap<IEvent, EventController.EventModel>().ReverseMap();
             CreateMap<IImage, ImageController.ImageModel>().ReverseMap();
             CreateMap<ILocation, LocationController.LocationModel>().ReverseMap();
+            CreateMap<GoogleMaps.Net.Clustering.Data.Geometry.MapPoint, EventController.MyMarker>();
         }
     }
 }
