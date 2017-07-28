@@ -21,7 +21,6 @@ import { LoaderService } from "../../../shared/loader.service";
 })
 export class EventCreateDataComponent implements OnInit {
     @Output() eventEmitter = new EventEmitter();
-    recurring: string = "none";
     @ViewChild("search") searchElementRef: ElementRef;
 
     address: FormControl;
@@ -40,7 +39,6 @@ export class EventCreateDataComponent implements OnInit {
     // FormControls for recurring
     repeatCount: FormControl;
     repeatEvery: FormControl;
-    repeatOn: FormControl;
 
     private createdEvent: Event;
     private createEventLoading: boolean = false;
@@ -61,7 +59,8 @@ export class EventCreateDataComponent implements OnInit {
             this.createEventLoading = value;
         });
 
-        this.categoryService.buildCategories(true);
+        this.categoryService.buildCategories("category", true);
+        this.categoryService.buildCategories("day");
 
         this.buildForm();
 
@@ -109,7 +108,6 @@ export class EventCreateDataComponent implements OnInit {
         // FormControls for reccuring
         this.repeatCount = new FormControl(0);
         this.repeatEvery = new FormControl(1);
-        this.repeatOn = new FormControl("");
 
         this.eventForm = new FormGroup({
             address: this.address,
@@ -125,19 +123,28 @@ export class EventCreateDataComponent implements OnInit {
 
             // FormControls for reccuring
             repeatCount: this.repeatCount,
-            repeatEvery: this.repeatEvery,
-            repeatOn: this.repeatOn
+            repeatEvery: this.repeatEvery
         }, endDateBeforeStartDate("start", "end"));
     }
 
     createEvent(formValues: any) {
         this.loaderService.displayLoader(true);
         let chosenCategories: number[] = [];
+        let chosenDays: number[] = [];
+
         this.categoryService.categories.filter(checkbox => {
             if (checkbox.checked) {
                 chosenCategories.push(checkbox.id);
             }
         });
+
+        if (this.occurence.value == "weekly") {
+            this.categoryService.days.filter(checkbox => {
+                if (checkbox.checked) {
+                    chosenDays.push(checkbox.id);
+                }
+            });
+        }
 
         let newEvent : Event = {
             Capacity: formValues.capacity,
@@ -161,7 +168,7 @@ export class EventCreateDataComponent implements OnInit {
             // attributes for reccuring events
             RepeatCount: formValues.repeatCount,
             RepeatEvery: formValues.repeatEvery,
-            RepeatOn: formValues.repeatOn
+            RepeatOnList: chosenDays
         }
         this.locationService.getLocation(formValues.address).subscribe((res: Location) => {
             newEvent.LocationId = res.Id;
@@ -178,11 +185,26 @@ export class EventCreateDataComponent implements OnInit {
     }
 
     // when user writes number in inputs in "end of repeating"
-    endOfRepeatingBlured(value: number = undefined) {
-        if (value) {
+    endOfRepeatingBlured(valueType: string, value: any) {
+        if (valueType == "num") {
             this.repeatCount.setValue(+value);
-        } else {
-            this.repeatCount.setValue(0);
+        } else if (valueType == "date") {
+            let endDateTimeRecurring: Date = new Date(value);
+            let endDateTime: Date = new Date(this.end.value);
+            let lastDateTime: Date = endDateTime;
+            let repeating = parseInt(this.repeatEvery.value);
+            let numberOfRepeating: number = 0;
+
+            if (this.occurence.value == "daily") {
+                lastDateTime.setDate(lastDateTime.getDate() + repeating);
+
+                while (lastDateTime < endDateTimeRecurring) {
+                    lastDateTime.setDate(lastDateTime.getDate() + repeating);
+                    numberOfRepeating += 1;
+                }
+            }
+
+            this.repeatCount.setValue(numberOfRepeating);
         }
     }
 
@@ -216,14 +238,6 @@ export class EventCreateDataComponent implements OnInit {
         });
     }
 
-    recurringChanged(value: string) {
-        this.recurring = value;
-
-        if (value == 'daily') {
-
-        }
-    }
-
     // returns array of numbers: [1..n]
     range(n: number): number[] {
         return Array.from(Array(n + 1).keys()).slice(1);
@@ -232,6 +246,14 @@ export class EventCreateDataComponent implements OnInit {
     updateCategories(category: number): void {
         this.categoryService.categories.filter(checkbox => {
             if (checkbox.id == category) {
+                checkbox.checked = !checkbox.checked;
+            }
+        });
+    }
+
+    updateDays(dayNumber: number): void {
+        this.categoryService.days.filter(checkbox => {
+            if (checkbox.id == dayNumber) {
                 checkbox.checked = !checkbox.checked;
             }
         });

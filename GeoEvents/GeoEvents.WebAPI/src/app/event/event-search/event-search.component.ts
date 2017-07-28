@@ -56,7 +56,7 @@ export class EventSearchComponent implements OnInit {
 	}
 
     ngOnInit(): void {
-        this.categoryService.buildCategories(false);
+        this.categoryService.buildCategories('category', false);
 
         this.geocodingService.getUserApproximateAddress()
             .subscribe(response => {

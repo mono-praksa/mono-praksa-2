@@ -18,9 +18,10 @@
     StartTime: Date;
 
     // attributes for reccuring events
-    RepeatCount?: number;
+    RepeatCount?: Date;
     RepeatEvery?: string;
-    RepeatOn?: string;
+    RepeatOn?: number;
+    RepeatOnList?: number[];
 }
 
 export class CustomAttribute {
