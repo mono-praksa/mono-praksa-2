@@ -150,9 +150,8 @@ namespace GeoEvents.Service
             evt.Rating = 0;
             evt.RateCount = 0;
             evt.RepeatOn = 0;
-            if (String.IsNullOrEmpty(evt.Occurrence))
+            if (evt.Occurrence == "none")
             {
-                evt.Occurrence = "none";
                 evt.RepeatEvery = 0;
                 evt.RepeatCount = 0;
             }
