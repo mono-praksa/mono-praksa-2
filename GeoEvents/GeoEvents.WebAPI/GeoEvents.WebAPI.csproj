@@ -405,10 +405,12 @@
     <TypeScriptCompile Include="src\app\event\event.module.ts" />
     <TypeScriptCompile Include="src\app\event\shared\event.service.ts" />
     <TypeScriptCompile Include="src\app\event\shared\location.service.ts" />
+    <TypeScriptCompile Include="src\app\event\shared\models\clustering-filter.model.ts" />
     <TypeScriptCompile Include="src\app\event\shared\models\event.model.ts" />
     <TypeScriptCompile Include="src\app\event\shared\models\filter.model.ts" />
     <TypeScriptCompile Include="src\app\event\shared\models\image.model.ts" />
     <TypeScriptCompile Include="src\app\event\shared\models\location.model.ts" />
+    <TypeScriptCompile Include="src\app\event\shared\models\map-point.model.ts" />
     <TypeScriptCompile Include="src\app\event\shared\validator.ts" />
     <TypeScriptCompile Include="src\app\home\home.component.ts" />
     <TypeScriptCompile Include="src\app\event\shared\category.service.ts" />

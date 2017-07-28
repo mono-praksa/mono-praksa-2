@@ -4,9 +4,11 @@ import { Observable } from "rxjs/Observable";
 import "rxjs/add/operator/map";
 import "rxjs/add/operator/catch";
 
+import { ClusteringFilter } from "./models/clustering-filter.model";
 import { Event } from "./models/event.model";
 import { Filter } from "./models/filter.model";
 import { Image } from "./models/image.model";
+import { MapPoint } from "./models/map-point.model";
 
 @Injectable()
 export class EventService {
@@ -39,11 +41,18 @@ export class EventService {
             .catch(this.handleError); 
     }
 
-    getEvents(filter: Filter): Observable < any > {
+    getEvents(filter: Filter): Observable<any> {
         let query = "/api/events/search" + this.makeQueryString(filter);
         //execute http call
         return this.http.get(query)
             .map((response: Response) => <any>response.json())
+            .catch(this.handleError);
+    }
+
+    getEventsClustered(filter: Filter, clusteringFilter: ClusteringFilter): Observable<any> {
+        let query = "api/events/search" + this.makeQueryString(filter, clusteringFilter);
+        return this.http.get(query)
+            .map((response: Response) => <MapPoint[]>response.json())
             .catch(this.handleError);
     }
 
@@ -73,7 +82,7 @@ export class EventService {
             }).catch(this.handleError);
     }
 
-    private makeQueryString(filter: Filter): string {
+    private makeQueryString(filter: Filter, clusteringFilter: ClusteringFilter = undefined): string {
         let query = "";
 
         query += "?category=";
@@ -111,10 +120,20 @@ export class EventService {
             query += "&custom=" + filter.Custom;
         }
 
-        query += "&pageNumber=" + filter.PageNumber.toString();
-        query += "&pageSize=" + filter.PageSize.toString();
-        query += "&orderAscending=" + filter.OrderIsAscending.toString();
-        query += "&orderBy=" + filter.OrderByString.toString();
+        if (!clusteringFilter) {
+            query += "&pageNumber=" + filter.PageNumber.toString();
+            query += "&pageSize=" + filter.PageSize.toString();
+            query += "&orderAscending=" + filter.OrderIsAscending.toString();
+            query += "&orderBy=" + filter.OrderByString.toString();
+        }
+        else {
+            query += "&NELatitude=" + clusteringFilter.NELatitude.toString();
+            query += "&NELongitude=" + clusteringFilter.NELongitude.toString();
+            query += "&SWLatitude=" + clusteringFilter.SWLatitude.toString();
+            query += "&SWLongitude=" + clusteringFilter.SWLongitude.toString();
+            query += "&ZoomLevel=" + clusteringFilter.ZoomLevel.toString();
+        }
+        
 
         return query;
     }

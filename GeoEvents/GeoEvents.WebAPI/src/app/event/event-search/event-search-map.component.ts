@@ -4,9 +4,11 @@ import { MapsAPILoader } from "@agm/core";
 import { Router } from "@angular/router";
 import { Observable } from "rxjs/Observable";
 
+import { ClusteringFilter } from "../shared/models/clustering-filter.model";
 import { Event } from "../shared/models/event.model";
 import { EventService } from "../shared/event.service";
 import { Filter } from "../shared/models/filter.model";
+import { MapPoint } from "../shared/models/map-point.model";
 
 @Component({
     selector: "display-map",
@@ -15,12 +17,12 @@ import { Filter } from "../shared/models/filter.model";
 })
 
 export class EventMapComponent implements OnInit {
-    @Input() events: Event[];
     @Input() filter: Filter;
 
+    private clusteringFilter: ClusteringFilter;
     private latitude: number;
     private longitude: number;
-    private mapPoints: any[] = [];
+    private mapPoints: MapPoint[];
     private zoom: number = 3;
 
     constructor(private router: Router, private eventService: EventService) {
@@ -29,7 +31,16 @@ export class EventMapComponent implements OnInit {
 
     ngOnInit() {
         this.initMap();
-        this.initMarkers();
+        this.clusteringFilter = {
+            NELatitude: 10,
+            NELongitude: 10,
+            SWLatitude: 10,
+            SWLongitude: 10,
+            ZoomLevel: 4
+        }
+        this.eventService.getEventsClustered(this.filter, this.clusteringFilter).subscribe((response: MapPoint[]) => {
+            this.mapPoints = response;
+        } )
     }
 
     private displayEvent(evt: Event): void {
@@ -53,24 +64,13 @@ export class EventMapComponent implements OnInit {
             this.longitude = this.filter.ULong;
             this.zoom = this.getZoom(this.filter.Radius);
         }
-        if (this.events && this.events.length > 0 && !this.latitude) {
-            this.latitude = this.events[0].Latitude;
-            this.longitude = this.events[0].Longitude;
+        if (this.mapPoints && this.mapPoints.length > 0 && !this.latitude) {
+            this.latitude = this.mapPoints[0].Y;
+            this.longitude = this.mapPoints[0].X;
         }
         else {
             this.latitude = 0;
             this.longitude = 0;
-        }
-    }
-
-    private initMarkers(): void {
-        for (let mapPoint of this.mapPoints) {
-            if (mapPoint.Count === 1) {
-                this.eventService.getEventById(mapPoint.Id).subscribe((response: Event) => {
-                    mapPoint.Lat = response.Latitude;
-                    mapPoint.Long = response.Longitude;
-                })
-            }
         }
     }
 }
