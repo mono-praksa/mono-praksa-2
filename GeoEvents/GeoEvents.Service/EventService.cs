@@ -116,9 +116,21 @@ namespace GeoEvents.Service
             {
                 evt.Category += evt.Categories[i];
             }
+            evt.RepeatOn = 0;
+            for (int i=0; i<evt.RepeatOnList.Count; i++)
+            {
+                evt.RepeatOn += evt.RepeatOnList[i];
+            }
             evt.Reserved = 0;
             evt.Rating = 0;
             evt.RateCount = 0;
+            if (String.IsNullOrEmpty(evt.Occurrence))
+            {
+                evt.Occurrence = "none";
+                evt.RepeatEvery = null;
+                evt.RepeatOn = null;
+                evt.RepeatCount = null;
+            }
 
             return Repository.CreateEventAsync(evt);
         }

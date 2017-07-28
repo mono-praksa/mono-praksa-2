@@ -135,6 +135,46 @@ namespace GeoEvents.Model.Common
         /// </value>
         string Custom { get; set; }
 
+        /// <summary>
+        /// Gets or sets the occurrence.
+        /// </summary>
+        /// <value>
+        /// The occurrence.
+        /// </value>
+        string Occurrence { get; set; }
+
+        /// <summary>
+        /// Gets or sets the repeat every.
+        /// </summary>
+        /// <value>
+        /// The repeat every.
+        /// </value>
+        int? RepeatEvery { get; set; }
+
+        /// <summary>
+        /// Gets or sets the repeat on.
+        /// </summary>
+        /// <value>
+        /// The repeat on.
+        /// </value>
+        int? RepeatOn { get; set; }
+
+        /// <summary>
+        /// Gets or sets the repeat count.
+        /// </summary>
+        /// <value>
+        /// The repeat count.
+        /// </value>
+        int? RepeatCount { get; set; }
+
+        /// <summary>
+        /// Gets or sets the repeat on list.
+        /// </summary>
+        /// <value>
+        /// The repeat on list.
+        /// </value>
+        List<int> RepeatOnList { get; set; }
+
         #endregion Properties
     }
 }
