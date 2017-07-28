@@ -65,6 +65,30 @@ export class EventMapComponent implements OnChanges, OnInit {
         this.router.navigate([routeUrl]);
     }
 
+    private getIconUrl(count: number): string {
+        if (count === 1) {
+            return "../../assets/images/pin.png";
+        }
+        else if (count < 10) {
+            return "../../assets/images/m1.png";
+        }
+        else if (count < 30) {
+            return "../../assets/images/m2.png";
+        }
+        else if (count < 100) {
+            return "../../assets/images/m3.png";
+        }
+        else if (count < 500) {
+            return "../../assets/images/m4.png";
+        }
+        else if (count >= 500) {
+            return "../../assets/images/m5.png";
+        }
+        else {
+            return "";
+        }
+}
+
     private getZoom(radius: number): number {
         if (radius) {
             return (16 - Math.log(radius / 500) / Math.log(2));

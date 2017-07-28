@@ -335,6 +335,12 @@
     <Content Include="Scripts\respond.min.js" />
     <Content Include="Scripts\markerclusterer.js" />
     <Content Include="src\app\assets\images\elephant-acid-green_480.png" />
+    <Content Include="src\app\assets\images\m1.png" />
+    <Content Include="src\app\assets\images\m2.png" />
+    <Content Include="src\app\assets\images\m3.png" />
+    <Content Include="src\app\assets\images\m4.png" />
+    <Content Include="src\app\assets\images\m5.png" />
+    <Content Include="src\app\assets\images\pin.png" />
     <Content Include="src\app\error\error-404.component.html" />
     <Content Include="src\app\event\event-create\event-create-customize\event-create-customize.component.html" />
     <Content Include="src\app\event\event-create\event-create-data\event-create-data.component.css" />
