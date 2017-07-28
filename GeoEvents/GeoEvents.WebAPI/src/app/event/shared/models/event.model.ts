@@ -18,7 +18,7 @@
     StartTime: Date;
 
     // attributes for reccuring events
-    RepeatCount?: Date;
+    RepeatCount?: number;
     RepeatEvery?: string;
     RepeatOn?: number;
     RepeatOnList?: number[];

@@ -21,6 +21,7 @@ import { LoaderService } from "../../../shared/loader.service";
 })
 export class EventCreateDataComponent implements OnInit {
     @Output() eventEmitter = new EventEmitter();
+    repeat: { valueType: string, value: string } = {valueType: "", value: ""};
     @ViewChild("search") searchElementRef: ElementRef;
 
     address: FormControl;
@@ -37,7 +38,6 @@ export class EventCreateDataComponent implements OnInit {
     start: FormControl;
 
     // FormControls for recurring
-    repeatCount: FormControl;
     repeatEvery: FormControl;
 
     private createdEvent: Event;
@@ -106,7 +106,6 @@ export class EventCreateDataComponent implements OnInit {
         this.start = new FormControl("", Validators.required);
 
         // FormControls for reccuring
-        this.repeatCount = new FormControl(0);
         this.repeatEvery = new FormControl(1);
 
         this.eventForm = new FormGroup({
@@ -122,7 +121,6 @@ export class EventCreateDataComponent implements OnInit {
             occurence: this.occurence,
 
             // FormControls for reccuring
-            repeatCount: this.repeatCount,
             repeatEvery: this.repeatEvery
         }, endDateBeforeStartDate("start", "end"));
     }
@@ -131,6 +129,7 @@ export class EventCreateDataComponent implements OnInit {
         this.loaderService.displayLoader(true);
         let chosenCategories: number[] = [];
         let chosenDays: number[] = [];
+        let repeatCount: number = 0;
 
         this.categoryService.categories.filter(checkbox => {
             if (checkbox.checked) {
@@ -144,6 +143,10 @@ export class EventCreateDataComponent implements OnInit {
                     chosenDays.push(checkbox.id);
                 }
             });
+        }
+
+        if (this.occurence.value != "none") {
+            repeatCount = this.endOfRepeatingNumber();
         }
 
         let newEvent : Event = {
@@ -166,7 +169,7 @@ export class EventCreateDataComponent implements OnInit {
             StartTime: formValues.start,
 
             // attributes for reccuring events
-            RepeatCount: formValues.repeatCount,
+            RepeatCount: repeatCount,
             RepeatEvery: formValues.repeatEvery,
             RepeatOnList: chosenDays
         }
@@ -185,11 +188,17 @@ export class EventCreateDataComponent implements OnInit {
     }
 
     // when user writes number in inputs in "end of repeating"
-    endOfRepeatingBlured(valueType: string, value: any) {
-        if (valueType == "num") {
-            this.repeatCount.setValue(+value);
-        } else if (valueType == "date") {
-            let endDateTimeRecurring: Date = new Date(value);
+    endOfRepeatingBlured(valueType: string, value: string) {
+        this.repeat.value = value;
+        this.repeat.valueType = valueType;
+        this.endOfRepeatingNumber();
+    }
+
+    endOfRepeatingNumber(): number {
+        if (this.repeat.valueType == "num") {
+            return +this.repeat.value;
+        } else if (this.repeat.valueType == "date") {
+            let endDateTimeRecurring: Date = new Date(this.repeat.value);
             let endDateTime: Date = new Date(this.end.value);
             let lastDateTime: Date = endDateTime;
             let repeating = parseInt(this.repeatEvery.value);
@@ -202,9 +211,38 @@ export class EventCreateDataComponent implements OnInit {
                     lastDateTime.setDate(lastDateTime.getDate() + repeating);
                     numberOfRepeating += 1;
                 }
+            } else if (this.occurence.value == "weekly") {
+                repeating *= 7;
+                lastDateTime.setDate(lastDateTime.getDate() + repeating);
+
+                while (lastDateTime < endDateTimeRecurring) {
+                    lastDateTime.setDate(lastDateTime.getDate() + repeating);
+                    numberOfRepeating += 1;
+                }
+            } else if (this.occurence.value == "monthly") {
+                let day = lastDateTime.getDate();
+                lastDateTime.setMonth(lastDateTime.getMonth() + repeating);
+                lastDateTime.setDate(day);
+
+                while (lastDateTime.getDate() != day) {
+                    lastDateTime.setMonth(lastDateTime.getMonth() + repeating);
+                    lastDateTime.setDate(day);
+                }
+
+                while (lastDateTime < endDateTimeRecurring) {
+                    lastDateTime.setMonth(lastDateTime.getMonth() + repeating);
+                    lastDateTime.setDate(day);
+
+                    while (lastDateTime.getDate() != day) {
+                        lastDateTime.setMonth(lastDateTime.getMonth() + repeating);
+                        lastDateTime.setDate(day);
+                    }
+                    numberOfRepeating += 1;
+                }
             }
 
-            this.repeatCount.setValue(numberOfRepeating);
+            console.log(numberOfRepeating);
+            return numberOfRepeating;
         }
     }
 

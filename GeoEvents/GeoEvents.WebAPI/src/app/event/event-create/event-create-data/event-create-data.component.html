@@ -64,13 +64,21 @@
                             <label>End of repeating</label>
                             <div class="row">
                                 <div class="col-md-12">
-                                    <input type="radio" name="endOfRepeating" id="endNever" (change)="endOfRepeatingChanged([{element: endDay, disable: true}, {element: endAfterRepetitions, disable: true}])" checked /> <label for="endNever">Never</label>
+                                    <input type="radio" name="endOfRepeating" id="endNever" (change)="endOfRepeatingChanged([{element: endDay, disable: true}, {element: endAfterRepetitions, disable: true}])" checked />
+                                    <label for="endNever">Never</label>
                                 </div>
                                 <div class="col-md-12">
-                                    <input type="radio" name="endOfRepeating" id="endAfter" (change)="endOfRepeatingChanged([{element: endDay, disable: true}, {element: endAfterRepetitions, disable: false}])" /> <label for="endAfter">After <input type="text" id="endAfterRepetitions" #endAfterRepetitions (blur)="endOfRepeatingBlured('num', +endAfterRepetitions.value)" disabled /> repetitions</label>
+                                    <input type="radio" name="endOfRepeating" id="endAfter" (change)="endOfRepeatingChanged([{element: endDay, disable: true}, {element: endAfterRepetitions, disable: false}])" />
+                                    <label for="endAfter">
+                                        After <input type="text" id="endAfterRepetitions" #endAfterRepetitions (blur)="endOfRepeatingBlured('num', +endAfterRepetitions.value)" disabled /> repetitions
+                                    </label>
                                 </div>
                                 <div class="col-md-12">
-                                    <input type="radio" name="endOfRepeating" id="endDay" (change)="endOfRepeatingChanged([{element: endDay, disable: false}, {element: endAfterRepetitions, disable: true}])" /> <label for="endDay">Day <input ngui-datetime-picker [close-on-select]="false" id="endDay" #endDay placeholder="Click to enter end date" (valueChanged)="endOfRepeatingBlured('date', endDay.value)" style="cursor: pointer;" disabled readonly /></label>
+                                    <input type="radio" name="endOfRepeating" id="endDay" (change)="endOfRepeatingChanged([{element: endDay, disable: false}, {element: endAfterRepetitions, disable: true}])" />
+                                    <label for="endDay">
+                                        Day 
+                                    </label>
+                                    <input ngui-datetime-picker [close-on-select]="false" id="endDay" #endDay placeholder="Click to enter end date" (ngModelChange)="endOfRepeatingBlured('date', endDay.value)" style="cursor: pointer;" disabled readonly />
                                 </div>
                             </div>
                         </div>
