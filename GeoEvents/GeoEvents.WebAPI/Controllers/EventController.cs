@@ -182,9 +182,10 @@ namespace GeoEvents.WebAPI.Controllers
         /// <param name="clusteringFilter">Filter used for clustering</param>
         /// <returns>Clustered events</returns>
         [HttpGet]
-        [Route("get/clustered")]
-        public async Task<HttpResponseMessage> GetEventsClusteredAsync([FromUri] FilterModel filter, [FromUri] ClusteringFilter clusteringFilter)
+        [Route("clustered")]
+        public async Task<HttpResponseMessage> GetEventsClusteredAsync([FromUri] Filter filter, [FromUri] ClusteringFilter clusteringFilter)
         {
+            /*
             if(filter.ULat == null || filter.ULong == null)
             {
                 return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "incorrect filter coordinates. filter coordinates are required");
@@ -193,7 +194,7 @@ namespace GeoEvents.WebAPI.Controllers
             {
                 return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "incorrect filter radius. radius is required. radius must be larger that zero");
             }
-
+            */
             var result = await Service.GetClusteredEventsAsync(filter, clusteringFilter);
 
             if(result == null)

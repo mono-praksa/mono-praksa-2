@@ -50,7 +50,7 @@ export class EventService {
     }
 
     getEventsClustered(filter: Filter, clusteringFilter: ClusteringFilter): Observable<any> {
-        let query = "api/events/search" + this.makeQueryString(filter, clusteringFilter);
+        let query = "/api/events/clustered" + this.makeQueryString(filter, clusteringFilter);
         return this.http.get(query)
             .map((response: Response) => <MapPoint[]>response.json())
             .catch(this.handleError);
@@ -127,6 +127,7 @@ export class EventService {
             query += "&orderBy=" + filter.OrderByString.toString();
         }
         else {
+            query += "&pageSize=25&pageNumber=-1"; 
             query += "&NELatitude=" + clusteringFilter.NELatitude.toString();
             query += "&NELongitude=" + clusteringFilter.NELongitude.toString();
             query += "&SWLatitude=" + clusteringFilter.SWLatitude.toString();

@@ -1,4 +1,4 @@
-﻿﻿import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from "@angular/core";
+﻿﻿import { Component, EventEmitter, Input, OnChanges, OnInit, Output, ViewChild } from "@angular/core";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { MapsAPILoader } from "@agm/core";
 import { Router } from "@angular/router";
@@ -16,7 +16,7 @@ import { MapPoint } from "../shared/models/map-point.model";
     templateUrl: "app/event/event-search/event-search-map.component.html"
 })
 
-export class EventMapComponent implements OnInit {
+export class EventMapComponent implements OnChanges, OnInit {
     @Input() filter: Filter;
 
     private clusteringFilter: ClusteringFilter;
@@ -29,18 +29,35 @@ export class EventMapComponent implements OnInit {
 
     }
 
+    ngOnChanges() {
+        if (this.filter) {
+            this.clusteringFilter = {
+                NELatitude: 50.5,
+                NELongitude: 50.5,
+                SWLatitude: 10.2,
+                SWLongitude: 10.2,
+                ZoomLevel: 4
+            }
+            this.eventService.getEventsClustered(this.filter, this.clusteringFilter).subscribe((response: MapPoint[]) => {
+                this.mapPoints = response;
+            })
+        }
+    }
+
     ngOnInit() {
         this.initMap();
-        this.clusteringFilter = {
-            NELatitude: 10,
-            NELongitude: 10,
-            SWLatitude: 10,
-            SWLongitude: 10,
-            ZoomLevel: 4
-        }
-        this.eventService.getEventsClustered(this.filter, this.clusteringFilter).subscribe((response: MapPoint[]) => {
-            this.mapPoints = response;
-        } )
+        if (this.filter) {
+            this.clusteringFilter = {
+                NELatitude: 50.5,
+                NELongitude: 50.5,
+                SWLatitude: 10.2,
+                SWLongitude: 10.2,
+                ZoomLevel: 4
+            }
+            this.eventService.getEventsClustered(this.filter, this.clusteringFilter).subscribe((response: MapPoint[]) => {
+                this.mapPoints = response;
+            })
+        }        
     }
 
     private displayEvent(evt: Event): void {
