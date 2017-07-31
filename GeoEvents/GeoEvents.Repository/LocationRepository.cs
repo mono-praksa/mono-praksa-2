@@ -3,11 +3,13 @@ using GeoEvents.Common;
 using GeoEvents.DAL;
 using GeoEvents.Model.Common;
 using GeoEvents.Repository.Common;
+using log4net;
 using Npgsql;
 using NpgsqlTypes;
 using System;
 using System.Data;
 using System.Data.Common;
+using System.Reflection;
 using System.Threading.Tasks;
 
 namespace GeoEvents.Repository
@@ -18,7 +20,7 @@ namespace GeoEvents.Repository
 
         protected IPostgresConnection Connection { get; private set; }
         protected IMapper Mapper { get; private set; }
-
+        private static readonly ILog _log = LogManager.GetLogger(typeof(EventRepository));
         #endregion Properties
 
         #region Constructors
@@ -42,38 +44,47 @@ namespace GeoEvents.Repository
         /// </returns>
         public async Task<ILocation> GetLocationAsync(string address)
         {
-            LocationEntity location = null;
-            LocationEntity NewLocation = new LocationEntity(Guid.NewGuid(), 0, 0, address);
-
-            using (var connection = Connection.CreateConnection())
-            using (NpgsqlCommand commandSelect = new NpgsqlCommand(QueryHelper.GetSelectLocationQueryString(), connection))
-
+            log4net.GlobalContext.Properties["AppName"] = Assembly.GetExecutingAssembly().FullName;
+            try
             {
-                commandSelect.Parameters.AddWithValue(QueryHelper.ParAddress, NpgsqlDbType.Text, address);
+                LocationEntity location = null;
+                LocationEntity NewLocation = new LocationEntity(Guid.NewGuid(), 0, 0, address);
 
-                await connection.OpenAsync();
-
-                DbDataReader dr = await commandSelect.ExecuteReaderAsync();
-                if (dr.Read())
+                using (var connection = Connection.CreateConnection())
                 {
-                    location = new LocationEntity()
+                    using (NpgsqlCommand commandSelect = new NpgsqlCommand(QueryHelper.GetSelectLocationQueryString(), connection))
+
                     {
-                        Id = new Guid(dr[0].ToString()),
-                        Address = dr[1].ToString(),
-                        Rating = Convert.ToDouble(dr[2]),
-                        RateCount = Convert.ToInt32(dr[3])
-                    };
+                        commandSelect.Parameters.AddWithValue(QueryHelper.ParAddress, NpgsqlDbType.Text, address);
+
+                        await connection.OpenAsync();
+
+                        DbDataReader dr = await commandSelect.ExecuteReaderAsync();
+                        if (dr.Read())
+                        {
+                            location = new LocationEntity()
+                            {
+                                Id = new Guid(dr[0].ToString()),
+                                Address = dr[1].ToString(),
+                                Rating = Convert.ToDouble(dr[2]),
+                                RateCount = Convert.ToInt32(dr[3])
+                            };
+                        }
+
+
+                        if (location == null)
+                        {
+                            return await CreateLocationAsync(Mapper.Map<ILocation>(NewLocation));
+                        }
+
+                        return await GetLocationByIdAsync(location.Id);
+                    }
                 }
-
-
-                if (location == null)
-                {
-                    return await CreateLocationAsync(Mapper.Map<ILocation>(NewLocation));
-                }
-
-                return await GetLocationByIdAsync(location.Id);
-
-
+            }
+            catch (Exception ex)
+            {
+                _log.Error("Error: ", ex);
+                throw ex;
             }
 
         }
@@ -87,29 +98,39 @@ namespace GeoEvents.Repository
         /// </returns>
         public async Task<ILocation> GetLocationByIdAsync(Guid id)
         {
-            LocationEntity location = new LocationEntity();
-
-            using (var connection = Connection.CreateConnection())
-            using (NpgsqlCommand command = new NpgsqlCommand(QueryHelper.GetSelectLocationByIdQueryString(), connection))
+            log4net.GlobalContext.Properties["AppName"] = Assembly.GetExecutingAssembly().FullName;
+            try
             {
-                command.Parameters.AddWithValue(QueryHelper.ParId, NpgsqlDbType.Uuid, id);
+                LocationEntity location = new LocationEntity();
 
-                await connection.OpenAsync();
-
-                DbDataReader dr = await command.ExecuteReaderAsync();
-                if (dr.Read())
-                {
-                    location = new LocationEntity()
+                using (var connection = Connection.CreateConnection()) {
+                    using (NpgsqlCommand command = new NpgsqlCommand(QueryHelper.GetSelectLocationByIdQueryString(), connection))
                     {
-                        Id = new Guid(dr[0].ToString()),
-                        Address = dr[1].ToString(),
-                        Rating = Convert.ToDouble(dr[2]),
-                        RateCount = Convert.ToInt32(dr[3])
-                    };
-                }
-            }
+                        command.Parameters.AddWithValue(QueryHelper.ParId, NpgsqlDbType.Uuid, id);
 
-            return Mapper.Map<ILocation>(location);
+                        await connection.OpenAsync();
+
+                        DbDataReader dr = await command.ExecuteReaderAsync();
+                        if (dr.Read())
+                        {
+                            location = new LocationEntity()
+                            {
+                                Id = new Guid(dr[0].ToString()),
+                                Address = dr[1].ToString(),
+                                Rating = Convert.ToDouble(dr[2]),
+                                RateCount = Convert.ToInt32(dr[3])
+                            };
+                        }
+                    }
+                }
+
+                return Mapper.Map<ILocation>(location);
+            }
+            catch (Exception ex)
+            {
+                _log.Error("Error: ", ex);
+                throw ex;
+            }
         }
 
         /// <summary>
@@ -121,21 +142,30 @@ namespace GeoEvents.Repository
         /// </returns>
         public async Task<ILocation> CreateLocationAsync(ILocation location)
         {
-
-            using (var connection = Connection.CreateConnection())
-            using (NpgsqlCommand command = new NpgsqlCommand(QueryHelper.GetInsertCreateLocationQueryString(), connection))
+            log4net.GlobalContext.Properties["AppName"] = Assembly.GetExecutingAssembly().FullName;
+            try
             {
-                await connection.OpenAsync();
+                using (var connection = Connection.CreateConnection())
+                {
+                    using (NpgsqlCommand command = new NpgsqlCommand(QueryHelper.GetInsertCreateLocationQueryString(), connection))
+                    {
+                        await connection.OpenAsync();
 
-                command.Parameters.AddWithValue(QueryHelper.ParId, NpgsqlDbType.Uuid, location.Id);
-                command.Parameters.AddWithValue(QueryHelper.ParAddress, NpgsqlDbType.Text, location.Address);
-                command.Parameters.AddWithValue(QueryHelper.ParRating, NpgsqlDbType.Double, location.Rating);
-                command.Parameters.AddWithValue(QueryHelper.ParRateCount, NpgsqlDbType.Double, location.RateCount);
-                await command.ExecuteNonQueryAsync();
+                        command.Parameters.AddWithValue(QueryHelper.ParId, NpgsqlDbType.Uuid, location.Id);
+                        command.Parameters.AddWithValue(QueryHelper.ParAddress, NpgsqlDbType.Text, location.Address);
+                        command.Parameters.AddWithValue(QueryHelper.ParRating, NpgsqlDbType.Double, location.Rating);
+                        command.Parameters.AddWithValue(QueryHelper.ParRateCount, NpgsqlDbType.Double, location.RateCount);
+                        await command.ExecuteNonQueryAsync();
 
-                return await GetLocationByIdAsync(location.Id);
+                        return await GetLocationByIdAsync(location.Id);
+                    }
+                }
             }
-
+            catch (Exception ex)
+            {
+                _log.Error("Error: ", ex);
+                throw ex;
+            }
         }
 
         /// <summary>
@@ -150,27 +180,37 @@ namespace GeoEvents.Repository
         /// </returns>
         public async Task<ILocation> UpdateLocationRatingAsync(Guid id, double rating, double currenRating, int rateCount)
         {
-            LocationEntity location = new LocationEntity();
-
-            using (var connection = Connection.CreateConnection())
-            using (NpgsqlCommand command = new NpgsqlCommand(QueryHelper.GetUpdateLocationRatingQueryString(), connection))
+            log4net.GlobalContext.Properties["AppName"] = Assembly.GetExecutingAssembly().FullName;
+            try
             {
-                await connection.OpenAsync();
+                LocationEntity location = new LocationEntity();
 
-                double NewRating = 0;
-                int NewRateCount = rateCount + 1;
+                using (var connection = Connection.CreateConnection())
+                {
+                    using (NpgsqlCommand command = new NpgsqlCommand(QueryHelper.GetUpdateLocationRatingQueryString(), connection))
+                    {
+                        await connection.OpenAsync();
 
-                NewRating = (currenRating * rateCount + rating) / NewRateCount;
+                        double NewRating = 0;
+                        int NewRateCount = rateCount + 1;
 
-                command.Parameters.AddWithValue(QueryHelper.ParId, NpgsqlDbType.Uuid, id);
-                command.Parameters.AddWithValue(QueryHelper.ParRateCount, NpgsqlDbType.Integer, NewRateCount);
-                command.Parameters.AddWithValue(QueryHelper.ParRating, NpgsqlDbType.Double, NewRating);
-                await command.ExecuteNonQueryAsync();
+                        NewRating = (currenRating * rateCount + rating) / NewRateCount;
 
-                return await GetLocationByIdAsync(id);
+                        command.Parameters.AddWithValue(QueryHelper.ParId, NpgsqlDbType.Uuid, id);
+                        command.Parameters.AddWithValue(QueryHelper.ParRateCount, NpgsqlDbType.Integer, NewRateCount);
+                        command.Parameters.AddWithValue(QueryHelper.ParRating, NpgsqlDbType.Double, NewRating);
+                        await command.ExecuteNonQueryAsync();
 
+                        return await GetLocationByIdAsync(id);
+
+                    }
+                }
             }
-
+            catch (Exception ex)
+            {
+                _log.Error("Error: ", ex);
+                throw ex;
+            }
 
         }
 

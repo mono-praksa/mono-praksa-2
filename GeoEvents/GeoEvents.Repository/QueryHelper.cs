@@ -12,7 +12,7 @@ namespace GeoEvents.Repository
         /// Quoted Constant string
         /// </summary>
         private static string TableNameEventQ = "events";
-
+        private static string TableNameLogsQ = "logs";
         private static string TableNameLocationQ = "locations";
         private static string TableNameImagesQ = "images";
         private static string NameQ = "name";
@@ -37,7 +37,6 @@ namespace GeoEvents.Repository
         /// Parametar Constant strings
         /// </summary>
         public static string ParLatitude = "@Latitude";
-
         public static string ParLongitude = "@Longitude";
         public static string ParName = "@Name";
         public static string ParEndTime = "@EndTime";
@@ -60,6 +59,13 @@ namespace GeoEvents.Repository
         public static string ParLocationId = "@LocationId";
         public static string ParCustom = "@Custom";
         public static string ParAddress = "@Address";
+        public static string ParAppName = "@AppName";
+        public static string ParThread = "@Thread";
+        public static string ParLevel = "@Level";
+        public static string ParLocation = "@Location";
+        public static string ParMessage = "@Message";
+        public static string ParLogDate = "LogDate";
+        public static string ParException = "@Exception";
 
         /// <summary>
         /// Added Qouted strings
@@ -611,10 +617,9 @@ namespace GeoEvents.Repository
         public static string GetInsertLoggerQueryString()
         {
 
-            return string.Format("insert into logs(app_name,thread,level,location,message,log_date,exception) values(@app_name,@thread,@level,@location,@message,@log_date,@exception)");
-            // (app_name, thread, level, location, message, log_date, exception)
+            return string.Format("insert into {0}(app_name,thread,level,location,message,log_date,exception) values({1},{2},{3},{4},{5},{6},{7})",
+                TableNameLogsQ,ParAppName,ParThread,ParLevel,ParLocation,ParMessage,ParLogDate,ParException);
         }
-
 
         /// <summary>
         /// Condition validation 

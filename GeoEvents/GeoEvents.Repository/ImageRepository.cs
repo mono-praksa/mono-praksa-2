@@ -3,12 +3,15 @@ using GeoEvents.Common;
 using GeoEvents.DAL;
 using GeoEvents.Model.Common;
 using GeoEvents.Repository.Common;
+using log4net;
 using Npgsql;
 using NpgsqlTypes;
 using System;
 using System.Collections.Generic;
 using System.Data.Common;
+using System.Reflection;
 using System.Threading.Tasks;
+
 
 namespace GeoEvents.Repository
 {
@@ -18,7 +21,7 @@ namespace GeoEvents.Repository
 
         protected IPostgresConnection Connection { get; private set; }
         protected IMapper Mapper { get; private set; }
-
+        private static readonly ILog _log = LogManager.GetLogger(typeof(EventRepository));
         #endregion Properties
 
         #region Constructors
@@ -42,36 +45,47 @@ namespace GeoEvents.Repository
         /// </returns>
         public async Task<IImage> CreateImageAsync(IImage img)
         {
-            ImageEntity DbImage = Mapper.Map<ImageEntity>(img);
-            ImageEntity selectImage = null;
-
-            using (var connection = Connection.CreateConnection())
-            using (NpgsqlCommand commandInsert = new NpgsqlCommand(QueryHelper.GetInsertImagesQueryString(), connection))
-            using (NpgsqlCommand commandSelect = new NpgsqlCommand(QueryHelper.GetSelectImageQueryString(), connection))
+            log4net.GlobalContext.Properties["AppName"] = Assembly.GetExecutingAssembly().FullName;
+            try
             {
-                commandInsert.Parameters.AddWithValue(QueryHelper.ParId, NpgsqlDbType.Uuid, DbImage.Id);
-                commandInsert.Parameters.AddWithValue(QueryHelper.ParContent, NpgsqlDbType.Bytea, DbImage.Content);
-                commandInsert.Parameters.AddWithValue(QueryHelper.ParEventId, NpgsqlDbType.Uuid, DbImage.EventId);
+                ImageEntity DbImage = Mapper.Map<ImageEntity>(img);
+                ImageEntity selectImage = null;
 
-                await connection.OpenAsync();
-                await commandInsert.ExecuteNonQueryAsync();
-
-                commandSelect.Parameters.AddWithValue(QueryHelper.ParId, NpgsqlDbType.Uuid, DbImage.Id);
-                DbDataReader dr = await commandSelect.ExecuteReaderAsync();
-
-                while (dr.Read())
+                using (var connection = Connection.CreateConnection())
                 {
-                    selectImage = new ImageEntity
+                    using (NpgsqlCommand commandSelect = new NpgsqlCommand(QueryHelper.GetSelectImageQueryString(), connection))
                     {
-                        Id = new Guid(dr[0].ToString()),
-                        EventId = DbImage.EventId
-                    };
+                        using (NpgsqlCommand commandInsert = new NpgsqlCommand(QueryHelper.GetInsertImagesQueryString(), connection))
+                        {
+                            commandInsert.Parameters.AddWithValue(QueryHelper.ParId, NpgsqlDbType.Uuid, DbImage.Id);
+                            commandInsert.Parameters.AddWithValue(QueryHelper.ParContent, NpgsqlDbType.Bytea, DbImage.Content);
+                            commandInsert.Parameters.AddWithValue(QueryHelper.ParEventId, NpgsqlDbType.Uuid, DbImage.EventId);
 
-                    selectImage.Content = (byte[])dr["Content"];
+                            await connection.OpenAsync();
+                            await commandInsert.ExecuteNonQueryAsync();
+                        }
+                        commandSelect.Parameters.AddWithValue(QueryHelper.ParId, NpgsqlDbType.Uuid, DbImage.Id);
+                        DbDataReader dr = await commandSelect.ExecuteReaderAsync();
+
+                        while (dr.Read())
+                        {
+                            selectImage = new ImageEntity
+                            {
+                                Id = new Guid(dr[0].ToString()),
+                                EventId = DbImage.EventId
+                            };
+
+                            selectImage.Content = (byte[])dr["Content"];
+                        }
+                    }
                 }
+                return Mapper.Map<IImage>(selectImage);
             }
-
-            return Mapper.Map<IImage>(selectImage);
+            catch (Exception ex)
+            {
+                _log.Error("Error: ", ex);
+                throw ex;
+            }
         }
 
         /// <summary>
@@ -83,29 +97,39 @@ namespace GeoEvents.Repository
         /// </returns>
         public async Task<IEnumerable<IImage>> GetImagesAsync(Guid eventID)
         {
-            List<IImage> selectImages = new List<IImage>();
-
-            using (var connection = Connection.CreateConnection())
-            using (NpgsqlCommand command = new NpgsqlCommand(QueryHelper.GetSelectImagesQueryString(), connection))
+            log4net.GlobalContext.Properties["AppName"] = Assembly.GetExecutingAssembly().FullName;
+            try
             {
-                command.Parameters.AddWithValue(QueryHelper.ParEventId, NpgsqlDbType.Uuid, eventID);
+                List<IImage> selectImages = new List<IImage>();
 
-                await connection.OpenAsync();
-                DbDataReader dr = await command.ExecuteReaderAsync();
-
-                while (dr.Read())
+                using (var connection = Connection.CreateConnection())
                 {
-                    ImageEntity tmp = new ImageEntity
+                    using (NpgsqlCommand command = new NpgsqlCommand(QueryHelper.GetSelectImagesQueryString(), connection))
                     {
-                        Id = new Guid(dr[0].ToString()),
-                        EventId = eventID
-                    };
-                    tmp.Content = (byte[])dr["Content"];
-                    selectImages.Add(Mapper.Map<IImage>(tmp));
-                }
-            }
+                        command.Parameters.AddWithValue(QueryHelper.ParEventId, NpgsqlDbType.Uuid, eventID);
 
-            return Mapper.Map<IEnumerable<IImage>>(selectImages);
+                        await connection.OpenAsync();
+                        DbDataReader dr = await command.ExecuteReaderAsync();
+
+                        while (dr.Read())
+                        {
+                            ImageEntity tmp = new ImageEntity
+                            {
+                                Id = new Guid(dr[0].ToString()),
+                                EventId = eventID
+                            };
+                            tmp.Content = (byte[])dr["Content"];
+                            selectImages.Add(Mapper.Map<IImage>(tmp));
+                        }
+                    }
+                }
+                return Mapper.Map<IEnumerable<IImage>>(selectImages);
+            }
+            catch (Exception ex)
+            {
+                _log.Error("Error: ", ex);
+                throw ex;
+            }
         }
 
         #endregion Methods
