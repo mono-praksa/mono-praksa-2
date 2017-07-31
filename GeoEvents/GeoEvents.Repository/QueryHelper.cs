@@ -94,7 +94,7 @@ namespace GeoEvents.Repository
         private static string TableNameEventRepeatEveryQ = String.Format("{0}.{1}", TableNameEventQ, RepeatEveryQ);
         private static string TableNameEventRepeatOnQ = String.Format("{0}.{1}", TableNameEventQ, RepeatOnQ);
         private static string TableNameEventRepeatCountQ = String.Format("{0}.{1}", TableNameEventQ, RepeatCountQ);
-        
+
 
         private static string TableNameLocationIdQ = String.Format("{0}.{1}", TableNameLocationQ, IdQ);
         private static string TableNameLocationRatingQ = String.Format("{0}.{1}", TableNameLocationQ, RatingQ);
@@ -153,8 +153,12 @@ namespace GeoEvents.Repository
             {
                 selectString = ConditionValidation(selectString);
 
-                selectString.AppendFormat(" (({0},{1}) OVERLAPS ({2},{3})) ",
-                    ParUserStartTime, ParUserEndTime, TableNameEventStartTimeQ, TableNameEventEndTimeQ);
+                //selectString.AppendFormat(" (({0},{1}) OVERLAPS ({2},{3})) ",
+                //    ParUserStartTime, ParUserEndTime, TableNameEventStartTimeQ, TableNameEventEndTimeQ);
+
+                selectString.AppendFormat(" (check_recurrence({0},{1},{2},{3},{4},{5},{6},{7})) ",
+                    ParUserStartTime, ParUserEndTime, TableNameEventStartTimeQ, TableNameEventEndTimeQ, TableNameEventOccurrenceQ,
+                    TableNameEventRepeatEveryQ, TableNameEventRepeatOnQ, TableNameEventRepeatCountQ);
             }
 
             ///Adding searcstring filter in queri if there is searchstring
@@ -270,10 +274,16 @@ namespace GeoEvents.Repository
             {
                 selectString = ConditionValidation(selectString);
 
-                selectString.AppendFormat(" (({0},{1}) OVERLAPS ({2},{3})) ",
-                    ParUserStartTime, ParUserEndTime, TableNameEventStartTimeQ, TableNameEventEndTimeQ);
+                //selectString.AppendFormat(" (({0},{1}) OVERLAPS ({2},{3})) ",
+                //    ParUserStartTime, ParUserEndTime, TableNameEventStartTimeQ, TableNameEventEndTimeQ);
+
+                selectString.AppendFormat(" (check_recurrence({0},{1},{2},{3},{4},{5},{6},{7})) ",
+                    ParUserStartTime, ParUserEndTime, TableNameEventStartTimeQ, TableNameEventEndTimeQ, TableNameEventOccurrenceQ,
+                    TableNameEventRepeatEveryQ, TableNameEventRepeatOnQ, TableNameEventRepeatCountQ);
+
+
             }
-           
+
             ///Adding searcstring filter in queri if there is searchstring
             if (!String.IsNullOrWhiteSpace(filter.SearchString))
             {
