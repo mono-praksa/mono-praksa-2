@@ -35,6 +35,7 @@ namespace GeoEvents.Repository
         {
             this.Mapper = mapper;
             this.Connection = connection;
+            
         }
 
         #endregion Constructors

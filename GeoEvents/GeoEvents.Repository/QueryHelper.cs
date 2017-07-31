@@ -519,7 +519,7 @@ namespace GeoEvents.Repository
         public static string GetInsertLoggerQueryString()
         {
 
-            return string.Format("insert into logs values(@app_name,@thread,@level,@location,@message,@exception,@log_date)");
+            return string.Format("insert into logs(app_name,thread,level,location,message,log_date,exception) values(@app_name,@thread,@level,@location,@message,@log_date,@exception)");
             // (app_name, thread, level, location, message, log_date, exception)
         }
 

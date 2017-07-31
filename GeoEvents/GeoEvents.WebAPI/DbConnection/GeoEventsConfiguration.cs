@@ -12,4 +12,5 @@ namespace GeoEvents.WebAPI.DbConnection
             ConnectionString = ConfigurationSettings.AppSettings["Constring"];
         }
     }
+
 }
