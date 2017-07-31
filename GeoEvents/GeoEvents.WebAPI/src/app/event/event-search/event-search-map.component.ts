@@ -94,6 +94,10 @@ export class EventMapComponent implements OnChanges, OnInit {
         }
     }
 
+    private getRadius(zoom: number = 1): number {
+        return Math.pow(2, 15 - zoom);
+    }
+
     private initMap(): void {
         if (this.filter) {
             this.latitude = this.filter.ULat;
@@ -108,13 +112,17 @@ export class EventMapComponent implements OnChanges, OnInit {
     }
 
     private markerClick(event: any): void {
-        console.log(event);
+        this.latitude = event.coords.latitude;
+        this.longitude = event.coords.longitude;
+        this.initialZoom = this.clusteringFilter.ZoomLevel + 1;
     }
 
     private onBoundsChange(bounds: LatLngBounds): void {
-        console.log("onBoundsChange");
+        var center = bounds.getCenter();
         var ne = bounds.getNorthEast();
         var sw = bounds.getSouthWest();
+        this.filter.ULat = center.lat();
+        this.filter.ULong = center.lng();
         this.clusteringFilter.NELatitude = ne.lat();
         this.clusteringFilter.NELongitude = ne.lng();
         this.clusteringFilter.SWLatitude = sw.lat();
@@ -122,7 +130,7 @@ export class EventMapComponent implements OnChanges, OnInit {
     }
 
     private onZoomChange(zoom: number): void {
-        console.log("onZoomChange");
         this.clusteringFilter.ZoomLevel = zoom;
+        this.filter.Radius = this.getRadius(zoom);
     }
 }
