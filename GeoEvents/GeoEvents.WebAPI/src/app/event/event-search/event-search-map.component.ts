@@ -1,4 +1,4 @@
-﻿﻿import { Component, EventEmitter, Input, OnChanges, OnInit, Output, ViewChild } from "@angular/core";
+﻿﻿import { ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnInit, Output, ViewChild } from "@angular/core";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { LatLngBounds, MapsAPILoader } from "@agm/core";
 import { Router } from "@angular/router";
@@ -20,13 +20,14 @@ export class EventMapComponent implements OnChanges, OnInit {
     @Input() filter: Filter;
 
     private clusteringFilter: ClusteringFilter;
+    private infoWindow: any;
+    private initialZoom: number = 1;
     private latitude: number;
     private longitude: number;
     private map: any;
     private mapPoints: MapPoint[];
-    private initialZoom: number = 1;
 
-    constructor(private router: Router, private eventService: EventService) {
+    constructor(private router: Router, private eventService: EventService, private changeDetectorRef: ChangeDetectorRef) {
 
     }
 
@@ -50,13 +51,24 @@ export class EventMapComponent implements OnChanges, OnInit {
         }
     }
 
+    private checkWindows(infoWindow: any): void {
+        this.changeDetectorRef.detectChanges();
+        if (this.infoWindow == infoWindow) {
+            return;
+        }
+        else if (this.infoWindow) {
+            this.infoWindow.close();
+        }
+        this.infoWindow = infoWindow;
+        this.changeDetectorRef.detectChanges();
+    }
+
     private displayEvent(evt: Event): void {
         let routeUrl = "/event/search/" + evt.Id;
         this.router.navigate([routeUrl]);
     }
 
     private getEvents(): void {
-        console.log("getEvents");
         this.eventService.getEventsClustered(this.filter, this.clusteringFilter).subscribe((response: MapPoint[]) => {
             this.mapPoints = response;
         })
@@ -117,12 +129,13 @@ export class EventMapComponent implements OnChanges, OnInit {
     }
 
     private markerClick(mapPoint: MapPoint): void {
-        this.map.latitude = mapPoint.Y;
-        this.map.longitude = mapPoint.X;
-        this.map.zoom += 1;
+        this.latitude = mapPoint.Y;
+        this.longitude = mapPoint.X;
+        this.initialZoom = 2 + this.map.zoom;
     }
 
     private onBoundsChange(bounds: LatLngBounds): void {
+        this.infoWindow = undefined;
         var center = bounds.getCenter();
         var ne = bounds.getNorthEast();
         var sw = bounds.getSouthWest();

@@ -150,9 +150,7 @@ namespace GeoEvents.Service
 
         #endregion Methods
 
-        #region Clustering
-
-        
+        #region Clustering        
 
         /// <summary>
         /// Gets the events in the form of Map points (markers and/or clusters).
@@ -163,9 +161,9 @@ namespace GeoEvents.Service
         /// <returns>List of Map points.</returns>
         public async Task<IList<MapPoint>> GetClusteredEventsAsync(IFilter filter, IClusteringFIlter clusteringFilter )
         {
-            var fff = new MapPoint();
-            string cachekey = filter.ULat.ToString() + filter.ULong.ToString() + filter.Radius.ToString() + filter.Category.ToString() + filter.Custom + filter.StartTime.ToString() + filter.EndTime.ToString() + filter.Price.ToString() + filter.RatingEvent.ToString() + filter.SearchString;
-            var points = await GetClusterPointCollection(filter, cachekey);
+            string dBCacheKey = filter.ULat.ToString() + filter.ULong.ToString() + filter.Radius.ToString() + filter.Category.ToString() + filter.Custom + filter.StartTime.ToString() + filter.EndTime.ToString() + filter.Price.ToString() + filter.RatingEvent.ToString() + filter.SearchString;
+
+            var points = await GetClusterPointCollection(filter, dBCacheKey);
 
             var mapService = new ClusterService(points);
             var input = new GetMarkersParams()
@@ -175,7 +173,7 @@ namespace GeoEvents.Service
                 SouthWestLatitude = clusteringFilter.SWLatitude,
                 SouthWestLongitude = clusteringFilter.SWLongitude,
                 ZoomLevel = clusteringFilter.ZoomLevel,
-                PointType = cachekey
+                PointType = dBCacheKey
             };
             //"MapService says: exception Object reference not set to an instance of an object."
             var markers = mapService.GetClusterMarkers(input);           
@@ -189,15 +187,16 @@ namespace GeoEvents.Service
         /// </summary>
         /// <param name="filter">Filter that will be used to retrieve data from the database if needed</param>
         /// <returns>The PointCollection</returns>
-        private async Task<PointCollection> GetClusterPointCollection(IFilter filter, string cachekey)
+        private async Task<PointCollection> GetClusterPointCollection(IFilter filter, string dBCacheKey)
         {
             var points = new PointCollection();
 
-            if (points.Exists(cachekey))
+            if (points.Exists(dBCacheKey))
+            {
                 return points;
+            }
 
             //get list of events from the database. filter is modified in a way it will recieve all pages at once.
-            filter.PageNumber = -1;
             List<IEvent> dataBaseResult = await Repository.GetAllEventsAsync(filter);
             
             //map the location, name and id properties
@@ -205,7 +204,7 @@ namespace GeoEvents.Service
             
             //i tried setting the cacheKey to null and timespan to zero to avoid caching
             //but it does not work that way.
-            points.Add(mapPoints, TimeSpan.FromSeconds(300), cachekey);
+            points.Set(mapPoints, TimeSpan.FromSeconds(300), dBCacheKey);
 
             //return the points
             return points;
