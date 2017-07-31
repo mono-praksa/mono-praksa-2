@@ -150,6 +150,12 @@ export class EventCreateDataComponent implements OnInit {
             repeatCount = this.endOfRepeatingNumber();
         }
 
+        let occurrence = formValues.occurrence;
+
+        if (this.monthlyOption == "week") {
+            occurrence += "dayname";
+        }
+
         let newEvent : Event = {
             Capacity: formValues.capacity,
             Categories: chosenCategories,
@@ -162,7 +168,7 @@ export class EventCreateDataComponent implements OnInit {
             Latitude: formValues.latitude,
             LocationId: undefined,
             Longitude: formValues.longitude,
-            Occurrence: formValues.occurrence,
+            Occurrence: occurrence,
             Price: formValues.price,
             RateCount: undefined,
             Rating: undefined,
