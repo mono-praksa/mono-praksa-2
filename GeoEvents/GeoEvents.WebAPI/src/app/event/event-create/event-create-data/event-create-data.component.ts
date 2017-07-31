@@ -262,13 +262,45 @@ export class EventCreateDataComponent implements OnInit {
                     lastDateTime = new Date(lastDateTime.getFullYear(), lastDateTime.getMonth() + repeating, 1);
                     lastDateTime.setDate(1 + (7 + currentDay - lastDateTime.getDay()) % 7);
                     lastDateTime = setWeekOfMonth(lastDateTime, currentWeek);
-                    
+
                     while (lastDateTime.getMonth() != nextMonth && lastDateTime < endDateTimeRecurring) { // tjedan s određenim danom u određenom mjesecu ne postoji
                         lastDateTime = new Date(lastDateTime.getFullYear(), nextMonth + repeating, 1);
                         nextMonth = (nextMonth + repeating) % 12;
                         lastDateTime.setDate(1 + (7 + currentDay - lastDateTime.getDay()) % 7);
                         lastDateTime = setWeekOfMonth(lastDateTime, currentWeek);
                     }
+                    numberOfRepeating += 1;
+                }
+            } else if (this.occurence.value == "yearly") {
+                let feb29 = lastDateTime.getDate() == 29 && lastDateTime.getMonth() == 1;
+
+                if (feb29) {
+                    lastDateTime.setFullYear(lastDateTime.getFullYear() + repeating);
+
+                    while (!isLeapYear(lastDateTime.getFullYear()) && lastDateTime < endDateTimeRecurring) {
+                        lastDateTime.setFullYear(lastDateTime.getFullYear() + repeating);
+                    }
+
+                    lastDateTime.setMonth(1);
+                    lastDateTime.setDate(29);
+                } else {
+                    lastDateTime.setFullYear(lastDateTime.getFullYear() + repeating);
+                }
+
+                while (lastDateTime < endDateTimeRecurring) {
+                    if (feb29) {
+                        lastDateTime.setFullYear(lastDateTime.getFullYear() + repeating);
+
+                        while (!isLeapYear(lastDateTime.getFullYear()) && lastDateTime < endDateTimeRecurring) {
+                            lastDateTime.setFullYear(lastDateTime.getFullYear() + repeating);
+                        }
+
+                        lastDateTime.setMonth(1);
+                        lastDateTime.setDate(29);
+                    } else {
+                        lastDateTime.setFullYear(lastDateTime.getFullYear() + repeating);
+                    }
+
                     numberOfRepeating += 1;
                 }
             }
@@ -379,4 +411,8 @@ let getWeekOfMonth = function (date: Date, exact: boolean = true) {
 let setWeekOfMonth = function (date: Date, week: number) {
     date.setDate(date.getDate() + (week - getWeekOfMonth(date))*7);
 	return date;
+}
+
+function isLeapYear(year: number) {
+    return ((year % 4 == 0) && (year % 100 != 0)) || (year % 400 == 0);
 }
