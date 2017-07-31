@@ -70,7 +70,7 @@ namespace GeoEvents.Repository
                 commandInsert.Parameters.AddWithValue(QueryHelper.ParOccurrence, NpgsqlDbType.Text, evt.Occurrence);
                 commandInsert.Parameters.AddWithValue(QueryHelper.ParRepeatEvery, NpgsqlDbType.Integer, evt.RepeatEvery);
                 commandInsert.Parameters.AddWithValue(QueryHelper.ParRepeatOn, NpgsqlDbType.Integer, evt.RepeatOn);
-                commandInsert.Parameters.AddWithValue(QueryHelper.ParRepeatCount, NpgsqlDbType.Timestamp, evt.RepeatCount);
+                commandInsert.Parameters.AddWithValue(QueryHelper.ParRepeatCount, NpgsqlDbType.Integer, evt.RepeatCount);
 
 
                 await connection.OpenAsync();
@@ -348,7 +348,7 @@ namespace GeoEvents.Repository
                         RepeatOn=Convert.ToInt32(dr[16]),
                         RepeatCount=Convert.ToInt32(dr[17]),
 
-                        LocationId = new Guid(dr[14].ToString())
+                        LocationId = new Guid(dr[18].ToString())
                     };
                 }
             }
