@@ -21,6 +21,7 @@ import { LoaderService } from "../../../shared/loader.service";
 })
 export class EventCreateDataComponent implements OnInit {
     @Output() eventEmitter = new EventEmitter();
+    monthlyOption: string = "month";
     repeat: { valueType: string, value: string } = {valueType: "", value: ""};
     @ViewChild("search") searchElementRef: ElementRef;
 
@@ -219,7 +220,7 @@ export class EventCreateDataComponent implements OnInit {
                     lastDateTime.setDate(lastDateTime.getDate() + repeating);
                     numberOfRepeating += 1;
                 }
-            } else if (this.occurence.value == "monthly") {
+            } else if (this.occurence.value == "monthly" && this.monthlyOption == "month") {
                 let day = lastDateTime.getDate();
                 lastDateTime.setMonth(lastDateTime.getMonth() + repeating);
                 lastDateTime.setDate(day);
@@ -236,6 +237,37 @@ export class EventCreateDataComponent implements OnInit {
                     while (lastDateTime.getDate() != day) {
                         lastDateTime.setMonth(lastDateTime.getMonth() + repeating);
                         lastDateTime.setDate(day);
+                    }
+                    numberOfRepeating += 1;
+                }
+            } else if (this.occurence.value == "monthly" && this.monthlyOption == "week") {
+                let currentWeek = getWeekOfMonth(lastDateTime);
+                let currentDay = lastDateTime.getDay();
+                let nextMonth;
+
+                nextMonth = (lastDateTime.getMonth() + repeating) % 12;
+                lastDateTime = new Date(lastDateTime.getFullYear(), lastDateTime.getMonth() + repeating, 1);
+                lastDateTime.setDate(1 + (7 + currentDay - lastDateTime.getDay()) % 7);
+                lastDateTime = setWeekOfMonth(lastDateTime, currentWeek);
+
+                while (lastDateTime.getMonth() != nextMonth && lastDateTime < endDateTimeRecurring) { // tjedan s određenim danom u određenom mjesecu ne postoji
+                    lastDateTime = new Date(lastDateTime.getFullYear(), nextMonth + repeating, 1);
+                    nextMonth = (nextMonth + repeating) % 12;
+                    lastDateTime.setDate(1 + (7 + currentDay - lastDateTime.getDay()) % 7);
+                    lastDateTime = setWeekOfMonth(lastDateTime, currentWeek);
+                }
+
+                while (lastDateTime < endDateTimeRecurring) {
+                    nextMonth = (lastDateTime.getMonth() + repeating) % 12;
+                    lastDateTime = new Date(lastDateTime.getFullYear(), lastDateTime.getMonth() + repeating, 1);
+                    lastDateTime.setDate(1 + (7 + currentDay - lastDateTime.getDay()) % 7);
+                    lastDateTime = setWeekOfMonth(lastDateTime, currentWeek);
+                    
+                    while (lastDateTime.getMonth() != nextMonth && lastDateTime < endDateTimeRecurring) { // tjedan s određenim danom u određenom mjesecu ne postoji
+                        lastDateTime = new Date(lastDateTime.getFullYear(), nextMonth + repeating, 1);
+                        nextMonth = (nextMonth + repeating) % 12;
+                        lastDateTime.setDate(1 + (7 + currentDay - lastDateTime.getDay()) % 7);
+                        lastDateTime = setWeekOfMonth(lastDateTime, currentWeek);
                     }
                     numberOfRepeating += 1;
                 }
@@ -274,6 +306,17 @@ export class EventCreateDataComponent implements OnInit {
         this.geocodingService.getAddress(this.eventForm.controls["latitude"].value, this.eventForm.controls["longitude"].value).subscribe(response => {
             this.eventForm.controls["address"].setValue(response);
         });
+    }
+
+    monthlyOptionChange() {
+        switch (this.monthlyOption) {
+            case "month":
+                this.monthlyOption = "week";
+                break;
+            case "week":
+                this.monthlyOption = "month";
+                break;
+        }
     }
 
     // returns array of numbers: [1..n]
@@ -317,4 +360,23 @@ export class EventCreateDataComponent implements OnInit {
 interface ICategoryElement {
     id: number,
     checked: boolean
+}
+
+let getWeekOfMonth = function (date: Date, exact: boolean = true) {
+    var month = date.getMonth()
+        , year = date.getFullYear()
+        , firstWeekday = new Date(year, month, 1).getDay()
+        , lastDateOfMonth = new Date(year, month + 1, 0).getDate()
+        , offsetDate = date.getDate() + firstWeekday - 1
+        , index = 1 // start index at 0 or 1, your choice
+        , weeksInMonth = index + Math.ceil((lastDateOfMonth + firstWeekday - 7) / 7)
+        , week = index + Math.floor(offsetDate / 7)
+        ;
+    if (exact || week < 2 + index) return week;
+    return week === weeksInMonth ? index + 5 : week;
+};
+
+let setWeekOfMonth = function (date: Date, week: number) {
+    date.setDate(date.getDate() + (week - getWeekOfMonth(date))*7);
+	return date;
 }

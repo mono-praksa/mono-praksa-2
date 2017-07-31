@@ -54,6 +54,17 @@
                                 <option *ngFor="let i of range(30)">{{i}}</option>
                             </select>
                         </div>
+                        <div class="col-md-12" *ngIf="occurence.value=='monthly'">
+                            <label>Repeat until</label>
+                            <div class="col-md-12">
+                                <input type="radio" name="monthlyRadio" id="monthlyByDayMonth" (change)="monthlyOptionChange()" checked />
+                                <label for="monthlyByDayMonth">day of the month</label>
+                            </div>
+                            <div class="col-md-12">
+                                <input type="radio" name="monthlyRadio" id="monthlyByDayWeek" (change)="monthlyOptionChange()" />
+                                <label for="monthlyByDayWeek">day of the week</label>
+                            </div>
+                        </div>
                         <div class="col-md-12" *ngIf="occurence.value=='weekly'">
                             <label>Repeat on</label>
                             <label for="{{categoryService.DayEnum[day]}}" *ngFor="let day of categoryService.keys('day')">
