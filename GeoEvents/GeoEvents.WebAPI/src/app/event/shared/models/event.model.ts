@@ -10,7 +10,7 @@
     LocationId: string;
     Longitude: number;
     Name: string;
-    Occurence: string;
+    Occurrence: string;
     Price: number;
     RateCount: number;
     Rating: number;

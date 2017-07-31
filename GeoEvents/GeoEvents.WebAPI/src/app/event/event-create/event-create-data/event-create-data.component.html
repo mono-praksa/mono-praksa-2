@@ -39,8 +39,8 @@
                 <div class="col-md-6">
                     <div class="row">
                         <div class="col-md-12">
-                            <label for="">Recurs</label>
-                            <select formControlName="occurence" class="form-control" id="occurence">
+                            <label for="occurrence">Recurs</label>
+                            <select formControlName="occurrence" class="form-control" id="occurrence">
                                 <option value="none">None</option>
                                 <option value="daily">Daily</option>
                                 <option value="weekly">Weekly</option>
@@ -48,13 +48,13 @@
                                 <option value="yearly">Yearly</option>
                             </select>
                         </div>
-                        <div class="col-md-12" *ngIf="occurence.value!='none'">
+                        <div class="col-md-12" *ngIf="occurrence.value!='none'">
                             <label for="repeatEvery">Repeat every</label>
                             <select formControlName="repeatEvery" class="form-control" id="interval">
                                 <option *ngFor="let i of range(30)">{{i}}</option>
                             </select>
                         </div>
-                        <div class="col-md-12" *ngIf="occurence.value=='monthly'">
+                        <div class="col-md-12" *ngIf="occurrence.value=='monthly'">
                             <label>Repeat until</label>
                             <div class="col-md-12">
                                 <input type="radio" name="monthlyRadio" id="monthlyByDayMonth" (change)="monthlyOptionChange()" checked />
@@ -65,13 +65,13 @@
                                 <label for="monthlyByDayWeek">day of the week</label>
                             </div>
                         </div>
-                        <div class="col-md-12" *ngIf="occurence.value=='weekly'">
+                        <div class="col-md-12" *ngIf="occurrence.value=='weekly'">
                             <label>Repeat on</label>
                             <label for="{{categoryService.DayEnum[day]}}" *ngFor="let day of categoryService.keys('day')">
                                 <input type="checkbox" value="{{day}}" (change)="updateDays(day)" id="{{categoryService.DayEnum[day]}}" /> {{categoryService.DayEnum[day]}}
                             </label>
                         </div>
-                        <div class="col-md-12" *ngIf="occurence.value!='none'">
+                        <div class="col-md-12" *ngIf="occurrence.value!='none'">
                             <label>End of repeating</label>
                             <div class="row">
                                 <div class="col-md-12">

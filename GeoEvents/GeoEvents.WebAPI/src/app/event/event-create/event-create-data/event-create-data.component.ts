@@ -34,7 +34,7 @@ export class EventCreateDataComponent implements OnInit {
     latitude: FormControl;
     longitude: FormControl;
     name: FormControl;
-    occurence: FormControl;
+    occurrence: FormControl;
     price: FormControl;
     start: FormControl;
 
@@ -102,7 +102,7 @@ export class EventCreateDataComponent implements OnInit {
         this.latitude = new FormControl("", Validators.required);
         this.longitude = new FormControl("", Validators.required);
         this.name = new FormControl("", Validators.required);
-        this.occurence = new FormControl("none");
+        this.occurrence = new FormControl("none");
         this.price = new FormControl("", [Validators.required, Validators.pattern(/^[0-9]+(\.\d{1,2})?$/)]);
         this.start = new FormControl("", Validators.required);
 
@@ -119,7 +119,7 @@ export class EventCreateDataComponent implements OnInit {
             name: this.name,
             price: this.price,
             start: this.start,
-            occurence: this.occurence,
+            occurrence: this.occurrence,
 
             // FormControls for reccuring
             repeatEvery: this.repeatEvery
@@ -138,7 +138,7 @@ export class EventCreateDataComponent implements OnInit {
             }
         });
 
-        if (this.occurence.value == "weekly") {
+        if (this.occurrence.value == "weekly") {
             this.categoryService.days.filter(checkbox => {
                 if (checkbox.checked) {
                     chosenDays.push(checkbox.id);
@@ -146,7 +146,7 @@ export class EventCreateDataComponent implements OnInit {
             });
         }
 
-        if (this.occurence.value != "none") {
+        if (this.occurrence.value != "none") {
             repeatCount = this.endOfRepeatingNumber();
         }
 
@@ -162,7 +162,7 @@ export class EventCreateDataComponent implements OnInit {
             Latitude: formValues.latitude,
             LocationId: undefined,
             Longitude: formValues.longitude,
-            Occurence: formValues.occurence,
+            Occurrence: formValues.occurrence,
             Price: formValues.price,
             RateCount: undefined,
             Rating: undefined,
@@ -205,14 +205,14 @@ export class EventCreateDataComponent implements OnInit {
             let repeating = parseInt(this.repeatEvery.value);
             let numberOfRepeating: number = 0;
 
-            if (this.occurence.value == "daily") {
+            if (this.occurrence.value == "daily") {
                 lastDateTime.setDate(lastDateTime.getDate() + repeating);
 
                 while (lastDateTime < endDateTimeRecurring) {
                     lastDateTime.setDate(lastDateTime.getDate() + repeating);
                     numberOfRepeating += 1;
                 }
-            } else if (this.occurence.value == "weekly") {
+            } else if (this.occurrence.value == "weekly") {
                 repeating *= 7;
                 lastDateTime.setDate(lastDateTime.getDate() + repeating);
 
@@ -220,7 +220,7 @@ export class EventCreateDataComponent implements OnInit {
                     lastDateTime.setDate(lastDateTime.getDate() + repeating);
                     numberOfRepeating += 1;
                 }
-            } else if (this.occurence.value == "monthly" && this.monthlyOption == "month") {
+            } else if (this.occurrence.value == "monthly" && this.monthlyOption == "month") {
                 let day = lastDateTime.getDate();
                 lastDateTime.setMonth(lastDateTime.getMonth() + repeating);
                 lastDateTime.setDate(day);
@@ -240,7 +240,7 @@ export class EventCreateDataComponent implements OnInit {
                     }
                     numberOfRepeating += 1;
                 }
-            } else if (this.occurence.value == "monthly" && this.monthlyOption == "week") {
+            } else if (this.occurrence.value == "monthly" && this.monthlyOption == "week") {
                 let currentWeek = getWeekOfMonth(lastDateTime);
                 let currentDay = lastDateTime.getDay();
                 let nextMonth;
@@ -271,7 +271,7 @@ export class EventCreateDataComponent implements OnInit {
                     }
                     numberOfRepeating += 1;
                 }
-            } else if (this.occurence.value == "yearly") {
+            } else if (this.occurrence.value == "yearly") {
                 let feb29 = lastDateTime.getDate() == 29 && lastDateTime.getMonth() == 1;
 
                 if (feb29) {
