@@ -169,7 +169,13 @@ namespace GeoEvents.Repository
                                     Capacity = Convert.ToInt32(dr[11]),
                                     Reserved = Convert.ToInt32(dr[12]),
                                     Custom = dr[13].ToString(),
-                                    LocationId = new Guid(dr[14].ToString())
+
+                                    Occurrence = dr[14].ToString(),
+                                    RepeatEvery = Convert.ToInt32(dr[15]),
+                                    RepeatOn = Convert.ToInt32(dr[16]),
+                                    RepeatCount = Convert.ToInt32(dr[17]),
+
+                                    LocationId = new Guid(dr[18].ToString())
                                 };
                                 SelectEvents.Add(Mapper.Map<IEvent>(tmp));
                             }

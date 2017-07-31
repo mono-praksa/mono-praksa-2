@@ -358,7 +358,6 @@ namespace GeoEvents.Repository
             if (filter.EndTime > filter.StartTime)
             {
                 selectString = ConditionValidation(selectString);
-
                 selectString.AppendFormat(" (check_recurrence({0},{1},{2},{3},{4},{5},{6},{7})) ",
                     ParUserStartTime, ParUserEndTime, TableNameEventStartTimeQ, TableNameEventEndTimeQ, TableNameEventOccurrenceQ,
                     TableNameEventRepeatEveryQ, TableNameEventRepeatOnQ, TableNameEventRepeatCountQ);
