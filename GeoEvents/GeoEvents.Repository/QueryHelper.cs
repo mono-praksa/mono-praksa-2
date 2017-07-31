@@ -18,20 +18,26 @@ namespace GeoEvents.Repository
         private static string NameQ = "name";
         private static string LatQ = "latitude";
         private static string LongQ = "longitude";
-        private static string StartTimeQ = "starttime";
-        private static string EndTimeQ = "endtime";
+        private static string StartTimeQ = "start_time";
+        private static string EndTimeQ = "end_time";
         private static string CategoryQ = "category";
         private static string IdQ = "id";
-        private static string EventIdQ = "eventid";
+        private static string EventIdQ = "event_id";
         private static string DescriptionQ = "description";
         private static string PriceQ = "price";
         private static string CapacityQ = "capacity";
         private static string ReservedQ = "reserved";
         private static string RatingQ = "rating";
-        private static string RateCountQ = "ratecount";
-        private static string RatingLocationQ = "ratinglocation";
+        private static string RateCountQ = "rate_count";
+        private static string RatingLocationQ = "rating_location";
         private static string CustomQ = "custom";
         private static string AddressQ = "address";
+        private static string LocationIdQ = "location_id";
+
+        private static string OccurrenceQ = "occurrence";
+        private static string RepeatEveryQ = "repeat_every";
+        private static string RepeatOnQ = "repeat_on";
+        private static string RepeatCountQ = "repeat_count";
 
         /// <summary>
         /// Parametar Constant strings
@@ -66,36 +72,46 @@ namespace GeoEvents.Repository
         public static string ParMessage = "@Message";
         public static string ParLogDate = "LogDate";
         public static string ParException = "@Exception";
+        public static string ParOccurrence = "@Occurrence";
+        public static string ParRepeatEvery = "@RepeatEvery";
+        public static string ParRepeatOn = "@RepeatOn";
+        public static string ParRepeatCount = "@RepeatCount";
 
         /// <summary>
         /// Added Qouted strings
         /// </summary>
-        private static string TableNameEventNameQ = "events.name";
+        private static string TableNameEventNameQ = String.Format("{0}.{1}", TableNameEventQ, NameQ);
 
-        private static string TableNameEventDescriptionQ = "events.description";
-        private static string TableNameEventStartTimeQ = "events.starttime";
-        private static string TableNameEventEndTimeQ = "events.endtime";
-        private static string TableNameEventLongQ = "events.longitude";
-        private static string TableNameEventLatQ = "events.latitude";
-        private static string TableNameEventCatQ = "events.category";
-        private static string TableNameEventIdQ = "events.id";
-        private static string TableNameEventPriceQ = "events.price";
-        private static string TableNameEventRatingQ = "events.rating";
-        private static string TableNameEventRateCountQ = "events.ratecount";
-        private static string TableNameEventRatingLocationQ = "events.ratinglocation";
-        private static string TableNameEventLocationIdQ = "events.locationid";
-        private static string TableNameEventCustomQ = "events.custom";
+        private static string TableNameEventDescriptionQ = String.Format("{0}.{1}", TableNameEventQ, DescriptionQ);
+        private static string TableNameEventStartTimeQ = String.Format("{0}.{1}", TableNameEventQ, StartTimeQ);
+        private static string TableNameEventEndTimeQ = String.Format("{0}.{1}", TableNameEventQ, EndTimeQ);
+        private static string TableNameEventLongQ = String.Format("{0}.{1}", TableNameEventQ, LongQ);
+        private static string TableNameEventLatQ = String.Format("{0}.{1}", TableNameEventQ, LatQ);
+        private static string TableNameEventCatQ = String.Format("{0}.{1}", TableNameEventQ, CategoryQ);
+        private static string TableNameEventIdQ = String.Format("{0}.{1}", TableNameEventQ, IdQ);
+        private static string TableNameEventPriceQ = String.Format("{0}.{1}", TableNameEventQ, PriceQ);
+        private static string TableNameEventRatingQ = String.Format("{0}.{1}", TableNameEventQ, RatingQ);
+        private static string TableNameEventRateCountQ = String.Format("{0}.{1}", TableNameEventQ, RateCountQ);
+        private static string TableNameEventLocationIdQ = String.Format("{0}.{1}", TableNameEventQ, LocationIdQ);
+        private static string TableNameEventCustomQ = String.Format("{0}.{1}", TableNameEventQ, CustomQ);
 
-        private static string TableNameLocationIdQ = "locations.id";
-        private static string TableNameLocationRatingQ = "locations.rating";
+        private static string TableNameEventOccurrenceQ = String.Format("{0}.{1}", TableNameEventQ, OccurrenceQ);
+        private static string TableNameEventRepeatEveryQ = String.Format("{0}.{1}", TableNameEventQ, RepeatEveryQ);
+        private static string TableNameEventRepeatOnQ = String.Format("{0}.{1}", TableNameEventQ, RepeatOnQ);
+        private static string TableNameEventRepeatCountQ = String.Format("{0}.{1}", TableNameEventQ, RepeatCountQ);
+
+
+        private static string TableNameLocationIdQ = String.Format("{0}.{1}", TableNameLocationQ, IdQ);
+        private static string TableNameLocationRatingQ = String.Format("{0}.{1}", TableNameLocationQ, RatingQ);
+
         /// <summary>
         /// Default DateTime
         /// </summary>
-        private static DateTime DefaulTime = new DateTime(0001, 01, 01);
         private static bool isNotFirst = false;
+
         #endregion Constants
 
-        #region Metods
+        #region Methods
 
         public static string GetSelectAllEventsQueryString(IFilter filter)
         {
@@ -132,29 +148,16 @@ namespace GeoEvents.Repository
             }
 
             /// Adding Time filter query if there is time in filter
-            if (filter.EndTime > DefaulTime && filter.StartTime > DefaulTime)
+            if (filter.EndTime > filter.StartTime)
             {
                 selectString = ConditionValidation(selectString);
 
+                //selectString.AppendFormat(" (({0},{1}) OVERLAPS ({2},{3})) ",
+                //    ParUserStartTime, ParUserEndTime, TableNameEventStartTimeQ, TableNameEventEndTimeQ);
 
-                selectString.AppendFormat(" (({0},{1}) OVERLAPS ({2},{3})) ",
-                    ParUserStartTime, ParUserEndTime, TableNameEventStartTimeQ, TableNameEventEndTimeQ);
-            }
-            else if (filter.EndTime == null && filter.StartTime > DefaulTime)
-            {
-                selectString = ConditionValidation(selectString);
-
-
-                selectString.AppendFormat(" ({0}<{1}) ",
-                    ParUserStartTime, TableNameEventEndTimeQ);
-            }
-            else if (filter.EndTime > DefaulTime && filter.StartTime == null)
-            {
-                selectString = ConditionValidation(selectString);
-
-
-                selectString.AppendFormat(" ({0}>{1}) ",
-                    ParUserEndTime, TableNameEventStartTimeQ);
+                selectString.AppendFormat(" (check_recurrence({0},{1},{2},{3},{4},{5},{6},{7})) ",
+                    ParUserStartTime, ParUserEndTime, TableNameEventStartTimeQ, TableNameEventEndTimeQ, TableNameEventOccurrenceQ,
+                    TableNameEventRepeatEveryQ, TableNameEventRepeatOnQ, TableNameEventRepeatCountQ);
             }
 
             ///Adding searcstring filter in queri if there is searchstring
@@ -201,7 +204,7 @@ namespace GeoEvents.Repository
             selectString.AppendFormat("SELECT COUNT({0}) FROM {1} ",
                 TableNameEventIdQ, TableNameEventQ);
 
-             isNotFirst = false;
+            isNotFirst = false;
 
             /// adding Distance filter to query if there is Location and radius
             if (filter.ULat != null && filter.ULong != null && filter.Radius != 0)
@@ -230,36 +233,22 @@ namespace GeoEvents.Repository
             }
 
             /// Adding Time filter query if there is time in filter
-            if (filter.EndTime > DefaulTime && filter.StartTime > DefaulTime)
+            if (filter.EndTime > filter.StartTime)
             {
                 selectString = ConditionValidation(selectString);
 
+                //selectString.AppendFormat(" (({0},{1}) OVERLAPS ({2},{3})) ",
+                //    ParUserStartTime, ParUserEndTime, TableNameEventStartTimeQ, TableNameEventEndTimeQ);
 
-                selectString.AppendFormat(" (({0},{1}) OVERLAPS ({2},{3})) ",
-                    ParUserStartTime, ParUserEndTime, TableNameEventStartTimeQ, TableNameEventEndTimeQ);
-            }
-            else if (filter.EndTime == null && filter.StartTime > DefaulTime)
-            {
-                selectString = ConditionValidation(selectString);
-
-
-                selectString.AppendFormat(" ({0}<{1}) ",
-                    ParUserStartTime, TableNameEventEndTimeQ);
-            }
-            else if (filter.EndTime > DefaulTime && filter.StartTime == null)
-            {
-                selectString = ConditionValidation(selectString);
-
-
-                selectString.AppendFormat(" ({0}>{1}) ",
-                    ParUserEndTime, TableNameEventStartTimeQ);
+                selectString.AppendFormat(" (check_recurrence({0},{1},{2},{3},{4},{5},{6},{7})) ",
+                    ParUserStartTime, ParUserEndTime, TableNameEventStartTimeQ, TableNameEventEndTimeQ, TableNameEventOccurrenceQ,
+                    TableNameEventRepeatEveryQ, TableNameEventRepeatOnQ, TableNameEventRepeatCountQ);
             }
 
             ///Adding searcstring filter in queri if there is searchstring
             if (!string.IsNullOrWhiteSpace(filter.SearchString))
             {
                 selectString = ConditionValidation(selectString);
-
 
                 selectString.AppendFormat(" (lower({0}) LIKE lower({1})) ",
                     NameQ, ParSearchString);
@@ -269,7 +258,6 @@ namespace GeoEvents.Repository
             if (filter.Category > 0)
             {
                 selectString = ConditionValidation(selectString);
-
 
                 selectString.AppendFormat(" ({0} & {1} > 0)",
                     ParCategory, TableNameEventCatQ);
@@ -325,7 +313,7 @@ namespace GeoEvents.Repository
                 selectString.AppendFormat("SELECT *, earth_distance(ll_to_earth({0},{1}), ll_to_earth({2},{3})) as distance from {4} WHERE ",
                     ParLatitude, ParLongitude, TableNameEventLatQ, TableNameEventLongQ, TableNameEventQ);
             }
-            else if(filter.OrderBy == "RatingLocation")
+            else if (filter.OrderBy == "RatingLocation")
             {
                 selectString.AppendFormat("SELECT * FROM {0} INNER JOIN {1} ON ({2} = {3}) ",
                     TableNameEventQ, TableNameLocationQ, TableNameEventLocationIdQ, TableNameLocationIdQ);
@@ -336,7 +324,7 @@ namespace GeoEvents.Repository
                     TableNameEventQ);
             }
 
-             isNotFirst = false;
+            isNotFirst = false;
 
             /// adding Distance filter to query if there is Location and radius
             if (filter.ULat != null && filter.ULong != null && filter.Radius != 0)
@@ -366,27 +354,17 @@ namespace GeoEvents.Repository
             }
 
             /// Adding Time filter query if there is time in filter
-            //if (filter.EndTime > DefaulTime && filter.StartTime > DefaulTime)
-            //{
+
+            if (filter.EndTime > filter.StartTime)
+            {
                 selectString = ConditionValidation(selectString);
 
-                selectString.AppendFormat(" (({0},{1}) OVERLAPS ({2},{3})) ",
-                    ParUserStartTime, ParUserEndTime, TableNameEventStartTimeQ, TableNameEventEndTimeQ);
-            //}
-            //else if (filter.EndTime == null && filter.StartTime > DefaulTime)
-            //{
-            //    selectString = ConditionValidation(selectString);
+                selectString.AppendFormat(" (check_recurrence({0},{1},{2},{3},{4},{5},{6},{7})) ",
+                    ParUserStartTime, ParUserEndTime, TableNameEventStartTimeQ, TableNameEventEndTimeQ, TableNameEventOccurrenceQ,
+                    TableNameEventRepeatEveryQ, TableNameEventRepeatOnQ, TableNameEventRepeatCountQ);
 
-            //    selectString.AppendFormat(" ({0}<{1}) ",
-            //        ParUserStartTime, TableNameEventEndTimeQ);
-            //}
-            //else if (filter.EndTime > DefaulTime && filter.StartTime == null)
-            //{
-            //    selectString = ConditionValidation(selectString);
 
-            //    selectString.AppendFormat(" ({0}>{1}) ",
-            //        ParUserEndTime, TableNameEventStartTimeQ);
-            //}
+            }
 
             ///Adding searcstring filter in queri if there is searchstring
             if (!string.IsNullOrWhiteSpace(filter.SearchString))
@@ -475,11 +453,11 @@ namespace GeoEvents.Repository
         /// </summary>
         /// <returns>Query string</returns>
         public static string GetInsertEventQueryString()
-        {   
-         return string.Format("INSERT INTO {0} VALUES ({1}, {2}, {3}, {4}, {5}, {6}, {7}, {8}, {9}, {10}, {11}, {12}, {13}, {14}, {15})",
-                TableNameEventQ, ParId, ParName, ParDescription, ParCategory, ParLatitude, ParLongitude,
-                ParStartTime, ParEndTime, ParRating, ParRateCount, ParPrice, ParCapacity, ParReserved,
-                ParCustom, ParLocationId);
+        {
+            return String.Format("INSERT INTO {0} VALUES ({1}, {2}, {3}, {4}, {5}, {6}, {7}, {8}, {9}, {10}, {11}, {12}, {13}, {14}, {15}, {16}, {17}, {18}, {19})",
+                   TableNameEventQ, ParId, ParName, ParDescription, ParCategory, ParLatitude, ParLongitude,
+                   ParStartTime, ParEndTime, ParRating, ParRateCount, ParPrice, ParCapacity, ParReserved,
+                   ParCustom, ParOccurrence, ParRepeatEvery, ParRepeatOn, ParRepeatCount, ParLocationId);
         }
 
         /// <summary>

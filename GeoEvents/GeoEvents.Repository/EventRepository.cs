@@ -103,11 +103,15 @@ namespace GeoEvents.Repository
                                 Capacity = Convert.ToInt32(dr[11]),
                                 Reserved = Convert.ToInt32(dr[12]),
                                 Custom = dr[13].ToString(),
-                                LocationId = new Guid(dr[14].ToString())
+
+                                Occurrence = dr[14].ToString(),
+                                RepeatEvery = Convert.ToInt32(dr[15]),
+                                RepeatOn = Convert.ToInt32(dr[16]),
+                                RepeatCount = Convert.ToInt32(dr[17]),
+
+                                LocationId = new Guid(dr[18].ToString())
                             };
                         }
-
-
                     }
                 }
                 return Mapper.Map<IEvent>(evtR);
@@ -225,7 +229,13 @@ namespace GeoEvents.Repository
                                 Capacity = Convert.ToInt32(dr[11]),
                                 Reserved = Convert.ToInt32(dr[12]),
                                 Custom = dr[13].ToString(),
-                                LocationId = new Guid(dr[14].ToString())
+
+                                Occurrence = dr[14].ToString(),
+                                RepeatEvery = Convert.ToInt32(dr[15]),
+                                RepeatOn = Convert.ToInt32(dr[16]),
+                                RepeatCount = Convert.ToInt32(dr[17]),
+
+                                LocationId = new Guid(dr[18].ToString())
                             };
                             SelectEvents.Add(Mapper.Map<IEvent>(tmp));
                         }
@@ -360,12 +370,18 @@ namespace GeoEvents.Repository
                                 Capacity = Convert.ToInt32(drSelect[11]),
                                 Reserved = Convert.ToInt32(drSelect[12]),
                                 Custom = drSelect[13].ToString(),
-                                LocationId = new Guid(drSelect[14].ToString())
+
+                                Occurrence = drSelect[14].ToString(),
+                                RepeatEvery = Convert.ToInt32(drSelect[15]),
+                                RepeatOn = Convert.ToInt32(drSelect[16]),
+                                RepeatCount = Convert.ToInt32(drSelect[17]),
+
+                                LocationId = new Guid(drSelect[18].ToString())
                             };
                         }
                     }
+                    return Mapper.Map<IEvent>(evtR);
                 }
-                return Mapper.Map<IEvent>(evtR);
             }
             catch (Exception ex)
             {
@@ -435,10 +451,15 @@ namespace GeoEvents.Repository
 
                                     Reserved = Convert.ToInt32(dr[12]),
                                     Custom = dr[13].ToString(),
-                                    LocationId = new Guid(dr[14].ToString())
+
+                                    Occurrence = dr[14].ToString(),
+                                    RepeatEvery = Convert.ToInt32(dr[15]),
+                                    RepeatOn = Convert.ToInt32(dr[16]),
+                                    RepeatCount = Convert.ToInt32(dr[17]),
+
+                                    LocationId = new Guid(dr[18].ToString())
                                 };
                             }
-                        
                     }
                 }
                 return Mapper.Map<IEvent>(evtR);
@@ -493,7 +514,13 @@ namespace GeoEvents.Repository
 
                                 Reserved = Convert.ToInt32(dr[12]),
                                 Custom = dr[13].ToString(),
-                                LocationId = new Guid(dr[14].ToString())
+
+                                Occurrence = dr[14].ToString(),
+                                RepeatEvery = Convert.ToInt32(dr[15]),
+                                RepeatOn = Convert.ToInt32(dr[16]),
+                                RepeatCount = Convert.ToInt32(dr[17]),
+
+                                LocationId = new Guid(dr[18].ToString())
                             };
                         }
                     }

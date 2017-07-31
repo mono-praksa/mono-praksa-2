@@ -30,13 +30,81 @@
             </div>
         </fieldset>
     </div>
+    <div class="form-group">
+        <fieldset>
+            <legend>
+                Recurring
+            </legend>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <label for="occurrence">Recurs</label>
+                            <select formControlName="occurrence" class="form-control" id="occurrence">
+                                <option value="none">None</option>
+                                <option value="daily">Daily</option>
+                                <option value="weekly">Weekly</option>
+                                <option value="monthly">Monthly</option>
+                                <option value="yearly">Yearly</option>
+                            </select>
+                        </div>
+                        <div class="col-md-12" *ngIf="occurrence.value!='none'">
+                            <label for="repeatEvery">Repeat every</label>
+                            <select formControlName="repeatEvery" class="form-control" id="interval">
+                                <option *ngFor="let i of range(30)">{{i}}</option>
+                            </select>
+                        </div>
+                        <div class="col-md-12" *ngIf="occurrence.value=='monthly'">
+                            <label>Repeat until</label>
+                            <div class="col-md-12">
+                                <input type="radio" name="monthlyRadio" id="monthlyByDayMonth" (change)="monthlyOptionChange()" checked />
+                                <label for="monthlyByDayMonth">day of the month</label>
+                            </div>
+                            <div class="col-md-12">
+                                <input type="radio" name="monthlyRadio" id="monthlyByDayWeek" (change)="monthlyOptionChange()" />
+                                <label for="monthlyByDayWeek">day of the week</label>
+                            </div>
+                        </div>
+                        <div class="col-md-12" *ngIf="occurrence.value=='weekly'">
+                            <label>Repeat on</label>
+                            <label for="{{categoryService.DayEnum[day]}}" *ngFor="let day of categoryService.keys('day')">
+                                <input type="checkbox" value="{{day}}" (change)="updateDays(day)" id="{{categoryService.DayEnum[day]}}" /> {{categoryService.DayEnum[day]}}
+                            </label>
+                        </div>
+                        <div class="col-md-12" *ngIf="occurrence.value!='none'">
+                            <label>End of repeating</label>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <input type="radio" name="endOfRepeating" id="endNever" (change)="endOfRepeatingChanged([{element: endDay, disable: true}, {element: endAfterRepetitions, disable: true}])" checked />
+                                    <label for="endNever">Never</label>
+                                </div>
+                                <div class="col-md-12">
+                                    <input type="radio" name="endOfRepeating" id="endAfter" (change)="endOfRepeatingChanged([{element: endDay, disable: true}, {element: endAfterRepetitions, disable: false}])" />
+                                    <label for="endAfter">
+                                        After <input type="text" id="endAfterRepetitions" #endAfterRepetitions (blur)="endOfRepeatingBlured('num', +endAfterRepetitions.value)" disabled /> repetitions
+                                    </label>
+                                </div>
+                                <div class="col-md-12">
+                                    <input type="radio" name="endOfRepeating" id="endDay" (change)="endOfRepeatingChanged([{element: endDay, disable: false}, {element: endAfterRepetitions, disable: true}])" />
+                                    <label for="endDay">
+                                        Day 
+                                    </label>
+                                    <input ngui-datetime-picker [close-on-select]="false" id="endDay" #endDay placeholder="Click to enter end date" (ngModelChange)="endOfRepeatingBlured('date', endDay.value)" style="cursor: pointer;" disabled readonly />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+    </div>
     <div class="form-group" [ngClass]="{'has-error': isAllUnchecked(), 'has-success': !isAllUnchecked()}">
         <fieldset>
             <legend class="control-label">
                 Categories
             </legend>
             <div class="row control-label">
-                <label class="col-md-3" *ngFor="let category of categoryService.keys()">
+                <label class="col-md-3" *ngFor="let category of categoryService.keys('category')">
                     <input type="checkbox" value="{{category}}" (change)="updateCategories(category)" *ngIf="categoryService.CategoryEnum[category]!='Miscellaneous'" />
                     <input type="checkbox" value="{{category}}" (change)="updateCategories(category)" *ngIf="categoryService.CategoryEnum[category]=='Miscellaneous'" checked/> {{categoryService.CategoryEnum[category]}}
                 </label>

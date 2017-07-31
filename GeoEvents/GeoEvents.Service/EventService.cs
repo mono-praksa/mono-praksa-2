@@ -69,6 +69,21 @@ namespace GeoEvents.Service
                 mult *= 2;
                 cat = cat >> 1;
             }
+            int repeaton = evt.RepeatOn;
+            mult = 1;
+            if (repeaton != 0)
+            {
+                while (repeaton > 0)
+                {
+                    int mod = repeaton % 2;
+                    if (mod == 1)
+                    {
+                        evt.RepeatOnList.Add(mult);
+                    }
+                    mult *= 2;
+                    repeaton = repeaton >> 1;
+                }
+            }
             return evt;
         }
 
@@ -82,7 +97,6 @@ namespace GeoEvents.Service
         public async Task<StaticPagedList<IEvent>> GetEventsAsync(IFilter filter)
         {
             StaticPagedList<IEvent> result = await Repository.GetEventsAsync(filter);
-
 
             foreach (IEvent evt in result)
             {
@@ -99,9 +113,22 @@ namespace GeoEvents.Service
                     mult *= 2;
                     cat = cat >> 1;
                 }
+                int repeaton = evt.RepeatOn;
+                mult = 1;
+                if (repeaton != 0)
+                {
+                    while (repeaton > 0)
+                    {
+                        int mod = repeaton % 2;
+                        if (mod == 1)
+                        {
+                            evt.RepeatOnList.Add(mult);
+                        }
+                        mult *= 2;
+                        repeaton = repeaton >> 1;
+                    }
+                }
             }
-
-
             return result;
         }
 
@@ -123,6 +150,19 @@ namespace GeoEvents.Service
             evt.Reserved = 0;
             evt.Rating = 0;
             evt.RateCount = 0;
+            evt.RepeatOn = 0;
+            if (evt.Occurrence == "none")
+            {
+                evt.RepeatEvery = 0;
+                evt.RepeatCount = 0;
+            }
+            else
+            {
+                for (int i = 0; i < evt.RepeatOnList.Count; i++)
+                {
+                    evt.RepeatOn += evt.RepeatOnList[i];
+                }
+            }
 
             return Repository.CreateEventAsync(evt);
         }

@@ -370,7 +370,39 @@ namespace GeoEvents.WebAPI.Controllers
             public Guid LocationId { get; set; }
 
             /// <summary>
-            /// Initializes a new instance of the <see cref="EventModel"/> class.
+            /// Gets or sets the occurrence.
+            /// </summary>
+            /// <value>
+            /// The occurrence.
+            /// </value>
+            public string Occurrence { get; set; }
+
+            /// <summary>
+            /// Gets or sets the repeat every.
+            /// </summary>
+            /// <value>
+            /// The repeat every.
+            /// </value>
+            public int RepeatEvery { get; set; }
+
+            /// <summary>
+            /// Gets or sets the repeat count.
+            /// </summary>
+            /// <value>
+            /// The repeat count.
+            /// </value>
+            public int RepeatCount { get; set; }
+
+            /// <summary>
+            /// Gets or sets the repeat on list.
+            /// </summary>
+            /// <value>
+            /// The repeat on list.
+            /// </value>
+            public List<int> RepeatOnList { get; set; }
+
+            /// <summary>
+            /// Initializes a new instance of the <see cref="EventModel" /> class.
             /// </summary>
             /// <param name="id">The identifier.</param>
             /// <param name="name">The name.</param>
@@ -388,7 +420,11 @@ namespace GeoEvents.WebAPI.Controllers
             /// <param name="ratingLocation">The rating location.</param>
             /// <param name="custom">The custom.</param>
             /// <param name="locationId">The location identifier.</param>
-            public EventModel(Guid id, string name, string description, DateTime starttime, DateTime endtime, decimal uLat, decimal uLong, List<int> categories, decimal price, int capacity, int reserved, decimal rating, int rateCount, decimal ratingLocation, string custom, Guid locationId)
+            /// <param name="occurrence">The occurrence.</param>
+            /// <param name="repeatevery">The repeatevery.</param>
+            /// <param name="repeatcount">The repeatcount.</param>
+            /// <param name="repeatonlist">The repeatonlist.</param>
+            public EventModel(Guid id, string name, string description, DateTime starttime, DateTime endtime, decimal uLat, decimal uLong, List<int> categories, decimal price, int capacity, int reserved, decimal rating, int rateCount, decimal ratingLocation, string custom, Guid locationId, string occurrence, int repeatevery, int repeatcount, List<int> repeatonlist)
             {
                 this.Id = id;
                 this.Name = name;
@@ -406,6 +442,10 @@ namespace GeoEvents.WebAPI.Controllers
                 this.RatingLocation = ratingLocation;
                 this.Custom = custom;
                 this.LocationId = locationId;
+                this.Occurrence = occurrence;
+                this.RepeatEvery = repeatevery;
+                this.RepeatCount = repeatcount;
+                this.RepeatOnList = repeatonlist;
             }
 
             /// <summary>

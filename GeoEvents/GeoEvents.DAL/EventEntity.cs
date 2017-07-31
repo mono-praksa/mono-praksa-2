@@ -129,6 +129,38 @@ namespace GeoEvents.DAL
         /// </value>
         public string Custom { get; set; }
 
+        /// <summary>
+        /// Gets or sets the occurrence.
+        /// </summary>
+        /// <value>
+        /// The occurrence.
+        /// </value>
+        public string Occurrence { get; set; }
+
+        /// <summary>
+        /// Gets or sets the repeat every.
+        /// </summary>
+        /// <value>
+        /// The repeat every.
+        /// </value>
+        public int RepeatEvery { get; set; }
+
+        /// <summary>
+        /// Gets or sets the repeat on.
+        /// </summary>
+        /// <value>
+        /// The repeat on.
+        /// </value>
+        public int RepeatOn { get; set; }
+
+        /// <summary>
+        /// Gets or sets the repeat count.
+        /// </summary>
+        /// <value>
+        /// The repeat count.
+        /// </value>
+        public int RepeatCount { get; set; }
+
         #endregion Properties
 
         #region Constructors
@@ -139,26 +171,29 @@ namespace GeoEvents.DAL
         public EventEntity() { }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="EventEntity"/> class.
+        /// Initializes a new instance of the <see cref="EventEntity" /> class.
         /// </summary>
-        /// <param name="Id">The identifier.</param>
-        /// <param name="StartTime">The start time.</param>
-        /// <param name="EndTime">The end time.</param>
-        /// <param name="Lat">The lat.</param>
-        /// <param name="Long">The long.</param>
-        /// <param name="Name">The name.</param>
-        /// <param name="Description">The description.</param>
-        /// <param name="Category">The category.</param>
-        /// <param name="Price">The price.</param>
-        /// <param name="Capacity">The capacity.</param>
-        /// <param name="Reserved">The reserved.</param>
-        /// <param name="Rating">The rating.</param>
-        /// <param name="RateCount">The rate count.</param>
-        /// <param name="RatingLocation">The rating location.</param>
-        /// <param name="LocationId">The location identifier.</param>
-        /// <param name="Custom">The custom attributes.</param>
+        /// <param name="id">The identifier.</param>
+        /// <param name="startTime">The start time.</param>
+        /// <param name="endTime">The end time.</param>
+        /// <param name="latitude">The latitude.</param>
+        /// <param name="longitude">The longitude.</param>
+        /// <param name="name">The name.</param>
+        /// <param name="description">The description.</param>
+        /// <param name="category">The category.</param>
+        /// <param name="price">The price.</param>
+        /// <param name="capacity">The capacity.</param>
+        /// <param name="reserved">The reserved.</param>
+        /// <param name="rating">The rating.</param>
+        /// <param name="rateCount">The rate count.</param>
+        /// <param name="locationId">The location identifier.</param>
+        /// <param name="custom">The custom.</param>
+        /// <param name="occurrence">The occurrence.</param>
+        /// <param name="repeatevery">The repeatevery.</param>
+        /// <param name="repeaton">The repeaton.</param>
+        /// <param name="repeatcount">The repeatcount.</param>
         public EventEntity(Guid id, DateTime startTime, DateTime endTime, double latitude,
-            double longitude, string name, string description, int category, double price, int capacity, int reserved, double rating, int rateCount, Guid locationId, string custom)
+            double longitude, string name, string description, int category, double price, int capacity, int reserved, double rating, int rateCount, Guid locationId, string custom, string occurrence, int repeatevery, int repeaton, int repeatcount)
         {
             this.Id = id;
             this.StartTime = startTime;
@@ -175,6 +210,10 @@ namespace GeoEvents.DAL
             this.RateCount = rateCount;
             this.LocationId = locationId;
             this.Custom = custom;
+            this.Occurrence = occurrence;
+            this.RepeatEvery = repeatevery;
+            this.RepeatOn = repeaton;
+            this.RepeatCount = repeatcount;
         }
 
         #endregion Constructors
