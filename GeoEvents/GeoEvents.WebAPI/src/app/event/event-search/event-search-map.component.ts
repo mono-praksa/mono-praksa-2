@@ -22,6 +22,7 @@ export class EventMapComponent implements OnChanges, OnInit {
     private clusteringFilter: ClusteringFilter;
     private latitude: number;
     private longitude: number;
+    private map: any;
     private mapPoints: MapPoint[];
     private initialZoom: number = 1;
 
@@ -111,10 +112,14 @@ export class EventMapComponent implements OnChanges, OnInit {
         }
     }
 
-    private markerClick(event: any): void {
-        this.latitude = event.coords.latitude;
-        this.longitude = event.coords.longitude;
-        this.initialZoom = this.clusteringFilter.ZoomLevel + 1;
+    private mapReady(event: any): void {
+        this.map = event;
+    }
+
+    private markerClick(mapPoint: MapPoint): void {
+        this.map.latitude = mapPoint.Y;
+        this.map.longitude = mapPoint.X;
+        this.map.zoom += 1;
     }
 
     private onBoundsChange(bounds: LatLngBounds): void {
