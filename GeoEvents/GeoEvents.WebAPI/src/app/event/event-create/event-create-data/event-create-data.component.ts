@@ -198,7 +198,6 @@ export class EventCreateDataComponent implements OnInit {
     endOfRepeatingBlured(valueType: string, value: string) {
         this.repeat.value = value;
         this.repeat.valueType = valueType;
-        this.endOfRepeatingNumber();
     }
 
     endOfRepeatingNumber(): number {
