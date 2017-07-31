@@ -32,23 +32,60 @@ export class EventMapComponent implements OnChanges, OnInit {
     }
 
     ngOnChanges() {
-        if (this.filter) {
-            this.getEvents();
+        if (!this.filter) {
+            this.filter = {
+                Category: 0,
+                Custom: undefined,
+                EndTime: undefined,
+                OrderByString: undefined,
+                OrderIsAscending: undefined,
+                PageNumber: undefined,
+                PageSize: undefined,
+                Price: undefined,
+                Radius: 25000,
+                RatingEvent: undefined,
+                SearchString: undefined,
+                StartTime: undefined,
+                ULat: 0,
+                ULong: 0
+            }
         }
+
+        this.latitude = this.filter.ULat;
+        this.longitude = this.filter.ULong;
+        this.initialZoom = this.getZoom(this.filter.Radius);
+        this.getEvents();
     }
 
     ngOnInit() {
         this.clusteringFilter = {
-            NELatitude: undefined,
-            NELongitude: undefined,
-            SWLatitude: undefined,
-            SWLongitude: undefined,
-            ZoomLevel: undefined
+            NELatitude: 90,
+            NELongitude: 180,
+            SWLatitude: -90,
+            SWLongitude: -180,
+            ZoomLevel: 1
         }
         this.initMap();
-        if (this.filter) {
-            this.getEvents();
+        if (!this.filter) {
+            this.filter = {
+                Category: 0,
+                Custom: undefined,
+                EndTime: undefined,
+                OrderByString: undefined,
+                OrderIsAscending: undefined,
+                PageNumber: undefined,
+                PageSize: undefined,
+                Price: undefined,
+                Radius: 25000,
+                RatingEvent: undefined,
+                SearchString: undefined,
+                StartTime: undefined,
+                ULat: 0,
+                ULong: 0
+            }
         }
+        
+        this.getEvents();
     }
 
     private checkWindows(infoWindow: any): void {
