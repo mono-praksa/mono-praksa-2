@@ -1,13 +1,14 @@
-﻿﻿import { Component, EventEmitter, Input, OnChanges, OnInit, Output, ViewChild } from "@angular/core";
+﻿﻿import { ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnInit, Output, ViewChild } from "@angular/core";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
+import { LatLngBounds, MapsAPILoader } from "@agm/core";
 import { Router } from "@angular/router";
 import { Observable } from "rxjs/Observable";
 
+import { ClusteringFilter } from "../shared/models/clustering-filter.model";
 import { Event } from "../shared/models/event.model";
-
-
-declare var google: any;
-var MarkerClusterer = require("../../../../Scripts/markerclusterer.js");
+import { EventService } from "../shared/event.service";
+import { Filter } from "../shared/models/filter.model";
+import { MapPoint } from "../shared/models/map-point.model";
 
 @Component({
     selector: "display-map",
@@ -15,178 +16,186 @@ var MarkerClusterer = require("../../../../Scripts/markerclusterer.js");
     templateUrl: "app/event/event-search/event-search-map.component.html"
 })
 
-export class EventMapComponent implements OnInit, OnChanges {
-    @Input() events: Event[];
-    googleMarkers: any;
-    @Input() latitude: number;
-    @Input() longitude: number;
-    map: any;
+export class EventMapComponent implements OnChanges, OnInit {
+    @Input() filter: Filter;
 
-    private lat: number;
-    private lng: number;
-    private zoom: number;
+    private clusteringFilter: ClusteringFilter;
+    private infoWindow: any;
+    private initialZoom: number = 1;
+    private latitude: number;
+    private longitude: number;
+    private map: any;
+    private mapPoints: MapPoint[];
 
-    constructor(private router: Router) {
+    constructor(private router: Router, private eventService: EventService, private changeDetectorRef: ChangeDetectorRef) {
 
     }
 
-    displayEvent(evt: Event) {
+    ngOnChanges() {
+        if (!this.clusteringFilter) {
+            this.clusteringFilter = {
+                NELatitude: 90,
+                NELongitude: 180,
+                SWLatitude: -90,
+                SWLongitude: -180,
+                ZoomLevel: 1
+            }
+        }
+
+        if (!this.filter) {
+            this.filter = {
+                Category: 0,
+                Custom: undefined,
+                EndTime: undefined,
+                OrderByString: undefined,
+                OrderIsAscending: undefined,
+                PageNumber: undefined,
+                PageSize: undefined,
+                Price: undefined,
+                Radius: 25000,
+                RatingEvent: undefined,
+                SearchString: undefined,
+                StartTime: undefined,
+                ULat: 0,
+                ULong: 0
+            }
+        }
+
+        this.latitude = this.filter.ULat;
+        this.longitude = this.filter.ULong;
+        this.initialZoom = this.getZoom(this.filter.Radius);
+        this.getEvents();
+    }
+
+    ngOnInit() {
+        this.clusteringFilter = {
+            NELatitude: 90,
+            NELongitude: 180,
+            SWLatitude: -90,
+            SWLongitude: -180,
+            ZoomLevel: 1
+        }
+        this.initMap();
+        if (!this.filter) {
+            this.filter = {
+                Category: 0,
+                Custom: undefined,
+                EndTime: undefined,
+                OrderByString: undefined,
+                OrderIsAscending: undefined,
+                PageNumber: undefined,
+                PageSize: undefined,
+                Price: undefined,
+                Radius: 25000,
+                RatingEvent: undefined,
+                SearchString: undefined,
+                StartTime: undefined,
+                ULat: 0,
+                ULong: 0
+            }
+        }
+        
+        this.getEvents();
+    }
+
+    private checkWindows(infoWindow: any): void {
+        this.changeDetectorRef.detectChanges();
+        if (this.infoWindow == infoWindow) {
+            return;
+        }
+        else if (this.infoWindow) {
+            this.infoWindow.close();
+        }
+        this.infoWindow = infoWindow;
+        this.changeDetectorRef.detectChanges();
+    }
+
+    private displayEvent(evt: Event): void {
         let routeUrl = "/event/search/" + evt.Id;
         this.router.navigate([routeUrl]);
     }
 
-    //initializes the markers
-    initMarkers() {
-        let i = 0;
-        let markers = this.events;
-        var result = [];
-
-        //set the scope
-        var self = this;
-
-        //infowindow that is shown on click
-        var infoWindow = new google.maps.InfoWindow();
-        //craete google markers for each event
-        for (; i < markers.length; ++i) {
-            //set the coordinates
-            let myLatLng = { lat: markers[i].Latitude, lng: markers[i].Longitude };
-
-            //create a new marker
-
-            let markerdata: Event = markers[i];
-
-            var marker = new google.maps.Marker({
-                map: self.map,
-                position: myLatLng,
-                title: markers[i].Name,
-                data: markerdata
-            });
-
-            //create a new event listerer for the marker, triggers on click
-            //displays the infowindow
-            google.maps.event.addListener(marker, "click", (function (marker: any, i: any) {
-                return function () {
-                    //
-                    //once this is merged and routing is implemented this will redirect to event details
-                    //
-                    infoWindow.setContent("<div><p>" + marker.title + "</p> <p>Double-click for more!</p></div>");
-                 //   self.MarkerLink.addListener("click", self.router.navigate(["/event/create"]));
-                    infoWindow.open(this.map, marker);
-                }
-            })(marker, i));
-
-            //
-            //once this is merged and router is implemented remove this function
-            //
-            //create a new event listener for the makrer, triggers on dblclick
-            //calls the function that emits the marker to the parent component
-			
-			
-            google.maps.event.addListener(marker, "dblclick", (function (marker: any, i: any) {
-                return function () {
-                    let eventToEmit: Event = marker.data;
-                    self.displayEvent(eventToEmit);
-                }
-            })(marker, i));
-			
-
-            //push the marker to the results
-            result.push(marker);
-        }
-        //return the markers
-        return result;
+    private getEvents(): void {
+        this.eventService.getEventsClustered(this.filter, this.clusteringFilter).subscribe((response: MapPoint[]) => {
+            this.mapPoints = response;
+        })
     }
 
-    ngOnChanges() {
-        this.map = undefined;
-        this.googleMarkers = undefined;
-
-        if (this.events && this.events.length > 0) {
-            if (this.latitude) {
-                this.lat = this.latitude;
-            }
-            else {
-                this.lat = this.events[0].Latitude;
-            }
-            if (this.longitude) {
-                this.lng = this.longitude;
-            }
-            else {
-                this.lng = this.events[0].Longitude;
-            }
+    private getIconUrl(count: number): string {
+        if (count === 1) {
+            return "app/assets/images/pin.png";
+        }
+        else if (count < 10) {
+            return "app/assets/images/m1.png";
+        }
+        else if (count < 30) {
+            return "app/assets/images/m2.png";
+        }
+        else if (count < 100) {
+            return "app/assets/images/m3.png";
+        }
+        else if (count < 500) {
+            return "app/assets/images/m4.png";
+        }
+        else if (count >= 500) {
+            return "app/assets/images/m5.png";
         }
         else {
-            this.lat = 0;
-            this.lng = 0;
+            return "";
         }
+}
 
-        //create a new object containing lat and lng
-        let myLatLng = { lat: this.lat, lng: this.lng };
-
-        //create the map
-        //this searches the template for a div with the id "map"
-        //sets the zoom and centers the map on the latitude and longitude from the input
-        this.map = new google.maps.Map(document.getElementById("map"), {
-            zoom: 3,
-            center: myLatLng,
-            minZoom: 3
-        });
-
-        //this initializes markers for the marker clusterer
-        if (this.events && this.events.length > 0) {
-            this.googleMarkers = this.initMarkers();
-
-            //initializes the marker clusterer
-            //this.map is the map where we will place the markers
-            //this.googlemarkers are the markers that will be clustered
-            //imagepath is the path to images for the cluster icons
-            var mc = new MarkerClusterer(this.map, this.googleMarkers, { maxZoom: 15, imagePath: "https://googlemaps.github.io/js-marker-clusterer/images/m" });
+    private getZoom(radius: number): number {
+        if (radius) {
+            return Math.ceil((16 - Math.log(radius * 2) / Math.log(2)));
+        }
+        else {
+            return 1;
         }
     }
 
-    ngOnInit() {
+    private getRadius(zoom: number = 1): number {
+        return Math.pow(2, 15 - zoom);
+    }
 
-        //this sets the latitude and longitude form input
-        if (this.events && this.events.length > 0) {
-            if (this.latitude) {
-                this.lat = this.latitude;
-            }
-            else {
-                this.lat = this.events[0].Latitude;
-            }
-            if (this.longitude) {
-                this.lng = this.longitude;
-            }
-            else {
-                this.lng = this.events[0].Longitude;
-            }
+    private initMap(): void {
+        if (this.filter) {
+            this.latitude = this.filter.ULat;
+            this.longitude = this.filter.ULong;
+            this.initialZoom = this.getZoom(this.filter.Radius);
         }
         else {
-            this.lat = 0;
-            this.lng = 0;
+            this.latitude = 0;
+            this.longitude = 0;
+            this.initialZoom = this.getZoom(undefined);
         }
+    }
 
-        //create a new object containing lat and lng
-        let myLatLng = { lat: this.lat, lng: this.lng };
+    private mapReady(event: any): void {
+        this.map = event;
+    }
 
-        //create the map
-        //this searches the template for a div with the id "map"
-        //sets the zoom and centers the map on the latitude and longitude from the input
-        this.map = new google.maps.Map(document.getElementById("map"), {
-            zoom: 3,
-            center: myLatLng,
-			minZoom: 3
-        });
+    private markerClick(mapPoint: MapPoint): void {
+        this.latitude = mapPoint.Y;
+        this.longitude = mapPoint.X;
+        this.initialZoom = 2 + this.map.zoom;
+    }
 
-        //this initializes markers for the marker clusterer
-        if (this.events && this.events.length > 0) {
-            this.googleMarkers = this.initMarkers();
+    private onBoundsChange(bounds: LatLngBounds): void {
+        this.infoWindow = undefined;
+        var center = bounds.getCenter();
+        var ne = bounds.getNorthEast();
+        var sw = bounds.getSouthWest();
+        this.filter.ULat = center.lat();
+        this.filter.ULong = center.lng();
+        this.clusteringFilter.NELatitude = ne.lat();
+        this.clusteringFilter.NELongitude = ne.lng();
+        this.clusteringFilter.SWLatitude = sw.lat();
+        this.clusteringFilter.SWLongitude = sw.lng();
+    }
 
-            //initializes the marker clusterer
-            //this.map is the map where we will place the markers
-            //this.googlemarkers are the markers that will be clustered
-            //imagepath is the path to images for the cluster icons
-            var mc = new MarkerClusterer(this.map, this.googleMarkers, { maxZoom: 15, imagePath: "https://googlemaps.github.io/js-marker-clusterer/images/m" });
-        }
+    private onZoomChange(zoom: number): void {
+        this.clusteringFilter.ZoomLevel = zoom;
+        this.filter.Radius = this.getRadius(zoom);
     }
 }

@@ -10,6 +10,7 @@
         public override void Load()
         {
             Bind<IFilter>().To<Filter>();
+            Bind<IClusteringFIlter>().To<ClusteringFilter>();
         }
     }
 

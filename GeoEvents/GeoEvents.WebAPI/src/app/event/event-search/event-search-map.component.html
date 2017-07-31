@@ -1,1 +1,15 @@
-﻿<div id="map"></div>
+﻿<div>
+    <agm-map [latitude]="latitude" [longitude]="longitude" [zoom]="initialZoom" (boundsChange)="onBoundsChange($event)" (zoomChange)="onZoomChange($event)" (idle)="getEvents()" (mapReady)="mapReady($event)">
+        <div *ngFor="let mapPoint of mapPoints">
+            <agm-marker *ngIf="mapPoint.Count === 1" [title]="mapPoint.Name" [iconUrl]="getIconUrl(mapPoint.Count)" [latitude]="mapPoint.Y" [longitude]="mapPoint.X" (markerClick)="checkWindows(infoWindow)">
+                <agm-info-window #infoWindow [disableAutoPan]="true">
+                    <strong>{{mapPoint.Name}}</strong>
+                    <p>
+                        <a class="clickable" [routerLink]="['/event/search/', mapPoint.Data]">Click here to see more!</a>
+                    </p>
+                </agm-info-window>
+            </agm-marker>
+            <agm-marker *ngIf="mapPoint.Count > 1" [label]="mapPoint.Count.toString()" [latitude]="mapPoint.Y" [longitude]="mapPoint.X" [iconUrl]="getIconUrl(mapPoint.Count)" (markerClick)="markerClick(mapPoint)"></agm-marker>
+        </div>
+    </agm-map>
+</div>

@@ -4,8 +4,13 @@ using GeoEvents.Repository.Common;
 using GeoEvents.Service.Common;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using X.PagedList;
+using GoogleMaps.Net.Clustering.Data.Geometry;
+using GoogleMaps.Net.Clustering.Infrastructure;
+using GoogleMaps.Net.Clustering.Services;
+using GoogleMaps.Net.Clustering.Data.Params;
 
 namespace GeoEvents.Service
 {
@@ -24,6 +29,7 @@ namespace GeoEvents.Service
         /// The repository.
         /// </value>
         protected IEventRepository Repository { get; private set; }
+ 
 
         #endregion Properties
 
@@ -99,8 +105,6 @@ namespace GeoEvents.Service
             return result;
         }
 
-        
-
         /// <summary>
         /// Creates an event asynchronously.
         /// </summary>
@@ -145,5 +149,67 @@ namespace GeoEvents.Service
         }
 
         #endregion Methods
+
+        #region Clustering        
+
+        /// <summary>
+        /// Gets the events in the form of Map points (markers and/or clusters).
+        /// Does not use caching but can be modified to cache the results from the database.
+        /// </summary>
+        /// <param name="filter">Filter used for retrieving events from the database.</param>
+        /// <param name="clusteringFilter">Filter used for clustering the markers.</param>
+        /// <returns>List of Map points.</returns>
+        public async Task<IList<MapPoint>> GetClusteredEventsAsync(IFilter filter, IClusteringFIlter clusteringFilter )
+        {
+            string dBCacheKey = filter.ULat.ToString() + filter.ULong.ToString() + filter.Radius.ToString() + filter.Category.ToString() + filter.Custom + filter.StartTime.ToString() + filter.EndTime.ToString() + filter.Price.ToString() + filter.RatingEvent.ToString() + filter.SearchString;
+
+            var points = await GetClusterPointCollection(filter, dBCacheKey);
+
+            var mapService = new ClusterService(points);
+            var input = new GetMarkersParams()
+            {
+                NorthEastLatitude = clusteringFilter.NELatitude,
+                NorthEastLongitude = clusteringFilter.NELongitude,
+                SouthWestLatitude = clusteringFilter.SWLatitude,
+                SouthWestLongitude = clusteringFilter.SWLongitude,
+                ZoomLevel = clusteringFilter.ZoomLevel,
+                PointType = dBCacheKey
+            };
+            //"MapService says: exception Object reference not set to an instance of an object."
+            var markers = mapService.GetClusterMarkers(input);           
+
+            return markers.Markers;
+        }
+
+        /// <summary>
+        /// Calls the repository and gets the events from the database using the filter
+        /// Then it maps these events into a pointCollection object
+        /// </summary>
+        /// <param name="filter">Filter that will be used to retrieve data from the database if needed</param>
+        /// <returns>The PointCollection</returns>
+        private async Task<PointCollection> GetClusterPointCollection(IFilter filter, string dBCacheKey)
+        {
+            var points = new PointCollection();
+
+            if (points.Exists(dBCacheKey))
+            {
+                return points;
+            }
+
+            //get list of events from the database. filter is modified in a way it will recieve all pages at once.
+            List<IEvent> dataBaseResult = await Repository.GetAllEventsAsync(filter);
+            
+            //map the location, name and id properties
+            var mapPoints = dataBaseResult.Select(p => new MapPoint() { X = p.Longitude, Y = p.Latitude, Name = p.Name, Data = p.Id.ToString() }).ToList();
+            
+            //i tried setting the cacheKey to null and timespan to zero to avoid caching
+            //but it does not work that way.
+            points.Set(mapPoints, TimeSpan.FromSeconds(300), dBCacheKey);
+
+            //return the points
+            return points;
+        }
+
+        #endregion
     }
 }

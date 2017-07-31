@@ -1,12 +1,15 @@
 import { Injectable } from "@angular/core";
 import { Http, Response, Headers, RequestOptions } from "@angular/http";
 import { Observable } from "rxjs/Observable";
+import "rxjs/add/observable/throw";
 import "rxjs/add/operator/map";
 import "rxjs/add/operator/catch";
 
+import { ClusteringFilter } from "./models/clustering-filter.model";
 import { Event } from "./models/event.model";
 import { Filter } from "./models/filter.model";
 import { Image } from "./models/image.model";
+import { MapPoint } from "./models/map-point.model";
 
 @Injectable()
 export class EventService {
@@ -33,17 +36,24 @@ export class EventService {
     }
 
     getEventCount(filter: Filter): Observable<number> {
-        let query = "/api/events/search/count" + this._makeQueryString(filter);
+        let query = "/api/events/search/count" + this.makeQueryString(filter);
         return this.http.get(query)
             .map((response: Response) => <number>response.json())
             .catch(this.handleError); 
     }
 
-    getEvents(filter: Filter): Observable < any > {
-        let query = "/api/events/search" + this._makeQueryString(filter);
+    getEvents(filter: Filter): Observable<any> {
+        let query = "/api/events/search" + this.makeQueryString(filter);
         //execute http call
         return this.http.get(query)
             .map((response: Response) => <any>response.json())
+            .catch(this.handleError);
+    }
+
+    getEventsClustered(filter: Filter, clusteringFilter: ClusteringFilter): Observable<any> {
+        let query = "/api/events/clustered" + this.makeQueryString(filter, clusteringFilter);
+        return this.http.get(query)
+            .map((response: Response) => <MapPoint[]>response.json())
             .catch(this.handleError);
     }
 
@@ -73,48 +83,59 @@ export class EventService {
             }).catch(this.handleError);
     }
 
-    private _makeQueryString(filter: Filter): string {
+    private makeQueryString(filter: Filter, clusteringFilter: ClusteringFilter = undefined): string {
         let query = "";
 
         query += "?category=";
         query += filter.Category.toString();
 
-        if (filter.ULat != null && filter.ULong != null && filter.Radius != null && filter.Radius != 0) {
+        if (filter.ULat && filter.ULong && filter.Radius && filter.Radius != 0) {
             query += "&uLat=" + filter.ULat.toString();
             query += "&uLong=" + filter.ULong.toString();
             query += "&radius=" + filter.Radius.toString();
         }
 
-        if (filter.StartTime != null && filter.StartTime.toString() != "") {
+        if (filter.StartTime && filter.StartTime.toString() != "") {
             query += "&startTime=" + filter.StartTime.toString();
         }
 
-        if (filter.EndTime != null && filter.EndTime.toString() != "") {
+        if (filter.EndTime && filter.EndTime.toString() != "") {
             query += "&endTime=" + filter.EndTime.toString();
         }
 
-        if (filter.Price != null && filter.Price >= 0) {
+        if (filter.Price && filter.Price >= 0) {
             query += "&price=" + filter.Price.toString();
         }
 
-        if (filter.RatingEvent != null && filter.RatingEvent >= 1 && filter.RatingEvent <= 5) {
+        if (filter.RatingEvent && filter.RatingEvent >= 1 && filter.RatingEvent <= 5) {
             query += "&ratingEvent=" + filter.RatingEvent.toString();
         }
 
-        if (filter.SearchString != null) {
+        if (filter.SearchString) {
             if (filter.SearchString.toString() != "") {
                 query += "&searchString=" + filter.SearchString.toString();
             }
         }
 
-        if (filter.Custom != null) {
+        if (filter.Custom) {
             query += "&custom=" + filter.Custom;
         }
 
-        query += "&pageNumber=" + filter.PageNumber.toString();
-        query += "&pageSize=" + filter.PageSize.toString();
-        query += "&orderAscending=" + filter.OrderIsAscending.toString();
-        query += "&orderBy=" + filter.OrderByString.toString();
+        if (!clusteringFilter) {
+            query += "&pageNumber=" + filter.PageNumber.toString();
+            query += "&pageSize=" + filter.PageSize.toString();
+            query += "&orderAscending=" + filter.OrderIsAscending.toString();
+            query += "&orderBy=" + filter.OrderByString.toString();
+        }
+        else {
+            query += "&pageSize=25&pageNumber=-1"; 
+            query += "&NELatitude=" + clusteringFilter.NELatitude.toString();
+            query += "&NELongitude=" + clusteringFilter.NELongitude.toString();
+            query += "&SWLatitude=" + clusteringFilter.SWLatitude.toString();
+            query += "&SWLongitude=" + clusteringFilter.SWLongitude.toString();
+            query += "&ZoomLevel=" + clusteringFilter.ZoomLevel.toString();
+        }
+        
 
         return query;
     }

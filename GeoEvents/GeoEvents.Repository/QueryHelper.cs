@@ -91,6 +91,98 @@ namespace GeoEvents.Repository
 
         #region Metods
 
+        public static string GetSelectAllEventsQueryString(IFilter filter)
+        {
+            StringBuilder selectString = new StringBuilder();
+
+            selectString.AppendFormat("SELECT * FROM {0} ", TableNameEventQ);
+
+            isNotFirst = false;
+
+            /// adding Distance filter to query if there is Location and radius
+            if (filter.ULat != null && filter.ULong != null && filter.Radius != 0)
+            {
+                selectString.Append(" WHERE ");
+                selectString.AppendFormat(" (earth_box(ll_to_earth({0},{1}),{2})@> ll_to_earth({3},{4})) ",
+                        ParLatitude, ParLongitude, ParRadius, TableNameEventLatQ, TableNameEventLongQ);
+                isNotFirst = true;
+            }
+
+            ///Adding Price filter query if there is price
+            if (filter.Price != null)
+            {
+                selectString = ConditionValidation(selectString);
+                selectString.AppendFormat("({0} <= {1}) ",
+                    TableNameEventPriceQ, ParPrice);
+            }
+
+            ///Adding Rating Event filter query if there is rating event
+            if (filter.RatingEvent != 0)
+            {
+                selectString = ConditionValidation(selectString);
+
+                selectString.AppendFormat("({0} >= {1}) ",
+                    TableNameEventRatingQ, ParRating);
+            }
+
+            /// Adding Time filter query if there is time in filter
+            if (filter.EndTime > DefaulTime && filter.StartTime > DefaulTime)
+            {
+                selectString = ConditionValidation(selectString);
+
+
+                selectString.AppendFormat(" (({0},{1}) OVERLAPS ({2},{3})) ",
+                    ParUserStartTime, ParUserEndTime, TableNameEventStartTimeQ, TableNameEventEndTimeQ);
+            }
+            else if (filter.EndTime == null && filter.StartTime > DefaulTime)
+            {
+                selectString = ConditionValidation(selectString);
+
+
+                selectString.AppendFormat(" ({0}<{1}) ",
+                    ParUserStartTime, TableNameEventEndTimeQ);
+            }
+            else if (filter.EndTime > DefaulTime && filter.StartTime == null)
+            {
+                selectString = ConditionValidation(selectString);
+
+
+                selectString.AppendFormat(" ({0}>{1}) ",
+                    ParUserEndTime, TableNameEventStartTimeQ);
+            }
+
+            ///Adding searcstring filter in queri if there is searchstring
+            if (!String.IsNullOrWhiteSpace(filter.SearchString))
+            {
+                selectString = ConditionValidation(selectString);
+
+
+                selectString.AppendFormat(" (lower({0}) LIKE lower({1})) ",
+                    NameQ, ParSearchString);
+            }
+
+            /// adding category filter in query if there is category
+            if (filter.Category > 0)
+            {
+                selectString = ConditionValidation(selectString);
+
+
+                selectString.AppendFormat(" ({0} & {1} > 0)",
+                    ParCategory, TableNameEventCatQ);
+            }
+
+            /// adding custom search
+            if (!String.IsNullOrWhiteSpace(filter.Custom))
+            {
+                selectString = ConditionValidation(selectString);
+
+                selectString.AppendFormat(" ({0} @> {1}) ",
+                    CustomQ, ParCustom);
+            }
+            return selectString.ToString();
+        }
+
+
         /// <summary>
         /// Gets query string with filter for count query
         /// </summary>

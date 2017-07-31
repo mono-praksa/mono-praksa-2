@@ -50,6 +50,10 @@
       <HintPath>..\packages\AutoMapper.6.1.1\lib\net45\AutoMapper.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="GoogleMaps.Net.Clustering, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\GoogleMaps.Net.Clustering.0.8.5-alpha\lib\GoogleMaps.Net.Clustering.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="log4net, Version=2.0.8.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
       <HintPath>..\packages\log4net.2.0.8\lib\net45-full\log4net.dll</HintPath>
       <Private>True</Private>
@@ -331,6 +335,12 @@
     <Content Include="Scripts\respond.min.js" />
     <Content Include="Scripts\markerclusterer.js" />
     <Content Include="src\app\assets\images\elephant-acid-green_480.png" />
+    <Content Include="src\app\assets\images\m1.png" />
+    <Content Include="src\app\assets\images\m2.png" />
+    <Content Include="src\app\assets\images\m3.png" />
+    <Content Include="src\app\assets\images\m4.png" />
+    <Content Include="src\app\assets\images\m5.png" />
+    <Content Include="src\app\assets\images\pin.png" />
     <Content Include="src\app\error\error-404.component.html" />
     <Content Include="src\app\event\event-create\event-create-customize\event-create-customize.component.html" />
     <Content Include="src\app\event\event-create\event-create-data\event-create-data.component.css" />
@@ -401,10 +411,12 @@
     <TypeScriptCompile Include="src\app\event\event.module.ts" />
     <TypeScriptCompile Include="src\app\event\shared\event.service.ts" />
     <TypeScriptCompile Include="src\app\event\shared\location.service.ts" />
+    <TypeScriptCompile Include="src\app\event\shared\models\clustering-filter.model.ts" />
     <TypeScriptCompile Include="src\app\event\shared\models\event.model.ts" />
     <TypeScriptCompile Include="src\app\event\shared\models\filter.model.ts" />
     <TypeScriptCompile Include="src\app\event\shared\models\image.model.ts" />
     <TypeScriptCompile Include="src\app\event\shared\models\location.model.ts" />
+    <TypeScriptCompile Include="src\app\event\shared\models\map-point.model.ts" />
     <TypeScriptCompile Include="src\app\event\shared\validator.ts" />
     <TypeScriptCompile Include="src\app\home\home.component.ts" />
     <TypeScriptCompile Include="src\app\event\shared\category.service.ts" />

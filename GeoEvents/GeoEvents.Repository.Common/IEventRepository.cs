@@ -11,6 +11,9 @@ namespace GeoEvents.Repository.Common
     {
         #region Methods
 
+
+        Task<List<IEvent>> GetAllEventsAsync(IFilter filter);
+
         /// <summary>
         /// Gets an event by its id asynchronously.
         /// </summary>
