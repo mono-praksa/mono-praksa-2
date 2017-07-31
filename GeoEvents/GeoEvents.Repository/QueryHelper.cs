@@ -372,10 +372,10 @@ namespace GeoEvents.Repository
         /// <returns>Query string</returns>
         public static string GetInsertEventQueryString()
         {
-            return String.Format("INSERT INTO {0} VALUES ({1}, {2}, {3}, {4}, {5}, {6}, {7}, {8}, {9}, {10}, {11}, {12}, {13}, {14}, {15})",
+            return String.Format("INSERT INTO {0} VALUES ({1}, {2}, {3}, {4}, {5}, {6}, {7}, {8}, {9}, {10}, {11}, {12}, {13}, {14}, {15}, {16}, {17}, {18}, {19})",
                    TableNameEventQ, ParId, ParName, ParDescription, ParCategory, ParLatitude, ParLongitude,
                    ParStartTime, ParEndTime, ParRating, ParRateCount, ParPrice, ParCapacity, ParReserved,
-                   ParCustom, ParLocationId);
+                   ParCustom, ParOccurrence, ParRepeatEvery, ParRepeatOn, ParRepeatCount, ParLocationId);
         }
 
         /// <summary>
