@@ -333,7 +333,6 @@
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
-    <Content Include="Scripts\markerclusterer.js" />
     <Content Include="src\app\assets\images\elephant-acid-green_480.png" />
     <Content Include="src\app\assets\images\m1.png" />
     <Content Include="src\app\assets\images\m2.png" />
@@ -346,7 +345,7 @@
     <Content Include="src\app\event\event-create\event-create-data\event-create-data.component.css" />
     <Content Include="src\app\event\event-create\event-create-data\event-create-data.component.html" />
     <Content Include="src\app\event\event-create\event-create-images\event-create-images.component.html" />
-    <Content Include="src\app\event\event-create\event-create-images\event-create.component.css" />
+    <Content Include="src\app\event\event-create\event-create.component.css" />
     <Content Include="src\app\event\event-create\event-create.component.html" />
     <Content Include="src\app\event\event-detail\event-detail.component.css" />
     <Content Include="src\app\event\event-detail\event-detail.component.html" />

@@ -7,7 +7,7 @@ namespace GeoEvents.Service.Common
     public interface ILocationService
     {
         /// <summary>
-        /// Getslocation or creates if there is non  asynchronous.
+        /// Gets location or creates if there is non  asynchronous.
         /// </summary>
         /// <param name="address"></param>
         /// <returns>
@@ -16,7 +16,7 @@ namespace GeoEvents.Service.Common
         Task<ILocation> GetLocationAsync(string address);
 
         /// <summary>
-        /// Create Location asynchronous
+        /// Create Location asynchronously
         /// </summary>
         /// <param name="location"></param>
         /// <returns>

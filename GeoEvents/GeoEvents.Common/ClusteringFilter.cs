@@ -8,7 +8,7 @@ namespace GeoEvents.Common
 {
     public class ClusteringFilter: IClusteringFIlter
     {
-        #region properties
+        #region Properties
 
         /// <summary>
         /// Gets or sets the latitude of the north-east conrner of the map viewport boundary.
@@ -40,24 +40,35 @@ namespace GeoEvents.Common
         /// <value>The Zoom level</value>
         public int ZoomLevel { get; set; }
 
-        #endregion
+        #endregion Properties
 
-        #region constructors
+        #region Constructors
 
-        public ClusteringFilter (double NELatitude, double NELongitude, double SWLatitude, double SWLongitude, int ZoomLevel)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ClusteringFilter"/> class 
+        /// </summary>
+        /// <param name="nELatitude">Latitude of the northeast boundary point.</param>
+        /// <param name="nELongitude">Longitude of the northeast boundary points.</param>
+        /// <param name="sWLatitude">Latitude of the southwest boundary point.</param>
+        /// <param name="sWLongitude">Longitude of the southwest boundary point.</param>
+        /// <param name="zoomLevel">Level of zoom on the map.</param>
+        public ClusteringFilter (double nELatitude, double nELongitude, double sWLatitude, double sWLongitude, int zoomLevel)
         {
-            this.NELatitude = NELatitude;
-            this.NELongitude = NELongitude;
-            this.SWLatitude = SWLatitude;
-            this.SWLongitude = SWLongitude;
-            this.ZoomLevel = ZoomLevel;
+            this.NELatitude = nELatitude;
+            this.NELongitude = nELongitude;
+            this.SWLatitude = sWLatitude;
+            this.SWLongitude = sWLongitude;
+            this.ZoomLevel = zoomLevel;
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ClusteringFilter"/> class
+        /// </summary>
         public ClusteringFilter ()
         {
 
         }
 
-        #endregion constructors
+        #endregion Constructors
     }
 }

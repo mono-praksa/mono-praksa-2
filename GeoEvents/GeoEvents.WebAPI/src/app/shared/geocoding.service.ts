@@ -20,10 +20,15 @@ export class GeocodingService {
             }).catch(this.handleError);
     }
 
-    getUserApproximateAddress() {
+    getUserApproximateAddress() : Observable<string> {
         return this.http.get("http://ip-api.com/json")
             .map((response: Response) => {
-                return response.json();
+                if (response.json().status == "success") {
+                    return response.json().city + ", " + response.json().country;
+                }
+                else {
+                    return undefined;
+                }
             }).catch(this.handleError);
     }
 

@@ -6,6 +6,9 @@ namespace GeoEvents.Repository
 
     public class DIModule : Ninject.Modules.NinjectModule
     {
+        /// <summary>
+        /// Loads the module into the kernel.
+        /// </summary>
         public override void Load()
         {
             Bind<IEventRepository>().To<EventRepository>();
@@ -15,7 +18,4 @@ namespace GeoEvents.Repository
     }
 
     #endregion Methods
-
-
-
 }

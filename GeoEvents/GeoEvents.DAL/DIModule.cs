@@ -6,6 +6,9 @@ namespace GeoEvents.DAL
 
     public class DIModule : Ninject.Modules.NinjectModule
     {
+        /// <summary>
+        /// Loads the module into the kernel.
+        /// </summary>
         public override void Load()
         {
             Bind<IPostgresConnection>().To<PostgresConnection>();

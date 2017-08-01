@@ -6,6 +6,9 @@ namespace GeoEvents.WebAPI.App_Start
 {
     public class WebProfile : Profile
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="WebProfile"/> class.
+        /// </summary>
         public WebProfile()
         {
             CreateMap<IEvent, EventController.EventModel>().ReverseMap();

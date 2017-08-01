@@ -52,9 +52,7 @@ export class EventSearchComponent implements OnInit {
 
         this.geocodingService.getUserApproximateAddress()
             .subscribe(response => {
-                if (response.status == "success") {
-                    this.userApproximateAddress = response.city + ", " + response.country;
-                }
+                this.userApproximateAddress = response;
             });
 
         if (this.route.snapshot.queryParams["searchString"]) {

@@ -11,7 +11,11 @@ namespace GeoEvents.Repository.Common
     {
         #region Methods
 
-
+        /// <summary>
+        /// Gets filtered Events asynchronously without paging and ordering.
+        /// </summary>
+        /// <param name="filter">The filter.</param>
+        /// <returns>The list of filtered events.</returns>
         Task<List<IEvent>> GetAllEventsAsync(IFilter filter);
 
         /// <summary>
@@ -33,9 +37,9 @@ namespace GeoEvents.Repository.Common
         /// <summary>
         /// Gets filtered Events asynchronously.
         /// </summary>
-        /// <param name="filter"></param>
+        /// <param name="filter">The filter.</param>
         /// <returns>
-        /// list of Events.
+        /// The list of filtered events.
         /// </returns>
         Task<IEvent> CreateEventAsync(IEvent evt);
 

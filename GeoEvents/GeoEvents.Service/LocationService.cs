@@ -35,21 +35,51 @@ namespace GeoEvents.Service
 
         #region Methods
 
+        /// <summary>
+        /// Gets location or creates if there is non  asynchronous.
+        /// </summary>
+        /// <param name="address"></param>
+        /// <returns>
+        /// Location
+        /// </returns>
         public Task<ILocation> GetLocationAsync(string address)
         {
             return Repository.GetLocationAsync(address);
         }
 
+        /// <summary>
+        /// Create Location asynchronously
+        /// </summary>
+        /// <param name="location"></param>
+        /// <returns>
+        /// Location
+        /// </returns>
         public Task<ILocation> CreateLocationAsync(ILocation location)
         {
             return Repository.CreateLocationAsync(location);
         }
 
+        /// <summary>
+        /// Get Location by Id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="Rating"></param>
+        /// <returns>
+        /// Location
+        /// </returns>
         public Task<ILocation> GetLocationByIdAsync(Guid id)
         {
             return Repository.GetLocationByIdAsync(id);
         }
 
+        /// <summary>
+        /// Get Location by Id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="Rating"></param>
+        /// <returns>
+        /// Location
+        /// </returns>
         public Task<ILocation> UpdateLocationRatingAsync(Guid eventId, double rating, double currentRating, int rateCount)
         {
             return Repository.UpdateLocationRatingAsync(eventId, rating, currentRating, rateCount);

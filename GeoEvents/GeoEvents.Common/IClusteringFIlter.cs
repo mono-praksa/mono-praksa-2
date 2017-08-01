@@ -8,6 +8,8 @@ namespace GeoEvents.Common
 {
     public interface IClusteringFIlter
     {
+        #region Properties
+
         /// <summary>
         /// Gets or sets the latitude of the north-east conrner of the map viewport boundary.
         /// </summary>
@@ -37,5 +39,7 @@ namespace GeoEvents.Common
         /// </summary>
         /// <value>The Zoom level</value>
         int ZoomLevel { get; set; }
+
+        #endregion Properties
     }
 }
