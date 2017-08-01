@@ -15,6 +15,7 @@ using log4net;
 using System.Reflection;
 
 
+[assembly: log4net.Config.XmlConfigurator(Watch = true)]
 
 namespace GeoEvents.Repository
 {
@@ -125,8 +126,8 @@ namespace GeoEvents.Repository
             }
             catch (Exception ex)
             {
-                _log.Error("Error: ", ex);
-                throw ex;
+                _log.Error(ex.StackTrace, ex);
+                throw new Exception(ex.StackTrace);
             }
         }
 
@@ -142,6 +143,7 @@ namespace GeoEvents.Repository
             log4net.GlobalContext.Properties["AppName"] = Assembly.GetExecutingAssembly().FullName;
             try
             {
+                throw new Exception("line 146");
                 EventEntity tmp;
                 int count;
                 List<IEvent> SelectEvents = new List<IEvent>();
@@ -202,8 +204,8 @@ namespace GeoEvents.Repository
             }
             catch (Exception ex)
             {
-                _log.Error("Error: ", ex);
-                throw ex;
+                _log.Error(ex.StackTrace, ex);
+                throw new Exception(ex.StackTrace);
             }
         }
 
@@ -259,8 +261,8 @@ namespace GeoEvents.Repository
             }
             catch (Exception ex)
             {
-                _log.Error("Error: ", ex);
-                throw ex;
+                _log.Error(ex.StackTrace, ex);
+                throw new Exception(ex.StackTrace);
             }
         }
 
@@ -322,8 +324,8 @@ namespace GeoEvents.Repository
             }
             catch (Exception ex)
             {
-                _log.Error("Error: ", ex);
-                throw ex;
+                _log.Error(ex.StackTrace, ex);
+                throw new Exception(ex.StackTrace);
             }
         }
 
@@ -398,8 +400,8 @@ namespace GeoEvents.Repository
             }
             catch (Exception ex)
             {
-                _log.Error("Error: ", ex);
-                throw ex;
+                _log.Error(ex.StackTrace, ex);
+                throw new Exception(ex.StackTrace);
             }
         }
 
@@ -479,8 +481,8 @@ namespace GeoEvents.Repository
             }
             catch (Exception ex)
             {
-                _log.Error("Error: ", ex);
-                throw ex;
+                _log.Error(ex.StackTrace, ex);
+                throw new Exception(ex.StackTrace);
             }
         }
 
@@ -542,8 +544,8 @@ namespace GeoEvents.Repository
             }
             catch (Exception ex)
             {
-                _log.Error("Error: ", ex);
-                throw ex;
+                _log.Error(ex.StackTrace, ex);
+                throw new Exception(ex.StackTrace);
             }
         }
 

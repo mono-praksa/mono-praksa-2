@@ -70,7 +70,7 @@ namespace GeoEvents.Repository
         public static string ParLevel = "@Level";
         public static string ParLocation = "@Location";
         public static string ParMessage = "@Message";
-        public static string ParLogDate = "LogDate";
+        public static string ParLogDate = "@LogDate";
         public static string ParException = "@Exception";
         public static string ParOccurrence = "@Occurrence";
         public static string ParRepeatEvery = "@RepeatEvery";
@@ -594,8 +594,8 @@ namespace GeoEvents.Repository
         public static string GetInsertLoggerQueryString()
         {
 
-            return string.Format("INSERT INTO {0}(app_name,thread,level,location,message,log_date,exception) VALUES({1},{2},{3},{4},{5},{6},{7})",
-                TableNameLogsQ,ParAppName,ParThread,ParLevel,ParLocation,ParMessage,ParLogDate,ParException);
+            return string.Format("INSERT INTO {0}(app_name,thread,level,location,message,exception,log_date) VALUES({1},{2},{3},{4},{5},{6},{7})",
+                TableNameLogsQ,ParAppName,ParThread,ParLevel,ParLocation,ParMessage,ParException,ParLogDate);
         }
 
         /// <summary>

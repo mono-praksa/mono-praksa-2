@@ -84,8 +84,8 @@ namespace GeoEvents.Repository
             }
             catch (Exception ex)
             {
-                _log.Error("Error: ", ex);
-                throw ex;
+                _log.Error(ex.StackTrace, ex);
+                throw new Exception(ex.StackTrace);
             }
 
         }
@@ -129,8 +129,8 @@ namespace GeoEvents.Repository
             }
             catch (Exception ex)
             {
-                _log.Error("Error: ", ex);
-                throw ex;
+                _log.Error(ex.StackTrace, ex);
+                throw new Exception(ex.StackTrace);
             }
         }
 
@@ -164,8 +164,8 @@ namespace GeoEvents.Repository
             }
             catch (Exception ex)
             {
-                _log.Error("Error: ", ex);
-                throw ex;
+                _log.Error(ex.StackTrace, ex);
+                throw new Exception(ex.StackTrace);
             }
         }
 
@@ -209,8 +209,8 @@ namespace GeoEvents.Repository
             }
             catch (Exception ex)
             {
-                _log.Error("Error: ", ex);
-                throw ex;
+                _log.Error(ex.StackTrace, ex);
+                throw new Exception(ex.StackTrace);
             }
 
         }
