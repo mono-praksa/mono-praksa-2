@@ -90,15 +90,15 @@ namespace GeoEvents.DAL
         public int Capacity { get; set; }
 
         /// <summary>
-        /// Gets or sets the reserved.
+        /// Gets or sets the number of reservations.
         /// </summary>
         /// <value>
-        /// The reserved.
+        /// The number of reservations.
         /// </value>
         public int Reserved { get; set; }
 
         /// <summary>
-        /// Gets or sets the rating.
+        /// Gets or sets the event rating.
         /// </summary>
         /// <value>
         /// The rating.
@@ -122,10 +122,10 @@ namespace GeoEvents.DAL
         public Guid LocationId { get; set; }
 
         /// <summary>
-        /// Gets or sets the custom.
+        /// Gets or sets the custom attributes.
         /// </summary>
         /// <value>
-        /// The custom.
+        /// The custom attributes.
         /// </value>
         public string Custom { get; set; }
 
@@ -138,18 +138,18 @@ namespace GeoEvents.DAL
         public string Occurrence { get; set; }
 
         /// <summary>
-        /// Gets or sets the repeat every.
+        /// Gets or sets the repeat interval.
         /// </summary>
         /// <value>
-        /// The repeat every.
+        /// The repeat interval.
         /// </value>
         public int RepeatEvery { get; set; }
 
         /// <summary>
-        /// Gets or sets the repeat on.
+        /// Gets or sets the day of the week on which the event repeats(weekly).
         /// </summary>
         /// <value>
-        /// The repeat on.
+        /// The day of the week.
         /// </value>
         public int RepeatOn { get; set; }
 

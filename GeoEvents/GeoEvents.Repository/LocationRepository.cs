@@ -21,6 +21,7 @@ namespace GeoEvents.Repository
         protected IPostgresConnection Connection { get; private set; }
         protected IMapper Mapper { get; private set; }
         private static readonly ILog _log = LogManager.GetLogger(typeof(EventRepository));
+		
         #endregion Properties
 
         #region Constructors

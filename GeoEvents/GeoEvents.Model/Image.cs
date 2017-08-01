@@ -12,7 +12,7 @@ namespace GeoEvents.Model
         #region Properties
 
         /// <summary>
-        /// Gets or sets the identifier.
+        /// Gets or sets the image identifier.
         /// </summary>
         /// <value>
         /// The identifier.
