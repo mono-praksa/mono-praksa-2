@@ -78,25 +78,19 @@ namespace GeoEvents.Common
         /// <summary>
         /// Gets or sets the price.
         /// </summary>
-        /// <value>
-        /// The price.
-        /// </value>
+        /// <value>The price.</value>
         public double? Price { get; set; }
 
         /// <summary>
-        /// Gets or sets the rating event.
+        /// Gets or sets the event rating.
         /// </summary>
-        /// <value>
-        /// The rating event.
-        /// </value>
+        /// <value>The event rating.</value>
         public double? RatingEvent { get; set; }
 
         /// <summary>
-        /// Gets or sets the custom.
+        /// Gets or sets the custom attributes.
         /// </summary>
-        /// <value>
-        /// The custom.
-        /// </value>
+        /// <value>The custom attributes.</value>
         public string Custom { get; set; }
 
         #endregion Properties

@@ -35,7 +35,7 @@ namespace GeoEvents.Common
         double SWLongitude { get; set; }
 
         /// <summary>
-        /// gets or sets the zoom level of the map.
+        /// Gets or sets the zoom level of the map.
         /// </summary>
         /// <value>The Zoom level</value>
         int ZoomLevel { get; set; }
