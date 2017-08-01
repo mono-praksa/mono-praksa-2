@@ -72,19 +72,17 @@ namespace GeoEvents.Service
             mult = 1;
             evt.RepeatOnList = new List<int>();
             int repeaton = evt.RepeatOn;
-            if (evt.RepeatOn != 0)
+            while (repeaton > 0)
             {
-                while (repeaton > 0)
+                int mod = repeaton % 2;
+                if (mod == 1)
                 {
-                    int mod = repeaton % 2;
-                    if (mod == 1)
-                    {
-                        evt.Categories.Add(mult);
-                    }
-                    mult *= 2;
-                    repeaton = repeaton >> 1;
+                    evt.RepeatOnList.Add(mult);
                 }
+                mult *= 2;
+                repeaton = repeaton >> 1;
             }
+
             return evt;
         }
 
@@ -118,18 +116,15 @@ namespace GeoEvents.Service
                 mult = 1;
                 evt.RepeatOnList = new List<int>();
                 int repeaton = evt.RepeatOn;
-                if (evt.RepeatOn != 0)
+                while (repeaton > 0)
                 {
-                    while (repeaton > 0)
+                    int mod = repeaton % 2;
+                    if (mod == 1)
                     {
-                        int mod = repeaton % 2;
-                        if (mod == 1)
-                        {
-                            evt.Categories.Add(mult);
-                        }
-                        mult *= 2;
-                        repeaton = repeaton >> 1;
+                        evt.RepeatOnList.Add(mult);
                     }
+                    mult *= 2;
+                    repeaton = repeaton >> 1;
                 }
             }
             return result;
