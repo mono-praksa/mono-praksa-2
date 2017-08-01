@@ -3,6 +3,7 @@ using System;
 
 namespace GeoEvents.Model
 {
+    /// <seealso cref="ILocation" />
     public class Location : ILocation
     {
         #region Properties

@@ -138,6 +138,9 @@ namespace GeoEvents.Common
             Custom = custom;
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Filter"/> class.
+        /// </summary>
         public Filter()
         {
 

@@ -4,6 +4,7 @@ namespace GeoEvents.Common
 {
     public interface IFilter
     {
+        #region Properties
         /// <summary>
         /// Gets or sets the latitude of the filter's location.
         /// </summary>
@@ -93,5 +94,6 @@ namespace GeoEvents.Common
         /// The custom attributes.
         /// </value>
         string Custom { get; set; }
+        #endregion Properties
     }
 }

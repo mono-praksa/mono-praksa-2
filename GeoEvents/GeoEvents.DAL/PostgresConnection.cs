@@ -7,6 +7,12 @@ namespace GeoEvents.DAL
     {
         #region Properties
 
+        /// <summary>
+        /// Gets the configuration.
+        /// </summary>
+        /// <value>
+        /// The configuration.
+        /// </value>
         protected IGeoEventsConfiguration configuration { get; private set; }
 
         #endregion Properties
