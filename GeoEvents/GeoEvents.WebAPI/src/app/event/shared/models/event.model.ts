@@ -19,7 +19,7 @@
 
     // attributes for reccuring events
     RepeatCount?: number;
-    RepeatEvery?: string;
+    RepeatEvery?: number;
     RepeatOn?: number;
     RepeatOnList?: number[];
 }

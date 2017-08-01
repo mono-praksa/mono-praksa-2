@@ -22,8 +22,10 @@ import { LocationService } from "../shared/location.service";
 export class EventDetailComponent implements OnInit {
     @ViewChild("carousel") carouselElement: ElementRef;
     eventForm: FormGroup;
+    eventFirstDay: number = -1;
     hasRated: boolean = false;
     rating: number;
+    eventRepetition: number = 0;
 
     private event: Event;
     private getImagesLoading: boolean = false;
@@ -51,6 +53,106 @@ export class EventDetailComponent implements OnInit {
             while (l >= 8) { ((a = (b >>> (l -= 8)) & 0xff) || (x < (L - 2))) && (r += w(a)); }
         }
         return r;
+    }
+
+    moveDate(movement: number) {
+        this.eventRepetition += movement;
+        let startTime = new Date(this.event.StartTime);
+        let endTime = new Date(this.event.EndTime);
+
+        if (this.event.Occurrence == 'daily') {
+            startTime.setDate(startTime.getDate() + movement * this.event.RepeatEvery);
+            endTime.setDate(endTime.getDate() + movement * this.event.RepeatEvery);
+        } else if (this.event.Occurrence == 'weekly') {
+            let extremeNumberExceptInfinity = function (list: number[], movement: number) {
+                list.sort();
+
+                if (movement == 1) { // search minimum
+                    if (list[0] == -Infinity) {
+                        return list[1];
+                    } else {
+                        return list[0];
+                    }
+                } else if (movement == -1) { // search maximum
+                    if (list[list.length - 1] == Infinity) {
+                        return list[list.length - 2];
+                    } else {
+                        return list[list.length - 1];
+                    }
+                }
+            }
+            let listOfDays = this.event.RepeatOnList.map((n: number) => Math.log2(n)); // 0 - sun, 1 - mon, etc
+            listOfDays.push(movement * Infinity);
+            listOfDays.sort((a: number, b: number) => (movement * (a - b)))
+
+            if (this.eventFirstDay == -1) {
+                this.eventFirstDay = startTime.getDay();
+            }
+
+            let moveDay;
+            
+            for (let i = 0; i < listOfDays.length; i++) {
+                if (movement * listOfDays[i] >= movement * startTime.getDay()) {
+                    if (movement * listOfDays[i] > movement * startTime.getDay()) {
+                        moveDay = listOfDays[i];
+                    } else {
+                        moveDay = listOfDays[i + 1];
+                    }
+                    break;
+                }
+            }
+
+            if (this.eventRepetition == 0) {
+                moveDay = this.eventFirstDay;
+            }
+
+            
+            if (moveDay == movement * Infinity) {
+                let value: number = movement * this.event.RepeatEvery * 7 + extremeNumberExceptInfinity(listOfDays, movement) - startTime.getDay();
+
+                startTime.setDate(startTime.getDate() + value);
+                endTime.setDate(endTime.getDate() + value);
+            } else {
+                startTime.setDate(startTime.getDate() + moveDay - startTime.getDay());
+                endTime.setDate(endTime.getDate() + moveDay - endTime.getDay());
+            }
+
+        } else if (this.event.Occurrence == 'monthly') {
+            let startDay = startTime.getDate();
+            let endDay = endTime.getDate();
+
+            let moveStartTime = new Date(startTime.getFullYear(), startTime.getMonth() + movement * this.event.RepeatEvery, 1);
+            let moveEndTime = new Date(endTime.getFullYear(), endTime.getMonth() + movement * this.event.RepeatEvery, 1);
+
+            let moveStartTimeNumberOfDays = new Date(moveStartTime.getFullYear(), moveStartTime.getMonth() + 1, 0).getDate();
+            let moveEndTimeNumberOfDays = new Date(moveEndTime.getFullYear(), moveEndTime.getMonth() + 1, 0).getDate();
+            
+            while (startDay > moveStartTimeNumberOfDays || endDay > moveEndTimeNumberOfDays) {
+                moveStartTime = new Date(moveStartTime.getFullYear(), moveStartTime.getMonth() + movement * this.event.RepeatEvery, 1);
+                moveEndTime = new Date(moveEndTime.getFullYear(), moveEndTime.getMonth() + movement * this.event.RepeatEvery, 1);
+
+                moveStartTimeNumberOfDays = new Date(moveStartTime.getFullYear(), moveStartTime.getMonth() + 1, 0).getDate();
+                moveEndTimeNumberOfDays = new Date(moveEndTime.getFullYear(), moveEndTime.getMonth() + 1, 0).getDate();
+            }
+
+            moveStartTime.setDate(startDay);
+            moveEndTime.setDate(endDay);
+
+            moveStartTime.setHours(startTime.getHours());
+            moveEndTime.setHours(endTime.getHours());
+
+            moveStartTime.setMinutes(startTime.getMinutes());
+            moveEndTime.setMinutes(endTime.getMinutes());
+            
+            startTime = moveStartTime;
+            endTime = moveEndTime;
+        } else if (this.event.Occurrence == 'yearly') {
+            startTime.setFullYear(startTime.getFullYear() + movement * this.event.RepeatEvery);
+            endTime.setFullYear(endTime.getFullYear() + movement * this.event.RepeatEvery);
+        }
+
+        this.event.StartTime = startTime;
+        this.event.EndTime = endTime;
     }
 
     ngOnInit() {

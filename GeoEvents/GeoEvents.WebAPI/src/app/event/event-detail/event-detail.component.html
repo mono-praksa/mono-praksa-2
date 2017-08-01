@@ -1,5 +1,18 @@
 ﻿<div class="col-md-7">
-    <h2 class="event-name">{{event?.Name}}</h2> <p class="event-time">{{event?.StartTime | date: 'MMMM d, y, HH:mm'}} - {{event?.EndTime | date: 'MMMM d, y, HH:mm'}}</p>
+    <h2 class="event-name">{{event?.Name}}</h2>
+    <div style="display: inline-block;">
+        <button class="btn btn-default" *ngIf="event?.Occurrence!='none'" (click)="moveDate(-1)" [disabled]="eventRepetition <= 0">
+            <span aria-hidden="true">&laquo;</span>
+        </button>
+    </div>
+    <div style="display: inline-block; text-align: center; width: 380px;">
+        {{event?.StartTime | date: 'MMMM d, y, HH:mm'}} - {{event?.EndTime | date: 'MMMM d, y, HH:mm'}}
+    </div>
+    <div style="display: inline-block;">
+        <button class="btn btn-default" *ngIf="event?.Occurrence!='none'" (click)="moveDate(1)" [disabled]="event.RepeatCount != 0 && eventRepetition >= event.RepeatCount">
+            <span aria-hidden="true">&raquo;</span>
+        </button>
+    </div>
     <h3>Details</h3> 
     <div class="well">
         <p>{{event?.Description}}</p>
