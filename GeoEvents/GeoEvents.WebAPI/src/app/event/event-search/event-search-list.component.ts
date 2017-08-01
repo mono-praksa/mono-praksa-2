@@ -26,10 +26,12 @@ export class EventListComponent implements OnChanges, OnInit {
 
     }
 
+	//called on changes, gets the events from the database using the changed filter.
     ngOnChanges() {
         this.getEvents(this.filter);
     }
 
+	//clled on init. starts the service for displaying loading icons
     ngOnInit() {
         this.loaderService.loaderStatus.subscribe((value: boolean) => {
             this.searchEventLoading = value;
@@ -62,6 +64,7 @@ export class EventListComponent implements OnChanges, OnInit {
         this.getEvents(this.filter);
     }
 
+	//called on page change. changes the filter and gets the new page of events from the database
     private onPageChange(event: any) {
         this.filter.PageNumber = event.page + 1;
         this.getEvents(this.filter);

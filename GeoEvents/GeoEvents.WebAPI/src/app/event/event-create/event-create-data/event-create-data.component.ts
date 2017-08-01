@@ -55,6 +55,8 @@ export class EventCreateDataComponent implements OnInit {
         private ngZone: NgZone
     ) { }
 
+	//called on init. starts the loader service, builds the form, starts the adresss atocomplete
+	//starts the maps api loader
     ngOnInit(): void {
         this.loaderService.loaderStatus.subscribe((value: boolean) => {
             this.createEventLoading = value;
@@ -94,6 +96,7 @@ export class EventCreateDataComponent implements OnInit {
         });
     }
 
+	//creates the form
     private buildForm(): void {
         this.address = new FormControl("", Validators.required);
         this.capacity = new FormControl("", [Validators.required, Validators.pattern(/^[1-9][0-9]*$/)]);
@@ -126,6 +129,7 @@ export class EventCreateDataComponent implements OnInit {
         }, endDateBeforeStartDate("start", "end"));
     }
 
+	//gets the form values and calls the service to create the event 
     createEvent(formValues: any) {
         this.loaderService.displayLoader(true);
         let chosenCategories: number[] = [];
@@ -187,6 +191,7 @@ export class EventCreateDataComponent implements OnInit {
         })
     }
 
+	//clears the location from the form control
     clearLocation(): void {
         this.isAddressValid = false;
         this.eventForm.controls["address"].setValue("");
@@ -200,6 +205,7 @@ export class EventCreateDataComponent implements OnInit {
         this.repeat.valueType = valueType;
     }
 
+	//counts the number of times the event will reocurr
     endOfRepeatingNumber(): number {
         if (this.repeat.valueType == "num") {
             return +this.repeat.value;
@@ -327,6 +333,7 @@ export class EventCreateDataComponent implements OnInit {
         }
     }
 
+	//checks wether all category checkboxes are unchecked
     isAllUnchecked(): boolean {
         let checkbox: ICategoryElement
         for (checkbox of this.categoryService.categories) {
@@ -337,6 +344,8 @@ export class EventCreateDataComponent implements OnInit {
         return true;
     }
 
+	//called when the google maps marker is updateDays
+	//gets the adress from the latitude and loingtude and sets the form controll
     markerUpdated(event: any): void {
         this.eventForm.controls["latitude"].setValue( event.coords.lat);
         this.eventForm.controls["longitude"].setValue(event.coords.lng);
@@ -345,6 +354,8 @@ export class EventCreateDataComponent implements OnInit {
         });
     }
 
+	//called on changing the option for reoccuring events
+	//sets the option 
     monthlyOptionChange() {
         switch (this.monthlyOption) {
             case "month":
@@ -361,6 +372,7 @@ export class EventCreateDataComponent implements OnInit {
         return Array.from(Array(n + 1).keys()).slice(1);
     }
 
+	//gets the selected categories and updates the checkboxes
     updateCategories(category: number): void {
         this.categoryService.categories.filter(checkbox => {
             if (checkbox.id == category) {
@@ -369,6 +381,7 @@ export class EventCreateDataComponent implements OnInit {
         });
     }
 
+	//update days for recurrring events
     updateDays(dayNumber: number): void {
         this.categoryService.days.filter(checkbox => {
             if (checkbox.id == dayNumber) {
@@ -377,6 +390,7 @@ export class EventCreateDataComponent implements OnInit {
         });
     }
 
+	//sets the current position using geolocation services
     private setCurrentPosition(): void {
         if ("geolocation" in navigator) {
             navigator.geolocation.getCurrentPosition((position) => {
@@ -400,15 +414,14 @@ interface ICategoryElement {
 }
 
 let getWeekOfMonth = function (date: Date, exact: boolean = true) {
-    var month = date.getMonth()
-        , year = date.getFullYear()
-        , firstWeekday = new Date(year, month, 1).getDay()
-        , lastDateOfMonth = new Date(year, month + 1, 0).getDate()
-        , offsetDate = date.getDate() + firstWeekday - 1
-        , index = 1 // start index at 0 or 1, your choice
-        , weeksInMonth = index + Math.ceil((lastDateOfMonth + firstWeekday - 7) / 7)
-        , week = index + Math.floor(offsetDate / 7)
-        ;
+    var month = date.getMonth(),
+		year = date.getFullYear(),
+		firstWeekday = new Date(year, month, 1).getDay(),
+		lastDateOfMonth = new Date(year, month + 1, 0).getDate(),
+		offsetDate = date.getDate() + firstWeekday - 1,
+		index = 1,
+		weeksInMonth = index + Math.ceil((lastDateOfMonth + firstWeekday - 7) / 7),
+		week = index + Math.floor(offsetDate / 7);
     if (exact || week < 2 + index) return week;
     return week === weeksInMonth ? index + 5 : week;
 };

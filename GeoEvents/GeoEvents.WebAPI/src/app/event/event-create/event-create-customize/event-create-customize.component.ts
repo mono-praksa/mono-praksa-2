@@ -21,7 +21,7 @@ export class EventCreateCustomizeComponent implements OnInit {
     key: FormControl;
     value: FormControl;
 
-    private _createEventLoading: boolean = false;
+    private createEventLoading: boolean = false;
 
     constructor(
         private loaderService: LoaderService,
@@ -29,6 +29,7 @@ export class EventCreateCustomizeComponent implements OnInit {
         private eventService: EventService
     ) { }
 
+	//called on init. starts the loading icon service and builds the form
     ngOnInit() : void {
         this.loaderService.loaderStatus.subscribe((value: boolean) => {
             this.createEventLoading = value;
@@ -37,6 +38,7 @@ export class EventCreateCustomizeComponent implements OnInit {
         this.buildForm();
     }
 
+	//adds custom attributes to the custom model
     addCustomAttribute(formValues: any): void {
         if (!this.createdEvent.CustomModel) {
             this.createdEvent.CustomModel = [];
@@ -55,6 +57,7 @@ export class EventCreateCustomizeComponent implements OnInit {
         this.resetValueControl();        
     }
 
+	//stringifies the custom attributes to json, displays loader and calls the eventservice to create the event
     createEvent(): void {
         this.createdEvent.Custom = JSON.stringify(this.createdEvent.CustomModel);
         if (!this.createdEvent.Custom) {
@@ -68,6 +71,7 @@ export class EventCreateCustomizeComponent implements OnInit {
         });
     }
 
+	//creates the form
     private buildForm(): void {
         this.key = new FormControl("", Validators.required);
         this.value = new FormControl("", Validators.required);
@@ -77,6 +81,7 @@ export class EventCreateCustomizeComponent implements OnInit {
         });
     }
 
+	//removes custom category key
     private removeKey(keyIndex: number): void {
         this.createdEvent.CustomModel.splice(keyIndex, 1);
         if (this.createdEvent.CustomModel.length === 0) {
@@ -84,6 +89,7 @@ export class EventCreateCustomizeComponent implements OnInit {
         }
     }
 
+	//removes custom category value
     private removeValue(keyIndex: number, valueIndex: number) {
         this.createdEvent.CustomModel[keyIndex].values.splice(valueIndex, 1);
         if (this.createdEvent.CustomModel[keyIndex].values.length === 0) {
@@ -91,16 +97,9 @@ export class EventCreateCustomizeComponent implements OnInit {
         }
     }
 
+	//resets form controll for custom attributes
     private resetValueControl(): void {
         this.customAttributeForm.controls["value"].setValue("");
         this.customAttributeForm.controls["value"].markAsUntouched();
-    }
-
-    get createEventLoading(): boolean {
-        return this._createEventLoading;
-    }
-
-    set createEventLoading(isCreatingEvent: boolean) {
-        this._createEventLoading = isCreatingEvent;
     }
 }

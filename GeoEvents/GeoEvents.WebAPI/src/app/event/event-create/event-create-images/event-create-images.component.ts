@@ -12,13 +12,14 @@ import { EventService } from "../../shared/event.service";
 export class EventCreateImagesComponent {
     @Input() customizedEvent: Event;
     
-    private _fileList: FileList;
-    private _files: file[];
-    private _formData: FormData;
-    private _uploadedFiles: string[] = [];
+    private fileList: FileList;
+    private files: file[];
+    private formData: FormData;
+    private uploadedFiles: string[] = [];
 
     constructor(private eventService: EventService) { }
 
+	//called on changes, removes the uploaded files from the filelist and adds their names to the uploaded files list
     onChange(fileInput: any) {
         this.fileList = fileInput.target.files;
         let filesTmp = [].slice.call(this.fileList);
@@ -35,6 +36,7 @@ export class EventCreateImagesComponent {
         }
     }
 
+	//for each file calls the service and posts the file to the server
     upload() {
         this.files.forEach((listItem, i) => {
             this.files[i].uploading = true;
@@ -56,6 +58,7 @@ export class EventCreateImagesComponent {
         })
     }
 
+	//checks wehter the files are uploading and sets the filter accordingly
     uploadingFilter() {
         if (this.files) {
             return this.files.filter((file) => {
@@ -63,41 +66,6 @@ export class EventCreateImagesComponent {
             }).length > 0;
         }
         return false;
-    }
-
-    get files(): file[] {
-        return this._files;
-    }
-
-    set files(theFiles: file[]) {
-        this._files = theFiles;
-    }
-
-    get uploadedFiles(): string[] {
-        return this._uploadedFiles;
-    }
-
-    set uploadedFiles(theFiles: string[]) {
-        this._uploadedFiles = theFiles;
-    }
-
-    get fileList(): FileList {
-        return this._fileList;
-    }
-
-    set fileList(theFileList: FileList) {
-        this._fileList = theFileList;
-    }
-
-    get formData() {
-        if (this._formData === undefined) {
-            this._formData = new FormData();
-        }
-        return this._formData;
-    }
-
-    set formData(value: FormData) { 
-        this._formData = value; 
     }
 }
 

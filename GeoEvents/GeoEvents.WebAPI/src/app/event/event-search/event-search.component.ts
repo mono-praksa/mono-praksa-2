@@ -47,6 +47,7 @@ export class EventSearchComponent implements OnInit {
         this.createForm();
     }
 
+	//called on init, builds the categories, gets the user adress, gets the search string from the url and changes the filter accordingly.
     ngOnInit(): void {
         this.categoryService.buildCategories('category', false);
 
@@ -82,6 +83,7 @@ export class EventSearchComponent implements OnInit {
         this.startMapZoomListener();
     }
 
+	//removes the current location from the form 
     private clearLocation(): void {
         this.isAddressValid = false;
         this.filterForm.controls["address"].setValue("");
@@ -89,10 +91,12 @@ export class EventSearchComponent implements OnInit {
         this.filterForm.controls["longitude"].setValue(null);
     }
 
+	//removes the start time from the form
     private clearStartTime(): void {
         this.filterForm.controls["start"].setValue("");
     }
 
+	//removes the end time from the form
     private clearEndTime(): void {
         this.filterForm.controls["end"].setValue("");
     }
@@ -229,6 +233,7 @@ export class EventSearchComponent implements OnInit {
         this.isAdvancedSearch = !this.isAdvancedSearch;
     }
 
+	//toggles displaying of map mode, triggered on click
     private toggleMapMode(): void {
         this.isMapMode = !this.isMapMode;
     }
