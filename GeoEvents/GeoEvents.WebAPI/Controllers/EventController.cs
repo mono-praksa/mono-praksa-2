@@ -6,18 +6,17 @@ using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
+using System.Runtime.Serialization;
 using System.Threading.Tasks;
 using System.Web.Http;
 using X.PagedList;
-using System.Runtime.Serialization;
 
 namespace GeoEvents.WebAPI.Controllers
 {
-
     [RoutePrefix("api/events")]
     public class EventController : ApiController
     {
-        #region Parameters
+        #region Properties
 
         /// <summary>
         /// Gets the service.
@@ -35,7 +34,7 @@ namespace GeoEvents.WebAPI.Controllers
         /// </value>
         protected IMapper Mapper { get; private set; }
 
-        #endregion Parameters
+        #endregion Properties
 
         #region Constructor
 
@@ -207,13 +206,13 @@ namespace GeoEvents.WebAPI.Controllers
             */
             var result = await Service.GetClusteredEventsAsync(filter, clusteringFilter);
 
-            if(result == null)
+            if (result == null)
             {
                 return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, "sorry :(");
             }
 
             IList<MyMarker> test = Mapper.Map<IList<GoogleMaps.Net.Clustering.Data.Geometry.MapPoint>, IList<MyMarker>>(result);
-            
+
             return Request.CreateResponse(HttpStatusCode.OK, test);
         }
 
@@ -457,8 +456,79 @@ namespace GeoEvents.WebAPI.Controllers
         #endregion Model
 
         #region Filter Model
+
         public class FilterModel : IFilter
         {
+            /// <summary>
+            /// The default user latitude
+            /// </summary>
+            private static double? DefaultUserLatitude = null;
+
+            /// <summary>
+            /// The default user longitude
+            /// </summary>
+            private static double? DefaultUserLongitude = null;
+
+            /// <summary>
+            /// The default radius
+            /// </summary>
+            private static double? DefaultRadius = null;
+
+            /// <summary>
+            /// The default start time
+            /// </summary>
+            private static DateTime? DefaultStartTime = null;
+
+            /// <summary>
+            /// The default end time
+            /// </summary>
+            private static DateTime? DefaultEndTime = null;
+
+            /// <summary>
+            /// The default category
+            /// </summary>
+            private static int? DefaultCategory = 0;
+
+            /// <summary>
+            /// The default page number
+            /// </summary>
+            private static int DefaultPageNumber = 1;
+
+            /// <summary>
+            /// The default page size
+            /// </summary>
+            private static int DefaultPageSize = 25;
+
+            /// <summary>
+            /// The default search string
+            /// </summary>
+            private static string DefaultSearchString = "";
+
+            /// <summary>
+            /// The default order by
+            /// </summary>
+            private static string DefaultOrderBy = "";
+
+            /// <summary>
+            /// The default order ascending
+            /// </summary>
+            private static bool DefaultOrderAscending = false;
+
+            /// <summary>
+            /// The default price
+            /// </summary>
+            private static double? DefaultPrice = null;
+
+            /// <summary>
+            /// The default rating event
+            /// </summary>
+            private static double? DefaultRatingEvent = null;
+
+            /// <summary>
+            /// The default custom
+            /// </summary>
+            private static string DefaultCustom = "";
+
             /// <summary>
             /// Gets or sets the latitude of the filter's location.
             /// </summary>
@@ -550,49 +620,27 @@ namespace GeoEvents.WebAPI.Controllers
             public string Custom { get; set; }
 
             /// <summary>
-            /// Initializes a new instance of the <see cref="Filter"/> class.
-            /// </summary>
-            /// <param name="uLat">The u lat.</param>
-            /// <param name="uLong">The u long.</param>
-            /// <param name="radius">The radius.</param>
-            /// <param name="startTime">The start time.</param>
-            /// <param name="endTime">The end time.</param>
-            /// <param name="category">The category.</param>
-            /// <param name="pageNumber">The page number.</param>
-            /// <param name="pageSize">Size of the page.</param>
-            /// <param name="searchString">The search string.</param>
-            /// <param name="orderBy">The order by.</param>
-            /// <param name="orderAscending">The order ascending.</param>
-            /// <param name="price">The price.</param>
-            /// <param name="ratingEvent">The rating event.</param>
-            /// <param name="custom">The custom.</param>
-            public FilterModel(double? uLat = null, double? uLong = null, double? radius = null, DateTime? startTime = null, DateTime? endTime = null, int? category = 0, int pageNumber = 1, int pageSize = 25, string searchString = "", string orderBy = "", bool? orderAscending = false, double? price = null, double? ratingEvent = null, string custom = "")
-            {
-                ULat = uLat;
-                ULong = uLong;
-                Radius = radius;
-                StartTime = startTime;
-                EndTime = endTime;
-                Category = category;
-                PageNumber = pageNumber;
-                PageSize = pageSize;
-                SearchString = searchString;
-                OrderBy = orderBy;
-                OrderAscending = orderAscending;
-                Price = price;
-                RatingEvent = ratingEvent;
-                Custom = custom;
-            }
-
-            /// <summary>
             /// Initializes a new instance of the <see cref="FilterModel"/> class.
             /// </summary>
             public FilterModel()
             {
-
+                ULat = DefaultUserLatitude;
+                ULong = DefaultUserLongitude;
+                Radius = DefaultRadius;
+                StartTime = DefaultStartTime;
+                EndTime = DefaultEndTime;
+                Category = DefaultCategory;
+                PageNumber = DefaultPageNumber;
+                PageSize = DefaultPageSize;
+                SearchString = DefaultSearchString;
+                OrderBy = DefaultOrderBy;
+                OrderAscending = DefaultOrderAscending;
+                Price = DefaultPrice;
+                RatingEvent = DefaultRatingEvent;
+                Custom = DefaultCustom;
             }
         }
-        #endregion Filter Model
 
+        #endregion Filter Model
     }
 }
