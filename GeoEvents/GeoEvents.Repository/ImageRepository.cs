@@ -53,18 +53,18 @@ namespace GeoEvents.Repository
 
                 using (var connection = Connection.CreateConnection())
                 {
-                    using (NpgsqlCommand commandSelect = new NpgsqlCommand(QueryHelper.GetSelectImageQueryString(), connection))
+                    using (NpgsqlCommand commandSelect = new NpgsqlCommand(ImageQueryHelper.GetSelectImageQueryString(), connection))
                     {
-                        using (NpgsqlCommand commandInsert = new NpgsqlCommand(QueryHelper.GetInsertImagesQueryString(), connection))
+                        using (NpgsqlCommand commandInsert = new NpgsqlCommand(ImageQueryHelper.GetInsertImagesQueryString(), connection))
                         {
-                            commandInsert.Parameters.AddWithValue(QueryHelper.ParId, NpgsqlDbType.Uuid, DbImage.Id);
-                            commandInsert.Parameters.AddWithValue(QueryHelper.ParContent, NpgsqlDbType.Bytea, DbImage.Content);
-                            commandInsert.Parameters.AddWithValue(QueryHelper.ParEventId, NpgsqlDbType.Uuid, DbImage.EventId);
+                            commandInsert.Parameters.AddWithValue(QueryConstants.ParId, NpgsqlDbType.Uuid, DbImage.Id);
+                            commandInsert.Parameters.AddWithValue(QueryConstants.ParContent, NpgsqlDbType.Bytea, DbImage.Content);
+                            commandInsert.Parameters.AddWithValue(QueryConstants.ParEventId, NpgsqlDbType.Uuid, DbImage.EventId);
 
                             await connection.OpenAsync();
                             await commandInsert.ExecuteNonQueryAsync();
                         }
-                        commandSelect.Parameters.AddWithValue(QueryHelper.ParId, NpgsqlDbType.Uuid, DbImage.Id);
+                        commandSelect.Parameters.AddWithValue(QueryConstants.ParId, NpgsqlDbType.Uuid, DbImage.Id);
                         DbDataReader dr = await commandSelect.ExecuteReaderAsync();
 
                         while (dr.Read())
@@ -104,9 +104,9 @@ namespace GeoEvents.Repository
 
                 using (var connection = Connection.CreateConnection())
                 {
-                    using (NpgsqlCommand command = new NpgsqlCommand(QueryHelper.GetSelectImagesQueryString(), connection))
+                    using (NpgsqlCommand command = new NpgsqlCommand(ImageQueryHelper.GetSelectImagesQueryString(), connection))
                     {
-                        command.Parameters.AddWithValue(QueryHelper.ParEventId, NpgsqlDbType.Uuid, eventID);
+                        command.Parameters.AddWithValue(QueryConstants.ParEventId, NpgsqlDbType.Uuid, eventID);
 
                         await connection.OpenAsync();
                         DbDataReader dr = await command.ExecuteReaderAsync();

@@ -96,9 +96,13 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AppenderQueryHelper.cs" />
+    <Compile Include="EventQueryHelper.cs" />
+    <Compile Include="ImageQueryHelper.cs" />
     <Compile Include="LocationRepository.cs" />
+    <Compile Include="LocationQueryHelper.cs" />
     <Compile Include="PostgresAppender.cs" />
-    <Compile Include="QueryHelper.cs" />
+    <Compile Include="QueryConstants.cs" />
     <Compile Include="DIModule.cs" />
     <Compile Include="EventRepository.cs" />
     <Compile Include="ImageRepository.cs" />
