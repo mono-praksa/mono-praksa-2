@@ -310,7 +310,7 @@ namespace GeoEvents.Repository
 
             if (filter.OrderBy == "Distance" && filter.ULat != null && filter.ULong != null)
             {
-                selectString.AppendFormat("SELECT *, earth_distance(ll_to_earth({0},{1}), ll_to_earth({2},{3})) as distance from {4} WHERE ",
+                selectString.AppendFormat("SELECT *, earth_distance(ll_to_earth({0},{1}), ll_to_earth({2},{3})) AS distance FROM {4} ",
                     ParLatitude, ParLongitude, TableNameEventLatQ, TableNameEventLongQ, TableNameEventQ);
             }
             else if (filter.OrderBy == "RatingLocation")
@@ -370,7 +370,7 @@ namespace GeoEvents.Repository
             {
                 selectString = ConditionValidation(selectString);
 
-                selectString.AppendFormat(" (lower({0}) LIKE lower({1})) ",
+                selectString.AppendFormat(" (LOWER({0}) LIKE LOWER({1})) ",
                     NameQ, ParSearchString);
             }
 
@@ -398,36 +398,36 @@ namespace GeoEvents.Repository
             switch (filter.OrderBy)
             {
                 case "Name":
-                    selectString.AppendFormat(" order by {0} ",
+                    selectString.AppendFormat(" ORDER BY {0} ",
                         TableNameEventNameQ);
                     break;
 
                 case "StartTime":
-                    selectString.AppendFormat(" order by {0} ",
+                    selectString.AppendFormat(" ORDER BY {0} ",
                         TableNameEventStartTimeQ);
                     break;
 
                 case "EndTime":
-                    selectString.AppendFormat(" order by {0} ",
+                    selectString.AppendFormat(" ORDER BY {0} ",
                         TableNameEventEndTimeQ);
                     break;
 
                 case "Distance":
-                    selectString.Append(" order by distance ");
+                    selectString.Append(" ORDER BY distance ");
                     break;
 
                 case "Price":
-                    selectString.AppendFormat(" order by {0} ",
+                    selectString.AppendFormat(" ORDER BY {0} ",
                         TableNameEventPriceQ);
                     break;
 
                 case "RatingEvent":
-                    selectString.AppendFormat(" order by {0} ",
+                    selectString.AppendFormat(" ORDER BY {0} ",
                         TableNameEventRatingQ);
                     break;
 
                 case "RatingLocation":
-                    selectString.AppendFormat(" order by {0} ",
+                    selectString.AppendFormat(" ORDER BY {0} ",
                         TableNameLocationRatingQ);
                     break;
             }
@@ -594,7 +594,7 @@ namespace GeoEvents.Repository
         public static string GetInsertLoggerQueryString()
         {
 
-            return string.Format("insert into {0}(app_name,thread,level,location,message,log_date,exception) values({1},{2},{3},{4},{5},{6},{7})",
+            return string.Format("INSERT INTO {0}(app_name,thread,level,location,message,log_date,exception) VALUES({1},{2},{3},{4},{5},{6},{7})",
                 TableNameLogsQ,ParAppName,ParThread,ParLevel,ParLocation,ParMessage,ParLogDate,ParException);
         }
 

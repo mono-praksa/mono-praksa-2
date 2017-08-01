@@ -28,13 +28,18 @@ export class CategoryService {
     DayEnum = DayEnum;
 
     buildCategories(enumName: string, checkLast: boolean = false): void {
-        for (let i of this.keys(enumName)) {
-            if (enumName == "category") {
+        if (enumName == "category") {
+            this.categories = [];
+            for (let i of this.keys(enumName)) {
                 this.categories.push({
                     id: parseInt(i),
                     checked: false
                 });
-            } else if (enumName == "day") {
+            }
+        }
+        else if (enumName == "day") {
+            this.days = [];
+            for (let i of this.keys(enumName)) {
                 this.days.push({
                     id: parseInt(i),
                     checked: false

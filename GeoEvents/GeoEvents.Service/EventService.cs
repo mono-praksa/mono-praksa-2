@@ -68,21 +68,6 @@ namespace GeoEvents.Service
                 mult *= 2;
                 cat = cat >> 1;
             }
-            int repeaton = evt.RepeatOn;
-            mult = 1;
-            if (repeaton != 0)
-            {
-                while (repeaton > 0)
-                {
-                    int mod = repeaton % 2;
-                    if (mod == 1)
-                    {
-                        evt.RepeatOnList.Add(mult);
-                    }
-                    mult *= 2;
-                    repeaton = repeaton >> 1;
-                }
-            }
             return evt;
         }
 

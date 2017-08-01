@@ -34,8 +34,6 @@ export class EventListComponent implements OnChanges, OnInit {
         this.loaderService.loaderStatus.subscribe((value: boolean) => {
             this.searchEventLoading = value;
         });
-
-        this.getEvents(this.filter);
     }
 
     //calls the http service and gets the events
