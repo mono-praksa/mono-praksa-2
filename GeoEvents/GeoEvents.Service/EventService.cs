@@ -2,15 +2,15 @@
 using GeoEvents.Model.Common;
 using GeoEvents.Repository.Common;
 using GeoEvents.Service.Common;
+using GoogleMaps.Net.Clustering.Data.Geometry;
+using GoogleMaps.Net.Clustering.Data.Params;
+using GoogleMaps.Net.Clustering.Infrastructure;
+using GoogleMaps.Net.Clustering.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using X.PagedList;
-using GoogleMaps.Net.Clustering.Data.Geometry;
-using GoogleMaps.Net.Clustering.Infrastructure;
-using GoogleMaps.Net.Clustering.Services;
-using GoogleMaps.Net.Clustering.Data.Params;
 
 namespace GeoEvents.Service
 {
@@ -29,7 +29,6 @@ namespace GeoEvents.Service
         /// The repository.
         /// </value>
         protected IEventRepository Repository { get; private set; }
- 
 
         #endregion Properties
 
@@ -113,21 +112,6 @@ namespace GeoEvents.Service
                     mult *= 2;
                     cat = cat >> 1;
                 }
-                int repeaton = evt.RepeatOn;
-                mult = 1;
-                if (repeaton != 0)
-                {
-                    while (repeaton > 0)
-                    {
-                        int mod = repeaton % 2;
-                        if (mod == 1)
-                        {
-                            evt.RepeatOnList.Add(mult);
-                        }
-                        mult *= 2;
-                        repeaton = repeaton >> 1;
-                    }
-                }
             }
             return result;
         }
@@ -190,7 +174,7 @@ namespace GeoEvents.Service
 
         #endregion Methods
 
-        #region Clustering        
+        #region Clustering
 
         /// <summary>
         /// Gets the events in the form of Map points (markers and/or clusters).
@@ -199,7 +183,7 @@ namespace GeoEvents.Service
         /// <param name="filter">Filter used for retrieving events from the database.</param>
         /// <param name="clusteringFilter">Filter used for clustering the markers.</param>
         /// <returns>List of Map points.</returns>
-        public async Task<IList<MapPoint>> GetClusteredEventsAsync(IFilter filter, IClusteringFIlter clusteringFilter )
+        public async Task<IList<MapPoint>> GetClusteredEventsAsync(IFilter filter, IClusteringFIlter clusteringFilter)
         {
             string dBCacheKey = filter.ULat.ToString() + filter.ULong.ToString() + filter.Radius.ToString() + filter.Category.ToString() + filter.Custom + filter.StartTime.ToString() + filter.EndTime.ToString() + filter.Price.ToString() + filter.RatingEvent.ToString() + filter.SearchString;
 
@@ -216,7 +200,7 @@ namespace GeoEvents.Service
                 PointType = dBCacheKey
             };
             //"MapService says: exception Object reference not set to an instance of an object."
-            var markers = mapService.GetClusterMarkers(input);           
+            var markers = mapService.GetClusterMarkers(input);
 
             return markers.Markers;
         }
@@ -238,10 +222,10 @@ namespace GeoEvents.Service
 
             //get list of events from the database. filter is modified in a way it will recieve all pages at once.
             List<IEvent> dataBaseResult = await Repository.GetAllEventsAsync(filter);
-            
+
             //map the location, name and id properties
             var mapPoints = dataBaseResult.Select(p => new MapPoint() { X = p.Longitude, Y = p.Latitude, Name = p.Name, Data = p.Id.ToString() }).ToList();
-            
+
             //i tried setting the cacheKey to null and timespan to zero to avoid caching
             //but it does not work that way.
             points.Set(mapPoints, TimeSpan.FromSeconds(300), dBCacheKey);
@@ -250,6 +234,6 @@ namespace GeoEvents.Service
             return points;
         }
 
-        #endregion
+        #endregion Clustering
     }
 }
