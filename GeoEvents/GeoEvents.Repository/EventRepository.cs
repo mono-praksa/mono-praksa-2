@@ -76,6 +76,13 @@ namespace GeoEvents.Repository
                             commandInsert.Parameters.AddWithValue(QueryHelper.ParRateCount, NpgsqlDbType.Integer, evt.RateCount);
                             commandInsert.Parameters.AddWithValue(QueryHelper.ParLocationId, NpgsqlDbType.Uuid, evt.LocationId);
                             commandInsert.Parameters.AddWithValue(QueryHelper.ParCustom, NpgsqlDbType.Jsonb, evt.Custom);
+                            commandInsert.Parameters.AddWithValue(QueryHelper.ParOccurrence, NpgsqlDbType.Text, evt.Occurrence);
+                            commandInsert.Parameters.AddWithValue(QueryHelper.ParRepeatEvery, NpgsqlDbType.Integer, evt.RepeatEvery);
+                            commandInsert.Parameters.AddWithValue(QueryHelper.ParRepeatOn, NpgsqlDbType.Integer, evt.RepeatOn);
+                            commandInsert.Parameters.AddWithValue(QueryHelper.ParRepeatCount, NpgsqlDbType.Integer, evt.RepeatCount);
+
+
+
 
 
                             await connection.OpenAsync();
