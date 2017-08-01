@@ -192,23 +192,32 @@ namespace GeoEvents.WebAPI.Controllers
         /// <returns>Clustered events</returns>
         [HttpGet]
         [Route("clustered")]
-        public async Task<HttpResponseMessage> GetEventsClusteredAsync([FromUri] Filter filter, [FromUri] ClusteringFilter clusteringFilter)
+        public async Task<HttpResponseMessage> GetEventsClusteredAsync([FromUri] FilterModel filter, [FromUri] ClusteringFilterModel clusteringFilter)
         {
-            /*
-            if(filter.ULat == null || filter.ULong == null)
+            if (filter == null)
             {
-                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "incorrect filter coordinates. filter coordinates are required");
+                filter = new FilterModel();
             }
-            if(filter.Radius == null || filter.Radius == 0)
+
+            if (clusteringFilter == null)
             {
-                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "incorrect filter radius. radius is required. radius must be larger that zero");
+                clusteringFilter = new ClusteringFilterModel();
             }
-            */
+
+            if (filter.StartTime == null)
+            {
+                filter.StartTime = DateTime.Now;
+            }
+            if (filter.EndTime == null)
+            {
+                filter.EndTime = DateTime.MaxValue;
+            }
+
             var result = await Service.GetClusteredEventsAsync(filter, clusteringFilter);
 
             if (result == null)
             {
-                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, "sorry :(");
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, "Internal Server Error");
             }
 
             IList<MyMarker> test = Mapper.Map<IList<GoogleMaps.Net.Clustering.Data.Geometry.MapPoint>, IList<MyMarker>>(result);
@@ -218,8 +227,11 @@ namespace GeoEvents.WebAPI.Controllers
 
         #endregion Methods
 
-        #region Model
+        #region Models
 
+        /// <summary>
+        /// Override of the MapPoint class so that the Name and Data properties are left in the object.
+        /// </summary>
         [Serializable]
         public class MyMarker : GoogleMaps.Net.Clustering.Data.Geometry.MapPoint
         {
@@ -453,82 +465,54 @@ namespace GeoEvents.WebAPI.Controllers
             public EventModel() { }
         }
 
-        #endregion Model
-
         #region Filter Model
 
         public class FilterModel : IFilter
         {
-            /// <summary>
-            /// The default user latitude
-            /// </summary>
-            private static double? DefaultUserLatitude = null;
-
-            /// <summary>
-            /// The default user longitude
-            /// </summary>
-            private static double? DefaultUserLongitude = null;
-
-            /// <summary>
-            /// The default radius
-            /// </summary>
-            private static double? DefaultRadius = null;
-
-            /// <summary>
-            /// The default start time
-            /// </summary>
-            private static DateTime? DefaultStartTime = null;
-
-            /// <summary>
-            /// The default end time
-            /// </summary>
-            private static DateTime? DefaultEndTime = null;
+            #region Default Values
 
             /// <summary>
             /// The default category
             /// </summary>
-            private static int? DefaultCategory = 0;
+            private const int DefaultCategory = 0;
 
             /// <summary>
             /// The default page number
             /// </summary>
-            private static int DefaultPageNumber = 1;
+            private const int DefaultPageNumber = 1;
 
             /// <summary>
             /// The default page size
             /// </summary>
-            private static int DefaultPageSize = 25;
+            private const int DefaultPageSize = 25;
 
             /// <summary>
             /// The default search string
             /// </summary>
-            private static string DefaultSearchString = "";
+            private const string DefaultSearchString = "";
 
             /// <summary>
             /// The default order by
             /// </summary>
-            private static string DefaultOrderBy = "";
+            private const string DefaultOrderBy = "Name";
 
             /// <summary>
             /// The default order ascending
             /// </summary>
-            private static bool DefaultOrderAscending = false;
-
-            /// <summary>
-            /// The default price
-            /// </summary>
-            private static double? DefaultPrice = null;
+            private const bool DefaultOrderAscending = true;
 
             /// <summary>
             /// The default rating event
             /// </summary>
-            private static double? DefaultRatingEvent = null;
+            private const double DefaultRatingEvent = 0;
 
             /// <summary>
             /// The default custom
             /// </summary>
-            private static string DefaultCustom = "";
+            private const string DefaultCustom = "";
+            #endregion Default Values
 
+            #region Properties
             /// <summary>
             /// Gets or sets the latitude of the filter's location.
             /// </summary>
@@ -618,29 +602,146 @@ namespace GeoEvents.WebAPI.Controllers
             /// The custom.
             /// </value>
             public string Custom { get; set; }
+            #endregion Properties
+
+            #region Constructors
+
+            /// <summary>
+            /// Initializes a new instance of the <see cref="FilterModel"/> class.
+            /// </summary>
+            public FilterModel(double? uLat, double? uLong, double? radius, DateTime? startTime, DateTime? endTime,
+                int? category = DefaultCategory, int pageNumber = DefaultPageNumber, string searchString = DefaultSearchString, 
+                string orderBy = DefaultOrderBy, bool? orderAscending = DefaultOrderAscending, double? price = null,
+                double? ratingEvent = DefaultRatingEvent, string custom = DefaultCustom )
+            {
+                ULat = uLat;
+                ULong = uLong;
+                Radius = radius;
+                StartTime = startTime;
+                EndTime = endTime;
+                Category = category;
+                PageNumber = pageNumber;
+                PageSize = DefaultPageSize;
+                SearchString = searchString;
+                OrderBy = orderBy;
+                OrderAscending = orderAscending;
+                Price = price;
+                RatingEvent = ratingEvent;
+                Custom = custom;
+            }
 
             /// <summary>
             /// Initializes a new instance of the <see cref="FilterModel"/> class.
             /// </summary>
             public FilterModel()
             {
-                ULat = DefaultUserLatitude;
-                ULong = DefaultUserLongitude;
-                Radius = DefaultRadius;
-                StartTime = DefaultStartTime;
-                EndTime = DefaultEndTime;
+                ULat = null;
+                ULong = null;
+                Radius = null;
+                StartTime = null;
+                EndTime = null;
                 Category = DefaultCategory;
                 PageNumber = DefaultPageNumber;
                 PageSize = DefaultPageSize;
                 SearchString = DefaultSearchString;
                 OrderBy = DefaultOrderBy;
                 OrderAscending = DefaultOrderAscending;
-                Price = DefaultPrice;
+                Price = null;
                 RatingEvent = DefaultRatingEvent;
                 Custom = DefaultCustom;
             }
+
+            #endregion Constructors
         }
 
         #endregion Filter Model
+
+        #region Clustering Filter Model
+
+        public class ClusteringFilterModel : IClusteringFIlter
+        {
+            #region Default Values
+
+            /// <summary>
+            /// The default latitude of the NE boundary.
+            /// </summary>
+            private const double DefaultNELatitude = 0.0;
+
+            /// <summary>
+            /// The default longitude of the NE boundary.
+            /// </summary>
+            private const double DefaultNELongitude = 0.0;
+
+            /// <summary>
+            /// The default latitude of the SW boundary.
+            /// </summary>
+            private const double DefaultSWLatitude = 0.0;
+
+            /// <summary>
+            /// The default longitude of the SW boundary.
+            /// </summary>
+            private const double DefaultSWLongitude = 0.0;
+
+            /// <summary>
+            /// The default map zoom level.
+            /// </summary>
+            private const int DefaultZoomLevel = 1;
+
+            #endregion Default Values
+
+            #region Properties
+            /// <summary>
+            /// Gets or sets the latitude of the north-east conrner of the map viewport boundary.
+            /// </summary>
+            /// <value>The Latitude</value>
+            public double NELatitude { get; set; }
+
+            /// <summary>
+            /// Gets or sets the longitude of the north-east corner of the map viewport boundary.
+            /// </summary>
+            /// <value>The Longitude.</value>
+            public double NELongitude { get; set; }
+
+            /// <summary>
+            /// Gets or sets the latitude of the south-west corner of the map viewport boundary.
+            /// </summary>
+            /// <value>The Latitude.</value>
+            public double SWLatitude { get; set; }
+
+            /// <summary>
+            /// Gets or sets the longitude of the south-west corner of the map viewport boundary.
+            /// </summary>
+            /// <value>The Longitude.</value>
+            public double SWLongitude { get; set; }
+
+            /// <summary>
+            /// Gets or sets the zoom level of the map.
+            /// </summary>
+            /// <value>The Zoom level</value>
+            public int ZoomLevel { get; set; }
+            #endregion Properties
+
+            #region Constructors
+
+            /// <summary>
+            /// Initializes a new instance of the <see cref="ClusteringFilterModel"/> class.
+            /// </summary>
+            public ClusteringFilterModel()
+            {
+                NELatitude = DefaultNELatitude;
+                NELongitude = DefaultNELongitude;
+                SWLatitude = DefaultSWLatitude;
+                SWLongitude = DefaultSWLongitude;
+                ZoomLevel = DefaultZoomLevel;
+            }
+
+            #endregion Constructors
+        }
+
+        #endregion Clustering Filter
+
+        #endregion Models
+
+
     }
 }

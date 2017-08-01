@@ -61,19 +61,19 @@ export class EventSearchComponent implements OnInit {
             this.filter = {
                 ULat: undefined,
                 ULong: undefined,
-                Radius: 0,
+                Radius: undefined,
                 StartTime: undefined,
                 EndTime: undefined,
-                Category: 0,
+                Category: undefined,
                 Price: undefined,
                 RatingEvent: undefined,
                 SearchString: this.route.snapshot.queryParams["searchString"],
                 Custom: undefined,
 
                 PageNumber: 1,
-                PageSize: 25,
-                OrderByString: "Name",
-                OrderIsAscending: true
+                PageSize: undefined,
+                OrderByString: undefined,
+                OrderIsAscending: undefined
             }
         }
         else {
@@ -177,10 +177,11 @@ export class EventSearchComponent implements OnInit {
 
 
             PageNumber: 1,
-            PageSize: 25,
-            OrderByString: "Name",
-            OrderIsAscending: true
+            PageSize: undefined,
+            OrderByString: undefined,
+            OrderIsAscending: undefined
         }
+        console.log(this.filter);
     }
 
     //sets the position(latitude and longitude) using geolocation services

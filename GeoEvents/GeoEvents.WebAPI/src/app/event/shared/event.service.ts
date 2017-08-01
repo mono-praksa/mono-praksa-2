@@ -82,58 +82,73 @@ export class EventService {
                 return <Event>response.json();
             }).catch(this.handleError);
     }
-
+    
     private makeQueryString(filter: Filter, clusteringFilter: ClusteringFilter = undefined): string {
         let query = "";
-
-        query += "?category=";
-        query += filter.Category.toString();
-
-        if (filter.ULat && filter.ULong && filter.Radius && filter.Radius != 0) {
-            query += "&uLat=" + filter.ULat.toString();
-            query += "&uLong=" + filter.ULong.toString();
-            query += "&radius=" + filter.Radius.toString();
+        let queryParamChar = "?";
+        if (filter.Category && filter.Category >= 0) {
+            query += queryParamChar + "category=" + filter.Category.toString();
+            queryParamChar = "&";
         }
 
-        if (filter.StartTime && filter.StartTime.toString() != "") {
-            query += "&startTime=" + filter.StartTime.toString();
+        if (!(filter.ULat === undefined || filter.ULat === null)
+            && !(filter.ULong === undefined || filter.ULong === null)
+            && !(filter.Radius === undefined || filter.Radius === null || filter.Radius === 0))
+        {
+            query += queryParamChar + "uLat=" + filter.ULat.toString();
+            queryParamChar = "&";
+            query += queryParamChar + "uLong=" + filter.ULong.toString();
+            query += queryParamChar + "radius=" + filter.Radius.toString();
         }
 
-        if (filter.EndTime && filter.EndTime.toString() != "") {
-            query += "&endTime=" + filter.EndTime.toString();
+        if (!(filter.StartTime === undefined || filter.StartTime === null || filter.StartTime.toString() === "")) {
+            query += queryParamChar + "startTime=" + filter.StartTime.toString();
+            queryParamChar = "&";
         }
 
-        if (filter.Price && filter.Price >= 0) {
-            query += "&price=" + filter.Price.toString();
+        if (!(filter.EndTime === undefined || filter.EndTime === null || filter.EndTime.toString() === "")) {
+            query += queryParamChar + "endTime=" + filter.EndTime.toString();
+            queryParamChar = "&";
         }
 
-        if (filter.RatingEvent && filter.RatingEvent >= 1 && filter.RatingEvent <= 5) {
-            query += "&ratingEvent=" + filter.RatingEvent.toString();
+        if (!(filter.Price === undefined || filter.Price === null || filter.Price.toString() === "")) {
+            query += queryParamChar + "price=" + filter.Price.toString();
+            queryParamChar = "&";
         }
 
-        if (filter.SearchString) {
-            if (filter.SearchString.toString() != "") {
-                query += "&searchString=" + filter.SearchString.toString();
-            }
+        if (!(filter.RatingEvent === undefined || filter.RatingEvent === null || filter.RatingEvent.toString() === "")) {
+            query += queryParamChar + "ratingEvent=" + filter.RatingEvent.toString();
+            queryParamChar = "&";
         }
 
-        if (filter.Custom) {
-            query += "&custom=" + filter.Custom;
+        if (!(filter.SearchString === undefined || filter.SearchString === null || filter.SearchString.toString() === "")) {
+            query += queryParamChar + "searchString=" + filter.SearchString.toString();
+            queryParamChar = "&";
+        }
+
+        if (!(filter.Custom === undefined || filter.Custom === null || filter.Custom.toString() === "")) {
+            query += queryParamChar + "custom=" + filter.Custom;
+            queryParamChar = "&";
         }
 
         if (!clusteringFilter) {
-            query += "&pageNumber=" + filter.PageNumber.toString();
-            query += "&pageSize=" + filter.PageSize.toString();
-            query += "&orderAscending=" + filter.OrderIsAscending.toString();
-            query += "&orderBy=" + filter.OrderByString.toString();
+            query += queryParamChar + "pageNumber=" + filter.PageNumber.toString();
+            queryParamChar = "&";
+            if (!(filter.OrderIsAscending === undefined || filter.OrderIsAscending === null))
+            {
+                query += queryParamChar + "orderAscending=" + filter.OrderIsAscending.toString();
+            }
+            if (!(filter.OrderByString === undefined || filter.OrderByString === null || filter.OrderByString.toString() === "")) {
+                query += queryParamChar + "orderBy=" + filter.OrderByString.toString();
+            }
         }
-        else {
-            query += "&pageSize=25&pageNumber=-1"; 
-            query += "&NELatitude=" + clusteringFilter.NELatitude.toString();
-            query += "&NELongitude=" + clusteringFilter.NELongitude.toString();
-            query += "&SWLatitude=" + clusteringFilter.SWLatitude.toString();
-            query += "&SWLongitude=" + clusteringFilter.SWLongitude.toString();
-            query += "&ZoomLevel=" + clusteringFilter.ZoomLevel.toString();
+        else if (clusteringFilter.ZoomLevel) {
+            query += queryParamChar + "NELatitude=" + clusteringFilter.NELatitude.toString();
+            queryParamChar = "&";
+            query += queryParamChar + "NELongitude=" + clusteringFilter.NELongitude.toString();
+            query += queryParamChar + "SWLatitude=" + clusteringFilter.SWLatitude.toString();
+            query += queryParamChar + "SWLongitude=" + clusteringFilter.SWLongitude.toString();
+            query += queryParamChar + "ZoomLevel=" + clusteringFilter.ZoomLevel.toString();
         }
         
 

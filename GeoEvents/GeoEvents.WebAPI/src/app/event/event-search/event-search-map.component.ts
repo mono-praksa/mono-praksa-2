@@ -21,6 +21,7 @@ export class EventMapComponent implements OnChanges, OnInit {
 
     private clusteringFilter: ClusteringFilter;
     private infoWindow: any;
+    private initialized: boolean = false;
     private initialZoom: number = 1;
     private latitude: number;
     private longitude: number;
@@ -36,17 +37,17 @@ export class EventMapComponent implements OnChanges, OnInit {
     ngOnChanges() {
         if (!this.clusteringFilter) {
             this.clusteringFilter = {
-                NELatitude: 90,
-                NELongitude: 180,
-                SWLatitude: -90,
-                SWLongitude: -180,
-                ZoomLevel: 1
+                NELatitude: undefined,
+                NELongitude: undefined,
+                SWLatitude: undefined,
+                SWLongitude: undefined,
+                ZoomLevel: undefined
             }
         }
 
         if (!this.filter) {
             this.filter = {
-                Category: 0,
+                Category: undefined,
                 Custom: undefined,
                 EndTime: undefined,
                 OrderByString: undefined,
@@ -54,52 +55,30 @@ export class EventMapComponent implements OnChanges, OnInit {
                 PageNumber: undefined,
                 PageSize: undefined,
                 Price: undefined,
-                Radius: 25000,
+                Radius: undefined,
                 RatingEvent: undefined,
                 SearchString: undefined,
                 StartTime: undefined,
-                ULat: 0,
-                ULong: 0
+                ULat: undefined,
+                ULong: undefined
             }
         }
 
         this.latitude = this.filter.ULat;
         this.longitude = this.filter.ULong;
         this.initialZoom = this.getZoom(this.filter.Radius);
-        this.getEvents();
+        if (!this.initialized) {
+            this.initialized = true;
+        }
+        else {
+            this.getEvents();
+        }
     }
 
 	//called once on init. sets the clustering filter to default values. sets the filter to default values
 	//initializes the map, and retrieves the events from the database.
     ngOnInit() {
-        this.clusteringFilter = {
-            NELatitude: 90,
-            NELongitude: 180,
-            SWLatitude: -90,
-            SWLongitude: -180,
-            ZoomLevel: 1
-        }
         this.initMap();
-        if (!this.filter) {
-            this.filter = {
-                Category: 0,
-                Custom: undefined,
-                EndTime: undefined,
-                OrderByString: undefined,
-                OrderIsAscending: undefined,
-                PageNumber: undefined,
-                PageSize: undefined,
-                Price: undefined,
-                Radius: 25000,
-                RatingEvent: undefined,
-                SearchString: undefined,
-                StartTime: undefined,
-                ULat: 0,
-                ULong: 0
-            }
-        }
-        
-        this.getEvents();
     }
 	
 	//check wether there is an infowindow open. if there is an infowindow open, the function closes it.

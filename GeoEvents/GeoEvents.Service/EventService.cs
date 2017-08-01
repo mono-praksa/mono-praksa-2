@@ -202,7 +202,7 @@ namespace GeoEvents.Service
             string dBCacheKey = filter.ULat.ToString() + filter.ULong.ToString() + filter.Radius.ToString() + filter.Category.ToString() + filter.Custom + filter.StartTime.ToString() + filter.EndTime.ToString() + filter.Price.ToString() + filter.RatingEvent.ToString() + filter.SearchString;
 
             var points = await GetClusterPointCollection(filter, dBCacheKey);
-
+            
             var mapService = new ClusterService(points);
             var input = new GetMarkersParams()
             {

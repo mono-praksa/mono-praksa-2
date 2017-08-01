@@ -20,6 +20,7 @@ export class EventListComponent implements OnChanges, OnInit {
     private dataServiceSubscription: Subscription;
     private errorMessage: string;
     private eventCount: number;
+    private pageSize: number;
     private searchEventLoading: boolean = false;
 
     constructor(private eventService: EventService, private loaderService: LoaderService) {
@@ -45,6 +46,7 @@ export class EventListComponent implements OnChanges, OnInit {
             .subscribe(result => {
                 this.events = result.data;
                 this.eventCount = result.metaData.TotalItemCount;
+                this.pageSize = result.metaData.PageSize;
                 this.loaderService.displayLoader(false);
             }, error => this.errorMessage = <any>error);
     }
