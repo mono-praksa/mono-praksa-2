@@ -179,8 +179,14 @@ namespace GeoEvents.WebAPI.Controllers
         [Route("update/reservation")]
         public async Task<HttpResponseMessage> UpdateReservationAsync(Guid eventId)
         {
-            var result = await Service.UpdateReservationAsync(eventId);
+            var evt = await Service.GetEventByIdAsync(eventId);
 
+            if(evt.Capacity == evt.Reserved)
+            {
+                return Request.CreateResponse(HttpStatusCode.BadRequest, "Cannot update reservation. Event fully reserved.");
+            }
+
+            var result = await Service.UpdateReservationAsync(eventId);
             return Request.CreateResponse(HttpStatusCode.OK, result);
         }
 

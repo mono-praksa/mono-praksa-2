@@ -63,9 +63,13 @@ export class EventMapComponent implements OnChanges, OnInit {
                 ULong: undefined
             }
         }
-
+        // a bit of a hack to make the map properly center if the search button was clicked and the form address wasn't changed
+        this.latitude = 0;
+        this.longitude = 0;
+        this.initialZoom = 0;
+        this.changeDetectorRef.detectChanges();
         this.latitude = this.filter.ULat;
-        this.longitude = this.filter.ULong;
+        this.longitude = this.filter.ULong;        
         this.initialZoom = this.getZoom(this.filter.Radius);
         if (!this.initialized) {
             this.initialized = true;
@@ -145,7 +149,7 @@ export class EventMapComponent implements OnChanges, OnInit {
 	
 	//returns the radius based on the zoom level
     private getRadius(zoom: number = 1): number {
-        return Math.pow(2, 15 - zoom);
+        return Math.pow(2, 16 - zoom);
     }
 
 	//initializes the map and sets the initial latitude, longitude and zoom level
