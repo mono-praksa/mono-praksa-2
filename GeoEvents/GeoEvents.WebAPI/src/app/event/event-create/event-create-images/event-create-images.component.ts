@@ -4,6 +4,7 @@ import { Observable } from "rxjs/Observable";
 
 import { Event } from "../../shared/models/event.model";
 import { EventService } from "../../shared/event.service";
+import { File } from "../../shared/models/file.model";
 
 @Component({
     selector: "create-images",
@@ -13,8 +14,8 @@ export class EventCreateImagesComponent {
     @Input() customizedEvent: Event;
     
     private fileList: FileList;
-    private files: file[];
-    private formData: FormData;
+    private files: File[];
+    private formData: FormData = new FormData();
     private uploadedFiles: string[] = [];
 
     constructor(private eventService: EventService) { }
@@ -38,6 +39,7 @@ export class EventCreateImagesComponent {
 
 	//for each file calls the service and posts the file to the server
     upload() {
+        let counter = 0;
         this.files.forEach((listItem, i) => {
             this.files[i].uploading = true;
             this.formData.append("name" + i, this.fileList[i], this.fileList[i].name);
@@ -47,10 +49,14 @@ export class EventCreateImagesComponent {
                 EventId: this.customizedEvent.Id,
                 FormData: this.formData
             }).subscribe((data: any) => {
+                counter++;
                 this.files[i].uploading = false;
                 this.files[i].finished = true;
+
                 this.uploadedFiles.push(this.files[i].name);
-                this.files.splice(i, 1);                
+                if (counter == this.files.length) {
+                    this.files = [];
+                }             
             }, (error: any) => {
                 this.files[i].error = true;
             });
@@ -67,11 +73,4 @@ export class EventCreateImagesComponent {
         }
         return false;
     }
-}
-
-interface file {
-    name: string
-    uploading: boolean
-    finished: boolean
-    error: boolean
 }

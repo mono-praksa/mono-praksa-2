@@ -412,6 +412,7 @@
     <TypeScriptCompile Include="src\app\event\shared\location.service.ts" />
     <TypeScriptCompile Include="src\app\event\shared\models\clustering-filter.model.ts" />
     <TypeScriptCompile Include="src\app\event\shared\models\event.model.ts" />
+    <TypeScriptCompile Include="src\app\event\shared\models\file.model.ts" />
     <TypeScriptCompile Include="src\app\event\shared\models\filter.model.ts" />
     <TypeScriptCompile Include="src\app\event\shared\models\image.model.ts" />
     <TypeScriptCompile Include="src\app\event\shared\models\location.model.ts" />
