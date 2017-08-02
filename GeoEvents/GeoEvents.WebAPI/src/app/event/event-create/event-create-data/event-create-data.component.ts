@@ -5,7 +5,7 @@ import { Observable } from "rxjs/Observable";
 
 import { CategoryService } from "../../shared/category.service";
 import { EventService } from "../../shared/event.service";
-import { endDateBeforeStartDate, uniqueName } from "../../shared/validator";
+import { endDateBeforeStartDate, uniqueName, startDayNotCheckedIfWeekly } from "../../shared/validator";
 import { LocationService } from "../../shared/location.service";
 
 import { Event } from "../../shared/models/event.model";
@@ -36,6 +36,7 @@ export class EventCreateDataComponent implements OnInit {
     name: FormControl;
     occurrence: FormControl;
     price: FormControl;
+    repeatOnList: FormControl;
     start: FormControl;
 
     // FormControls for recurring
@@ -111,6 +112,7 @@ export class EventCreateDataComponent implements OnInit {
 
         // FormControls for reccuring
         this.repeatEvery = new FormControl(1);
+        this.repeatOnList = new FormControl([]);
 
         this.eventForm = new FormGroup({
             address: this.address,
@@ -125,15 +127,16 @@ export class EventCreateDataComponent implements OnInit {
             occurrence: this.occurrence,
 
             // FormControls for reccuring
-            repeatEvery: this.repeatEvery
-        }, endDateBeforeStartDate("start", "end"));
+            repeatEvery: this.repeatEvery,
+            repeatOnList: this.repeatOnList
+        });
+        this.eventForm.setValidators([endDateBeforeStartDate("start", "end"), startDayNotCheckedIfWeekly()]);
     }
 
 	//gets the form values and calls the service to create the event 
     createEvent(formValues: any) {
         this.loaderService.displayLoader(true);
         let chosenCategories: number[] = [];
-        let chosenDays: number[] = [];
         let repeatCount: number = 0;
 
         this.categoryService.categories.filter(checkbox => {
@@ -141,14 +144,6 @@ export class EventCreateDataComponent implements OnInit {
                 chosenCategories.push(checkbox.id);
             }
         });
-
-        if (this.occurrence.value == "weekly") {
-            this.categoryService.days.filter(checkbox => {
-                if (checkbox.checked) {
-                    chosenDays.push(checkbox.id);
-                }
-            });
-        }
 
         if (this.occurrence.value != "none") {
             repeatCount = this.endOfRepeatingNumber();
@@ -182,13 +177,32 @@ export class EventCreateDataComponent implements OnInit {
             // attributes for reccuring events
             RepeatCount: repeatCount,
             RepeatEvery: formValues.repeatEvery,
-            RepeatOnList: chosenDays
+            RepeatOnList: formValues.repeatOnList
         }
+        console.log(newEvent);
         this.locationService.getLocation(formValues.address).subscribe((res: Location) => {
             newEvent.LocationId = res.Id;
             this.loaderService.displayLoader(false);
             this.eventEmitter.emit(newEvent);
         })
+    }
+
+    checkDay(day: number) {
+        for (let el of this.categoryService.days) {
+            if (el.id == day) {
+                return el.checked;
+            }
+        }
+
+        this.updateDays(day);
+    }
+
+    checkDayDefault() {
+        if (this.occurrence.value == 'weekly') {
+            if (this.start.value != "") {
+                this.updateDays(Math.pow(2, new Date(this.start.value).getDay()));
+            }
+        }
     }
 
 	//clears the location from the form control
@@ -409,7 +423,6 @@ export class EventCreateDataComponent implements OnInit {
                 }
             }
 
-            console.log(numberOfRepeating);
             return numberOfRepeating;
         }
     }
@@ -476,11 +489,21 @@ export class EventCreateDataComponent implements OnInit {
 
 	//update days for recurrring events
     updateDays(dayNumber: number): void {
+        let chosenDays: number[] = [];
+
         this.categoryService.days.filter(checkbox => {
             if (checkbox.id == dayNumber) {
                 checkbox.checked = !checkbox.checked;
             }
         });
+
+        for (let el of this.categoryService.days) {
+            if (el.checked) {
+                chosenDays.push(el.id);
+            }
+        }
+        
+        this.repeatOnList.setValue(chosenDays);
     }
 
 	//sets the current position using geolocation services

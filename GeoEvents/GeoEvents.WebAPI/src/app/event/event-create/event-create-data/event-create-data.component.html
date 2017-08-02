@@ -23,7 +23,7 @@
                 </div>
                 <div class="col-md-6" [ngClass]="{'has-error': end.touched && (end.invalid || eventForm.hasError('endDateBeforeStartDate')), 'has-success': end.touched && !(end.invalid || eventForm.hasError('endDateBeforeStartDate'))}">
                     <label for="end" class="control-label">End</label>
-                    <input formControlName="end" ngui-datetime-picker [close-on-select]="false" class="form-control" id="end" placeholder="Click to enter date and time" required readonly style="cursor: pointer;" (change)="checkStartTime()" />
+                    <input formControlName="end" ngui-datetime-picker [close-on-select]="false" class="form-control" id="end" placeholder="Click to enter date and time" required readonly style="cursor: pointer;" />
                     <span class="help-block" *ngIf="end.touched && end.invalid">Required!</span>
                     <span class="help-block" *ngIf="end.touched && eventForm.hasError('endDateBeforeStartDate')">End date must be after start date!</span>
                 </div>
@@ -40,7 +40,7 @@
                     <div class="row">
                         <div class="col-md-12">
                             <label for="occurrence">Recurs</label>
-                            <select formControlName="occurrence" class="form-control" id="occurrence">
+                            <select formControlName="occurrence" class="form-control" id="occurrence" (change)="checkDayDefault()">
                                 <option value="none">None</option>
                                 <option value="daily">Daily</option>
                                 <option value="weekly">Weekly</option>
@@ -65,11 +65,15 @@
                                 <label for="monthlyByDayWeek">day of the week</label>
                             </div>
                         </div>
-                        <div class="col-md-12" *ngIf="occurrence.value=='weekly'">
-                            <label>Repeat on</label>
-                            <label for="{{categoryService.DayEnum[day]}}" *ngFor="let day of categoryService.keys('day')">
-                                <input type="checkbox" value="{{day}}" (change)="updateDays(day)" id="{{categoryService.DayEnum[day]}}" /> {{categoryService.DayEnum[day]}}
+                        <div class="col-md-12" *ngIf="occurrence.value=='weekly'" [ngClass]="{'has-error': eventForm.hasError('startDayNotCheckedIfWeekly')}">
+                            <label class="control-label">Repeat on</label>
+
+                            <label for="{{categoryService.DayEnum[day]}}" class="control-label" *ngFor="let day of categoryService.keys('day')">
+                                <input type="checkbox" value="{{day}}" (change)="updateDays(day)" id="{{categoryService.DayEnum[day]}}" [checked]="checkDay(day)" />
+                                {{categoryService.DayEnum[day]}}
                             </label>
+
+                            <span class="help-block" *ngIf="eventForm.hasError('startDayNotCheckedIfWeekly')">Start day must be checked!</span>
                         </div>
                         <div class="col-md-12" *ngIf="occurrence.value!='none'">
                             <label>End of repeating</label>

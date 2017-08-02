@@ -104,3 +104,31 @@ export function uniqueName(names: string[]){
         return null
     }
 }
+
+export function startDayNotCheckedIfWeekly() {
+    return (group: FormGroup): { [key: string]: any } => {
+        let repeatOnList = group.controls["repeatOnList"];
+        let start = group.controls["start"];
+
+        if (repeatOnList.value != null && start.value != null) {
+            if (start.value != "") {
+                let isOk = false;
+
+                for (let el of repeatOnList.value) {
+                    if (Math.pow(2, new Date(start.value).getDay()) == el) {
+                        isOk = true;
+                        break;
+                    }
+                }
+
+                if (!isOk) {
+                    return {
+                        startDayNotCheckedIfWeekly: true
+                    }
+                }
+            }
+        }
+
+        return null;
+    }
+}
