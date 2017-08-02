@@ -156,7 +156,7 @@ export class EventCreateDataComponent implements OnInit {
 
         let occurrence = formValues.occurrence;
 
-        if (this.monthlyOption == "week") {
+        if (this.monthlyOption == "week" && this.occurrence.value == 'monthly') {
             occurrence += "dayname";
         }
 
