@@ -52,32 +52,29 @@ namespace GeoEvents.Repository
                 ImageEntity selectImage = null;
 
                 using (var connection = Connection.CreateConnection())
+                using (NpgsqlCommand commandSelect = new NpgsqlCommand(ImageQueryHelper.GetSelectImageQueryString(), connection))
+                using (NpgsqlCommand commandInsert = new NpgsqlCommand(ImageQueryHelper.GetInsertImagesQueryString(), connection))
                 {
-                    using (NpgsqlCommand commandSelect = new NpgsqlCommand(ImageQueryHelper.GetSelectImageQueryString(), connection))
+                    commandInsert.Parameters.AddWithValue(QueryConstants.ParId, NpgsqlDbType.Uuid, DbImage.Id);
+                    commandInsert.Parameters.AddWithValue(QueryConstants.ParContent, NpgsqlDbType.Bytea, DbImage.Content);
+                    commandInsert.Parameters.AddWithValue(QueryConstants.ParEventId, NpgsqlDbType.Uuid, DbImage.EventId);
+
+                    await connection.OpenAsync();
+                    await commandInsert.ExecuteNonQueryAsync();
+
+                    commandSelect.Parameters.AddWithValue(QueryConstants.ParId, NpgsqlDbType.Uuid, DbImage.Id);
+                    DbDataReader dr = await commandSelect.ExecuteReaderAsync();
+
+                    while (dr.Read())
                     {
-                        using (NpgsqlCommand commandInsert = new NpgsqlCommand(ImageQueryHelper.GetInsertImagesQueryString(), connection))
+                        selectImage = new ImageEntity
                         {
-                            commandInsert.Parameters.AddWithValue(QueryConstants.ParId, NpgsqlDbType.Uuid, DbImage.Id);
-                            commandInsert.Parameters.AddWithValue(QueryConstants.ParContent, NpgsqlDbType.Bytea, DbImage.Content);
-                            commandInsert.Parameters.AddWithValue(QueryConstants.ParEventId, NpgsqlDbType.Uuid, DbImage.EventId);
-
-                            await connection.OpenAsync();
-                            await commandInsert.ExecuteNonQueryAsync();
-                        }
-                        commandSelect.Parameters.AddWithValue(QueryConstants.ParId, NpgsqlDbType.Uuid, DbImage.Id);
-                        DbDataReader dr = await commandSelect.ExecuteReaderAsync();
-
-                        while (dr.Read())
-                        {
-                            selectImage = new ImageEntity
-                            {
-                                Id = new Guid(dr[0].ToString()),
-                                EventId = DbImage.EventId
-                            };
-
-                            selectImage.Content = (byte[])dr["Content"];
-                        }
+                            Id = new Guid(dr[0].ToString()),
+                            EventId = DbImage.EventId
+                        };
+                        selectImage.Content = (byte[])dr["Content"];
                     }
+
                 }
                 return Mapper.Map<IImage>(selectImage);
             }
@@ -101,27 +98,25 @@ namespace GeoEvents.Repository
             try
             {
                 List<IImage> selectImages = new List<IImage>();
-
                 using (var connection = Connection.CreateConnection())
+                using (NpgsqlCommand command = new NpgsqlCommand(ImageQueryHelper.GetSelectImagesQueryString(), connection))
                 {
-                    using (NpgsqlCommand command = new NpgsqlCommand(ImageQueryHelper.GetSelectImagesQueryString(), connection))
+                    command.Parameters.AddWithValue(QueryConstants.ParEventId, NpgsqlDbType.Uuid, eventID);
+
+                    await connection.OpenAsync();
+                    DbDataReader dr = await command.ExecuteReaderAsync();
+
+                    while (dr.Read())
                     {
-                        command.Parameters.AddWithValue(QueryConstants.ParEventId, NpgsqlDbType.Uuid, eventID);
-
-                        await connection.OpenAsync();
-                        DbDataReader dr = await command.ExecuteReaderAsync();
-
-                        while (dr.Read())
+                        ImageEntity tmp = new ImageEntity
                         {
-                            ImageEntity tmp = new ImageEntity
-                            {
-                                Id = new Guid(dr[0].ToString()),
-                                EventId = eventID
-                            };
-                            tmp.Content = (byte[])dr["Content"];
-                            selectImages.Add(Mapper.Map<IImage>(tmp));
-                        }
+                            Id = new Guid(dr[0].ToString()),
+                            EventId = eventID
+                        };
+                        tmp.Content = (byte[])dr["Content"];
+                        selectImages.Add(Mapper.Map<IImage>(tmp));
                     }
+
                 }
                 return Mapper.Map<IEnumerable<IImage>>(selectImages);
             }
