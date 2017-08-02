@@ -203,6 +203,7 @@ export class EventCreateDataComponent implements OnInit {
     endOfRepeatingBlured(valueType: string, value: string) {
         this.repeat.value = value;
         this.repeat.valueType = valueType;
+        this.endOfRepeatingNumber();
     }
 
 	//counts the number of times the event will reocurr
@@ -224,93 +225,185 @@ export class EventCreateDataComponent implements OnInit {
                     numberOfRepeating += 1;
                 }
             } else if (this.occurrence.value == "weekly") {
-                repeating *= 7;
-                lastDateTime.setDate(lastDateTime.getDate() + repeating);
+                let listOfDays = this.categoryService.days.map((n: { id: number, checked: boolean }) => { if (n.checked) return Math.log2(n.id);});
+                listOfDays.push(Infinity);
+                listOfDays.sort();
+                
+                let moveDay;
+
+                for (let i = 0; i < listOfDays.length; i++) {
+                    if (listOfDays[i] >= lastDateTime.getDay()) {
+                        if (listOfDays[i] > lastDateTime.getDay()) {
+                            moveDay = listOfDays[i];
+                        } else {
+                            moveDay = listOfDays[i + 1];
+                        }
+                        break;
+                    }
+                }
+                
+                if (moveDay == Infinity) {
+                    let value: number = repeating * 7 + listOfDays[0] - lastDateTime.getDay();
+
+                    lastDateTime.setDate(lastDateTime.getDate() + value);
+                } else {
+                    lastDateTime.setDate(lastDateTime.getDate() + moveDay - lastDateTime.getDay());
+                }
 
                 while (lastDateTime < endDateTimeRecurring) {
-                    lastDateTime.setDate(lastDateTime.getDate() + repeating);
+                    for (let i = 0; i < listOfDays.length; i++) {
+                        if (listOfDays[i] >= lastDateTime.getDay()) {
+                            if (listOfDays[i] > lastDateTime.getDay()) {
+                                moveDay = listOfDays[i];
+                            } else {
+                                moveDay = listOfDays[i + 1];
+                            }
+                            break;
+                        }
+                    }
+
+                    if (moveDay == Infinity) {
+                        let value: number = repeating * 7 + listOfDays[0] - lastDateTime.getDay();
+
+                        lastDateTime.setDate(lastDateTime.getDate() + value);
+                    } else {
+                        lastDateTime.setDate(lastDateTime.getDate() + moveDay - lastDateTime.getDay());
+                    }
+
                     numberOfRepeating += 1;
                 }
             } else if (this.occurrence.value == "monthly" && this.monthlyOption == "month") {
                 let day = lastDateTime.getDate();
-                lastDateTime.setMonth(lastDateTime.getMonth() + repeating);
-                lastDateTime.setDate(day);
 
-                while (lastDateTime.getDate() != day) {
-                    lastDateTime.setMonth(lastDateTime.getMonth() + repeating);
-                    lastDateTime.setDate(day);
+                let nextTime = new Date(lastDateTime.getFullYear(), lastDateTime.getMonth() + repeating, 1);
+                let nextTimeNumberOfDays = new Date(nextTime.getFullYear(), nextTime.getMonth() + 1, 0).getDate();
+
+                while (day > nextTimeNumberOfDays) {
+                    nextTime = new Date(nextTime.getFullYear(), nextTime.getMonth() + repeating, 1);
+                    nextTimeNumberOfDays = new Date(nextTime.getFullYear(), nextTime.getMonth() + 1, 0).getDate();
                 }
 
-                while (lastDateTime < endDateTimeRecurring) {
-                    lastDateTime.setMonth(lastDateTime.getMonth() + repeating);
-                    lastDateTime.setDate(day);
+                nextTime.setDate(day);
+                nextTime.setHours(lastDateTime.getHours());
+                nextTime.setMinutes(lastDateTime.getMinutes());
 
-                    while (lastDateTime.getDate() != day) {
-                        lastDateTime.setMonth(lastDateTime.getMonth() + repeating);
-                        lastDateTime.setDate(day);
+                lastDateTime = nextTime;
+
+                while (lastDateTime < endDateTimeRecurring) {
+                    nextTime = new Date(lastDateTime.getFullYear(), lastDateTime.getMonth() + repeating, 1);
+                    nextTimeNumberOfDays = new Date(nextTime.getFullYear(), nextTime.getMonth() + 1, 0).getDate();
+
+                    while (day > nextTimeNumberOfDays) {
+                        nextTime = new Date(nextTime.getFullYear(), nextTime.getMonth() + repeating, 1);
+                        nextTimeNumberOfDays = new Date(nextTime.getFullYear(), nextTime.getMonth() + 1, 0).getDate();
                     }
+
+                    nextTime.setDate(day);
+                    nextTime.setHours(lastDateTime.getHours());
+                    nextTime.setMinutes(lastDateTime.getMinutes());
+
+                    lastDateTime = nextTime;
+
                     numberOfRepeating += 1;
                 }
             } else if (this.occurrence.value == "monthly" && this.monthlyOption == "week") {
-                let currentWeek = getWeekOfMonth(lastDateTime);
-                let currentDay = lastDateTime.getDay();
-                let nextMonth;
+                let week = getWeekOfMonth(lastDateTime);
+                let day = lastDateTime.getDay();
 
-                nextMonth = (lastDateTime.getMonth() + repeating) % 12;
-                lastDateTime = new Date(lastDateTime.getFullYear(), lastDateTime.getMonth() + repeating, 1);
-                lastDateTime.setDate(1 + (7 + currentDay - lastDateTime.getDay()) % 7);
-                lastDateTime = setWeekOfMonth(lastDateTime, currentWeek);
+                let nextMonth = lastDateTime.getMonth() + repeating;
+                let nextTime = new Date(lastDateTime.getFullYear(), nextMonth, 1);
 
-                while (lastDateTime.getMonth() != nextMonth && lastDateTime < endDateTimeRecurring) { // tjedan s određenim danom u određenom mjesecu ne postoji
-                    lastDateTime = new Date(lastDateTime.getFullYear(), nextMonth + repeating, 1);
-                    nextMonth = (nextMonth + repeating) % 12;
-                    lastDateTime.setDate(1 + (7 + currentDay - lastDateTime.getDay()) % 7);
-                    lastDateTime = setWeekOfMonth(lastDateTime, currentWeek);
+                let nextDay;
+
+                if (nextTime.getDay() > day) {
+                    nextDay = 8 - (nextTime.getDay() - day);
+                } else {
+                    nextDay = 1 + day - nextTime.getDay();
                 }
 
-                while (lastDateTime < endDateTimeRecurring) {
-                    nextMonth = (lastDateTime.getMonth() + repeating) % 12;
-                    lastDateTime = new Date(lastDateTime.getFullYear(), lastDateTime.getMonth() + repeating, 1);
-                    lastDateTime.setDate(1 + (7 + currentDay - lastDateTime.getDay()) % 7);
-                    lastDateTime = setWeekOfMonth(lastDateTime, currentWeek);
+                nextTime.setDate(nextDay);
+                setWeekOfMonth(nextTime, week);
 
-                    while (lastDateTime.getMonth() != nextMonth && lastDateTime < endDateTimeRecurring) { // tjedan s određenim danom u određenom mjesecu ne postoji
-                        lastDateTime = new Date(lastDateTime.getFullYear(), nextMonth + repeating, 1);
-                        nextMonth = (nextMonth + repeating) % 12;
-                        lastDateTime.setDate(1 + (7 + currentDay - lastDateTime.getDay()) % 7);
-                        lastDateTime = setWeekOfMonth(lastDateTime, currentWeek);
+                while (nextTime.getMonth() != (nextMonth % 12)) {
+                    nextMonth += repeating;
+                    nextTime = new Date(lastDateTime.getFullYear(), nextMonth, 1);
+
+                    if (nextTime.getDay() > day) {
+                        nextDay = 8 - (nextTime.getDay() - day);
+                    } else {
+                        nextDay = 1 + day - nextTime.getDay();
                     }
+
+                    nextTime.setDate(nextDay);
+                    setWeekOfMonth(nextTime, week);
+                }
+
+                nextTime.setHours(lastDateTime.getHours());
+                nextTime.setMinutes(lastDateTime.getMinutes());
+                lastDateTime = setWeekOfMonth(nextTime, week);
+
+                while (lastDateTime < endDateTimeRecurring) {
+                    nextMonth = lastDateTime.getMonth() + repeating;
+                    nextTime = new Date(lastDateTime.getFullYear(), nextMonth, 1);
+
+                    let nextDay;
+
+                    if (nextTime.getDay() > day) {
+                        nextDay = 8 - (nextTime.getDay() - day);
+                    } else {
+                        nextDay = 1 + day - nextTime.getDay();
+                    }
+
+                    nextTime.setDate(nextDay);
+                    setWeekOfMonth(nextTime, week);
+
+                    while (nextTime.getMonth() != (nextMonth % 12)) {
+                        nextMonth += repeating;
+                        nextTime = new Date(lastDateTime.getFullYear(), nextMonth, 1);
+
+                        if (nextTime.getDay() > day) {
+                            nextDay = 8 - (nextTime.getDay() - day);
+                        } else {
+                            nextDay = 1 + day - nextTime.getDay();
+                        }
+
+                        nextTime.setDate(nextDay);
+                        setWeekOfMonth(nextTime, week);
+                    }
+
+                    nextTime.setHours(lastDateTime.getHours());
+                    nextTime.setMinutes(lastDateTime.getMinutes());
+                    lastDateTime = setWeekOfMonth(nextTime, week);
+                    
                     numberOfRepeating += 1;
                 }
             } else if (this.occurrence.value == "yearly") {
-                let feb29 = lastDateTime.getDate() == 29 && lastDateTime.getMonth() == 1;
+                let nextTime = new Date(lastDateTime.getFullYear() + repeating, lastDateTime.getMonth(), 1);
 
-                if (feb29) {
-                    lastDateTime.setFullYear(lastDateTime.getFullYear() + repeating);
-
-                    while (!isLeapYear(lastDateTime.getFullYear()) && lastDateTime < endDateTimeRecurring) {
-                        lastDateTime.setFullYear(lastDateTime.getFullYear() + repeating);
+                if (lastDateTime.getDate() == 29 && lastDateTime.getMonth() == 1) { // if feb29
+                    while (lastDateTime.getDate() == 29 && lastDateTime.getMonth() == 1 && !isLeapYear(nextTime.getFullYear())) {
+                        nextTime = new Date(nextTime.getFullYear() + repeating, nextTime.getMonth(), 1);
                     }
-
-                    lastDateTime.setMonth(1);
-                    lastDateTime.setDate(29);
-                } else {
-                    lastDateTime.setFullYear(lastDateTime.getFullYear() + repeating);
                 }
 
+                nextTime.setDate(lastDateTime.getDate());
+                nextTime.setHours(lastDateTime.getHours());
+                nextTime.setMinutes(lastDateTime.getMinutes());
+                lastDateTime = nextTime;
+
                 while (lastDateTime < endDateTimeRecurring) {
-                    if (feb29) {
-                        lastDateTime.setFullYear(lastDateTime.getFullYear() + repeating);
+                    nextTime = new Date(lastDateTime.getFullYear() + repeating, lastDateTime.getMonth(), 1);
 
-                        while (!isLeapYear(lastDateTime.getFullYear()) && lastDateTime < endDateTimeRecurring) {
-                            lastDateTime.setFullYear(lastDateTime.getFullYear() + repeating);
+                    if (lastDateTime.getDate() == 29 && lastDateTime.getMonth() == 1) { // if feb29
+                        while (lastDateTime.getDate() == 29 && lastDateTime.getMonth() == 1 && !isLeapYear(nextTime.getFullYear())) {
+                            nextTime = new Date(nextTime.getFullYear() + repeating, nextTime.getMonth(), 1);
                         }
-
-                        lastDateTime.setMonth(1);
-                        lastDateTime.setDate(29);
-                    } else {
-                        lastDateTime.setFullYear(lastDateTime.getFullYear() + repeating);
                     }
+
+                    nextTime.setDate(lastDateTime.getDate());
+                    nextTime.setHours(lastDateTime.getHours());
+                    nextTime.setMinutes(lastDateTime.getMinutes());
+                    lastDateTime = nextTime;
 
                     numberOfRepeating += 1;
                 }
