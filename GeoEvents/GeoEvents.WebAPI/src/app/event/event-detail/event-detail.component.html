@@ -60,8 +60,11 @@
         <div class="custom-display">
             <h4>Reserved/Capacity: {{event?.Reserved}}/{{event?.Capacity}}</h4>
         </div>
-        <div>
-            <input type="button" class="btn btn-default" value="Reserve" (click)="reserve()" />
+        <div *ngIf="event?.Reserved < event?.Capacity">
+            <input type="button" class="btn btn-default" value="Reserve" (click)="reserve()" [disabled]="event?.Reserved >= event?.Capacity"/>
+        </div>
+        <div *ngIf="event?.Reserved >= event?.Capacity">
+            <input type="button" class="btn btn-danger" value="Event fully reserved" (click)="reserve()" [disabled]="event?.Reserved >= event?.Capacity" />
         </div>
     </div>
     <h3>Images</h3>

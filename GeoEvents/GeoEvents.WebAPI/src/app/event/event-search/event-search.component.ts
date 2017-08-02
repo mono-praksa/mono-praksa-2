@@ -181,7 +181,6 @@ export class EventSearchComponent implements OnInit {
             OrderByString: undefined,
             OrderIsAscending: undefined
         }
-        console.log(this.filter);
     }
 
     //sets the position(latitude and longitude) using geolocation services

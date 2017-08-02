@@ -53,7 +53,12 @@ export class EventListComponent implements OnChanges, OnInit {
 
     //gets the events when user checks the ascending order checkbox
     private getEventsAscendingChanged() {
-        this.filter.OrderIsAscending = !this.filter.OrderIsAscending;
+        if (this.filter.OrderIsAscending === undefined) {
+            this.filter.OrderIsAscending = false;
+        }
+        else {
+            this.filter.OrderIsAscending = !this.filter.OrderIsAscending;
+        }
         //get the events
         this.getEvents(this.filter);
     }
