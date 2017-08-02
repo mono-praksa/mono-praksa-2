@@ -1,9 +1,9 @@
 import { Injectable } from "@angular/core";
 import { Http, Response, Headers, RequestOptions } from "@angular/http";
 import { Observable } from "rxjs/Observable";
-import "rxjs/add/observable/throw";
-import "rxjs/add/operator/map";
 import "rxjs/add/operator/catch";
+import "rxjs/add/operator/map";
+import "rxjs/add/observable/throw";
 
 import { ClusteringFilter } from "./models/clustering-filter.model";
 import { Event } from "./models/event.model";
@@ -23,12 +23,6 @@ export class EventService {
             .catch(this.handleError);
     }
 
-    createImage(image: Image): Observable<Image> {
-        let options = new RequestOptions();
-        return this.http.post("/api/images/create/" + image.EventId, image.FormData, options)
-            .map((response: Response) => response.json());
-    }
-
     getEventById(eventId: number): Observable<Event> {
         return this.http.get("/api/events/get?eventId=" + eventId)
             .map((response: Response) => <Event>response.json())
@@ -44,7 +38,6 @@ export class EventService {
 
     getEvents(filter: Filter): Observable<any> {
         let query = "/api/events/search" + this.makeQueryString(filter);
-        //execute http call
         return this.http.get(query)
             .map((response: Response) => <any>response.json())
             .catch(this.handleError);
@@ -55,13 +48,6 @@ export class EventService {
         return this.http.get(query)
             .map((response: Response) => <MapPoint[]>response.json())
             .catch(this.handleError);
-    }
-
-    getImages(id: string): Observable<Image[]> {
-        return this.http.get("/api/images/get/" + id)
-            .map((response: Response) => {
-                return <Image[]>response.json();
-            }).catch(this.handleError);
     }
 
     handleError(error: Response) {

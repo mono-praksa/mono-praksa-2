@@ -20,6 +20,7 @@ import { EventDetailResolverService } from "./event-detail/event-detail-resolver
 import { EventDetailRouteActivatorService } from "./event-detail/event-detail-route-activator.service";
 import { CategoryService } from "./shared/category.service";
 import { EventService } from "./shared/event.service";
+import { ImageService } from "./shared/image.service";
 import { LocationService } from "./shared/location.service";
 
 import { GeocodingService } from "../shared/geocoding.service";
@@ -54,6 +55,7 @@ import { GeocodingService } from "../shared/geocoding.service";
         EventDetailRouteActivatorService,
         EventService,
         GeocodingService,
+        ImageService,
         LocationService
 	]
 })

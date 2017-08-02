@@ -409,6 +409,7 @@
     <TypeScriptCompile Include="src\app\event\event-routing.module.ts" />
     <TypeScriptCompile Include="src\app\event\event.module.ts" />
     <TypeScriptCompile Include="src\app\event\shared\event.service.ts" />
+    <TypeScriptCompile Include="src\app\event\shared\image.service.ts" />
     <TypeScriptCompile Include="src\app\event\shared\location.service.ts" />
     <TypeScriptCompile Include="src\app\event\shared\models\clustering-filter.model.ts" />
     <TypeScriptCompile Include="src\app\event\shared\models\event.model.ts" />

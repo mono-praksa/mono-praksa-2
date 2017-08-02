@@ -1,10 +1,10 @@
 ﻿import { Component, Input } from "@angular/core";
 import { Headers, Http, RequestOptions, Response } from "@angular/http";
 import { Observable } from "rxjs/Observable";
-
 import { Event } from "../../shared/models/event.model";
 import { EventService } from "../../shared/event.service";
 import { File } from "../../shared/models/file.model";
+import { ImageService } from "../../shared/image.service";
 
 @Component({
     selector: "create-images",
@@ -18,7 +18,7 @@ export class EventCreateImagesComponent {
     private formData: FormData = new FormData();
     private uploadedFiles: string[] = [];
 
-    constructor(private eventService: EventService) { }
+    constructor(private eventService: EventService, private imageService: ImageService) { }
 
 	//called on changes, removes the uploaded files from the filelist and adds their names to the uploaded files list
     onChange(fileInput: any) {
@@ -44,7 +44,7 @@ export class EventCreateImagesComponent {
             this.files[i].uploading = true;
             this.formData.append("name" + i, this.fileList[i], this.fileList[i].name);
 
-            this.eventService.createImage({
+            this.imageService.createImage({
                 Id: undefined,
                 EventId: this.customizedEvent.Id,
                 FormData: this.formData

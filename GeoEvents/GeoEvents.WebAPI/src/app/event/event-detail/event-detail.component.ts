@@ -5,11 +5,12 @@ import { FormGroup } from "@angular/forms";
 import { MapsAPILoader } from "@agm/core";
 import { Observable } from "rxjs/Observable";
 
-import { Event } from "../shared/models/event.model";
-import { Image } from "../shared/models/image.model";
-import { Location } from "../shared/models/location.model";
-import { EventService } from "../shared/event.service";
 import { CategoryService } from "../shared/category.service";
+import { Event } from "../shared/models/event.model";
+import { EventService } from "../shared/event.service";
+import { Image } from "../shared/models/image.model";
+import { ImageService } from "../shared/image.service";
+import { Location } from "../shared/models/location.model";
 import { LoaderService } from "../../shared/loader.service";
 import { LocationService } from "../shared/location.service";
 
@@ -37,6 +38,7 @@ export class EventDetailComponent implements OnInit {
         private activatedRoute: ActivatedRoute,
         private categoryService: CategoryService,
         private eventService: EventService,
+        private imageService: ImageService,
         private loaderService: LoaderService,
         private locationService: LocationService,
         private mapsAPILoader: MapsAPILoader,
@@ -244,7 +246,7 @@ export class EventDetailComponent implements OnInit {
 
         this.loaderService.displayLoader(true);
 
-        this.eventService.getImages(this.activatedRoute.snapshot.params["eventId"]).subscribe((res: Image[]) => {
+        this.imageService.getImages(this.activatedRoute.snapshot.params["eventId"]).subscribe((res: Image[]) => {
             this.images = res
             for (var i = 0; i < this.images.length; i++) {
                 var item = document.createElement("div");
