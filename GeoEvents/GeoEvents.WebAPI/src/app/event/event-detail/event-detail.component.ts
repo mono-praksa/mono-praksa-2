@@ -275,24 +275,6 @@ let setDayOccurrenceInMonth = function (date: Date, occurrence: number): Date {
     return newDate;
 }
 
-let getWeekOfMonth = function (date: Date, exact: boolean = true): number {
-    var month = date.getMonth(),
-        year = date.getFullYear(),
-        firstWeekday = new Date(year, month, 1).getDay(),
-        lastDateOfMonth = new Date(year, month + 1, 0).getDate(),
-        offsetDate = date.getDate() + firstWeekday - 1,
-        index = 1,
-        weeksInMonth = index + Math.ceil((lastDateOfMonth + firstWeekday - 7) / 7),
-        week = index + Math.floor(offsetDate / 7);
-    if (exact || week < 2 + index) return week;
-    return week === weeksInMonth ? index + 5 : week;
-};
-
-function setWeekOfMonth (date: Date, week: number) {
-    date.setDate(date.getDate() + (week - getWeekOfMonth(date)) * 7);
-    return date;
-}
-
 function isLeapYear(year: number) {
     return ((year % 4 == 0) && (year % 100 != 0)) || (year % 400 == 0);
 }

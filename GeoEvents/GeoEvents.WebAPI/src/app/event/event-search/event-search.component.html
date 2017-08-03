@@ -31,14 +31,14 @@
 						<div class="form-group" [ngClass]="{'has-error': start.touched && filterForm.hasError('endDateBeforeStartDate')}">
                             <label for="start">Start Time</label>
                             <div [ngClass]="{'input-group': start.value != ''}">
-							    <input formControlName="start" ngui-datetime-picker [close-on-select]="true" class="form-control input-sm clickable" id="start" placeholder="Start Date" readonly />
+							    <input formControlName="start" ngui-datetime-picker [close-on-select]="false" class="form-control input-sm clickable" id="start" placeholder="Start Date" readonly />
                                 <span *ngIf="start.value!=''" class="input-group-addon clickable"  (click)="clearStartTime()">X</span>
                             </div>
                         </div>
                         <div class="form-group" [ngClass]="{'has-error': end.touched && filterForm.hasError('endDateBeforeStartDate')}">
                             <label for="end">End Time</label>
                             <div [ngClass]="{'input-group': end.value != ''}">
-                                <input formControlName="end" ngui-datetime-picker [close-on-select]="true" class="form-control input-sm clickable" id="end" placeholder="End Date" readonly />
+                                <input formControlName="end" ngui-datetime-picker [close-on-select]="false" class="form-control input-sm clickable" id="end" placeholder="End Date" readonly />
                                 <span *ngIf="end.value!=''" class="input-group-addon clickable" (click)="clearEndTime()">X</span>
                             </div>
                         </div>

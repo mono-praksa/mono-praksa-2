@@ -202,6 +202,9 @@ export class EventCreateDataComponent implements OnInit {
             if (this.start.value != "") {
                 this.updateDays(Math.pow(2, new Date(this.start.value).getDay()));
             }
+        } else {
+            this.categoryService.buildCategories("day");
+            this.repeatOnList.setValue([]);
         }
     }
 
@@ -217,7 +220,6 @@ export class EventCreateDataComponent implements OnInit {
     endOfRepeatingBlured(valueType: string, value: string) {
         this.repeat.value = value;
         this.repeat.valueType = valueType;
-        this.endOfRepeatingNumber();
     }
 
 	//counts the number of times the event will reocurr
@@ -230,6 +232,8 @@ export class EventCreateDataComponent implements OnInit {
             let lastDateTime: Date = endDateTime;
             let repeating = parseInt(this.repeatEvery.value);
             let numberOfRepeating: number = 0;
+
+            let dayOccurrence = getDayOccurrenceInMonth(new Date(lastDateTime)); // used if monthly by day name
 
             if (this.occurrence.value == "daily") {
                 lastDateTime.setDate(lastDateTime.getDate() + repeating);
@@ -321,74 +325,41 @@ export class EventCreateDataComponent implements OnInit {
                     numberOfRepeating += 1;
                 }
             } else if (this.occurrence.value == "monthly" && this.monthlyOption == "week") {
-                let week = getWeekOfMonth(lastDateTime);
-                let day = lastDateTime.getDay();
+                let nextTime = new Date(lastDateTime.getFullYear(), lastDateTime.getMonth() + repeating, 1);
 
-                let nextMonth = lastDateTime.getMonth() + repeating;
-                let nextTime = new Date(lastDateTime.getFullYear(), nextMonth, 1);
+                let nextTimeDay = nextTime.getDay();
+                let currentDay = lastDateTime.getDay();
 
-                let nextDay;
-
-                if (nextTime.getDay() > day) {
-                    nextDay = 8 - (nextTime.getDay() - day);
+                if (currentDay >= nextTimeDay) {
+                    nextTime.setDate(nextTime.getDate() + currentDay - nextTimeDay);
                 } else {
-                    nextDay = 1 + day - nextTime.getDay();
+                    nextTime.setDate(nextTime.getDate() + 7 - (nextTimeDay - currentDay));
                 }
 
-                nextTime.setDate(nextDay);
-                setWeekOfMonth(nextTime, week);
-
-                while (nextTime.getMonth() != (nextMonth % 12)) {
-                    nextMonth += repeating;
-                    nextTime = new Date(lastDateTime.getFullYear(), nextMonth, 1);
-
-                    if (nextTime.getDay() > day) {
-                        nextDay = 8 - (nextTime.getDay() - day);
-                    } else {
-                        nextDay = 1 + day - nextTime.getDay();
-                    }
-
-                    nextTime.setDate(nextDay);
-                    setWeekOfMonth(nextTime, week);
-                }
-
+                nextTime = setDayOccurrenceInMonth(nextTime, dayOccurrence);
                 nextTime.setHours(lastDateTime.getHours());
                 nextTime.setMinutes(lastDateTime.getMinutes());
-                lastDateTime = setWeekOfMonth(nextTime, week);
+
+                lastDateTime = nextTime;
 
                 while (lastDateTime < endDateTimeRecurring) {
-                    nextMonth = lastDateTime.getMonth() + repeating;
-                    nextTime = new Date(lastDateTime.getFullYear(), nextMonth, 1);
+                    nextTime = new Date(lastDateTime.getFullYear(), lastDateTime.getMonth() + repeating, 1);
 
-                    let nextDay;
+                    let nextTimeDay = nextTime.getDay();
+                    let currentDay = lastDateTime.getDay();
 
-                    if (nextTime.getDay() > day) {
-                        nextDay = 8 - (nextTime.getDay() - day);
+                    if (currentDay >= nextTimeDay) {
+                        nextTime.setDate(nextTime.getDate() + currentDay - nextTimeDay);
                     } else {
-                        nextDay = 1 + day - nextTime.getDay();
+                        nextTime.setDate(nextTime.getDate() + 7 - (nextTimeDay - currentDay));
                     }
 
-                    nextTime.setDate(nextDay);
-                    setWeekOfMonth(nextTime, week);
-
-                    while (nextTime.getMonth() != (nextMonth % 12)) {
-                        nextMonth += repeating;
-                        nextTime = new Date(lastDateTime.getFullYear(), nextMonth, 1);
-
-                        if (nextTime.getDay() > day) {
-                            nextDay = 8 - (nextTime.getDay() - day);
-                        } else {
-                            nextDay = 1 + day - nextTime.getDay();
-                        }
-
-                        nextTime.setDate(nextDay);
-                        setWeekOfMonth(nextTime, week);
-                    }
-
+                    nextTime = setDayOccurrenceInMonth(nextTime, dayOccurrence);
                     nextTime.setHours(lastDateTime.getHours());
                     nextTime.setMinutes(lastDateTime.getMinutes());
-                    lastDateTime = setWeekOfMonth(nextTime, week);
-                    
+
+                    lastDateTime = nextTime;
+
                     numberOfRepeating += 1;
                 }
             } else if (this.occurrence.value == "yearly") {
@@ -529,22 +500,39 @@ interface ICategoryElement {
     checked: boolean
 }
 
-let getWeekOfMonth = function (date: Date, exact: boolean = true) {
-    var month = date.getMonth(),
-		year = date.getFullYear(),
-		firstWeekday = new Date(year, month, 1).getDay(),
-		lastDateOfMonth = new Date(year, month + 1, 0).getDate(),
-		offsetDate = date.getDate() + firstWeekday - 1,
-		index = 1,
-		weeksInMonth = index + Math.ceil((lastDateOfMonth + firstWeekday - 7) / 7),
-		week = index + Math.floor(offsetDate / 7);
-    if (exact || week < 2 + index) return week;
-    return week === weeksInMonth ? index + 5 : week;
-};
+let getDayOccurrenceInMonth = function (date: Date): number {
+    let day = date.getDate();
 
-let setWeekOfMonth = function (date: Date, week: number) {
-    date.setDate(date.getDate() + (week - getWeekOfMonth(date))*7);
-	return date;
+    if (day <= 7) {
+        return 1;
+    } else if (day <= 14) {
+        return 2;
+    } else if (day <= 21) {
+        return 3;
+    } else if (day <= 28) {
+        return 4;
+    } else if (day <= 31) {
+        return 5;
+    }
+}
+
+let setDayOccurrenceInMonth = function (date: Date, occurrence: number): Date {
+    let currentDay = date.getDay();
+
+    let newDate = new Date(date.getFullYear(), date.getMonth(), (occurrence - 1) * 7 + 1);
+    let dayOfNewDate = newDate.getDay();
+
+    if (currentDay >= dayOfNewDate) {
+        newDate.setDate(newDate.getDate() + currentDay - dayOfNewDate);
+    } else {
+        newDate.setDate(newDate.getDate() + 7 - (dayOfNewDate - currentDay));
+    }
+
+    if (newDate.getMonth() != date.getMonth()) {
+        return setDayOccurrenceInMonth(date, 4);
+    }
+
+    return newDate;
 }
 
 function isLeapYear(year: number) {
