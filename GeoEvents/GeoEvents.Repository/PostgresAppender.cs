@@ -32,7 +32,7 @@ namespace GeoEvents.Repository
         /// </remarks>
         protected override void Append(LoggingEvent loggingEvent)
         {
-            using (NpgsqlConnection conn = new NpgsqlConnection("Server=192.168.21.10;Port=5432;Database=locoDB;User Id=postgres;Password=postgres;"))
+            using (NpgsqlConnection conn = new NpgsqlConnection("Server=192.168.21.10;Port=5432;Database=LastBase;User Id=postgres;Password=postgres;"))
             {
                 conn.Open();
                 using (NpgsqlCommand command = new NpgsqlCommand(AppenderQueryHelper.GetInsertLoggerQueryString(), conn))
