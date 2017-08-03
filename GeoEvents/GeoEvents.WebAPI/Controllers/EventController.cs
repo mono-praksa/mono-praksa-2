@@ -89,14 +89,21 @@ namespace GeoEvents.WebAPI.Controllers
         [Route("search")]
         public async Task<HttpResponseMessage> GetEventsAsync([FromUri] FilterModel filter)
         {
-            if (filter.StartTime == null)
+            if (filter.EndTime < DateTime.Now && filter.StartTime == null)
             {
-                filter.StartTime = DateTime.Now;
+                filter.StartTime = DateTime.MinValue;
             }
+
             if (filter.EndTime == null)
             {
                 filter.EndTime = DateTime.MaxValue;
             }
+
+            if (filter.StartTime == null && filter.EndTime >= DateTime.Now)
+            {
+                filter.StartTime = DateTime.Now;
+            }
+
             var result = await Service.GetEventsAsync(filter);
 
             var temp = Mapper.Map<IEnumerable<IEvent>, IEnumerable<EventModel>>(result);
@@ -181,7 +188,7 @@ namespace GeoEvents.WebAPI.Controllers
         {
             var evt = await Service.GetEventByIdAsync(eventId);
 
-            if(evt.Capacity == evt.Reserved)
+            if (evt.Capacity == evt.Reserved)
             {
                 return Request.CreateResponse(HttpStatusCode.BadRequest, "Cannot update reservation. Event fully reserved.");
             }
@@ -616,9 +623,9 @@ namespace GeoEvents.WebAPI.Controllers
             /// Initializes a new instance of the <see cref="FilterModel"/> class.
             /// </summary>
             public FilterModel(double? uLat, double? uLong, double? radius, DateTime? startTime, DateTime? endTime,
-                int? category = DefaultCategory, int pageNumber = DefaultPageNumber, string searchString = DefaultSearchString, 
+                int? category = DefaultCategory, int pageNumber = DefaultPageNumber, string searchString = DefaultSearchString,
                 string orderBy = DefaultOrderBy, bool? orderAscending = DefaultOrderAscending, double? price = null,
-                double? ratingEvent = DefaultRatingEvent, string custom = DefaultCustom )
+                double? ratingEvent = DefaultRatingEvent, string custom = DefaultCustom)
             {
                 ULat = uLat;
                 ULong = uLong;
