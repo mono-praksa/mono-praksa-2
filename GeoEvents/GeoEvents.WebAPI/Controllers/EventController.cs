@@ -89,7 +89,7 @@ namespace GeoEvents.WebAPI.Controllers
         [Route("search")]
         public async Task<HttpResponseMessage> GetEventsAsync([FromUri] FilterModel filter)
         {
-            if (filter.EndTime < DateTime.Now && filter.StartTime == null)
+            if (filter.EndTime <= DateTime.Now && filter.StartTime == null)
             {
                 filter.StartTime = DateTime.MinValue;
             }
@@ -99,7 +99,7 @@ namespace GeoEvents.WebAPI.Controllers
                 filter.EndTime = DateTime.MaxValue;
             }
 
-            if (filter.StartTime == null && filter.EndTime >= DateTime.Now)
+            if (filter.StartTime == null && filter.EndTime > DateTime.Now)
             {
                 filter.StartTime = DateTime.Now;
             }
@@ -217,13 +217,19 @@ namespace GeoEvents.WebAPI.Controllers
                 clusteringFilter = new ClusteringFilterModel();
             }
 
-            if (filter.StartTime == null)
+            if (filter.EndTime <= DateTime.Now && filter.StartTime == null)
             {
-                filter.StartTime = DateTime.Now;
+                filter.StartTime = DateTime.MinValue;
             }
+
             if (filter.EndTime == null)
             {
                 filter.EndTime = DateTime.MaxValue;
+            }
+
+            if (filter.StartTime == null && filter.EndTime > DateTime.Now)
+            {
+                filter.StartTime = DateTime.Now;
             }
 
             var result = await Service.GetClusteredEventsAsync(filter, clusteringFilter);

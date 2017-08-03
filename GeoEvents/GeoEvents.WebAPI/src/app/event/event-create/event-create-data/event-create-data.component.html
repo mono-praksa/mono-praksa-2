@@ -51,7 +51,8 @@
                         <div class="col-md-12" *ngIf="occurrence.value!='none'">
                             <label for="repeatEvery">Repeat every</label>
                             <select formControlName="repeatEvery" class="form-control" id="interval">
-                                <option *ngFor="let i of range(30)">{{i}}</option>
+                                <option [value]="1">1 {{occurrence.value | repeat:""}}</option>
+                                <option *ngFor="let i of range(30)" [value]="i">{{i}} {{occurrence.value | repeat:"s"}}</option>
                             </select>
                         </div>
                         <div class="col-md-12" *ngIf="occurrence.value=='monthly'">
@@ -68,10 +69,12 @@
                         <div class="col-md-12" *ngIf="occurrence.value=='weekly'" [ngClass]="{'has-error': eventForm.hasError('startDayNotCheckedIfWeekly')}">
                             <label class="control-label">Repeat on</label>
 
-                            <label for="{{categoryService.DayEnum[day]}}" class="control-label" *ngFor="let day of categoryService.keys('day')">
+                            <span class="custom-margin" *ngFor="let day of categoryService.keys('day')">
                                 <input type="checkbox" value="{{day}}" (change)="updateDays(day)" id="{{categoryService.DayEnum[day]}}" [checked]="checkDay(day)" />
-                                {{categoryService.DayEnum[day]}}
-                            </label>
+                                <label for="{{categoryService.DayEnum[day]}}" class="control-label">
+                                    {{categoryService.DayEnum[day]}}
+                                </label>
+                            </span>
 
                             <span class="help-block" *ngIf="eventForm.hasError('startDayNotCheckedIfWeekly')">Start day must be checked!</span>
                         </div>

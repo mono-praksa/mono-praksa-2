@@ -1,3 +1,7 @@
 ﻿agm-map {
     height: 300px;
 }
+
+.custom-margin {
+    margin-right: 12px;
+}

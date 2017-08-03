@@ -418,6 +418,7 @@
     <TypeScriptCompile Include="src\app\event\shared\models\image.model.ts" />
     <TypeScriptCompile Include="src\app\event\shared\models\location.model.ts" />
     <TypeScriptCompile Include="src\app\event\shared\models\map-point.model.ts" />
+    <TypeScriptCompile Include="src\app\event\shared\repeat-on.pipe.ts" />
     <TypeScriptCompile Include="src\app\event\shared\validator.ts" />
     <TypeScriptCompile Include="src\app\home\home.component.ts" />
     <TypeScriptCompile Include="src\app\event\shared\category.service.ts" />

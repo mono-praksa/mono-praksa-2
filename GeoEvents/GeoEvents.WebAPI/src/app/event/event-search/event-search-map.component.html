@@ -5,7 +5,7 @@
                 <agm-info-window #infoWindow [disableAutoPan]="true">
                     <strong>{{mapPoint.Name}}</strong>
                     <p>
-                        <a class="clickable" [routerLink]="['/event/search/', mapPoint.Data]">Click here to see more!</a>
+                        <a class="clickable" [routerLink]="['/event/search/', mapPoint.Data]" [queryParams]="{ startTime: filter?.StartTime === undefined ? '' : filter.StartTime, endTime: filter?.EndTime === undefined ? '' : filter.EndTime }">Click here to see more!</a>
                     </p>
                 </agm-info-window>
             </agm-marker>
