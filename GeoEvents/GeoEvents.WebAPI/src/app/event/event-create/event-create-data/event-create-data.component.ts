@@ -179,7 +179,7 @@ export class EventCreateDataComponent implements OnInit {
             RepeatEvery: formValues.repeatEvery,
             RepeatOnList: formValues.repeatOnList
         }
-        console.log(newEvent);
+        
         this.locationService.getLocation(formValues.address).subscribe((res: Location) => {
             newEvent.LocationId = res.Id;
             this.loaderService.displayLoader(false);
@@ -220,6 +220,8 @@ export class EventCreateDataComponent implements OnInit {
     endOfRepeatingBlured(valueType: string, value: string) {
         this.repeat.value = value;
         this.repeat.valueType = valueType;
+
+        console.log(this.endOfRepeatingNumber());
     }
 
 	//counts the number of times the event will reocurr
@@ -236,12 +238,10 @@ export class EventCreateDataComponent implements OnInit {
             let dayOccurrence = getDayOccurrenceInMonth(new Date(lastDateTime)); // used if monthly by day name
 
             if (this.occurrence.value == "daily") {
-                lastDateTime.setDate(lastDateTime.getDate() + repeating);
-
-                while (lastDateTime < endDateTimeRecurring) {
+                do {
                     lastDateTime.setDate(lastDateTime.getDate() + repeating);
                     numberOfRepeating += 1;
-                }
+                } while (lastDateTime < endDateTimeRecurring);
             } else if (this.occurrence.value == "weekly") {
                 let listOfDays = this.categoryService.days.map((n: { id: number, checked: boolean }) => { if (n.checked) return Math.log2(n.id);});
                 listOfDays.push(Infinity);
@@ -249,26 +249,7 @@ export class EventCreateDataComponent implements OnInit {
                 
                 let moveDay;
 
-                for (let i = 0; i < listOfDays.length; i++) {
-                    if (listOfDays[i] >= lastDateTime.getDay()) {
-                        if (listOfDays[i] > lastDateTime.getDay()) {
-                            moveDay = listOfDays[i];
-                        } else {
-                            moveDay = listOfDays[i + 1];
-                        }
-                        break;
-                    }
-                }
-                
-                if (moveDay == Infinity) {
-                    let value: number = repeating * 7 + listOfDays[0] - lastDateTime.getDay();
-
-                    lastDateTime.setDate(lastDateTime.getDate() + value);
-                } else {
-                    lastDateTime.setDate(lastDateTime.getDate() + moveDay - lastDateTime.getDay());
-                }
-
-                while (lastDateTime < endDateTimeRecurring) {
+                do {
                     for (let i = 0; i < listOfDays.length; i++) {
                         if (listOfDays[i] >= lastDateTime.getDay()) {
                             if (listOfDays[i] > lastDateTime.getDay()) {
@@ -289,25 +270,14 @@ export class EventCreateDataComponent implements OnInit {
                     }
 
                     numberOfRepeating += 1;
-                }
+                } while (lastDateTime < endDateTimeRecurring);
             } else if (this.occurrence.value == "monthly" && this.monthlyOption == "month") {
                 let day = lastDateTime.getDate();
 
-                let nextTime = new Date(lastDateTime.getFullYear(), lastDateTime.getMonth() + repeating, 1);
-                let nextTimeNumberOfDays = new Date(nextTime.getFullYear(), nextTime.getMonth() + 1, 0).getDate();
+                let nextTime;
+                let nextTimeNumberOfDays;
 
-                while (day > nextTimeNumberOfDays) {
-                    nextTime = new Date(nextTime.getFullYear(), nextTime.getMonth() + repeating, 1);
-                    nextTimeNumberOfDays = new Date(nextTime.getFullYear(), nextTime.getMonth() + 1, 0).getDate();
-                }
-
-                nextTime.setDate(day);
-                nextTime.setHours(lastDateTime.getHours());
-                nextTime.setMinutes(lastDateTime.getMinutes());
-
-                lastDateTime = nextTime;
-
-                while (lastDateTime < endDateTimeRecurring) {
+                do {
                     nextTime = new Date(lastDateTime.getFullYear(), lastDateTime.getMonth() + repeating, 1);
                     nextTimeNumberOfDays = new Date(nextTime.getFullYear(), nextTime.getMonth() + 1, 0).getDate();
 
@@ -323,30 +293,18 @@ export class EventCreateDataComponent implements OnInit {
                     lastDateTime = nextTime;
 
                     numberOfRepeating += 1;
-                }
+                } while (lastDateTime < endDateTimeRecurring);
             } else if (this.occurrence.value == "monthly" && this.monthlyOption == "week") {
                 let nextTime = new Date(lastDateTime.getFullYear(), lastDateTime.getMonth() + repeating, 1);
 
-                let nextTimeDay = nextTime.getDay();
-                let currentDay = lastDateTime.getDay();
+                let nextTimeDay;
+                let currentDay;
 
-                if (currentDay >= nextTimeDay) {
-                    nextTime.setDate(nextTime.getDate() + currentDay - nextTimeDay);
-                } else {
-                    nextTime.setDate(nextTime.getDate() + 7 - (nextTimeDay - currentDay));
-                }
-
-                nextTime = setDayOccurrenceInMonth(nextTime, dayOccurrence);
-                nextTime.setHours(lastDateTime.getHours());
-                nextTime.setMinutes(lastDateTime.getMinutes());
-
-                lastDateTime = nextTime;
-
-                while (lastDateTime < endDateTimeRecurring) {
+                do {
                     nextTime = new Date(lastDateTime.getFullYear(), lastDateTime.getMonth() + repeating, 1);
 
-                    let nextTimeDay = nextTime.getDay();
-                    let currentDay = lastDateTime.getDay();
+                    nextTimeDay = nextTime.getDay();
+                    currentDay = lastDateTime.getDay();
 
                     if (currentDay >= nextTimeDay) {
                         nextTime.setDate(nextTime.getDate() + currentDay - nextTimeDay);
@@ -361,22 +319,11 @@ export class EventCreateDataComponent implements OnInit {
                     lastDateTime = nextTime;
 
                     numberOfRepeating += 1;
-                }
+                } while (lastDateTime < endDateTimeRecurring);
             } else if (this.occurrence.value == "yearly") {
-                let nextTime = new Date(lastDateTime.getFullYear() + repeating, lastDateTime.getMonth(), 1);
+                let nextTime;
 
-                if (lastDateTime.getDate() == 29 && lastDateTime.getMonth() == 1) { // if feb29
-                    while (lastDateTime.getDate() == 29 && lastDateTime.getMonth() == 1 && !isLeapYear(nextTime.getFullYear())) {
-                        nextTime = new Date(nextTime.getFullYear() + repeating, nextTime.getMonth(), 1);
-                    }
-                }
-
-                nextTime.setDate(lastDateTime.getDate());
-                nextTime.setHours(lastDateTime.getHours());
-                nextTime.setMinutes(lastDateTime.getMinutes());
-                lastDateTime = nextTime;
-
-                while (lastDateTime < endDateTimeRecurring) {
+                do {
                     nextTime = new Date(lastDateTime.getFullYear() + repeating, lastDateTime.getMonth(), 1);
 
                     if (lastDateTime.getDate() == 29 && lastDateTime.getMonth() == 1) { // if feb29
@@ -391,7 +338,7 @@ export class EventCreateDataComponent implements OnInit {
                     lastDateTime = nextTime;
 
                     numberOfRepeating += 1;
-                }
+                } while (lastDateTime < endDateTimeRecurring);
             }
 
             return numberOfRepeating;

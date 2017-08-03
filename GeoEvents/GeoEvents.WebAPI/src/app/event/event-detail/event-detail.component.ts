@@ -27,7 +27,7 @@ export class EventDetailComponent implements OnInit {
     eventFirstDay: number = -1;
     hasRated: boolean = false;
     rating: number;
-    eventRepetition: number = 0;
+    eventRepetition: number = 1;
 
     private event: Event;
     private getImagesLoading: boolean = false;
@@ -62,8 +62,8 @@ export class EventDetailComponent implements OnInit {
         this.eventRepetition += movement;
 
         if (movement == -1) {
-            let startTime = new Date(this.dates[this.eventRepetition].start);
-            let endTime = new Date(this.dates[this.eventRepetition].end);
+            let startTime = new Date(this.dates[this.eventRepetition - 1].start);
+            let endTime = new Date(this.dates[this.eventRepetition - 1].end);
             
             this.event.StartTime = startTime;
             this.event.EndTime = endTime;
@@ -71,9 +71,9 @@ export class EventDetailComponent implements OnInit {
             let startTime: Date;
             let endTime: Date;
 
-            if (this.eventRepetition < this.dates.length) { // if start and end time already exist
-                startTime = this.dates[this.eventRepetition].start;
-                endTime = this.dates[this.eventRepetition].end;
+            if (this.eventRepetition <= this.dates.length) { // if start and end time already exist
+                startTime = this.dates[this.eventRepetition - 1].start;
+                endTime = this.dates[this.eventRepetition - 1].end;
                 
                 this.event.StartTime = startTime;
                 this.event.EndTime = endTime;
