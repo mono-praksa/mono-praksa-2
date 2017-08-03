@@ -109,9 +109,10 @@ export function startDayNotCheckedIfWeekly() {
     return (group: FormGroup): { [key: string]: any } => {
         let repeatOnList = group.controls["repeatOnList"];
         let start = group.controls["start"];
+        let occurrence = group.controls["occurrence"];
 
-        if (repeatOnList.value != null && start.value != null) {
-            if (start.value != "") {
+        if (repeatOnList.value != null && start.value != null && occurrence.value != null) {
+            if (start.value != "" && occurrence.value == "weekly") {
                 let isOk = false;
 
                 for (let el of repeatOnList.value) {
