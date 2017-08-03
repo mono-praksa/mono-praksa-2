@@ -42,7 +42,7 @@ export class EventDetailComponent implements OnInit {
         private loaderService: LoaderService,
         private locationService: LocationService,
         private mapsAPILoader: MapsAPILoader,
-        private ngZone: NgZone
+        private ngZone: NgZone,
     ) {
 
     }
@@ -207,6 +207,10 @@ export class EventDetailComponent implements OnInit {
             }
             this.loaderService.displayLoader(false);
         });
+
+        if (this.event.Occurrence != "none") {
+            this.setEventTimeToOverlap();
+        }
     }
 
     parseSvg(xmlString: string) {
@@ -237,6 +241,37 @@ export class EventDetailComponent implements OnInit {
             .subscribe((response: Event) => {
                 this.event.Reserved = response.Reserved;
             });
+    }
+
+    // sets start and end time of reccuring events to first time which overlaps with filter start and end time
+    setEventTimeToOverlap() {
+        let filterStartTime = this.activatedRoute.snapshot.queryParams["startTime"];
+        let filterEndTime = this.activatedRoute.snapshot.queryParams["endTime"];
+
+        let filterStartTimeDate;
+        let filterEndTimeDate;
+
+        if (filterStartTime != "" && filterEndTime != "") {
+            filterStartTimeDate = new Date(filterStartTime);
+            filterEndTimeDate = new Date(filterEndTime);
+        } else if (filterEndTime == "") {
+            filterStartTimeDate = new Date(filterStartTime);
+            filterEndTimeDate = new Date(8640000000000000); // max date
+        } else if (filterStartTime == "") {
+            filterStartTimeDate = new Date(); // now
+            filterEndTimeDate = new Date(filterEndTime);
+
+            if (filterEndTimeDate < filterStartTimeDate) {
+                filterStartTimeDate = new Date(-8640000000000000); // min date
+            }
+        } else {
+            filterStartTimeDate = new Date(-8640000000000000); // min date
+            filterEndTimeDate = new Date(8640000000000000); // max date
+        }
+
+        while (new Date(this.event.StartTime) > filterEndTimeDate || new Date(this.event.EndTime) < filterStartTimeDate) {
+            this.moveDate(1);
+        }
     }
 }
 

@@ -1,7 +1,7 @@
 ﻿<div class="col-md-7">
     <h2 class="event-name">{{event?.Name}}</h2>
-    <div style="display: inline-block;">
-        <button class="btn btn-default" *ngIf="event?.Occurrence!='none'" (click)="moveDate(-1)" [disabled]="eventRepetition <= 1">
+    <div style="display: inline-block; width: 30px;">
+        <button class="btn btn-default" *ngIf="event?.Occurrence!='none' && eventRepetition > 1" (click)="moveDate(-1)">
             <span aria-hidden="true">&laquo;</span>
         </button>
     </div>
@@ -9,7 +9,7 @@
         {{event?.StartTime | date: 'MMMM d, y, HH:mm'}} - {{event?.EndTime | date: 'MMMM d, y, HH:mm'}}
     </div>
     <div style="display: inline-block;">
-        <button class="btn btn-default" *ngIf="event?.Occurrence!='none'" (click)="moveDate(1)" [disabled]="event.RepeatCount != 0 && eventRepetition >= event.RepeatCount">
+        <button class="btn btn-default" *ngIf="event?.Occurrence!='none' && (eventRepetition <= event.RepeatCount || event.RepeatCount == 0)" (click)="moveDate(1)">
             <span aria-hidden="true">&raquo;</span>
         </button>
     </div>
@@ -65,6 +65,9 @@
         </div>
         <div *ngIf="event?.Reserved >= event?.Capacity">
             <input type="button" class="btn btn-danger" value="Event fully reserved" (click)="reserve()" [disabled]="event?.Reserved >= event?.Capacity" />
+        </div>
+        <div>
+            <h4>Price: {{event?.Price | currency: "USD": true: "1.2-2"}}</h4>
         </div>
     </div>
     <h3>Images</h3>

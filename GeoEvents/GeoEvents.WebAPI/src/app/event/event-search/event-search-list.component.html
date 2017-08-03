@@ -32,7 +32,7 @@
                 </thead>
                 <tbody>
                     <tr *ngFor="let evt of events">
-                        <th class="col-md-2"><a [routerLink]="evt.Id"><small>{{evt.Name}}</small></a></th>
+                        <th class="col-md-2"><a [routerLink]="[evt.Id]" [queryParams]="{ startTime: filter?.StartTime, endTime: filter?.EndTime }"><small>{{evt.Name}}</small></a></th>
                         <th class="col-md-2"><small>{{evt.StartTime | date: 'MMMM d, y, HH:mm'}}</small></th>
                         <th class="col-md-2"><small>{{evt.EndTime | date: 'MMMM d, y, HH:mm'}}</small></th>
                         <th class="col-md-6"><small>{{evt.Description}}</small></th>

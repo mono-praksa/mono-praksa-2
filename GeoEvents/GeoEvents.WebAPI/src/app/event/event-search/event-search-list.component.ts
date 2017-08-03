@@ -23,9 +23,7 @@ export class EventListComponent implements OnChanges, OnInit {
     private pageSize: number;
     private searchEventLoading: boolean = false;
 
-    constructor(private eventService: EventService, private loaderService: LoaderService) {
-
-    }
+    constructor(private eventService: EventService, private loaderService: LoaderService) { }
 
 	//called on changes, gets the events from the database using the changed filter.
     ngOnChanges() {
