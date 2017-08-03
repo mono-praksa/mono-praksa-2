@@ -71,7 +71,7 @@ export class EventDetailComponent implements OnInit {
             let startTime: Date;
             let endTime: Date;
 
-            if (this.eventRepetition < this.dates.length) {
+            if (this.eventRepetition < this.dates.length) { // if start and end time already exist
                 startTime = this.dates[this.eventRepetition].start;
                 endTime = this.dates[this.eventRepetition].end;
                 
@@ -80,10 +80,10 @@ export class EventDetailComponent implements OnInit {
             } else {
                 startTime = new Date(this.event.StartTime);
                 endTime = new Date(this.event.EndTime);
+                let difference = +endTime - +startTime;
 
                 if (this.event.Occurrence == 'daily') {
                     startTime.setDate(startTime.getDate() + this.event.RepeatEvery);
-                    endTime.setDate(endTime.getDate() + this.event.RepeatEvery);
                 } else if (this.event.Occurrence == 'weekly') {
                     let listOfDays = this.event.RepeatOnList.map((n: number) => Math.log2(n)); // 0 - sun, 1 - mon, etc
                     listOfDays.push(Infinity);
@@ -106,121 +106,59 @@ export class EventDetailComponent implements OnInit {
                         let value: number = this.event.RepeatEvery * 7 + listOfDays[0] - startTime.getDay();
 
                         startTime.setDate(startTime.getDate() + value);
-                        endTime.setDate(endTime.getDate() + value);
                     } else {
                         startTime.setDate(startTime.getDate() + moveDay - startTime.getDay());
-                        endTime.setDate(endTime.getDate() + moveDay - endTime.getDay());
                     }
 
                 } else if (this.event.Occurrence == 'monthly') {
                     let startDay = startTime.getDate();
-                    let endDay = endTime.getDate();
-
                     let moveStartTime = new Date(startTime.getFullYear(), startTime.getMonth() + this.event.RepeatEvery, 1);
-                    let moveEndTime = new Date(endTime.getFullYear(), endTime.getMonth() + this.event.RepeatEvery, 1);
-
                     let moveStartTimeNumberOfDays = new Date(moveStartTime.getFullYear(), moveStartTime.getMonth() + 1, 0).getDate();
-                    let moveEndTimeNumberOfDays = new Date(moveEndTime.getFullYear(), moveEndTime.getMonth() + 1, 0).getDate();
 
-                    while (startDay > moveStartTimeNumberOfDays || endDay > moveEndTimeNumberOfDays) {
+                    while (startDay > moveStartTimeNumberOfDays) {
                         moveStartTime = new Date(moveStartTime.getFullYear(), moveStartTime.getMonth() + this.event.RepeatEvery, 1);
-                        moveEndTime = new Date(moveEndTime.getFullYear(), moveEndTime.getMonth() + this.event.RepeatEvery, 1);
-
                         moveStartTimeNumberOfDays = new Date(moveStartTime.getFullYear(), moveStartTime.getMonth() + 1, 0).getDate();
-                        moveEndTimeNumberOfDays = new Date(moveEndTime.getFullYear(), moveEndTime.getMonth() + 1, 0).getDate();
                     }
 
                     moveStartTime.setDate(startDay);
-                    moveEndTime.setDate(endDay);
-
                     moveStartTime.setHours(startTime.getHours());
-                    moveEndTime.setHours(endTime.getHours());
-
                     moveStartTime.setMinutes(startTime.getMinutes());
-                    moveEndTime.setMinutes(endTime.getMinutes());
 
                     startTime = moveStartTime;
-                    endTime = moveEndTime;
                 } else if (this.event.Occurrence == 'monthlydayname') {
-                    let startWeek = getWeekOfMonth(startTime);
-                    let endWeek = getWeekOfMonth(endTime);
+                    let moveStartTime = new Date(startTime.getFullYear(), startTime.getMonth() + this.event.RepeatEvery, 1);
 
-                    let startDay = startTime.getDay();
-                    let differenceDay: number = Math.floor((+endTime - +startTime) / 1000 / 60 / 60 / 24);
+                    let moveStartTimeDay = moveStartTime.getDay();
+                    let currentDay = startTime.getDay();
 
-                    let moveStartMonth = startTime.getMonth() + this.event.RepeatEvery;
-                    let moveEndMonth = endTime.getMonth() + this.event.RepeatEvery;
-
-                    let moveStartTime = new Date(startTime.getFullYear(), moveStartMonth, 1);
-                    let moveEndTime = new Date(endTime.getFullYear(), moveEndMonth, 1);
-                    
-                    let moveStartDay;
-
-                    if (moveStartTime.getDay() > startDay) {
-                        moveStartDay = 8 - (moveStartTime.getDay() - startDay);
+                    if (currentDay >= moveStartTimeDay) {
+                        moveStartTime.setDate(moveStartTime.getDate() + currentDay - moveStartTimeDay);
                     } else {
-                        moveStartDay = 1 + startDay - moveStartTime.getDay();
+                        moveStartTime.setDate(moveStartTime.getDate() + 7 - (moveStartTimeDay - currentDay));
                     }
 
-                    moveStartTime.setDate(moveStartDay);
-                    moveEndTime.setDate(moveStartDay + differenceDay);
-                    
-                    setWeekOfMonth(moveStartTime, startWeek);
-                    setWeekOfMonth(moveEndTime, endWeek);
-                    
-                    while (moveStartTime.getMonth() != (moveStartMonth % 12) || moveEndTime.getMonth() != (moveEndMonth % 12)) {
-                        moveStartMonth += this.event.RepeatEvery;
-                        moveEndMonth += this.event.RepeatEvery;
-
-                        moveStartTime = new Date(startTime.getFullYear(), moveStartMonth, 1);
-                        moveEndTime = new Date(endTime.getFullYear(), moveEndMonth, 1);
-                        
-                        if (moveStartTime.getDay() > startDay) {
-                            moveStartDay = 8 - (moveStartTime.getDay() - startDay);
-                        } else {
-                            moveStartDay = 1 + startDay - moveStartTime.getDay();
-                        }
-
-                        moveStartTime.setDate(moveStartDay);
-                        moveEndTime.setDate(moveStartDay + differenceDay);
-                        
-                        setWeekOfMonth(moveStartTime, startWeek);
-                        setWeekOfMonth(moveEndTime, endWeek);
-                    }
-
+                    moveStartTime = setDayOccurrenceInMonth(moveStartTime, getDayOccurrenceInMonth(new Date(this.dates[0].start)));
                     moveStartTime.setHours(startTime.getHours());
-                    moveEndTime.setHours(endTime.getHours());
-
                     moveStartTime.setMinutes(startTime.getMinutes());
-                    moveEndTime.setMinutes(endTime.getMinutes());
 
-                    startTime = setWeekOfMonth(moveStartTime, startWeek);
-                    endTime = setWeekOfMonth(moveEndTime, endWeek);
+                    startTime = moveStartTime;
                 } else if (this.event.Occurrence == 'yearly') {
                     let moveStartTime = new Date(startTime.getFullYear() + this.event.RepeatEvery, startTime.getMonth(), 1);
-                    let moveEndTime = new Date(endTime.getFullYear() + this.event.RepeatEvery, endTime.getMonth(), 1);
 
-                    if ((startTime.getDate() == 29 && startTime.getMonth() == 1) || (endTime.getDate() == 29 && endTime.getMonth() == 1)) { // if feb29
-                        while ((startTime.getDate() == 29 && startTime.getMonth() == 1 && !isLeapYear(moveStartTime.getFullYear())) ||
-                            (endTime.getDate() == 29 && endTime.getMonth() == 1 && !isLeapYear(moveEndTime.getFullYear()))) {
+                    if ((startTime.getDate() == 29 && startTime.getMonth() == 1)) { // if feb29
+                        while ((startTime.getDate() == 29 && startTime.getMonth() == 1 && !isLeapYear(moveStartTime.getFullYear()))) {
                             moveStartTime = new Date(moveStartTime.getFullYear() + this.event.RepeatEvery, moveStartTime.getMonth(), 1);
-                            moveEndTime = new Date(moveEndTime.getFullYear() + this.event.RepeatEvery, moveEndTime.getMonth(), 1);
                         }
                     }
 
                     moveStartTime.setDate(startTime.getDate());
-                    moveEndTime.setDate(endTime.getDate());
-
                     moveStartTime.setHours(startTime.getHours());
-                    moveEndTime.setHours(endTime.getHours());
-
                     moveStartTime.setMinutes(startTime.getMinutes());
-                    moveEndTime.setMinutes(endTime.getMinutes());
 
                     startTime = moveStartTime;
-                    endTime = moveEndTime;
                 }
 
+                endTime = new Date(+startTime + difference);
                 this.event.StartTime = startTime;
                 this.event.EndTime = endTime;
                 this.dates.push({ start: startTime, end: endTime });
@@ -302,7 +240,42 @@ export class EventDetailComponent implements OnInit {
     }
 }
 
-let getWeekOfMonth = function (date: Date, exact: boolean = true) {
+let getDayOccurrenceInMonth = function (date: Date): number {
+    let day = date.getDate();
+
+    if (day <= 7) {
+        return 1;
+    } else if (day <= 14) {
+        return 2;
+    } else if (day <= 21) {
+        return 3;
+    } else if (day <= 28) {
+        return 4;
+    } else if (day <= 31) {
+        return 5;
+    }
+}
+
+let setDayOccurrenceInMonth = function (date: Date, occurrence: number): Date {
+    let currentDay = date.getDay();
+
+    let newDate = new Date(date.getFullYear(), date.getMonth(), (occurrence - 1) * 7 + 1);
+    let dayOfNewDate = newDate.getDay();
+
+    if (currentDay >= dayOfNewDate) {
+        newDate.setDate(newDate.getDate() + currentDay - dayOfNewDate);
+    } else {
+        newDate.setDate(newDate.getDate() + 7 - (dayOfNewDate - currentDay));
+    }
+
+    if (newDate.getMonth() != date.getMonth()) {
+        return setDayOccurrenceInMonth(date, 4);
+    }
+
+    return newDate;
+}
+
+let getWeekOfMonth = function (date: Date, exact: boolean = true): number {
     var month = date.getMonth(),
         year = date.getFullYear(),
         firstWeekday = new Date(year, month, 1).getDay(),
