@@ -220,8 +220,6 @@ export class EventCreateDataComponent implements OnInit {
     endOfRepeatingBlured(valueType: string, value: string) {
         this.repeat.value = value;
         this.repeat.valueType = valueType;
-
-        console.log(this.endOfRepeatingNumber());
     }
 
 	//counts the number of times the event will reocurr

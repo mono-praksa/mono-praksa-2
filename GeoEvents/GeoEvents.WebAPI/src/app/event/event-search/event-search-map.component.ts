@@ -108,7 +108,16 @@ export class EventMapComponent implements OnChanges, OnInit {
 	//calls service and retrieves the events from the database
     private getEvents(): void {
         this.eventService.getEventsClustered(this.filter, this.clusteringFilter).subscribe((response: MapPoint[]) => {
-            this.mapPoints = response;
+            this.mapPoints = response.sort((pointA, pointB) => pointA.X < pointB.X ? -1 : 1);
+            let pointsCount = this.mapPoints.filter(point => point.Count === 1).length;
+            let counter = 0;
+            for (let point of this.mapPoints) {
+                if (point.Count === 1) {
+                    point.X += 0.0001*Math.cos(2 * Math.PI * counter / pointsCount);
+                    point.Y += 0.0001 * Math.sin(2 * Math.PI * counter / pointsCount);
+                    counter += 1;
+                }
+            }
         })
     }
 
@@ -149,7 +158,7 @@ export class EventMapComponent implements OnChanges, OnInit {
 	
 	//returns the radius based on the zoom level
     private getRadius(zoom: number = 1): number {
-        return Math.pow(2, 16 - zoom);
+        return Math.pow(2, 15 - zoom);
     }
 
 	//initializes the map and sets the initial latitude, longitude and zoom level
@@ -173,6 +182,10 @@ export class EventMapComponent implements OnChanges, OnInit {
 
 	//called when clicked on a cluster, centers the map on the clicked cluster and increases the zoom level
     private markerClick(mapPoint: MapPoint): void {
+        this.latitude = 0;
+        this.longitude = 0;
+        this.initialZoom = 0;
+        this.changeDetectorRef.detectChanges();
         this.latitude = mapPoint.Y;
         this.longitude = mapPoint.X;
         this.initialZoom = 2 + this.map.zoom;
