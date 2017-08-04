@@ -41,15 +41,15 @@
         </div>
         <div>
             <fieldset class="rating" [ngClass]="{'notrated': !hasRated}">
-                <input type="radio" value="5" [checked]="rating===5" />
+                <input type="radio" value="5" [checked]="rating===5 || (event.Rating > 4.5 && !hasRated)" />
                 <label title="5 stars" (click)='rate(5)'>5 stars</label>
-                <input type="radio" value="4" [checked]="rating===4" />
+                <input type="radio" value="4" [checked]="rating===4 || (event.Rating > 3.5 && !hasRated)" />
                 <label title="4 stars" (click)='rate(4)'>4 stars</label>
-                <input type="radio" value="3" [checked]="rating===3" />
+                <input type="radio" value="3" [checked]="rating===3 || (event.Rating > 2.5 && !hasRated)" />
                 <label title="3 stars" (click)='rate(3)'>3 stars</label>
-                <input type="radio" value="2" [checked]="rating===2" />
+                <input type="radio" value="2" [checked]="rating===2 || (event.Rating > 1.5 && !hasRated)" />
                 <label title="2 stars" (click)='rate(2)'>2 stars</label>
-                <input type="radio" value="1" [checked]="rating===1" />
+                <input type="radio" value="1" [checked]="rating===1 || (event.Rating > 0.5 && !hasRated)" />
                 <label title="1 stars" (click)='rate(1)'>1 star</label>
             </fieldset>
         </div>
