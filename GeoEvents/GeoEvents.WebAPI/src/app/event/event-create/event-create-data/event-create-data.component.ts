@@ -36,11 +36,9 @@ export class EventCreateDataComponent implements OnInit {
     name: FormControl;
     occurrence: FormControl;
     price: FormControl;
+    repeatEvery: FormControl;
     repeatOnList: FormControl;
     start: FormControl;
-    test: string = "s";
-    // FormControls for recurring
-    repeatEvery: FormControl;
 
     private createdEvent: Event;
     private createEventLoading: boolean = false;
@@ -357,8 +355,7 @@ export class EventCreateDataComponent implements OnInit {
 
 	//checks wether all category checkboxes are unchecked
     isAllUnchecked(): boolean {
-        let checkbox: ICategoryElement
-        for (checkbox of this.categoryService.categories) {
+        for (let checkbox of this.categoryService.categories) {
             if (checkbox.checked) {
                 return false;
             }
@@ -440,11 +437,6 @@ export class EventCreateDataComponent implements OnInit {
     }
 }
 
-interface ICategoryElement {
-    id: number,
-    checked: boolean
-}
-
 let getDayOccurrenceInMonth = function (date: Date): number {
     let day = date.getDate();
 
@@ -459,6 +451,10 @@ let getDayOccurrenceInMonth = function (date: Date): number {
     } else if (day <= 31) {
         return 5;
     }
+}
+
+let isLeapYear = function (year: number): boolean {
+    return ((year % 4 == 0) && (year % 100 != 0)) || (year % 400 == 0);
 }
 
 let setDayOccurrenceInMonth = function (date: Date, occurrence: number): Date {
@@ -478,8 +474,4 @@ let setDayOccurrenceInMonth = function (date: Date, occurrence: number): Date {
     }
 
     return newDate;
-}
-
-function isLeapYear(year: number) {
-    return ((year % 4 == 0) && (year % 100 != 0)) || (year % 400 == 0);
 }
