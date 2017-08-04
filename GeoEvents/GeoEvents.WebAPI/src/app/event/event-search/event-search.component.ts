@@ -56,7 +56,7 @@ export class EventSearchComponent implements OnInit {
                 this.userApproximateAddress = response;
             });
 
-        if (this.route.snapshot.queryParams["searchString"]) {
+        if (!(this.route.snapshot.queryParams["searchString"] === null || this.route.snapshot.queryParams["searchString"] === undefined)) {
             this.searchString.setValue(this.route.snapshot.queryParams["searchString"]);
             this.filter = {
                 ULat: undefined,
