@@ -37,7 +37,6 @@ namespace GeoEvents.Repository
         #endregion Constructors
 
         #region Methods
-
         /// <summary>
         /// Creates Event asynchronously.
         /// </summary>
