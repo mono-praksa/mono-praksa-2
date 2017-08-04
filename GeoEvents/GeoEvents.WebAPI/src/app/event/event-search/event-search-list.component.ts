@@ -1,5 +1,4 @@
 ﻿import { Component, Input, OnChanges, OnInit } from "@angular/core";
-import { DatePipe } from "@angular/common";
 import { MapsAPILoader } from "@agm/core";
 import { Subscription } from "rxjs/Subscription";
 

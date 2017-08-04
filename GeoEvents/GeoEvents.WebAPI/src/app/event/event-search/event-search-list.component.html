@@ -27,7 +27,8 @@
                         <th class="col-md-2">Name</th>
                         <th class="col-md-2">Start Time</th>
                         <th class="col-md-2">End Time</th>
-                        <th class="col-md-6">Description</th>
+                        <th class="col-md-2">Price</th>
+                        <th class="col-md-2">Rating</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -35,7 +36,8 @@
                         <th class="col-md-2"><a [routerLink]="[evt.Id]" [queryParams]="{ startTime: filter?.StartTime, endTime: filter?.EndTime }"><small>{{evt.Name}}</small></a></th>
                         <th class="col-md-2"><small>{{evt.StartTime | date: 'MMMM d, y, HH:mm'}}</small></th>
                         <th class="col-md-2"><small>{{evt.EndTime | date: 'MMMM d, y, HH:mm'}}</small></th>
-                        <th class="col-md-6"><small>{{evt.Description}}</small></th>
+                        <th class="col-md-2"><small>{{evt.Price | currency:"USD":true:"1.2-2"}}</small></th>
+                        <th class="col-md-2"><small>{{evt.Rating | number:"1.2-2"}}</small></th>
                     </tr>
                 </tbody>
             </table>
