@@ -27,6 +27,7 @@ export class EventListComponent implements OnChanges, OnInit {
 
 	//called on changes, gets the events from the database using the changed filter.
     ngOnChanges() {
+        this.eventCount = undefined;
         this.getEvents(this.filter);
     }
 

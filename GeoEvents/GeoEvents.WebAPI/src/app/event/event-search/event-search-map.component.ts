@@ -28,7 +28,7 @@ export class EventMapComponent implements OnChanges, OnInit {
     private map: any;
     private mapPoints: MapPoint[];
 
-    constructor(private router: Router, private eventService: EventService, private changeDetectorRef: ChangeDetectorRef) {
+    constructor(private changeDetectorRef: ChangeDetectorRef, private eventService: EventService, private router: Router) {
 
     }
 	
