@@ -51,8 +51,7 @@
                         <div class="col-md-12" *ngIf="occurrence.value!='none'">
                             <label for="repeatEvery">Repeat every</label>
                             <select formControlName="repeatEvery" class="form-control" id="interval">
-                                <option [value]="1">1 {{occurrence.value | repeat:""}}</option>
-                                <option *ngFor="let i of range(30)" [value]="i">{{i}} {{occurrence.value | repeat:"s"}}</option>
+                                <option *ngFor="let i of range(30)" [value]="i">{{i}} {{occurrence.value | repeat:[i]}}</option>
                             </select>
                         </div>
                         <div class="col-md-12" *ngIf="occurrence.value=='monthly'">

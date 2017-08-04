@@ -38,7 +38,7 @@ export class EventCreateDataComponent implements OnInit {
     price: FormControl;
     repeatOnList: FormControl;
     start: FormControl;
-
+    test: string = "s";
     // FormControls for recurring
     repeatEvery: FormControl;
 
@@ -391,7 +391,7 @@ export class EventCreateDataComponent implements OnInit {
 
     // returns array of numbers: [1..n]
     range(n: number): number[] {
-        return Array.from(Array(n + 1).keys()).slice(2);
+        return Array.from(Array(n + 1).keys()).slice(1);
     }
 
 	//gets the selected categories and updates the checkboxes
