@@ -9,7 +9,7 @@ namespace GeoEvents.WebAPI.DbConnection
 
         public GeoEventsConfiguration()
         {
-            ConnectionString = ConfigurationSettings.AppSettings["Constring"];
+            ConnectionString = System.Configuration.ConfigurationManager.AppSettings["Constring"];
         }
     }
 

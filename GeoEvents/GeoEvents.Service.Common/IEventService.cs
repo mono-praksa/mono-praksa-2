@@ -4,7 +4,7 @@ using GoogleMaps.Net.Clustering.Data.Geometry;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using X.PagedList;
+using PagedList;
 
 namespace GeoEvents.Service.Common
 {

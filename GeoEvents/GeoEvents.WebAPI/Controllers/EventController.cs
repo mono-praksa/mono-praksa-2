@@ -9,7 +9,7 @@ using System.Net.Http;
 using System.Runtime.Serialization;
 using System.Threading.Tasks;
 using System.Web.Http;
-using X.PagedList;
+using PagedList;
 
 namespace GeoEvents.WebAPI.Controllers
 {

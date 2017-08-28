@@ -3,7 +3,7 @@ using GeoEvents.Model.Common;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using X.PagedList;
+using PagedList;
 
 namespace GeoEvents.Repository.Common
 {

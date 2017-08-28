@@ -10,7 +10,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
 using System.Threading.Tasks;
-using X.PagedList;
+using PagedList;
 using log4net;
 using System.Reflection;
 
