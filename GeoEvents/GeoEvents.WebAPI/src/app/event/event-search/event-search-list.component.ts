@@ -9,7 +9,7 @@ import { LoaderService } from "../../shared/loader.service";
 
 @Component({
     selector: "display-list",
-    templateUrl:"app/event/event-search/event-search-list.component.html"
+    templateUrl:"./event-search-list.component.html"
 })
 
 export class EventListComponent implements OnChanges, OnInit {

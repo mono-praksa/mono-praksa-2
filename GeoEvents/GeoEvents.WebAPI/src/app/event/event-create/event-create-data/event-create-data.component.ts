@@ -16,8 +16,8 @@ import { LoaderService } from "../../../shared/loader.service";
 
 @Component({
     selector: "create-event",
-    templateUrl: "app/event/event-create/event-create-data/event-create-data.component.html",
-    styleUrls: ["app/event/event-create/event-create-data/event-create-data.component.css"]
+    templateUrl: "./event-create-data.component.html",
+    styleUrls: ["./event-create-data.component.css"]
 })
 export class EventCreateDataComponent implements OnInit {
     @Output() eventEmitter = new EventEmitter();

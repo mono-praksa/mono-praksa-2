@@ -16,8 +16,8 @@ import { LocationService } from "../shared/location.service";
 
 @Component({
     selector: "event-details",
-    styleUrls: ["app/event/event-detail/event-detail.component.css"],
-    templateUrl: "app/event/event-detail/event-detail.component.html"
+    styleUrls: ["./event-detail.component.css"],
+    templateUrl: "./event-detail.component.html"
 })
 
 export class EventDetailComponent implements OnInit {
@@ -167,7 +167,7 @@ export class EventDetailComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.event = this.activatedRoute.snapshot.data.event;
+        this.event = this.activatedRoute.snapshot.data['event'];
         this.event.Custom = eval(this.event.Custom);
 
         this.dates.push({ start: this.event.StartTime, end: this.event.EndTime });

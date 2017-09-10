@@ -12,8 +12,8 @@ import { MapPoint } from "../shared/models/map-point.model";
 
 @Component({
     selector: "display-map",
-    styleUrls: ["app/event/event-search/event-search-map.component.css"],
-    templateUrl: "app/event/event-search/event-search-map.component.html"
+    styleUrls: ["./event-search-map.component.css"],
+    templateUrl: "./event-search-map.component.html"
 })
 
 export class EventMapComponent implements OnChanges, OnInit {

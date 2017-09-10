@@ -8,7 +8,7 @@ import { ImageService } from "../../shared/image.service";
 
 @Component({
     selector: "create-images",
-    templateUrl: "app/event/event-create/event-create-images/event-create-images.component.html"
+    templateUrl: "./event-create-images.component.html"
 })
 export class EventCreateImagesComponent {
     @Input() customizedEvent: Event;

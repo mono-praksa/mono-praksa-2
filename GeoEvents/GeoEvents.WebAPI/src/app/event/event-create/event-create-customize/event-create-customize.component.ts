@@ -11,7 +11,7 @@ import { LoaderService } from "../../../shared/loader.service";
 
 @Component({
     selector: "create-customize",
-    templateUrl: "app/event/event-create/event-create-customize/event-create-customize.component.html"
+    templateUrl: "./event-create-customize.component.html"
 })
 
 export class EventCreateCustomizeComponent implements OnInit {

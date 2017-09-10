@@ -10,11 +10,11 @@ export class EventDetailRouteActivatorService implements CanActivate {
     constructor(private eventService: EventService, private router: Router) { }
 
     canActivate(route: ActivatedRouteSnapshot) {
-        if (!this.isGuid(route.params.eventId)) {
+        if (!this.isGuid(route.params['eventId'])) {
             this.router.navigate(["../../../404"]);
         }
         
-        this.eventService.getEventById(route.params.eventId).subscribe((event: Event) => {
+        this.eventService.getEventById(route.params['eventId']).subscribe((event: Event) => {
             if (event.Id === "00000000-0000-0000-0000-000000000000") {
                 this.router.navigate(["../../../404"]);
             } else {

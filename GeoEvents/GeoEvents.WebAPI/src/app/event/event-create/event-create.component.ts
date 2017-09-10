@@ -2,8 +2,8 @@
 import { Event } from "../shared/models/event.model";
 
 @Component({
-    templateUrl: "app/event/event-create/event-create.component.html",
-    styleUrls: ["app/event/event-create/event-create.component.css"]
+    templateUrl: "./event-create.component.html",
+    styleUrls: ["./event-create.component.css"]
 })
 export class EventCreateComponent {
     createdEvent: Event;

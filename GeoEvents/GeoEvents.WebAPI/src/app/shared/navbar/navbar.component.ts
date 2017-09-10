@@ -2,7 +2,7 @@
 
 @Component({
     selector: "nav-bar",
-    styleUrls: ["app/shared/navbar/navbar.component.css"],
-    templateUrl: "app/shared/navbar/navbar.component.html"
+    styleUrls: ["./navbar.component.css"],
+    templateUrl: "./navbar.component.html"
 })
 export class NavbarComponent { }
