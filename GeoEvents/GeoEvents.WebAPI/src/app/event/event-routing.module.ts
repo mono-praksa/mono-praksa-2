@@ -10,9 +10,9 @@ import { EventSearchComponent } from "./event-search/event-search.component";
 @NgModule({
 	imports: [
         RouterModule.forChild([
-            { path: "search/:eventId", component: EventDetailComponent, canActivate: [EventDetailRouteActivatorService], resolve: { event: EventDetailResolverService } },
-			{ path: "search", component: EventSearchComponent },
-			{ path: "create", component: EventCreateComponent }
+            { path: "event/search/:eventId", component: EventDetailComponent, canActivate: [EventDetailRouteActivatorService], resolve: { event: EventDetailResolverService } },
+			{ path: "event/search", component: EventSearchComponent },
+			{ path: "event/create", component: EventCreateComponent }
 		]),
 	],
 	exports: [

@@ -11,7 +11,7 @@ import { HomeComponent } from "./home/home.component";
 			{ path: "home", component: HomeComponent },
 			{ path: "", redirectTo: "home", pathMatch: "full" },
             { path: "404", component: Error404Component },
-            { path: 'event', loadChildren: 'app/event/event.module#EventModule' },
+           // { path: 'event', loadChildren: './event/event.module#EventModule' },
 			{ path: "**", redirectTo: "404" }
 		]),
 	]
