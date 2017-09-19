@@ -11,6 +11,8 @@ import { Filter } from "./models/filter.model";
 import { Image } from "./models/image.model";
 import { MapPoint } from "./models/map-point.model";
 
+const API_URL = "2017-group1/api";
+
 @Injectable()
 export class EventService {
     constructor(private http: Http) { }
@@ -18,33 +20,33 @@ export class EventService {
     createEvent(event: Event): Observable<Event> {
         let headers = new Headers({ "Content-Type": "application/json" });
         let options = new RequestOptions({ headers: headers });
-        return this.http.post("/api/events/create", JSON.stringify(event), options)
+        return this.http.post(API_URL + "/events/create", JSON.stringify(event), options)
             .map((response: Response) => <Event>response.json())
             .catch(this.handleError);
     }
 
     getEventById(eventId: number): Observable<Event> {
-        return this.http.get("/api/events/get?eventId=" + eventId)
+        return this.http.get(API_URL + "/events/get?eventId=" + eventId)
             .map((response: Response) => <Event>response.json())
             .catch(this.handleError);
     }
 
     getEventCount(filter: Filter): Observable<number> {
-        let query = "/api/events/search/count" + this.makeQueryString(filter);
+        let query = API_URL + "/events/search/count" + this.makeQueryString(filter);
         return this.http.get(query)
             .map((response: Response) => <number>response.json())
             .catch(this.handleError); 
     }
 
     getEvents(filter: Filter): Observable<any> {
-        let query = "/api/events/search" + this.makeQueryString(filter);
+        let query = API_URL + "/events/search" + this.makeQueryString(filter);
         return this.http.get(query)
             .map((response: Response) => <any>response.json())
             .catch(this.handleError);
     }
 
     getEventsClustered(filter: Filter, clusteringFilter: ClusteringFilter): Observable<any> {
-        let query = "/api/events/clustered" + this.makeQueryString(filter, clusteringFilter);
+        let query = API_URL + "/events/clustered" + this.makeQueryString(filter, clusteringFilter);
         return this.http.get(query)
             .map((response: Response) => <MapPoint[]>response.json())
             .catch(this.handleError);
@@ -56,14 +58,14 @@ export class EventService {
 	}
 
     updateRating(eventId: string, rating: number, currentrating: number, ratecount: number): Observable<Event> {
-        return this.http.put("/api/events/update/rating?eventId=" + eventId + "&rating=" + rating + "&currentrating=" + currentrating + "&ratecount=" + ratecount, {})
+        return this.http.put(API_URL + "/events/update/rating?eventId=" + eventId + "&rating=" + rating + "&currentrating=" + currentrating + "&ratecount=" + ratecount, {})
             .map((response: Response) => {
                 return <Event>response.json();
             }).catch(this.handleError);
     }
 
     updateReservation(eventId: string): Observable<Event> {
-        return this.http.put("/api/events/update/reservation?eventId=" + eventId, {})
+        return this.http.put(API_URL + "//events/update/reservation?eventId=" + eventId, {})
             .map((response: Response) => {
                 return <Event>response.json();
             }).catch(this.handleError);

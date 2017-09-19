@@ -293,12 +293,16 @@
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="app.9234449c534475d4cf4f.js" />
     <Content Include="Areas\HelpPage\HelpPage.css" />
+    <Content Include="assets\elephant-acid-green_480.ae4a2ba726d2309ebbc6ffd02b30c7bf.png" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
+    <Content Include="index.html" />
+    <Content Include="polyfills.9234449c534475d4cf4f.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Areas\HelpPage\Views\Web.config" />
@@ -324,6 +328,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="package.json" />
+    <None Include="Properties\PublishProfiles\geoevents.pubxml" />
     <None Include="Properties\PublishProfiles\GeoEventsProfile.pubxml" />
     <None Include="Properties\PublishProfiles\geoeventspublish.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
@@ -337,13 +342,6 @@
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
-    <Content Include="src\app\assets\images\elephant-acid-green_480.png" />
-    <Content Include="src\app\assets\images\m1.png" />
-    <Content Include="src\app\assets\images\m2.png" />
-    <Content Include="src\app\assets\images\m3.png" />
-    <Content Include="src\app\assets\images\m4.png" />
-    <Content Include="src\app\assets\images\m5.png" />
-    <Content Include="src\app\assets\images\pin.png" />
     <Content Include="src\app\error\error-404.component.html" />
     <Content Include="src\app\event\event-create\event-create-customize\event-create-customize.component.html" />
     <Content Include="src\app\event\event-create\event-create-data\event-create-data.component.css" />
@@ -361,12 +359,20 @@
     <Content Include="src\app\home\home.component.html" />
     <Content Include="src\app\shared\navbar\navbar.component.css" />
     <Content Include="src\app\shared\navbar\navbar.component.html" />
+    <Content Include="src\assets\images\elephant-acid-green_480.png" />
+    <Content Include="src\assets\images\m1.png" />
+    <Content Include="src\assets\images\m2.png" />
+    <Content Include="src\assets\images\m3.png" />
+    <Content Include="src\assets\images\m4.png" />
+    <Content Include="src\assets\images\m5.png" />
+    <Content Include="src\assets\images\pin.png" />
     <Content Include="src\favicon.ico" />
     <Content Include="src\index.html" />
     <Content Include="src\styles.css" />
     <Content Include="src\systemjs-angular-loader.js" />
     <Content Include="src\systemjs.config.extras.js" />
     <Content Include="src\systemjs.config.js" />
+    <Content Include="vendor.9234449c534475d4cf4f.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>

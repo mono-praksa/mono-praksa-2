@@ -7,17 +7,19 @@ import "rxjs/add/observable/throw";
 
 import { Image } from "./models/image.model";
 
+const API_URL = "2017-group1/api";
+
 @Injectable()
 export class ImageService {
     constructor(private http: Http) { }
 
     createImage(image: Image): Observable<Image> {
-        return this.http.post("/api/images/create/" + image.EventId, image.FormData)
+        return this.http.post(API_URL + "/images/create/" + image.EventId, image.FormData)
             .map((response: Response) => response.json());
     }
 
     getImages(id: string): Observable<Image[]> {
-        return this.http.get("/api/images/get/" + id)
+        return this.http.get(API_URL + "/images/get/" + id)
             .map((response: Response) => {
                 return <Image[]>response.json();
             }).catch(this.handleError);

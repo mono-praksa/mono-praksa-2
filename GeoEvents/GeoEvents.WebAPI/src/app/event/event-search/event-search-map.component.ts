@@ -124,22 +124,22 @@ export class EventMapComponent implements OnChanges, OnInit {
 	//gets the iconurl based on the number of markers inside a cluster
     private getIconUrl(count: number): string {
         if (count === 1) {
-            return "app/assets/images/pin.png";
+            return "../../../assets/images/pin.png";
         }
         else if (count < 10) {
-            return "app/assets/images/m1.png";
+            return "../../../assets/images/m1.png";
         }
         else if (count < 30) {
-            return "app/assets/images/m2.png";
+            return "../../../assets/images/m2.png";
         }
         else if (count < 100) {
-            return "app/assets/images/m3.png";
+            return "../../../assets/images/m3.png";
         }
         else if (count < 500) {
-            return "app/assets/images/m4.png";
+            return "../../../assets/images/m4.png";
         }
         else if (count >= 500) {
-            return "app/assets/images/m5.png";
+            return "../../../assets/images/m5.png";
         }
         else {
             return "";

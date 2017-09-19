@@ -14,9 +14,9 @@ import { NavbarComponent } from "./shared/navbar/navbar.component";
 
 @NgModule({
     imports: [
+		EventModule,
 		AppRoutingModule,
         BrowserModule,
-		EventModule,
         FormsModule,
         HttpModule,
         ReactiveFormsModule,

@@ -7,18 +7,20 @@ import "rxjs/add/observable/throw";
 
 import { Location } from "./models/location.model";
 
+const API_URL = "2017-group1/api";
+
 @Injectable()
 export class LocationService {
     constructor(private http: Http) { }
 
     getLocation(address: string): Observable<Location> {
-        return this.http.get("/api/locations/get?address=" + address)
+        return this.http.get(API_URL + "/locations/get?address=" + address)
             .map((response: Response) => <Location>response.json())
             .catch(this.handleError);
     }
 
     getLocationById(id: string): Observable<Location> {
-        return this.http.get("/api/locations/get?id=" + id)
+        return this.http.get(API_URL + "/locations/get?id=" + id)
             .map((response: Response) => <Location>response.json())
             .catch(this.handleError);
     }
@@ -29,7 +31,7 @@ export class LocationService {
     }
 
     updateRating(locationId: string, rating: number, currentRating: number, rateCount: number): Observable<Location> {
-        return this.http.put("/api/locations/update/rating?locationId=" + locationId + "&rating=" + rating + "&currentrating=" + currentRating + "&ratecount=" + rateCount, {})
+        return this.http.put(API_URL + "/locations/update/rating?locationId=" + locationId + "&rating=" + rating + "&currentrating=" + currentRating + "&ratecount=" + rateCount, {})
             .map((response: Response) => {
                 return <Location>response.json();
             }).catch(this.handleError);
